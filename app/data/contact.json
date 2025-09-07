@@ -1,0 +1,44 @@
+[
+  {
+    "type": "email",
+    "value": "herrywidnyana@gmail.com",
+    "icon": "/icons/gmail.png",
+    "href": "mailto:herrywidnyana@gmail.com"
+  },
+  {
+    "type": "phone",
+    "value": "+62 812-3456-7890",
+    "icon": "/icons/phone.png",
+    "href": "tel:+6281234567890"
+  },
+  {
+    "type": "instagram",
+    "value": "@herrywidnyana",
+    "icon": "/icons/instagram.png",
+    "href": "instagram.com/herrywidnyana"
+  },
+  {
+    "type": "whatsapp",
+    "value": "+6281234567890",
+    "icon": "/icons/wa.png",
+    "href": "https://wa.me/6281234567890"
+  },
+  {
+    "type": "linkedin",
+    "value": "@herrywidnyana",
+    "icon": "/icons/linkedin.png",
+    "href": "https://linkedin.com/in/herrywidnyana"
+  },
+  {
+    "type": "github",
+    "value": "@herrywidnyana22",
+    "icon": "/icons/github.png",
+    "href": "https://github.com/herrywidnyana22"
+  },
+  {
+    "type": "website",
+    "value": "https://herrywidnyana.dev",
+    "icon": "/icons/web.png",
+    "href": "https://herrywidnyana.dev"
+  }
+]

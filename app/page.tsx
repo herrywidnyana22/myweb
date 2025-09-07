@@ -1,103 +1,176 @@
-import Image from "next/image";
+'use client';
+
+import { Card } from '@/components/card';
+import { ChatHeader } from '@/components/chatHeader';
+import DialogConfirm from '@/components/dialogConfirm';
+import { Dock } from '@/components/dock';
+import { ChatInput } from '@/components/input';
+import { ChatLoader } from '@/components/chatLoader';
+import { ChatItem } from '@/components/chatItem';
+import { PageTitle } from '@/components/pageTitle';
+import { useEffect, useRef, useState } from 'react';
+import { Profile } from '@/components/profile';
+import { Widget } from '@/components/widget';
+import { dockItems } from '@/constants';
+import { Contact } from '@/components/contact';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [messages, setMessages] = useState<ChatResponseProps[]>([]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isMinimized, setIsMinimized] = useState(false); // ⬅️ untuk toggle minimize
+  const [showConfirm, setShowConfirm] = useState(false); // ⬅️ untuk konfirmasi clear
+  const [dockTarget, setDockTarget] = useState<DOMRect | null>(null);
+  const [openWindowId, setOpenWindowId] = useState<string | null>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleDockClick = (id: string, rect: DOMRect) => {
+    if (openWindowId === id) {
+      setOpenWindowId(null); // minimize
+    } else {
+      setDockTarget(rect);
+      setOpenWindowId(id); // maximize/open
+    }
+  };
+
+  const sendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    setIsLoading(true);
+
+    const newMessages: ChatResponseProps[] = [...messages, { role: 'user', text: input }];
+    setMessages(newMessages);
+    setInput('');
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        body: JSON.stringify({ message: input }),
+      });
+
+      const data = await res.json();
+
+      setMessages(prev => [...prev, { role: 'bot', text: data.text, cards: data.cards }]);
+    } catch (err) {
+      console.error('Error:', err);
+      setMessages(prev => [
+        ...prev,
+        { role: 'bot', text: '⚠️ Sorry, something went wrong.' },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onConfirmClear = () => {
+    setMessages([]);
+    localStorage.removeItem('chatHistory');
+    setShowConfirm(false);
+  };
+
+  const onCancelClear = () => {
+    setShowConfirm(false);
+  };
+
+  const onMinimize = () => {
+    setIsMinimized(prev => !prev);
+  };
+
+  useEffect(() => {
+    const saved = localStorage.getItem('chatHistory');
+    if (saved) {
+      setMessages(JSON.parse(saved));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('chatHistory', JSON.stringify(messages));
+  }, [messages]);
+
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isLoading]);
+
+  return (
+    <main className='h-screen relative overflow-hidden px-64 py-20'>
+      {/* Gradient Background */}
+      <div className='absolute inset-0 bg-gradient-to-b from-blue-900 via-purple-900 to-orange-600 opacity-90' />
+      <div className='absolute inset-0 bg-black/20' />
+
+      <div className='relative z-10 flex flex-col space-y-12'>
+        <PageTitle />
+
+        {/* Chat Window */}
+        <div className='relative w-full mx-auto transition'>
+          <div className='w-full mx-auto rounded-3xl overflow-hidden shadow-2xl border border-gray-600/50 '>
+            {/* Chat Header */}
+            {messages.length > 0 && (
+              <ChatHeader
+                isMinimized={isMinimized}
+                onClear={() => setShowConfirm(true)}
+                onMinimize={onMinimize}
+              />
+            )}
+
+            {/* Chat Body */}
+            {!isMinimized && messages.length > 0 && (
+              <div className='bg-gray-800/70 backdrop-blur-sm max-h-[60vh] overflow-y-auto p-4 space-y-4'>
+                {messages.map((msg, i) => (
+                  <div key={i} className={msg.role === 'user' ? 'text-right' : ''}>
+                    <ChatItem role={msg.role} text={msg.text} />
+                    {msg.cards && (
+                      <div className='grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 ml-10'>
+                        {msg.cards.map((proj, j) => (
+                          <Card key={j} {...proj} />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+                {isLoading && (
+                  <ChatItem role='bot'>
+                    <ChatLoader />
+                  </ChatItem>
+                )}
+                <div ref={chatEndRef} />
+              </div>
+            )}
+
+            {/* Footer / Input Area */}
+            <div className='bg-gray-900/90 border-t border-gray-700 p-3'>
+              <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} />
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </div>
+
+      {/* Konfirmasi Clear */}
+      {showConfirm && (
+        <DialogConfirm
+          text='Yakin ingin menghapus semua chat sebelumnya?'
+          onConfirm={onConfirmClear}
+          onCancel={onCancelClear}
+        />
+      )}
+      <Dock items={dockItems} onIconClick={handleDockClick} />
+      <div className='grid grid-cols-6 gap-6"'>
+        {dockItems.map(item => (
+          <Widget
+            key={item.id}
+            dockTarget={dockTarget}
+            isOpen={openWindowId === item.id}
+            className={item.className}
+          >
+            {item.children}
+          </Widget>
+        ))}
+      </div>
+    </main>
   );
 }
