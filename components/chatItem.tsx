@@ -27,10 +27,10 @@ export const ChatItem = ({
 
       {/* Chat Bubble */}
       <div
-        className={`max-w-[70%] px-3 py-2 rounded-3xl text-md ${
+        className={`max-w-[80%] sm:max-w-[70%] px-3 py-2 sm:px-4 sm:py-3 rounded-3xl text-sm sm:text-base md:text-[17px] leading-relaxed sm:leading-7 tracking-normal sm:tracking-tight ${
           isUser
-            ? 'bg-blue-500 text-white rounded-tr-none'
-            : 'bg-white border text-slate-900 rounded-tl-none'
+            ? 'bg-blue-500 text-white rounded-tr-none font-normal'
+            : 'bg-white border text-slate-900 rounded-tl-none font-normal'
         }`}
       >
         {children && children}

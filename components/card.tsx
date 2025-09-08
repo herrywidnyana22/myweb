@@ -9,20 +9,20 @@ export const Card = (cards: DataItemProps) => {
       href={cards.link || '#'}
       target='_blank'
       rel='noopener noreferrer'
-      className='flex gap-3 items-center justify-between border p-4 rounded-3xl shadow-md bg-white text-left text-neutral-800 cursor-pointer'
+      className='flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between border p-4 rounded-3xl shadow-md bg-white text-left text-neutral-800 cursor-pointer'
     >
-      <div className='flex gap-3 items-center'>
+      <div className='flex flex-col sm:flex-row gap-3 items-start sm:items-center'>
         {cards.icon && (
           <Image
             width={85}
             height={85}
             src={cards.icon}
             alt={cards.title}
-            className='size-10 inline-block object-contain'
+            className='inline-block size-10 sm:size-12 object-contain'
           />
         )}
-        <div className='space-y-1'>
-          <h3 className='font-bold'>{cards.title}</h3>
+        <div className='space-y-1 w-full'>
+          <h3 className='font-bold text-base sm:text-lg'>{cards.title}</h3>
           <div className='text-sm text-gray-600'>
             <ReactMarkdown>{cards.description}</ReactMarkdown>
           </div>

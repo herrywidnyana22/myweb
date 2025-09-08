@@ -17,23 +17,37 @@ export async function POST(req: Request) {
     const response = await client.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
-      // config: {
-      //   systemInstruction: 'You are developer. Your name is Herry Widnyana.',
-      // },
+      config: {
+        systemInstruction: 'You are developer. Your name is Herry.',
+      },
     });
 
     // Ambil raw text
     let responseText = response.text ?? '';
 
-    // Bersihkan kalau masih ada ```json atau ```
-    responseText = responseText.replace(/```json|```/g, '').trim();
+    // Normalisasi output model: hapus pembungkus yang umum (markdown/HTML)
+    responseText = responseText
+      // strip fenced code blocks
+      .replace(/```json|```/g, '')
+      // strip possible HTML code/pre wrappers
+      .replace(/<\/?(pre|code)[^>]*>/gi, '')
+      // strip leading labels like "Bot" or similar
+      .replace(/^\s*Bot\s*/i, '')
+      .trim();
 
-    // Coba parse ke JSON
+    // Usahakan ekstrak objek JSON pertama bila ada noise di sekitarnya
+    const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+
     let data;
     try {
-      data = JSON.parse(responseText);
+      if (jsonMatch) {
+        data = JSON.parse(jsonMatch[0]);
+      } else {
+        data = JSON.parse(responseText);
+      }
     } catch (err) {
       console.error('JSON parse error:', err, responseText);
+      // fallback: kirim sebagai text polos
       data = { text: responseText, cards: [] };
     }
 

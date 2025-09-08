@@ -1,4 +1,4 @@
-import { Maximize2, Minus, X } from 'lucide-react';
+import { CircleChevronDown, CircleMinus, CircleX } from 'lucide-react';
 
 export const ChatHeader = ({ isMinimized, onClear, onMinimize }: ChatHeaderProps) => {
   return (
@@ -8,13 +8,13 @@ export const ChatHeader = ({ isMinimized, onClear, onMinimize }: ChatHeaderProps
           className='size-4 flex items-center justify-center rounded-full bg-red-500 text-white transition cursor-pointer'
           onClick={onClear}
         >
-          <X size={85} />
+          <CircleX size={85} />
         </button>
         <button
           className='size-4 flex items-center justify-center rounded-full bg-yellow-500 text-white transition cursor-pointer'
           onClick={onMinimize}
         >
-          {isMinimized ? <Maximize2 size={85} /> : <Minus size={85} />}
+          {isMinimized ? <CircleChevronDown size={20} /> : <CircleMinus size={85} />}
         </button>
       </div>
     </div>

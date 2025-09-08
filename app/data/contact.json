@@ -6,12 +6,6 @@
     "href": "mailto:herrywidnyana@gmail.com"
   },
   {
-    "type": "phone",
-    "value": "+62 812-3456-7890",
-    "icon": "/icons/phone.png",
-    "href": "tel:+6281234567890"
-  },
-  {
     "type": "instagram",
     "value": "@herrywidnyana",
     "icon": "/icons/instagram.png",

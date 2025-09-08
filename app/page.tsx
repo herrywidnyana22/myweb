@@ -9,10 +9,8 @@ import { ChatLoader } from '@/components/chatLoader';
 import { ChatItem } from '@/components/chatItem';
 import { PageTitle } from '@/components/pageTitle';
 import { useEffect, useRef, useState } from 'react';
-import { Profile } from '@/components/profile';
 import { Widget } from '@/components/widget';
 import { dockItems } from '@/constants';
-import { Contact } from '@/components/contact';
 
 export default function Home() {
   const [messages, setMessages] = useState<ChatResponseProps[]>([]);
@@ -20,16 +18,13 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false); // ⬅️ untuk toggle minimize
   const [showConfirm, setShowConfirm] = useState(false); // ⬅️ untuk konfirmasi clear
-  const [dockTarget, setDockTarget] = useState<DOMRect | null>(null);
-  const [openWindowId, setOpenWindowId] = useState<string | null>(null);
+  const [openById, setOpenById] = useState<Record<string, boolean>>({});
+  const [targetById, setTargetById] = useState<Record<string, DOMRect | null>>({});
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const handleDockClick = (id: string, rect: DOMRect) => {
-    if (openWindowId === id) {
-      setOpenWindowId(null); // minimize
-    } else {
-      setDockTarget(rect);
-      setOpenWindowId(id); // maximize/open
-    }
+    setTargetById(prev => ({ ...prev, [id]: rect }));
+    setOpenById(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
   const sendMessage = async (e: React.FormEvent) => {
@@ -98,16 +93,21 @@ export default function Home() {
   }, [messages, isLoading]);
 
   return (
-    <main className='h-screen relative overflow-hidden px-64 py-20'>
+    <main className='h-screen relative px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64 py-4 sm:py-10 md:py-16 lg:py-20 overflow-hidden'>
       {/* Gradient Background */}
       <div className='absolute inset-0 bg-gradient-to-b from-blue-900 via-purple-900 to-orange-600 opacity-90' />
       <div className='absolute inset-0 bg-black/20' />
 
-      <div className='relative z-10 flex flex-col space-y-12'>
-        <PageTitle />
+      {/* Backdrop overlay when input is focused */}
+      {isInputFocused && (
+        <div className='absolute inset-0 z-50 backdrop-blur-sm bg-black/30 transition-opacity' />
+      )}
+
+      <div className='relative w-full flex flex-col space-y-8 sm:space-y-10 lg:space-y-12 max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto'>
+        {Object.values(openById).every(v => !v) && (<PageTitle />)}
 
         {/* Chat Window */}
-        <div className='relative w-full mx-auto transition'>
+        <div className='relative z-1000 w-full mx-auto transition'>
           <div className='w-full mx-auto rounded-3xl overflow-hidden shadow-2xl border border-gray-600/50 '>
             {/* Chat Header */}
             {messages.length > 0 && (
@@ -120,7 +120,7 @@ export default function Home() {
 
             {/* Chat Body */}
             {!isMinimized && messages.length > 0 && (
-              <div className='bg-gray-800/70 backdrop-blur-sm max-h-[60vh] overflow-y-auto p-4 space-y-4'>
+              <div className='bg-gray-800/70 backdrop-blur-sm max-h-[65vh] sm:max-h-[60vh] overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4'>
                 {messages.map((msg, i) => (
                   <div key={i} className={msg.role === 'user' ? 'text-right' : ''}>
                     <ChatItem role={msg.role} text={msg.text} />
@@ -144,10 +144,25 @@ export default function Home() {
 
             {/* Footer / Input Area */}
             <div className='bg-gray-900/90 border-t border-gray-700 p-3'>
-              <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} />
+              <ChatInput input={input} setInput={setInput} sendMessage={sendMessage} onFocus={() => setIsInputFocused(true)} onBlur={() => setIsInputFocused(false)} />
             </div>
           </div>
         </div>
+
+        {/* Widget */}
+        <div className='w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4 lg:gap-6'>
+        {dockItems.map(item => (
+          <Widget
+            key={item.id}
+            dockTarget={targetById[item.id] ?? null}
+            isOpen={!!openById[item.id]}
+            isChatMaximized={!isMinimized && messages.length > 0}
+            className={item.className}
+          >
+            {item.children}
+          </Widget>
+        ))}
+      </div>
       </div>
 
       {/* Konfirmasi Clear */}
@@ -158,19 +173,8 @@ export default function Home() {
           onCancel={onCancelClear}
         />
       )}
-      <Dock items={dockItems} onIconClick={handleDockClick} />
-      <div className='grid grid-cols-6 gap-6"'>
-        {dockItems.map(item => (
-          <Widget
-            key={item.id}
-            dockTarget={dockTarget}
-            isOpen={openWindowId === item.id}
-            className={item.className}
-          >
-            {item.children}
-          </Widget>
-        ))}
-      </div>
+      <Dock items={dockItems} onIconClick={handleDockClick} isOpenById={openById} />
+      
     </main>
   );
 }

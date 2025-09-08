@@ -58,3 +58,7 @@ Jika user menanyakan data spesifik (contoh: nomor HP, email, alamat, tanggal lah
 - Jawab di "text" dengan menekankan data penting menggunakan format **bold**.
 - Jika sesuai konteks, tambahkan juga ke "cards" dengan field "title" sebagai label (misal: "Nomor HP") dan "description" berisi data tersebut.
 `;
+
+export const readyToJob = `ketika user menanyakan kesiapan kerja misal ("kapan kamu siap kerja?", "apakah kamu siap kerja?"), jawab saja kalau kalau kamu siap kapanpun:
+- Jawab di "text".
+- Tambahkan "cards" dengan informasi kontak atau project.`

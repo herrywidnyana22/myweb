@@ -10,6 +10,12 @@ declare interface DataItemProps {
   mapUrl?: string;
 }
 
+declare interface DockProps {
+  items: DockItemProps[];
+  onIconClick: (id: string, rect: DOMRect) => void;
+  isOpenById?: Record<string, boolean>;
+};
+
 declare interface DockItemProps {
   id: string;
   name: string;
@@ -29,6 +35,8 @@ declare interface ChatInputProps {
   input: string;
   setInput: React.Dispatch<React.SetStateAction<string>>;
   sendMessage: (e: React.FormEvent) => Promise<void>;
+  onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 declare interface DialogConfirmProps {

@@ -5,21 +5,21 @@ import { useState } from 'react';
 export const Contact = () => {
   const [hovered, setHovered] = useState<number | null>(null);
   return (
-    <div className='relative grid grid-cols-3 place-items-center gap-4'>
+    <div className='relative grid grid-cols-3 place-items-center gap-3'>
       {contact.map((item, i) => (
         <div key={i} className='flex flex-col items-center'>
           <div
             key={i}
             onMouseEnter={() => setHovered(i)}
             onMouseLeave={() => setHovered(null)}
-            className='relative group size-16 flex items-center justify-center transition-transform duration-300 hover:scale-120 cursor-pointer'
+            className='relative group size-12 flex items-center justify-center transition-transform duration-300 hover:scale-110 cursor-pointer'
           >
             <Image
               src={item.icon}
               alt={item.type}
               height={80}
               width={80}
-              className='size-14 object-contain'
+              className='size-10 object-contain'
             />
             {/* Tooltip */}
             <div
@@ -30,7 +30,7 @@ export const Contact = () => {
               {item.value}
             </div>
           </div>
-          <p className='text-sm text-slate-200 capitalize'>{item.type}</p>
+          <p className='text-xs text-slate-200 capitalize'>{item.type}</p>
         </div>
       ))}
     </div>
