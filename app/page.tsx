@@ -103,7 +103,7 @@ export default function Home() {
         <div className='absolute inset-0 z-50 backdrop-blur-sm bg-black/30 transition-opacity' />
       )}
 
-      <div className='relative w-full flex flex-col space-y-8 sm:space-y-10 lg:space-y-12 max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto'>
+      <div className='relative w-full h-full  flex flex-col space-y-8 sm:space-y-10 lg:space-y-12 max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto'>
         {Object.values(openById).every(v => !v) && (<PageTitle />)}
 
         {/* Chat Window */}
@@ -125,7 +125,7 @@ export default function Home() {
                   <div key={i} className={msg.role === 'user' ? 'text-right' : ''}>
                     <ChatItem role={msg.role} text={msg.text} />
                     {msg.cards && (
-                      <div className='grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 ml-10'>
+                      <div className='max-w-[80%] sm:max-w-[70%] grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 ml-10'>
                         {msg.cards.map((proj, j) => (
                           <Card key={j} {...proj} />
                         ))}
@@ -150,7 +150,7 @@ export default function Home() {
         </div>
 
         {/* Widget */}
-        <div className='w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4 lg:gap-6'>
+        <div className='w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3 sm:gap-4 lg:gap-6'>
         {dockItems.map(item => (
           <Widget
             key={item.id}

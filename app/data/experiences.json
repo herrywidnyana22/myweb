@@ -1,0 +1,38 @@
+[
+  {
+    "company": "Tech Corp",
+    "role": "Frontend Developer",
+    "location": "Remote",
+    "year": "2022 - Present",
+    "jobdesk": "Developing and maintaining modern web applications",
+    "description": "Focused on building responsive and accessible UI using Next.js, React, and Tailwind. Collaborated with backend engineers to deliver features with optimized performance.",
+    "icon": "/images/companies/techcorp.png"
+  },
+  {
+    "company": "Designify Studio",
+    "role": "UI/UX Designer",
+    "location": "Jakarta, Indonesia",
+    "year": "2020 - 2022",
+    "jobdesk": "Designing user interfaces and improving user experience",
+    "description": "Created wireframes, prototypes, and design systems for multiple client projects. Conducted usability testing to validate design decisions.",
+    "icon": "/images/companies/designify.png"
+  },
+  {
+    "company": "Startup Labs",
+    "role": "Full Stack Developer",
+    "location": "Singapore",
+    "year": "2019 - 2020",
+    "jobdesk": "Building MVP products for early-stage startups",
+    "description": "Handled both frontend and backend development using React, Node.js, and MongoDB. Deployed scalable applications on AWS and improved CI/CD pipelines.",
+    "icon": "/images/companies/startuplabs.png"
+  },
+  {
+    "company": "EduTech Academy",
+    "role": "Software Engineering Intern",
+    "location": "Bandung, Indonesia",
+    "year": "2018 - 2019",
+    "jobdesk": "Supporting the development team in building e-learning platforms",
+    "description": "Assisted in developing features for a learning management system. Gained hands-on experience with Git workflows, Agile methodology, and testing tools.",
+    "icon": "/images/companies/edutech.png"
+  }
+]

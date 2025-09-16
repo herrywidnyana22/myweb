@@ -1,37 +1,37 @@
 [
   {
-    "type": "email",
-    "value": "herrywidnyana@gmail.com",
+    "title": "email",
+    "description": "herrywidnyana@gmail.com",
     "icon": "/icons/gmail.png",
     "href": "mailto:herrywidnyana@gmail.com"
   },
   {
-    "type": "instagram",
-    "value": "@herrywidnyana",
+    "title": "instagram",
+    "description": "@herrywidnyana",
     "icon": "/icons/instagram.png",
     "href": "instagram.com/herrywidnyana"
   },
   {
-    "type": "whatsapp",
-    "value": "+6281234567890",
+    "title": "whatsapp",
+    "description": "+6281234567890",
     "icon": "/icons/wa.png",
     "href": "https://wa.me/6281234567890"
   },
   {
-    "type": "linkedin",
-    "value": "@herrywidnyana",
+    "title": "linkedin",
+    "description": "@herrywidnyana",
     "icon": "/icons/linkedin.png",
     "href": "https://linkedin.com/in/herrywidnyana"
   },
   {
-    "type": "github",
-    "value": "@herrywidnyana22",
+    "title": "github",
+    "description": "@herrywidnyana22",
     "icon": "/icons/github.png",
     "href": "https://github.com/herrywidnyana22"
   },
   {
-    "type": "website",
-    "value": "https://herrywidnyana.dev",
+    "title": "website",
+    "description": "https://herrywidnyana.dev",
     "icon": "/icons/web.png",
     "href": "https://herrywidnyana.dev"
   }

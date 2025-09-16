@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, } from 'framer-motion';
+import { Tooltip } from './tooltip';
 
 export const Dock = ({ items, onIconClick, isOpenById }: DockProps) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -32,6 +33,8 @@ export const Dock = ({ items, onIconClick, isOpenById }: DockProps) => {
             onMouseLeave={() => setHoveredIndex(null)}
           >
             {/* Icon */}
+            <Tooltip label={item.name}>
+
             <motion.button
               onClick={() => {
                 const rect = refs.current[item.id]?.getBoundingClientRect();
@@ -44,25 +47,12 @@ export const Dock = ({ items, onIconClick, isOpenById }: DockProps) => {
                 damping: 18,
                 mass: 0.5,
               }}
-              className='size-9 sm:size-11 md:size-12 flex items-center justify-center'
+              className='size-10 sm:size-12 md:size-14 flex items-center justify-center'
             >
               {item.icon}
             </motion.button>
+            </Tooltip>
 
-            {/* Tooltip */}
-            <AnimatePresence>
-              {hoveredIndex === index && (
-                <motion.div
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: -4 }}
-                  exit={{ opacity: 0, y: 6 }}
-                  transition={{ duration: 0.2, ease: 'easeOut' }}
-                  className='absolute -top-8 px-2 py-1 bg-black/80 text-white text-xs rounded-lg pointer-events-none whitespace-nowrap'
-                >
-                  {item.name}
-                </motion.div>
-              )}
-            </AnimatePresence>
             {/* Active indicator dot (absolute, does not affect layout) */}
             {isOpenById?.[item.id] && (
               <div className='absolute -bottom-2 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-white/90 shadow-[0_0_6px_rgba(255,255,255,0.9)] pointer-events-none' />

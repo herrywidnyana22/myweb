@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
 import projects from '@/app/data/projects.json';
 import profile from '@/app/data/profile.json';
+import address from '@/app/data/address.json';
+import contacts from '@/app/data/contacts.json';
+import educations from '@/app/data/educations.json';
+import experiences from '@/app/data/experiences.json';
 import { buildPrompt } from '@/constants/promptTemplate';
 
 const client = new GoogleGenAI({
@@ -12,7 +16,7 @@ export async function POST(req: Request) {
   try {
     const { message } = await req.json();
 
-    const prompt = buildPrompt(message, projects, profile);
+    const prompt = buildPrompt({message, profile, address, projects, contacts, educations, experiences});
 
     const response = await client.models.generateContent({
       model: 'gemini-2.5-flash',

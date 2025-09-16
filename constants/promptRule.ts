@@ -7,32 +7,78 @@ Aturan Bahasa:
 `;
 
 export const formatRule = `
-Output Format:
-- Return ONLY valid JSON.
-- Do NOT wrap with markdown (\`\`\`) or extra text.
-- JSON format must follow this structure:
+Rules:
+1. Always return ONLY valid JSON (no markdown, no extra text).
+2. Top-level JSON must contain:
+   {
+     "text": "string",
+     "cards": [...]
+   }
+3. "text" is a summary or direct answer to the user's question.
+4. "cards" format is DYNAMIC depending on the context:
 
-{
-  "text": "summary text here",
-  "cards": [
-    { 
-      "title": "...", 
-      "description": "...", 
-      "tech": ["..."], 
-      "href": "...", 
-      "icon": "...", 
-      "icon2": "...", 
-      "image": "...",
-      "mapUrl": "..." 
+   a. If the user asks about projects → follow ProjectProps:
+   {
+     "title": string,
+     "description": string,
+     "icon": string,
+     "progressValue": number,
+     "demoLink"?: string,
+     "githubLink": string,
+     "iconCategory": [
+       {
+         "src": string,
+         "label": string
+       }
+     ]
+   }
+
+  b. if the user asks about my educations -> follow EducationsProps:
+   {
+      "school": string,
+      "mayor": string,
+      "year": string,
+      "icon"?: string | React.ReactNode,
+      "subIcon"?: string | React.ReactNode,
+  }
+
+  c. if the user asks about my experiences -> follow ExperienceProps:
+   {
+      "company": string
+      "role": string
+      "location": string
+      "year": string
+      "jobdesk": string
+      "description": string
+      "icon": string | React.ReactNode
     }
-  ]
-}
+
+  d.if user asks about my address -> follow AddressProps:
+  {
+    "address": string
+    "lat": number | string
+    "lng": number | string
+    "mapUrl"?: string
+  }
+
+   e. For all other contexts, (education, profile, etc.) basic like "kamu lulusan mana?" → follow DefaultCardData:
+   {
+     "id"?: string,
+     "title": string,
+     "description": string,
+     "icon"?: string,
+     "href"?: string
+   }
+
+5. Do NOT mix the two card formats in the same response.
+6. If there's no relevant card, return an empty array [] for "cards".
+7. Respect languageRule: answer in the same language as the user.
 `;
 
 export const educationRule = `
 Jika user bertanya tentang education:
 - Jawab di "text".
-- Tambahkan "cards" dengan informasi pendidikan (school, major, year).
+- Tambahkan "cards" dengan informasi pendidikan (school, major, year) sesuai EducationsProps.
 `;
 
 export const projectRule = `
