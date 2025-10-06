@@ -6,7 +6,7 @@ export const Contact = () => {
   const [hovered, setHovered] = useState<number | null>(null);
   return (
     <div className='relative grid grid-cols-3 place-items-center gap-3'>
-      {contacts.map((item, i) => (
+      {contacts?.map((item, i) => (
         <div key={i} className='flex flex-col items-center'>
           <div
             key={i}
