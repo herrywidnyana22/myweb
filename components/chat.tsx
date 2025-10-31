@@ -92,7 +92,7 @@ export const Chat = ({
         setPropMessages(messages);
         localStorage.setItem('chatHistory', JSON.stringify(messages));
         scrollToBottom();
-    }, [messages, setPropMessages]);
+    }, [messages, setPropMessages, scrollToBottom]);
     
     return ( 
     <>

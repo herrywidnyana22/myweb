@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import { Tooltip } from './tooltip';
 import { memo } from 'react';
 
-const CardComponent = memo((card: DataItemProps) => {
+const CardComponent = (card: DataItemProps) => {
   const renderContent = () => {
     switch (card.type) {
       case 'project':
@@ -95,7 +95,7 @@ const CardComponent = memo((card: DataItemProps) => {
       <div className="flex-1">{renderContent()}</div>
     </div>
   );
-});
+};
 
 export const Card = memo(CardComponent);
 Card.displayName = 'Card';
