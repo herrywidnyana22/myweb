@@ -16,8 +16,8 @@ export default function Home() {
   const [messages, setMessages] = useState<ChatResponseProps[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isMinimized, setIsMinimized] = useState(false); // ⬅️ untuk toggle minimize
-  const [showConfirm, setShowConfirm] = useState(false); // ⬅️ untuk konfirmasi clear
+  const [isMinimized, setIsMinimized] = useState(false); // untuk toggle minimize
+  const [showConfirm, setShowConfirm] = useState(false); // untuk konfirmasi clear
   const [openById, setOpenById] = useState<Record<string, boolean>>({});
   const [targetById, setTargetById] = useState<Record<string, DOMRect | null>>(
     {}
@@ -112,7 +112,7 @@ export default function Home() {
       )}
 
       <div className='relative w-full h-full  flex flex-col space-y-8 sm:space-y-10 lg:space-y-12 max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto'>
-        {Object.values(openById).every(v => !v) && <PageTitle />}
+        <PageTitle isWidgetOpen={Object.values(openById).every(v => !v)}/>
 
         {/* Chat Window */}
         <div className='relative z-1000 w-full mx-auto transition'>
