@@ -44,26 +44,30 @@ export async function POST(req: Request) {
       .trim();
 
     // Parsing JSON pertama yang valid
-    let data: { text: string; cards: any[] } = { text: '', cards: [] };
+    const data: { text: string; cards: DataItemProps[] } = { text: '', cards: [] };
     try {
       const jsonMatch = rawText.match(/\{[\s\S]*\}/);
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]);
         data.text = parsed.text ?? '';
-        data.cards = Array.isArray(parsed.cards) ? parsed.cards : [];
+        // Pastikan cards sesuai tipe DataItemProps
+        data.cards = Array.isArray(parsed.cards)
+          ? parsed.cards.map((card: any) => ({
+              ...card,
+              type: card.type || 'default', // set default type
+            }))
+          : []
       } else {
-        // fallback jika bukan JSON
         data.text = rawText;
-        data.cards = [];
       }
-    } catch (err) {
-      console.error('JSON parse error:', err, rawText);
-      data.text = rawText;
-      data.cards = [];
+    } catch {
+      data.text = rawText
+      data.cards = []
     }
 
+
     // Pastikan setiap card punya type
-    data.cards = data.cards.map((card: any) => {
+    data.cards = data.cards.map((card) => {
       if (!card.type) {
         // bisa menebak type berdasarkan properti unik
         if ('progressValue' in card) card.type = 'project';
@@ -76,8 +80,7 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json(data);
-  } catch (error: unknown) {
-    console.error('API Error:', error);
+  } catch {
     return NextResponse.json(
       { error: 'Something went wrong' },
       { status: 500 }

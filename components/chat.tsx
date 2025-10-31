@@ -70,7 +70,7 @@ export const Chat = ({
                 },
             ])
 
-        } catch (err) {
+        } catch {
             setMessages((prev: ChatResponseProps[]) => [
                 ...prev,
                 { role: 'bot', text: '⚠️ Sorry, something went wrong.', cards: [] },
@@ -89,14 +89,14 @@ export const Chat = ({
 
     useEffect(() => {
         scrollToBottom()
-    }, [messages, isLoading])
+    }, [messages, isLoading, scrollToBottom])
     
     useEffect(() => {
         const saved = localStorage.getItem('chatHistory')
         if (saved) {
             setMessages(JSON.parse(saved))
         }
-    }, [])
+    }, [setMessages])
     
     return ( 
     <>

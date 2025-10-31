@@ -1,12 +1,9 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import { Tooltip } from './tooltip';
 import { memo } from 'react';
 
 export const Card = memo((card: DataItemProps) => {
-  console.log('Rendering Card:', card)
-  
   const renderContent = () => {
     switch (card.type) {
       case 'project':
@@ -90,8 +87,8 @@ export const Card = memo((card: DataItemProps) => {
         <Image
           src={card.icon}
           alt={'icon'}
-          width={60}
-          height={60}
+          width={40}
+          height={40}
           className="inline-block object-contain"
         />
       )}
