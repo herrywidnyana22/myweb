@@ -13,9 +13,9 @@
   },
   {
     "title": "whatsapp",
-    "description": "+6281234567890",
+    "description": "+6283130000094",
     "icon": "/icons/wa.png",
-    "href": "https://wa.me/6281234567890"
+    "href": "https://wa.me/6283130000094"
   },
   {
     "title": "linkedin",
@@ -31,8 +31,8 @@
   },
   {
     "title": "website",
-    "description": "https://herrywidnyana.dev",
+    "description": "https://herrywidnyana.com",
     "icon": "/icons/web.png",
-    "href": "https://herrywidnyana.dev"
+    "href": "https://herrywidnyana.com"
   }
 ]

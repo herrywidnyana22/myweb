@@ -3,9 +3,13 @@
 import clsx from 'clsx';
 import { Tooltip } from './tooltip';
 
-export const ProgressCircle = ({ value, label, className }: ProgressCircleProps) => {
+export const ProgressCircle = ({
+  value,
+  label,
+  className,
+}: ProgressCircleProps) => {
   const radius = 25; // circle radius
-  const stroke = 6 ; // stroke width
+  const stroke = 6; // stroke width
   const circumference = 2 * Math.PI * radius;
   const progress = circumference - (value / 100) * circumference;
 
@@ -25,7 +29,7 @@ export const ProgressCircle = ({ value, label, className }: ProgressCircleProps)
         )}
       >
         <svg
-          className="rotate-[-90deg]"
+          className='rotate-[-90deg]'
           width={radius * 2 + stroke * 2}
           height={radius * 2 + stroke * 2}
         >
@@ -34,9 +38,9 @@ export const ProgressCircle = ({ value, label, className }: ProgressCircleProps)
             cx={radius + stroke}
             cy={radius + stroke}
             r={radius}
-            stroke="#2C2C2E"
+            stroke='#2C2C2E'
             strokeWidth={stroke}
-            fill="none"
+            fill='none'
           />
           {/* Progress Circle */}
           <circle
@@ -45,19 +49,19 @@ export const ProgressCircle = ({ value, label, className }: ProgressCircleProps)
             r={radius}
             stroke={getStrokeColor()}
             strokeWidth={stroke}
-            fill="none"
+            fill='none'
             strokeDasharray={circumference}
             strokeDashoffset={progress}
-            strokeLinecap="round"
-            className="transition-all duration-500 ease-out"
+            strokeLinecap='round'
+            className='transition-all duration-500 ease-out'
           />
         </svg>
 
         {/* Value in center */}
-        <div className="absolute flex flex-col items-center justify-center">
-          <span className="text-white font-light text-[14px] capitalize">
+        <div className='absolute flex flex-col items-center justify-center'>
+          <span className='text-white font-light text-[14px] capitalize'>
             {value}
-            <span className="text-xs text-white/70">%</span>
+            <span className='text-xs text-white/70'>%</span>
           </span>
         </div>
       </div>

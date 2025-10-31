@@ -6,7 +6,7 @@ export const Card = (cards: DataItemProps) => {
   console.log({ cards });
   return (
     <Link
-      href={cards.link || '#'}
+      href={cards.href || '#'}
       target='_blank'
       rel='noopener noreferrer'
       className='flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between border p-4 rounded-3xl shadow-md bg-white text-left text-neutral-800 cursor-pointer'

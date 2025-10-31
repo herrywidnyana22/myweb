@@ -16,7 +16,7 @@ export const Contact = () => {
           >
             <Image
               src={item.icon}
-              alt={item.type}
+              alt={'contact icon'}
               height={80}
               width={80}
               className='size-10 object-contain'
@@ -27,10 +27,10 @@ export const Contact = () => {
                 hovered === i ? 'opacity-100' : 'opacity-0'
               }`}
             >
-              {item.value}
+              {item.description}
             </div>
           </div>
-          <p className='text-xs text-slate-200 capitalize'>{item.type}</p>
+          <p className='text-xs text-slate-200 capitalize'>{item.title}</p>
         </div>
       ))}
     </div>
