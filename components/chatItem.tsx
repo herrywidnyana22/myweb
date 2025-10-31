@@ -47,8 +47,8 @@ export const ChatItem = ({ role, text, children }: ChatItemProps) => {
         <span
           className={`absolute top-0 w-3 h-4 ${
             isUser
-              ? 'right-[-8px] bg-blue-500 rounded-tr-[1px]'
-              : 'left-[-8px] bg-white rounded-tl-[1px]'
+              ? '-right-2 bg-blue-500 rounded-tr-[1px]'
+              : '-left-2 bg-white rounded-tl-[1px]'
           }`}
           style={{
             clipPath: isUser

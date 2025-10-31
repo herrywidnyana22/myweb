@@ -1,5 +1,6 @@
 [
   {
+    "type": "experience",
     "company": "Tech Corp",
     "role": "Frontend Developer",
     "location": "Remote",
@@ -9,6 +10,7 @@
     "icon": "/images/companies/techcorp.png"
   },
   {
+    "type": "experience",
     "company": "Designify Studio",
     "role": "UI/UX Designer",
     "location": "Jakarta, Indonesia",
@@ -18,6 +20,7 @@
     "icon": "/images/companies/designify.png"
   },
   {
+    "type": "experience",
     "company": "Startup Labs",
     "role": "Full Stack Developer",
     "location": "Singapore",
@@ -27,6 +30,7 @@
     "icon": "/images/companies/startuplabs.png"
   },
   {
+    "type": "experience",
     "company": "EduTech Academy",
     "role": "Software Engineering Intern",
     "location": "Bandung, Indonesia",

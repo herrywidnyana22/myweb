@@ -1,9 +1,11 @@
 import { Profile } from '@/components/profile';
-import Image from 'next/image';
-import contacts from '@/app/data/contacts.json';
 import { Contact } from '@/components/contact';
-import Education from '@/components/education';
 import { Projects } from '@/components/projects';
+
+import contacts from '@/app/data/contacts.json';
+import Image from 'next/image';
+import Education from '@/components/education';
+
 
 export const dockItems: DockItemProps[] = [
   {
@@ -82,7 +84,7 @@ export const dockItems: DockItemProps[] = [
   {
     id: 'project',
     name: 'Project',
-    children: <Projects />,
+    children: <Projects/>,
     icon: (
       <Image
         src={'/icons/document.png'}

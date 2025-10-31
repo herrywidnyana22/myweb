@@ -1,8 +1,9 @@
 [
   {
+    "type": "project",
     "title": "Portfolio Website",
     "description": "A personal portfolio built with Next.js and Tailwind, showcasing projects and blogs.",
-    "icon": "/icons/experience.png",
+    "icon": "/icons/project.png",
     "iconCategory": [
       { "src": "/icons/react.png", "label": "React" },
       { "src": "/icons/nextjs.png", "label": "Next.js" },
@@ -13,6 +14,7 @@
     "githubLink": "https://github.com/herrywidnyana/portfolio"
   },
   {
+    "type": "project",
     "title": "IoT GPS Tracker",
     "description": "An Arduino + ESP32 based GPS tracker with live location sharing via cloud dashboard.",
     "icon": "/icons/experience.png",
@@ -26,9 +28,10 @@
     "githubLink": "https://github.com/herrywidnyana/gps-tracker"
   },
   {
+    "type": "project",
     "title": "Chat Application",
     "description": "A real-time chat app with authentication, built with Next.js, Supabase, and Tailwind.",
-    "icon": "/icons/experience.png",
+    "icon": "/icons/document.png",
     "iconCategory": [
       { "src": "/icons/nextjs.png", "label": "Next.js" },
       { "src": "/icons/react.png", "label": "React" },

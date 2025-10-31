@@ -1,21 +1,22 @@
-import data from "@/app/data/projects.json"; // put the JSON above in /data/projects.json
 import Image from "next/image";
 import { Eye, Github } from "lucide-react";
 import { ProgressCircle } from "./progressCircle";
-import Link from "next/link";
 import { Tooltip } from "./tooltip";
+
+import Link from "next/link";
+import ReactMarkdown from "react-markdown";
+import ProjectData from "@/app/data/projects.json"; // put the JSON above in /data/projects.json
+
 
 export const Projects = () => {
   return (
     <div className="grid gap-y-12 gap-x-6 md:grid-cols-2 mt-5">
-      {data.map((project: ProjectProps, i: number) => (
+      {ProjectData.map((project: ProjectProps, i: number) => (
         <div key={i} className="relative">
           {/* ICON */}
           <div className="absolute -top-8 left-[10%] flex items-center">
-
             <div 
               className="rounded-full bg-gray-900/80 size-14 flex items-center justify-center p-3 backdrop-blur-2xl border border-white/20 shadow-2xl z-20">
-              
               <Image
                 src={project.icon}
                 alt="icon"
@@ -36,14 +37,14 @@ export const Projects = () => {
             </div>
 
             {/* Text */}
-            <p className="text-sm font-light leading-relaxed mt-2">
-              {project.description}
-            </p>
+            <div className="text-sm font-light leading-relaxed mt-2">
+               <ReactMarkdown>{project.description}</ReactMarkdown>
+            </div>
 
             {/* Tech stack icons */}
             <div className="mt-2 flex flex-wrap gap-2">
               {project.iconCategory.map((tech, i) => (
-                <Tooltip label={tech.label} key={i}>
+                <Tooltip key={i} label={tech.label}>
                   <Image
                     src={tech.src}
                     alt="tech-icon"

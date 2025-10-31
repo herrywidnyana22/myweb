@@ -1,35 +1,41 @@
 [
   {
+    "type": "contact",
     "title": "email",
     "description": "herrywidnyana@gmail.com",
     "icon": "/icons/gmail.png",
     "href": "mailto:herrywidnyana@gmail.com"
   },
   {
+    "type": "contact",
     "title": "instagram",
     "description": "@herrywidnyana",
     "icon": "/icons/instagram.png",
     "href": "instagram.com/herrywidnyana"
   },
   {
+    "type": "contact",
     "title": "whatsapp",
     "description": "+6283130000094",
     "icon": "/icons/wa.png",
     "href": "https://wa.me/6283130000094"
   },
   {
+    "type": "contact",
     "title": "linkedin",
     "description": "@herrywidnyana",
     "icon": "/icons/linkedin.png",
     "href": "https://linkedin.com/in/herrywidnyana"
   },
   {
+    "type": "contact",
     "title": "github",
     "description": "@herrywidnyana22",
     "icon": "/icons/github.png",
     "href": "https://github.com/herrywidnyana22"
   },
   {
+    "type": "contact",
     "title": "website",
     "description": "https://herrywidnyana.com",
     "icon": "/icons/web.png",

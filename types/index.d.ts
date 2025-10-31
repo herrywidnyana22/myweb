@@ -1,14 +1,4 @@
-// declare interface DataItemProps {
-//   id?: string;
-//   title: string;
-//   description: string;
-//   tech?: string[];
-//   icon?: string;
-//   icon2?: string;
-//   image?: string;
-//   link?: string;
-//   mapUrl?: string;
-// }
+
 declare type DataItemProps = 
   | ({ type: 'project' } & ProjectProps)
   | ({ type: 'address' } & AddressProps)
@@ -88,6 +78,14 @@ declare interface DockItemProps {
   icon: React.ReactNode;
   children?: React.ReactNode;
   className?: string;
+}
+
+declare interface ChatProps {
+  messages: ChatResponseProps[];
+  setMessages: React.Dispatch<React.SetStateAction<messages>>;
+  setIsInputFocused: React.Dispatch<React.SetStateAction<boolean>>;
+  isMinimized: boolean;
+  setIsMinimized: React.Dispatch<React.SetStateAction<isMinimized>>;
 }
 
 declare interface ChatResponseProps {
