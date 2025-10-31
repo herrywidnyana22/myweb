@@ -45,8 +45,8 @@ export default function Education() {
           <div className="size-12 border-2 border-gray-400 rounded-full flex items-center justify-center bg-white shadow">
             <span className='text-slate-600 font-bold'>{node.icon}</span>
           </div>
-          <div className="w-[2px] h-8 bg-black"></div>
-          <div className="border-1 border-black px-4 py-2 bg-white shadow rounded-2xl">
+          <div className="w-0.5 h-8 bg-black"></div>
+          <div className="border border-black px-4 py-2 bg-white shadow rounded-2xl">
             {node.text}
           </div>
         </div>

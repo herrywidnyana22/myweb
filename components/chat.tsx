@@ -9,17 +9,24 @@ import { ChatItem } from '@/components/chatItem';
 import DialogConfirm from './dialogConfirm';
 
 export const Chat = ({
-    messages, 
-    setMessages,
+    messages: propMessages,
+    setMessages: setPropMessages,
     setIsInputFocused,
     setIsMinimized,
     isMinimized,
 }:ChatProps) => {
+    const [messages, setMessages] = useState<ChatResponseProps[]>(() => {
+        if (typeof window !== 'undefined') {
+        const saved = localStorage.getItem('chatHistory');
+        if (saved) return JSON.parse(saved);
+        }
+        return propMessages || [];
+    })
     const [input, setInput] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [showConfirm, setShowConfirm] = useState(false); // untuk konfirmasi clear
+    const [isLoading, setIsLoading] = useState(false)
+    const [showConfirm, setShowConfirm] = useState(false) // untuk konfirmasi clear
 
-    const chatEndRef = useRef<HTMLDivElement | null>(null);
+    const chatEndRef = useRef<HTMLDivElement | null>(null)
 
     const onMinimize = () => {
         setIsMinimized(!isMinimized);
@@ -81,22 +88,11 @@ export const Chat = ({
         }
     };
 
-
     useEffect(() => {
-        localStorage.setItem('chatHistory', JSON.stringify(messages))
-    }, [messages]);
-
-
-    useEffect(() => {
-        scrollToBottom()
-    }, [messages, isLoading, scrollToBottom])
-    
-    useEffect(() => {
-        const saved = localStorage.getItem('chatHistory')
-        if (saved) {
-            setMessages(JSON.parse(saved))
-        }
-    }, [setMessages])
+        setPropMessages(messages);
+        localStorage.setItem('chatHistory', JSON.stringify(messages));
+        scrollToBottom();
+    }, [messages, setPropMessages]);
     
     return ( 
     <>
