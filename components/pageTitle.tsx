@@ -30,3 +30,5 @@ export const PageTitle = ({isWidgetOpen}: PageTitleProps) => {
     </header>
   );
 };
+
+
