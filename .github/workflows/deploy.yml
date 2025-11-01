@@ -1,4 +1,4 @@
-name: Deploy Next.js App via Cloudflare Tunnel
+name: 🚀 Deploy Next.js App via Cloudflare Tunnel
 
 on:
   push:
@@ -10,46 +10,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout kode dari GitHub
+      # --- Checkout Repo ---
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Install cloudflared (untuk SSH via Cloudflare Zero Trust)
-      - name: Install Cloudflared
-        run: |
-          wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
-          sudo dpkg -i cloudflared-linux-amd64.deb
-
-      # Setup SSH Key
+      # --- Setup SSH key untuk koneksi ke VPS ---
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
-      # Test koneksi Cloudflare Access
-      - name: Authenticate Cloudflare Access
+      # --- Install Cloudflared untuk koneksi lewat Zero Trust ---
+      - name: Install Cloudflared
         run: |
-          echo "Testing connection to ${{ secrets.VPS_HOST }} via Cloudflare Access"
-        env:
-          TUNNEL_SERVICE_AUTH_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
-          TUNNEL_SERVICE_AUTH_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
+          sudo apt-get update
+          sudo apt-get install -y cloudflared
 
-      # perintah di VPS melalui Cloudflare Tunnel
-      - name: Deploy to VPS via Cloudflare Tunnel
+      # --- Deploy ke VPS lewat Cloudflare Tunnel (authenticated) ---
+      - name: Deploy to VPS via Cloudflare Tunnel (Authenticated)
         env:
-          TUNNEL_SERVICE_AUTH_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
-          TUNNEL_SERVICE_AUTH_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
         run: |
           ssh -o StrictHostKeyChecking=no \
-              -o ProxyCommand="cloudflared access ssh --hostname ${{ secrets.VPS_HOST }}" \
+              -o ProxyCommand="cloudflared access ssh --hostname ${{ secrets.VPS_HOST }} \
+              --id $CF_ACCESS_CLIENT_ID \
+              --secret $CF_ACCESS_CLIENT_SECRET" \
               -i ~/.ssh/id_ed25519 \
               ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
-          
-          echo "✅ Connected to VPS via Cloudflare Tunnel"
 
+          echo "Connected to VPS via Cloudflare Access Tunnel"
           cd /var/www/myweb
-          echo "Pulling latest changes from GitHub..."
+
+          echo "Pulling latest code..."
           git pull origin main
 
           echo "Rebuilding Docker containers..."
