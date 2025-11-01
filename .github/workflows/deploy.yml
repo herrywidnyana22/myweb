@@ -1,4 +1,4 @@
-name: 🚀 Auto Deploy MyWeb via Cloudflare Tunnel
+name: Auto Deploy MyWeb via Cloudflare Tunnel
 
 on:
   push:
@@ -10,24 +10,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repository
+      # Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Install Cloudflared (needed for SSH via Zero Trust)
+      # Install Cloudflared (needed for SSH via Zero Trust)
       - name: Install Cloudflared
         run: |
           wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
           sudo dpkg -i cloudflared-linux-amd64.deb
 
-      # 3️⃣ Setup SSH key (private key from GitHub Secrets)
+      # Setup SSH key (private key from GitHub Secrets)
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
-      # 4️⃣ Authenticate Cloudflare Access (Service Token)
+      # Authenticate Cloudflare Access (Service Token)
       - name: Authenticate Cloudflare Access
         env:
           CF_ACCESS_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
@@ -41,7 +41,7 @@ jobs:
             --secret=$CF_ACCESS_CLIENT_SECRET || true
           echo "✅ Cloudflare Access authenticated."
 
-      # 5️⃣ SSH into VPS through Cloudflare Tunnel and deploy
+      # SSH into VPS through Cloudflare Tunnel and deploy
       - name: Deploy to VPS via Cloudflare Tunnel
         env:
           CF_ACCESS_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
@@ -49,7 +49,7 @@ jobs:
           VPS_USER: ${{ secrets.VPS_USER }}
           VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
-          echo "🚀 Starting deployment via Cloudflare Access Tunnel..."
+          echo "Starting deployment via Cloudflare Access Tunnel..."
 
           ssh -o StrictHostKeyChecking=no \
               -o ProxyCommand="cloudflared access ssh \
@@ -59,15 +59,15 @@ jobs:
               -i ~/.ssh/id_ed25519 \
               $VPS_USER@$VPS_HOST << 'EOF'
 
-          echo "✅ Connected to VPS via Cloudflare Access Tunnel"
+          echo "Connected to VPS via Cloudflare Access Tunnel"
 
           cd /var/www/myweb
-          echo "📦 Pulling latest changes from GitHub..."
+          echo "Pulling latest changes from GitHub..."
           git pull origin main
 
-          echo "🧱 Rebuilding Docker containers..."
+          echo "Rebuilding Docker containers..."
           docker compose down
           docker compose up -d --build
 
-          echo "🎉 Deployment complete!"
+          echo "Deployment complete!"
           EOF
