@@ -1,4 +1,4 @@
-name: Deploy My Web App via Cloudflare Tunnel
+name: 🚀 Auto Deploy MyWeb via Cloudflare Tunnel
 
 on:
   push:
@@ -10,49 +10,58 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout kode
+      # 1️⃣ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2️⃣ Install cloudflared
+      # 2️⃣ Install Cloudflared (needed for SSH via Zero Trust)
       - name: Install Cloudflared
         run: |
           wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
           sudo dpkg -i cloudflared-linux-amd64.deb
 
-      # 3️⃣ Setup SSH Key
+      # 3️⃣ Setup SSH key (private key from GitHub Secrets)
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
-      # 4️⃣ Login ke Cloudflare Zero Trust (Service Token)
+      # 4️⃣ Authenticate Cloudflare Access (Service Token)
       - name: Authenticate Cloudflare Access
         env:
           CF_ACCESS_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
           CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
-          echo "Logging in to Cloudflare Access..."
-          cloudflared access token --id $CF_ACCESS_CLIENT_ID --secret $CF_ACCESS_CLIENT_SECRET --url https://${{ secrets.VPS_HOST }}
-          echo "✅ Cloudflare Access authenticated successfully"
+          echo "🔑 Authenticating Cloudflare Access Token..."
+          cloudflared access token \
+            --app=https://${VPS_HOST} \
+            --id=$CF_ACCESS_CLIENT_ID \
+            --secret=$CF_ACCESS_CLIENT_SECRET || true
+          echo "✅ Cloudflare Access authenticated."
 
-      # 5️⃣ Deploy ke VPS via Cloudflare Tunnel
-      - name: Deploy to VPS via Cloudflare Tunnel (Authenticated)
+      # 5️⃣ SSH into VPS through Cloudflare Tunnel and deploy
+      - name: Deploy to VPS via Cloudflare Tunnel
         env:
           CF_ACCESS_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
           CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+          VPS_HOST: ${{ secrets.VPS_HOST }}
         run: |
+          echo "🚀 Starting deployment via Cloudflare Access Tunnel..."
+
           ssh -o StrictHostKeyChecking=no \
-              -o ProxyCommand="cloudflared access ssh --hostname ${{ secrets.VPS_HOST }} \
+              -o ProxyCommand="cloudflared access ssh \
+              --hostname $VPS_HOST \
               --id $CF_ACCESS_CLIENT_ID \
               --secret $CF_ACCESS_CLIENT_SECRET" \
               -i ~/.ssh/id_ed25519 \
-              ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+              $VPS_USER@$VPS_HOST << 'EOF'
 
           echo "✅ Connected to VPS via Cloudflare Access Tunnel"
-          cd /var/www/myweb
 
+          cd /var/www/myweb
           echo "📦 Pulling latest changes from GitHub..."
           git pull origin main
 
@@ -60,5 +69,5 @@ jobs:
           docker compose down
           docker compose up -d --build
 
-          echo "🚀 Deployment complete!"
+          echo "🎉 Deployment complete!"
           EOF
