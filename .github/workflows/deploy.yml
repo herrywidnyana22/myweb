@@ -1,4 +1,4 @@
-name: 🚀 Deploy Next.js App via Cloudflare Tunnel
+name: Deploy My Web App via Cloudflare Tunnel
 
 on:
   push:
@@ -10,25 +10,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # --- Checkout Repo ---
+      # 1️⃣ Checkout kode
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # --- Setup SSH key untuk koneksi ke VPS ---
+      # 2️⃣ Install cloudflared
+      - name: Install Cloudflared
+        run: |
+          wget -q https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+          sudo dpkg -i cloudflared-linux-amd64.deb
+
+      # 3️⃣ Setup SSH Key
       - name: Setup SSH Key
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
-          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
-      # --- Install Cloudflared untuk koneksi lewat Zero Trust ---
-      - name: Install Cloudflared
+      # 4️⃣ Login ke Cloudflare Zero Trust (Service Token)
+      - name: Authenticate Cloudflare Access
+        env:
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
         run: |
-          sudo apt-get update
-          sudo apt-get install -y cloudflared
+          echo "Logging in to Cloudflare Access..."
+          cloudflared access token --id $CF_ACCESS_CLIENT_ID --secret $CF_ACCESS_CLIENT_SECRET --url https://${{ secrets.VPS_HOST }}
+          echo "✅ Cloudflare Access authenticated successfully"
 
-      # --- Deploy ke VPS lewat Cloudflare Tunnel (authenticated) ---
+      # 5️⃣ Deploy ke VPS via Cloudflare Tunnel
       - name: Deploy to VPS via Cloudflare Tunnel (Authenticated)
         env:
           CF_ACCESS_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
@@ -41,15 +50,15 @@ jobs:
               -i ~/.ssh/id_ed25519 \
               ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
 
-          echo "Connected to VPS via Cloudflare Access Tunnel"
+          echo "✅ Connected to VPS via Cloudflare Access Tunnel"
           cd /var/www/myweb
 
-          echo "Pulling latest code..."
+          echo "📦 Pulling latest changes from GitHub..."
           git pull origin main
 
-          echo "Rebuilding Docker containers..."
+          echo "🧱 Rebuilding Docker containers..."
           docker compose down
           docker compose up -d --build
 
-          echo "Deployment complete!"
+          echo "🚀 Deployment complete!"
           EOF
