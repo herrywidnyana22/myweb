@@ -1,13 +1,16 @@
-
-FROM node:20-alpine AS builder_myweb
+# Dockerfile
+FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
 
-
-FROM nginx:alpine
-RUN rm -rf /usr/share/nginx/html/*
-COPY --from=builder_myweb /app/dist /usr/share/nginx/html
+# production image
+FROM node:20-alpine
+WORKDIR /app
+COPY --from=builder /app ./
 EXPOSE 3000
+CMD ["npm", "start"]
+
+
