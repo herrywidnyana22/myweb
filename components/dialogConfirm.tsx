@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 
-export default function DialogConfirm({ text, onConfirm, onCancel }: DialogConfirmProps) {
+export default memo(function DialogConfirm({ text, onConfirm, onCancel }: DialogConfirmProps) {
   return (
     <div className='fixed inset-0 bg-black/50 flex items-center justify-center z-9999'>
       <div className='bg-gray-900 p-6 rounded-xl shadow-lg text-center border border-white/20'>
@@ -21,5 +21,5 @@ export default function DialogConfirm({ text, onConfirm, onCancel }: DialogConfi
         </div>
       </div>
     </div>
-  );
-}
+  )
+})

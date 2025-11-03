@@ -2,10 +2,10 @@
 
 import { Dock } from '@/components/dock';
 import { PageTitle } from '@/components/pageTitle';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Widget } from '@/components/widget';
 import { dockItems } from '@/constants';
-import { Chat } from '@/components/chat';
+import { Chat } from '@/components/chat/chat';
 
 export default function Home() {
   const [messages, setMessages] = useState<ChatResponseProps[]>([]);
@@ -14,11 +14,10 @@ export default function Home() {
   const [openById, setOpenById] = useState<Record<string, boolean>>({});
   const [targetById, setTargetById] = useState<Record<string, DOMRect | null>>({});
 
-  const handleDockClick = (id: string, rect: DOMRect) => {
-    setTargetById(prev => ({ ...prev, [id]: rect }));
-    setOpenById(prev => ({ ...prev, [id]: !prev[id] }));
-  };
-
+  const handleDockClick = useCallback((id: string, rect: DOMRect) => {
+    setTargetById(prev => ({ ...prev, [id]: rect }))
+    setOpenById(prev => ({ ...prev, [id]: !prev[id] }))
+  }, [])
 
   return (
     <main className='h-screen relative px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64 py-4 sm:py-10 md:py-16 lg:py-20 overflow-hidden'>

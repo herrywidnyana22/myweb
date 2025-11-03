@@ -2,10 +2,12 @@ version: "3.8"
 
 services:
   web:
-    build: .
+    image: myweb-web:${TAG:-latest}
     container_name: myweb-app
     ports:
       - "3000:3000"
     env_file:
       - .env
     restart: always
+    environment:
+      - NODE_ENV=production

@@ -6,7 +6,7 @@ import { Tooltip } from "./tooltip";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import ProjectData from "@/app/data/projects.json"; // put the JSON above in /data/projects.json
-
+import { Icon } from "./icon";
 
 export const Projects = () => {
   return (
@@ -44,15 +44,12 @@ export const Projects = () => {
             {/* Tech stack icons */}
             <div className="mt-2 flex flex-wrap gap-2">
               {project.iconCategory.map((tech, i) => (
-                <Tooltip key={i} label={tech.label}>
-                  <Image
+                  <Icon
+                    key={i}
                     src={tech.src}
-                    alt="tech-icon"
-                    width={25}
-                    height={25}
+                    size={25}
                     className="rounded-full bg-gray-900/90 p-1 border border-white/20"
                   />
-                </Tooltip>
               ))}
             </div>
 

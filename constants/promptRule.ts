@@ -49,7 +49,7 @@ Rules:
       "year": string,
       "icon"?: string | React.ReactNode,
       "subIcon"?: string | React.ReactNode,
-  }
+    }
 
    c. if the user asks about experiences -> follow ExperienceProps:
    {
@@ -64,15 +64,23 @@ Rules:
     }
 
    d.if user asks about my address -> follow AddressProps:
-  {
-    "type": "address",
-    "address": string
-    "lat": number | string
-    "lng": number | string
-    "mapUrl"?: string
-  }
+    {
+      "type": "address",
+      "address": string
+      "lat": number | string
+      "lng": number | string
+      "mapUrl"?: string
+    }
 
-   e. For all other contexts → follow DefaultCardData:
+   e.if user asks about my contact -> follow ContactProps:
+    {
+      title: string
+      description: string 
+      icon?: string | React.ReactNode
+      href?: string
+    }
+
+   f. For all other contexts → follow DefaultCardData:
    {
      "type": "default",
      "id"?: string,

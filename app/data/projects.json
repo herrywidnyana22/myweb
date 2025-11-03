@@ -3,11 +3,11 @@
     "type": "project",
     "title": "Portfolio Website",
     "description": "A personal portfolio built with Next.js and Tailwind, showcasing projects and blogs.",
-    "icon": "/icons/project.png",
+    "icon": "/icons/project.webp",
     "iconCategory": [
-      { "src": "/icons/react.png", "label": "React" },
-      { "src": "/icons/nextjs.png", "label": "Next.js" },
-      { "src": "/icons/tailwind.png", "label": "TailwindCSS" }
+      { "src": "/icons/react.webp", "label": "React" },
+      { "src": "/icons/nextjs.webp", "label": "Next.js" },
+      { "src": "/icons/tailwind.webp", "label": "TailwindCSS" }
     ],
     "progressValue": 90,
     "demoLink": "https://my-portfolio.vercel.app",
@@ -17,11 +17,11 @@
     "type": "project",
     "title": "IoT GPS Tracker",
     "description": "An Arduino + ESP32 based GPS tracker with live location sharing via cloud dashboard.",
-    "icon": "/icons/experience.png",
+    "icon": "/icons/experience.webp",
     "iconCategory": [
-      { "src": "/icons/arduino.png", "label": "Arduino" },
-      { "src": "/icons/flutter.png", "label": "Flutter" },
-      { "src": "/icons/firebase.png", "label": "Firebase" }
+      { "src": "/icons/arduino.webp", "label": "Arduino" },
+      { "src": "/icons/flutter.webp", "label": "Flutter" },
+      { "src": "/icons/firebase.webp", "label": "Firebase" }
     ],
     "progressValue": 70,
     "demoLink": "https://gps-demo.vercel.app",
@@ -31,11 +31,11 @@
     "type": "project",
     "title": "Chat Application",
     "description": "A real-time chat app with authentication, built with Next.js, Supabase, and Tailwind.",
-    "icon": "/icons/document.png",
+    "icon": "/icons/document.webp",
     "iconCategory": [
-      { "src": "/icons/nextjs.png", "label": "Next.js" },
-      { "src": "/icons/react.png", "label": "React" },
-      { "src": "/icons/supabase.png", "label": "Supabase" }
+      { "src": "/icons/nextjs.webp", "label": "Next.js" },
+      { "src": "/icons/react.webp", "label": "React" },
+      { "src": "/icons/supabase.webp", "label": "Supabase" }
     ],
     "progressValue": 62,
     "demoLink": "https://chatapp.vercel.app",

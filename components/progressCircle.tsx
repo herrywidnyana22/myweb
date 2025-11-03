@@ -2,6 +2,7 @@
 
 import clsx from 'clsx';
 import { Tooltip } from './tooltip';
+import { getColor } from '@/utils/getColor';
 
 export const ProgressCircle = ({
   value,
@@ -11,14 +12,7 @@ export const ProgressCircle = ({
   const radius = 25; // circle radius
   const stroke = 6; // stroke width
   const circumference = 2 * Math.PI * radius;
-  const progress = circumference - (value / 100) * circumference;
-
-  // Tentukan warna berdasarkan value
-  const getStrokeColor = () => {
-    if (value > 80) return '#32D74B'; // Hijau (iOS green)
-    if (value > 50) return '#FFA500'; // Oranye
-    return '#FF3B30'; // Merah (iOS red)
-  };
+  const progress = circumference - (value / 100) * circumference
 
   return (
     <Tooltip label={`${label} ${value}%`}>
@@ -47,7 +41,7 @@ export const ProgressCircle = ({
             cx={radius + stroke}
             cy={radius + stroke}
             r={radius}
-            stroke={getStrokeColor()}
+            stroke={getColor(value)}
             strokeWidth={stroke}
             fill='none'
             strokeDasharray={circumference}

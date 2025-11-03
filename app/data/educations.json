@@ -4,31 +4,31 @@
       "school": "SD Negeri 3 Busungbiu",
       "major": "Sekolah Dasar",
       "year": "2001 - 2007",
-      "icon": "/icons/education.png",
-      "subIcon": "/icons/graduation.png"
+      "icon": "/icons/education.webp",
+      "subIcon": "/icons/graduation.webp"
     },
     {
       "type": "education",
       "school": "SMP Negeri 4 Busungbiu",
       "major": "Sekolah Menengah Pertama",
       "year": "2007 - 2010",
-      "icon": "/icons/education.png",
-      "subIcon": "/icons/graduation.png"
+      "icon": "/icons/education.webp",
+      "subIcon": "/icons/graduation.webp"
     },
     {
       "type": "education",
       "school": "SMK Negeri 1 Seririt",
       "major": "Teknik Komputer dan Jaringan",
       "year": "2010 - 2013",
-      "icon": "/icons/education.png",
-      "subIcon": "/icons/graduation.png"
+      "icon": "/icons/education.webp",
+      "subIcon": "/icons/graduation.webp"
     },
     {
       "type": "education",
       "school": "ITB STIKOM Bali",
       "major": "S1 - Sistem Informasi",
       "year": "2013 - 2017",
-      "icon": "/icons/education.png",
-      "subIcon": "/icons/graduation.png"
+      "icon": "/icons/education.webp",
+      "subIcon": "/icons/graduation.webp"
     }
   ]

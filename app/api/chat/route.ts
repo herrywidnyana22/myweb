@@ -9,15 +9,54 @@ import contacts from '@/app/data/contacts.json';
 import educations from '@/app/data/educations.json';
 import experiences from '@/app/data/experiences.json';
 
+// ---------- Types ----------
+interface AIResponse {
+  text: string;
+  cards: Partial<DataItemProps>[];
+}
+
+interface ApiResponse {
+  text: string;
+  cards: DataItemProps[];
+}
+
+// ---------- Gemini Client ----------
 const client = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY!,
 });
 
+// ---------- Helper ----------
+function sanitizeJSON(raw: string): string {
+  return raw
+    .replace(/```json|```/g, '')
+    .replace(/<\/?(pre|code)[^>]*>/gi, '')
+    .replace(/,\s*([}\]])/g, '$1')
+    .replace(/[“”]/g, '"')
+    .replace(/[\r\n]+/g, ' ')
+    .replace(/\\(?!["\\/bfnrtu])/g, '\\\\')
+    .trim();
+}
+
+function normalizeCard(card: Partial<DataItemProps>): DataItemProps {
+  let type = card.type;
+
+  if (!type) {
+    if ('progressValue' in card) type = 'project';
+    else if ('school' in card) type = 'education';
+    else if ('company' in card) type = 'experience';
+    else if ('address' in card) type = 'address';
+    else if ('href' in card) type = 'contact';
+    else type = 'default';
+  }
+
+  return { ...card, type } as DataItemProps;
+}
+
+// ---------- Main Handler ----------
 export async function POST(req: Request) {
   try {
-    const { message } = await req.json();
+    const { message } = (await req.json()) as { message: string };
 
-    // Build prompt
     const prompt = buildPrompt({
       message,
       profile,
@@ -28,58 +67,51 @@ export async function POST(req: Request) {
       experiences,
     });
 
-    // Generate AI content
     const response = await client.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
     });
 
     let rawText = response.text ?? '';
+    rawText = sanitizeJSON(rawText);
 
-    // Bersihkan pembungkus umum
-    rawText = rawText
-      .replace(/```json|```/g, '')
-      .replace(/<\/?(pre|code)[^>]*>/gi, '')
-      .replace(/^\s*Bot\s*/i, '')
-      .trim();
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    const data: ApiResponse = { text: '', cards: [] };
 
-    // Parsing JSON pertama yang valid
-    const data: { text: string; cards: DataItemProps[] } = { text: '', cards: [] };
+    if (jsonMatch) {
+      const jsonStr = sanitizeJSON(jsonMatch[0]);
 
-    try {
-      const jsonMatch = rawText.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        const parsed = JSON.parse(jsonMatch[0]);
-        data.text = parsed.text ?? '';
-        data.cards = Array.isArray(parsed.cards)
-          ? (parsed.cards as Partial<DataItemProps>[]).map((card) => {
-              // Tentukan type berdasarkan properti unik
-              if (!card.type) {
-                if ('progressValue' in card) card.type = 'project';
-                else if ('school' in card) card.type = 'education';
-                else if ('company' in card) card.type = 'experience';
-                else if ('address' in card) card.type = 'address';
-                else card.type = 'default';
-              }
-              return card as DataItemProps;
-            })
-          : [];
-      } else {
-        data.text = rawText;
-        data.cards = [];
+      let parsed: AIResponse | null = null;
+      try {
+        parsed = JSON.parse(jsonStr) as AIResponse;
+      } catch (err) {
+        console.warn('JSON parse error, attempting fallback:', err);
+        const safe = jsonStr.replace(/[^\x20-\x7E]+/g, '');
+        parsed = JSON.parse(safe) as AIResponse;
       }
-    } catch (err) {
-      console.error('JSON parse error:', err);
-      data.text = rawText;
+
+      data.text = parsed.text ?? 'Data tidak tersedia.';
+      data.cards = Array.isArray(parsed.cards)
+        ? parsed.cards.map(normalizeCard)
+        : [];
+    } else {
+      data.text = rawText || 'Data tidak tersedia.';
       data.cards = [];
     }
 
     return NextResponse.json(data);
-  } catch (err) {
-    console.error('API Error:', err);
-    return NextResponse.json(
-      { error: 'Something went wrong' },
-      { status: 500 }
-    );
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      console.error('API Error:', err.message);
+    } else {
+      console.error('Unknown API Error:', err);
+    }
+
+    const fallback: ApiResponse = {
+      text: 'Terjadi kesalahan server.',
+      cards: [],
+    };
+
+    return NextResponse.json(fallback, { status: 200 });
   }
 }

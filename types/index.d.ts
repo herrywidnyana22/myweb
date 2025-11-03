@@ -1,6 +1,7 @@
 
 declare type DataItemProps = 
   | ({ type: 'project' } & ProjectProps)
+  | ({ type: 'contact' } & ContactProps)
   | ({ type: 'address' } & AddressProps)
   | ({ type: 'education' } & EducationProps)
   | ({ type: 'experience' } & ExperienceProps)
@@ -50,6 +51,13 @@ declare interface ProjectProps{
   iconCategory: IconCategoryProps[]
 }
 
+declare interface ContactProps {
+  title: string
+  description: string 
+  icon?: string | React.ReactNode
+  href?: string
+}
+
 declare interface IconCategoryProps{
   src: string
   label: string
@@ -85,7 +93,7 @@ declare interface ChatProps {
   setMessages: React.Dispatch<React.SetStateAction<messages>>;
   setIsInputFocused: React.Dispatch<React.SetStateAction<boolean>>;
   isMinimized: boolean;
-  setIsMinimized: React.Dispatch<React.SetStateAction<isMinimized>>;
+  setIsMinimized: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 declare interface ChatResponseProps {
@@ -132,3 +140,13 @@ declare interface TooltipProps{
   children: ReactNode;
   label: string;
 };
+
+declare interface IconProps{
+  label?: string;
+  href?: string;
+  src?: string;
+  IconComponent?: LucideIcon;
+  size?: number;
+  className?: string;
+  newTab?: boolean;
+}

@@ -15,7 +15,7 @@ export const dockItems: DockItemProps[] = [
     children: <Profile />,
     icon: (
       <Image
-        src={'/images/profile.jpg'}
+        src={'/images/profile.webp'}
         alt='icon'
         height={240}
         width={240}
@@ -56,7 +56,7 @@ export const dockItems: DockItemProps[] = [
     children: <Education />,
     icon: (
       <Image
-        src={'/icons/graduation.png'}
+        src={'/icons/graduation.webp'}
         alt='icon'
         height={128}
         width={128}
@@ -71,7 +71,7 @@ export const dockItems: DockItemProps[] = [
     name: 'Experience',
     icon: (
       <Image
-        src={'/icons/experience.png'}
+        src={'/icons/experience.webp'}
         alt='icon'
         height={128}
         width={128}
@@ -87,7 +87,7 @@ export const dockItems: DockItemProps[] = [
     children: <Projects/>,
     icon: (
       <Image
-        src={'/icons/document.png'}
+        src={'/icons/document.webp'}
         alt='icon'
         height={240}
         width={240}
