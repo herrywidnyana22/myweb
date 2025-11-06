@@ -9,13 +9,14 @@ export const Contact = () => {
   const { data, isLoading, error } = useData<ContactProps>('contacts');
 
   if (isLoading) {
+    // 🦴 Skeleton Loader
     return (
-      <div className="grid grid-cols-2 place-items-center gap-3 p-4 sm:p-6">
+      <div className="grid grid-cols-2 place-items-center gap-2 sm:gap-3 p-3 sm:p-6">
         {Array.from({ length: 4 }).map((_, i) => (
           <div key={i} className="flex flex-col items-center">
             <div className="relative flex flex-col gap-2 items-center justify-center">
-              <div className="flex items-center justify-center p-2 bg-gray-700 rounded-2xl size-16 animate-pulse" />
-              <div className="h-3 w-12 bg-gray-600 rounded mt-2 animate-pulse" />
+              <div className="flex items-center justify-center bg-gray-700 rounded-xl size-12 sm:size-16 animate-pulse" />
+              <div className="h-2 w-10 sm:w-12 bg-gray-600 rounded mt-2 animate-pulse" />
             </div>
           </div>
         ))}
@@ -28,28 +29,33 @@ export const Contact = () => {
   }
 
   return (
-    <div className="grid grid-cols-2 place-items-center gap-3 p-4 sm:p-6">
+    <div className="grid grid-cols-2 place-items-center gap-2 sm:gap-3 p-3 sm:p-6">
       {data?.map((item, i) => (
         <Tooltip key={i} label={item.description}>
-          <Link 
-            href={item.href || '#'} 
+          <Link
+            href={item.href || '#'}
             target="_blank"
             rel="noopener noreferrer"
             className="flex flex-col items-center"
           >
-            <div className="relative flex flex-col gap-2 items-center justify-center transition-transform duration-300 hover:scale-110 cursor-pointer">
-              <div className="flex items-center justify-center p-2 bg-amber-50 rounded-2xl size-16">
+            <div className="relative flex flex-col gap-1.5 sm:gap-2 items-center justify-center transition-transform duration-300 hover:scale-105 sm:hover:scale-110 cursor-pointer">
+              {/* Icon container */}
+              <div className="flex items-center justify-center p-1.5 sm:p-2 bg-amber-50 rounded-xl sm:rounded-2xl size-12 sm:size-16 shadow-sm">
                 {item.icon && typeof item.icon === 'string' && (
                   <Image
                     src={item.icon}
                     alt="contact icon"
-                    height={80}
-                    width={80}
-                    className="size-20 object-contain"
+                    height={60}
+                    width={60}
+                    className="size-10 sm:size-14 object-contain"
                   />
                 )}
               </div>
-              <p className="text-xs text-slate-200 capitalize">{item.title}</p>
+
+              {/* Label */}
+              <p className="text-[10px] sm:text-xs text-slate-200 capitalize mt-1 sm:mt-2 truncate">
+                {item.title}
+              </p>
             </div>
           </Link>
         </Tooltip>

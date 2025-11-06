@@ -23,6 +23,7 @@ export default function Home() {
     <main className='h-screen relative px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64 py-4 sm:py-10 md:py-16 lg:py-20 overflow-hidden'>
       {/* Gradient Background */}
       <div className='absolute inset-0 bg-linear-to-b from-blue-900 via-purple-900 to-orange-600 opacity-90' />
+      {/* <div className='absolute inset-0 bg-linear-to-br from-[#2b1055] via-[#44166c] to-[#ff6b6b] opacity-90' /> */}
       <div className='absolute inset-0 bg-black/20' />
 
       {/* Backdrop overlay when input is focused */}
@@ -30,7 +31,11 @@ export default function Home() {
         <div className='absolute inset-0 z-50 backdrop-blur-sm bg-black/30 transition-opacity' />
       )}
 
-      <div className='relative w-full h-full flex flex-col space-y-8 sm:space-y-10 lg:space-y-12 max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto'>
+      <div className="
+        relative w-full h-full flex flex-col 
+        space-y-2 sm:space-y-4 md:space-y-8 lg:space-y-10 xl:space-y-12
+        max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto
+      ">
         {/* Header  */}
         <PageTitle isWidgetOpen={Object.values(openById).every(v => !v)}/>
 
@@ -38,6 +43,7 @@ export default function Home() {
         <Chat
           messages={messages}
           setMessages={setMessages}
+          isInputFocused={isInputFocused}
           setIsInputFocused={setIsInputFocused}
           isMinimized={isMinimized}
           setIsMinimized={setIsMinimized}

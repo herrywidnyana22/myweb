@@ -12,6 +12,7 @@ import DialogConfirm from '../dialogConfirm';
 export const Chat = ({
     messages: propMessages,
     setMessages: setPropMessages,
+    isInputFocused,
     setIsInputFocused,
     setIsMinimized,
     isMinimized,
@@ -19,7 +20,7 @@ export const Chat = ({
     const [messages, setMessages] = useState<ChatResponseProps[]>(propMessages || []);
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false)
-    const [showConfirm, setShowConfirm] = useState(false) // untuk konfirmasi clear
+    const [showConfirm, setShowConfirm] = useState(false) 
 
     const chatEndRef = useRef<HTMLDivElement | null>(null)
 
@@ -95,12 +96,34 @@ export const Chat = ({
       localStorage.setItem('chatHistory', JSON.stringify(messages))
       scrollToBottom()
   }, [messages, setPropMessages, scrollToBottom])
-    
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.visualViewport) return;
+
+    const handleResize = () => {
+      const visual = window.visualViewport;
+      if (!visual) return;
+
+      // Keyboard dianggap muncul kalau tinggi viewport lebih kecil dari tinggi window
+      setIsInputFocused(visual.height < window.innerHeight - 100);
+    };
+
+    window.visualViewport.addEventListener('resize', handleResize);
+
+    // Jalankan sekali di awal agar state sinkron saat load
+    handleResize();
+
+    return () => window.visualViewport?.removeEventListener('resize', handleResize);
+  }, [setIsInputFocused]);
     
     return ( 
     <>
         {/* Chat Window */}
-        <div className='relative z-1000 w-full mx-auto transition'>
+        <div
+          className={`relative z-1000 w-full mx-auto transition-all duration-300 ease-in-out
+          ${isInputFocused ? '-translate-y-20' : 'translate-y-0'}
+          sm:translate-y-0`} // desktop tetap
+        >
           <div className='w-full mx-auto rounded-3xl overflow-hidden shadow-2xl border border-gray-600/50 '>
             {/* Chat Header */}
             {messages.length > 0 && (
@@ -147,6 +170,7 @@ export const Chat = ({
                 sendMessage={sendMessage}
                 onFocus={() => setIsInputFocused(true)}
                 onBlur={() => setIsInputFocused(false)}
+                setIsMinimized={setIsMinimized}
               />
             </div>
           </div>

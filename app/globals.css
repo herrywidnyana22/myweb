@@ -55,4 +55,10 @@ body {
   background: var(--text-muted);
 }
 
+@media (max-width: 640px) {
+  body {
+    overscroll-behavior: none;
+  }
+}
+
 

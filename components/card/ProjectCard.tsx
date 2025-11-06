@@ -9,73 +9,108 @@ import { getColor } from '@/utils';
 
 export const ProjectCard = (card: ProjectProps) => {
   return (
-    <div className="flex flex-col gap-2 w-full">
-        <div className="flex items-center gap-3">
-            {card.icon && (
-                <Image
-                    src={card.icon}
-                    alt={card.title}
-                    width={40}
-                    height={40}
-                    className="object-contain"
-                />
-            )}
-            <h3 className="font-semibold text-lg text-gray-600"><ReactMarkdown>{card.title}</ReactMarkdown></h3>
-        </div>
+    <div
+      className="
+        flex flex-col gap-1.5 sm:gap-2 
+        w-full p-2 sm:p-3
+        transition-all duration-300
+      "
+    >
+      {/* Header: Icon + Title */}
+      <div className="flex items-center gap-2 sm:gap-3">
+        {card.icon && (
+          <Image
+            src={card.icon}
+            alt={card.title}
+            width={30}
+            height={30}
+            className="object-contain sm:w-10 sm:h-10"
+          />
+        )}
+        <h3 className="font-semibold text-sm sm:text-base md:text-lg text-gray-700 leading-tight">
+          <ReactMarkdown>{card.title}</ReactMarkdown>
+        </h3>
+      </div>
 
-        <div className="text-sm text-gray-600 leading-snug">
-            <ReactMarkdown>{card.description}</ReactMarkdown>
-        </div>
+      {/* Description */}
+      <div className="text-xs sm:text-sm text-gray-600 leading-snug sm:leading-normal mt-1">
+        <ReactMarkdown>{card.description}</ReactMarkdown>
+      </div>
 
-        {typeof card.progressValue === 'number' && (
-            <Tooltip label={`Progress: ${card.progressValue}%`}>
-                <div className="w-full bg-gray-200 rounded-full h-2 mt-2 overflow-hidden">
-                    <div
-                        className="h-2 rounded-full transition-all duration-500"
-                        style={{
-                            width: `${Math.min(card.progressValue, 100)}%`,
-                            backgroundColor: getColor(card.progressValue),
-                        }}
-                    />
-                </div>
-            </Tooltip>
+      {/* Progress Bar */}
+      {typeof card.progressValue === 'number' && (
+        <Tooltip label={`Progress: ${card.progressValue}%`}>
+          <div className="w-full bg-gray-200 rounded-full h-1.5 sm:h-2 mt-2 overflow-hidden">
+            <div
+              className="h-full rounded-full transition-all duration-500"
+              style={{
+                width: `${Math.min(card.progressValue, 100)}%`,
+                backgroundColor: getColor(card.progressValue),
+              }}
+            />
+          </div>
+        </Tooltip>
+      )}
+
+      {/* Footer: Tech icons + Action buttons */}
+      <div
+        className="
+          flex justify-between items-center 
+          mt-2 sm:mt-3
+        "
+      >
+        {/* Tech Stack */}
+        {card.iconCategory && card.iconCategory.length > 0 && (
+          <div className="flex flex-wrap gap-1 sm:gap-1.5">
+            {card.iconCategory.map((icon: IconCategoryProps, idx: number) => (
+              <Icon
+                key={idx}
+                label={icon.label}
+                src={icon.src}
+                size={18}
+                className="
+                  bg-gray-900/10 sm:bg-gray-900/20 
+                  p-0.5 sm:p-1 
+                  rounded-full 
+                  border border-white/10
+                "
+              />
+            ))}
+          </div>
         )}
 
-        <div className='flex justify-between items-center mt-3'>
-
-            {card.iconCategory && card.iconCategory.length > 0 && (
-                
-                <div className="flex gap-2 flex-wrap">
-                    {card.iconCategory.map((icon:IconCategoryProps, idx:number) => (
-                        <Icon
-                            key={idx}
-                            label={icon.label}
-                            src={icon.src}
-                            className='bg-gray-900/20'
-                        />
-                    ))}
-                </div>
-            )}
-            <div className="flex gap-2">
-                {card.githubLink && typeof card.githubLink === 'string' && (
-                    <Icon 
-                        label='Source code'
-                        href={card.githubLink}
-                        IconComponent={Github}
-                        className='bg-black'
-                    />
-                )}
-                {card.demoLink && typeof card.demoLink === 'string' && (
-                    <Icon 
-                        label='View demo'
-                        href={card.demoLink}
-                        IconComponent={Eye}
-                        className='bg-black/10'
-                    />
-                )}
-                
-            </div>
+        {/* Action Buttons */}
+        <div className="flex gap-1 sm:gap-1.5">
+          {card.githubLink && typeof card.githubLink === 'string' && (
+            <Icon
+              label="Source code"
+              href={card.githubLink}
+              IconComponent={Github}
+              size={18}
+              className="
+                bg-black text-white 
+                p-1 sm:p-1.5 
+                rounded-full 
+                hover:bg-gray-800 transition
+              "
+            />
+          )}
+          {card.demoLink && typeof card.demoLink === 'string' && (
+            <Icon
+              label="View demo"
+              href={card.demoLink}
+              IconComponent={Eye}
+              size={18}
+              className="
+                bg-black/10 
+                p-1 sm:p-1.5 
+                rounded-full 
+                hover:bg-black/20 transition
+              "
+            />
+          )}
         </div>
+      </div>
     </div>
   );
 };

@@ -103,10 +103,11 @@ declare interface DockItemProps {
 
 declare interface ChatProps {
   messages: ChatResponseProps[];
-  setMessages: React.Dispatch<React.SetStateAction<messages>>;
-  setIsInputFocused: React.Dispatch<React.SetStateAction<boolean>>;
-  isMinimized: boolean;
-  setIsMinimized: React.Dispatch<React.SetStateAction<boolean>>;
+  setMessages: React.Dispatch<React.SetStateAction<messages>>
+  isInputFocused: boolean
+  setIsInputFocused: React.Dispatch<React.SetStateAction<boolean>>
+  isMinimized: boolean
+  setIsMinimized: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 declare interface ChatResponseProps {
@@ -119,6 +120,7 @@ declare interface ChatResponseProps {
 declare interface ChatInputProps {
   input: string;
   setInput: React.Dispatch<React.SetStateAction<string>>;
+  setIsMinimized: React.Dispatch<React.SetStateAction<boolean>>;
   sendMessage: (e: React.FormEvent) => Promise<void>;
   onFocus?: () => void;
   onBlur?: () => void;
