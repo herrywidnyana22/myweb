@@ -2,9 +2,9 @@
 
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
+import { memo } from 'react';
 import { ProjectCard } from './projectCard';
 import { ContactCard } from './contactCard';
-import { memo } from 'react';
 
 const CardComponent = (card: DataItemProps) => {
   switch (card.type) {
