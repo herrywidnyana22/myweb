@@ -23,7 +23,7 @@ declare interface AddressProps{
   mapUrl?: string
 }
 
-declare interface ExperiencesProps{
+declare interface ExperienceProps{
   company: string
   role: string
   location: string
@@ -33,7 +33,7 @@ declare interface ExperiencesProps{
   icon: string | React.ReactNode
 }
 
-declare interface EducationsProps{
+declare interface EducationProps{
   school: string
   major: string
   year: string
@@ -66,11 +66,24 @@ declare interface IconCategoryProps{
 declare interface BuildPromptProps{
   message: string
   projects: ProjectProps[]
-  profile: unknown
+  profile: ProfileProps
   address: AddressProps
   contacts: DefaultCardData[]
-  educations: EducationsProps[]
-  experiences: ExperiencesProps[]
+  educations: EducationProps[]
+  experiences: ExperienceProps[]
+}
+
+declare interface ProfileProps{
+  fullName: string 
+  role: string 
+  summary: string 
+  image: string
+  birth: BirthdayProps
+}
+
+type BirthdayProps = {
+  date: string
+  place: string
 }
 
 

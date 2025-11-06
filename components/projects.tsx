@@ -1,86 +1,74 @@
-import Image from "next/image";
-import { Eye, Github } from "lucide-react";
-import { ProgressCircle } from "./progressCircle";
-import { Tooltip } from "./tooltip";
+'use client';
 
-import Link from "next/link";
-import ReactMarkdown from "react-markdown";
-import ProjectData from "@/app/data/projects.json"; // put the JSON above in /data/projects.json
-import { Icon } from "./icon";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCreative, Pagination } from 'swiper/modules';
+import { ProjectItem } from './projectItem';
+import { useData } from '@/lib/useData';
 
 export const Projects = () => {
+  const { data, isLoading, error } = useData<ProjectProps>('projects');
+
+  if (isLoading) {
+    // 🦴 Skeleton Loader (ikut layout Swiper)
+    return (
+      <Swiper
+        grabCursor
+        effect="creative"
+        creativeEffect={{
+          prev: { shadow: true, translate: [0, 0, -400] },
+          next: { translate: ['100%', 0, 0] },
+        }}
+        modules={[EffectCreative, Pagination]}
+        className="mySwiper w-full h-full overflow-hidden"
+      >
+        {Array.from({ length: 3 }).map((_, i) => (
+          <SwiperSlide key={i}>
+            <div className="w-full h-full flex flex-col gap-3 p-6 rounded-2xl bg-white animate-pulse">
+              <div className="flex items-center gap-3">
+                <div className="rounded-full size-14 bg-gray-300" />
+                <div className="h-5 w-1/2 bg-gray-300 rounded" />
+              </div>
+              <div className="flex-1 mt-3 space-y-3">
+                <div className="h-3 bg-gray-200 rounded w-full" />
+                <div className="h-3 bg-gray-200 rounded w-5/6" />
+                <div className="h-3 bg-gray-200 rounded w-4/5" />
+              </div>
+              <div className="flex justify-end gap-3 mt-5">
+                <div className="h-6 w-20 bg-gray-300 rounded-2xl" />
+                <div className="h-6 w-24 bg-gray-300 rounded-2xl" />
+              </div>
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    );
+  }
+
+  if (error) {
+    return <p className="text-center text-red-400 p-4">Gagal memuat project.</p>;
+  }
+
+  if (!data?.length) {
+    return <p className="text-center text-gray-400 p-4">Belum ada data project.</p>;
+  }
+
   return (
-    <div className="grid gap-y-12 gap-x-6 md:grid-cols-2 mt-5">
-      {ProjectData.map((project: ProjectProps, i: number) => (
-        <div key={i} className="relative">
-          {/* ICON */}
-          <div className="absolute -top-8 left-[10%] flex items-center">
-            <div 
-              className="rounded-full bg-gray-900/80 size-14 flex items-center justify-center p-3 backdrop-blur-2xl border border-white/20 shadow-2xl z-20">
-              <Image
-                src={project.icon}
-                alt="icon"
-                width={40}
-                height={40}
-                className="size-10 object-contain"
-              />
-            </div>
-            <span className="px-4 py-1 rounded-2xl backdrop-blur-2xl border border-white/20 shadow-2xl bg-gray-900/80  text-sm">{project.title}</span>
-          </div>
-          
-          <div
-            className="bg-white/20 p-6 rounded-2xl text-slate-200"
-          >
-            {/* Progress */}
-            <div className="float-right ml-3 mb-2">
-              <ProgressCircle value={project.progressValue} label="Progress" />
-            </div>
-
-            {/* Text */}
-            <div className="text-sm font-light leading-relaxed mt-2">
-               <ReactMarkdown>{project.description}</ReactMarkdown>
-            </div>
-
-            {/* Tech stack icons */}
-            <div className="mt-2 flex flex-wrap gap-2">
-              {project.iconCategory.map((tech, i) => (
-                  <Icon
-                    key={i}
-                    src={tech.src}
-                    size={25}
-                    className="rounded-full bg-gray-900/90 p-1 border border-white/20"
-                  />
-              ))}
-            </div>
-
-            {/* Buttons */}
-            <div className="mt-5 flex gap-3 justify-end">
-              <Link
-                href={project.githubLink}
-                target="_blank"
-                className="flex items-center gap-2 bg-black px-3 py-1.5 rounded-2xl text-sm hover:bg-gray-800 transition"
-              >
-                <Github size={16} />
-                Source
-              </Link>
-              {
-                project.demoLink && (
-                <Link
-                  href={project.demoLink}
-                  target="_blank"
-                  className="flex items-center gap-2 bg-orange-500/90 px-3 py-1.5 rounded-2xl text-sm hover:bg-orange-600 transition"
-                >
-                  <Eye size={16} />
-                  View Demo
-                </Link>
-                )
-              }
-            </div>
-
-            
-          </div>
-        </div>
+    <Swiper
+      grabCursor
+      effect="creative"
+      creativeEffect={{
+        prev: { shadow: true, translate: [0, 0, -400] },
+        next: { translate: ['100%', 0, 0] },
+      }}
+      pagination={{ clickable: true }}
+      modules={[EffectCreative, Pagination]}
+      className="mySwiper w-full h-full overflow-hidden"
+    >
+      {data.map((project, i) => (
+        <SwiperSlide key={i}>
+          <ProjectItem {...project} />
+        </SwiperSlide>
       ))}
-    </div>
+    </Swiper>
   );
 };

@@ -1,15 +1,16 @@
+
+import Image from 'next/image';
+
 import { Profile } from '@/components/profile';
 import { Contact } from '@/components/contact';
 import { Projects } from '@/components/projects';
 
-import contacts from '@/app/data/contacts.json';
-import Image from 'next/image';
-import Education from '@/components/education';
+import { Experiences } from '@/components/experiences';
+import { Education } from '@/components/education';
 
 
 export const dockItems: DockItemProps[] = [
   {
-    // grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8
     id: 'profile',
     name: 'Profile',
     children: <Profile />,
@@ -23,32 +24,24 @@ export const dockItems: DockItemProps[] = [
       />
     ),
     className:
-      'col-span-2 sm:col-span-2 md:col-span-4 lg:col-span-6 xl:col-span-4',
+      'col-span-2 sm:col-span-3 md:col-span-3 lg:col-span-4 xl:col-span-6',
   },
   {
     id: 'kontak',
     name: 'Kontak',
     children: <Contact />,
     icon: (
-      <div className='size-10 sm:size-12 md:size-14 flex items-center justify-center rounded-xl bg-white/10 backdrop-blur-sm border border-white/20'>
-        <div className='grid grid-cols-2 gap-0.5 size-7 sm:size-8 md:size-9'>
-          {contacts.slice(0, 4).map((item, i) => (
-            <div key={i} className='flex items-center justify-center'>
-              <Image
-                src={item.icon}
-                alt={'contact icon'}
-                height={80}
-                width={80}
-                className='size-3 md:size-4 object-contain'
-              />
-            </div>
-          ))}
-        </div>
-      </div>
+      <Image
+        src={'/icons/contact.png'}
+        alt='icon'
+        height={128}
+        width={128}
+        className='size-10 sm:size-12 md:size-14 object-cover'
+      />
     ),
 
     className:
-      'col-span-1 sm:col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-2 overflow-hidden',
+      'col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-2 xl:col-span-2 overflow-hidden',
   },
   {
     id: 'education',
@@ -64,11 +57,12 @@ export const dockItems: DockItemProps[] = [
       />
     ),
     className:
-      'col-span-1 sm:col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-2 overflow-hidden',
+      'col-span-2 sm:col-span-4 md:col-span-4 lg:col-span-6 xl:col-span-8 overflow-hidden',
   },
   {
     id: 'experience',
     name: 'Experience',
+    children: <Experiences/>,
     icon: (
       <Image
         src={'/icons/experience.webp'}
@@ -79,7 +73,7 @@ export const dockItems: DockItemProps[] = [
       />
     ),
     className:
-      'col-span-2 sm:col-span-2 md:col-span-4 lg:col-span-6 xl:col-span-8',
+      'col-span-2 sm:col-span-4 md:col-span-4 lg:col-span-6 xl:col-span-4',
   },
   {
     id: 'project',
@@ -87,14 +81,14 @@ export const dockItems: DockItemProps[] = [
     children: <Projects/>,
     icon: (
       <Image
-        src={'/icons/document.webp'}
+        src={'/icons/project3d.webp'}
         alt='icon'
-        height={240}
-        width={240}
+        height={128}
+        width={128}
         className='size-10 sm:size-12 md:size-14 object-cover'
       />
     ),
     className:
-      'col-span-2 sm:col-span-2 md:col-span-4 lg:col-span-6 xl:col-span-8',
+      'col-span-2 sm:col-span-4 md:col-span-4 lg:col-span-6 xl:col-span-4',
   },
 ];

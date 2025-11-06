@@ -30,7 +30,7 @@ export default function Home() {
         <div className='absolute inset-0 z-50 backdrop-blur-sm bg-black/30 transition-opacity' />
       )}
 
-      <div className='relative w-full h-full  flex flex-col space-y-8 sm:space-y-10 lg:space-y-12 max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto'>
+      <div className='relative w-full h-full flex flex-col space-y-8 sm:space-y-10 lg:space-y-12 max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto'>
         {/* Header  */}
         <PageTitle isWidgetOpen={Object.values(openById).every(v => !v)}/>
 

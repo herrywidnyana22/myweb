@@ -41,7 +41,7 @@ Rules:
      ]
    }
 
-   b. if the user asks about educations -> follow EducationsProps:
+   b. if the user asks about educations -> follow EducationProps:
    {
       "type": "education",
       "school": string,

@@ -35,22 +35,22 @@ export const Dock = ({ items, onIconClick, isOpenById }: DockProps) => {
             {/* Icon */}
             <Tooltip label={item.name}>
 
-            <motion.button
-              onClick={() => {
-                const rect = refs.current[item.id]?.getBoundingClientRect();
-                if (rect) onIconClick(item.id, rect);
-              }}
-              animate={getTransform(index)}
-              transition={{
-                type: 'spring',
-                stiffness: 250,
-                damping: 18,
-                mass: 0.5,
-              }}
-              className='size-10 sm:size-12 md:size-14 flex items-center justify-center'
-            >
-              {item.icon}
-            </motion.button>
+              <motion.button
+                onClick={() => {
+                  const rect = refs.current[item.id]?.getBoundingClientRect();
+                  if (rect) onIconClick(item.id, rect);
+                }}
+                animate={getTransform(index)}
+                transition={{
+                  type: 'spring',
+                  stiffness: 250,
+                  damping: 18,
+                  mass: 0.5,
+                }}
+                className='size-10 sm:size-12 md:size-14 flex items-center justify-center'
+              >
+                {item.icon}
+              </motion.button>
             </Tooltip>
 
             {/* Active indicator dot (absolute, does not affect layout) */}

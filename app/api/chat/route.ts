@@ -1,13 +1,7 @@
 import { NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
 import { buildPrompt } from '@/constants/promptTemplate';
-
-import projects from '@/app/data/projects.json';
-import profile from '@/app/data/profile.json';
-import address from '@/app/data/address.json';
-import contacts from '@/app/data/contacts.json';
-import educations from '@/app/data/educations.json';
-import experiences from '@/app/data/experiences.json';
+import { fetchSheetData } from '@/lib/fetchData';
 
 // ---------- Types ----------
 interface AIResponse {
@@ -25,7 +19,7 @@ const client = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY!,
 });
 
-// ---------- Helper ----------
+// ---------- Helpers ----------
 function sanitizeJSON(raw: string): string {
   return raw
     .replace(/```json|```/g, '')
@@ -39,7 +33,6 @@ function sanitizeJSON(raw: string): string {
 
 function normalizeCard(card: Partial<DataItemProps>): DataItemProps {
   let type = card.type;
-
   if (!type) {
     if ('progressValue' in card) type = 'project';
     else if ('school' in card) type = 'education';
@@ -48,7 +41,6 @@ function normalizeCard(card: Partial<DataItemProps>): DataItemProps {
     else if ('href' in card) type = 'contact';
     else type = 'default';
   }
-
   return { ...card, type } as DataItemProps;
 }
 
@@ -57,6 +49,21 @@ export async function POST(req: Request) {
   try {
     const { message } = (await req.json()) as { message: string };
 
+    // 🔥 Ambil data langsung dari Google Sheet (via API route)
+    const [profileData, addressData, projects, contacts, educations, experiences] = await Promise.all([
+      fetchSheetData<any>('profile'),
+      fetchSheetData<any>('address'),
+      fetchSheetData<any>('projects'),
+      fetchSheetData<any>('contacts'),
+      fetchSheetData<any>('educations'),
+      fetchSheetData<any>('experiences'),
+    ]);
+
+    // Ambil object tunggal untuk profile & address
+    const profile = Array.isArray(profileData) ? profileData[0] : profileData;
+    const address = Array.isArray(addressData) ? addressData[0] : addressData;
+
+    // 🔧 Bangun prompt AI
     const prompt = buildPrompt({
       message,
       profile,
@@ -67,6 +74,7 @@ export async function POST(req: Request) {
       experiences,
     });
 
+    // 🔮 Kirim ke Gemini
     const response = await client.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: prompt,
@@ -80,7 +88,6 @@ export async function POST(req: Request) {
 
     if (jsonMatch) {
       const jsonStr = sanitizeJSON(jsonMatch[0]);
-
       let parsed: AIResponse | null = null;
       try {
         parsed = JSON.parse(jsonStr) as AIResponse;
@@ -100,18 +107,11 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json(data);
-  } catch (err: unknown) {
-    if (err instanceof Error) {
-      console.error('API Error:', err.message);
-    } else {
-      console.error('Unknown API Error:', err);
-    }
-
-    const fallback: ApiResponse = {
-      text: 'Terjadi kesalahan server.',
-      cards: [],
-    };
-
-    return NextResponse.json(fallback, { status: 200 });
+  } catch (err) {
+    console.error('Chat API Error:', err);
+    return NextResponse.json(
+      { text: 'Terjadi kesalahan server.', cards: [] },
+      { status: 500 }
+    );
   }
 }

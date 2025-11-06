@@ -14,13 +14,13 @@ export const ContactCard = (card: ContactProps) => {
   }, [card.description])
 
   return (
-    <div className="w-full flex items-center gap-4 hover:bg-gray-100 rounded-xl transition p-1">
+    <div className="w-full flex items-center gap-4 rounded-xl transition p-1">
       {card.icon && typeof card.icon === 'string' && (
         <Image
           src={card.icon}
           alt={card.title}
-          width={32}
-          height={32}
+          width={48}
+          height={48}
           className="object-contain"
         />
       )}

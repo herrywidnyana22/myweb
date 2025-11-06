@@ -1,4 +1,8 @@
 @import 'tailwindcss';
+@import 'swiper/css';
+@import 'swiper/css/effect-coverflow';
+@import 'swiper/css/effect-creative';
+@import 'swiper/css/pagination';
 
 :root {
   --background: #0a0a0a;

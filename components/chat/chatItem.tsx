@@ -11,7 +11,7 @@ export const ChatItem = memo(({ role, text, children }: ChatItemProps) => {
 
   const wrapperClass = `flex items-start gap-3 pb-3 ${
     isUser ? 'justify-end' : 'justify-start'
-  }`;
+  }`
 
   const bubbleClass = [
     'relative',
@@ -22,11 +22,11 @@ export const ChatItem = memo(({ role, text, children }: ChatItemProps) => {
     isUser
       ? 'bg-blue-500 text-white rounded-tr-none'
       : 'bg-white border text-slate-900 rounded-tl-none',
-  ].join(' ');
+  ].join(' ')
 
   const avatar = (src: string, alt: string, className: string) => (
     <Image src={src} alt={alt} height={240} width={240} className={className} />
-  );
+  )
 
   return (
     <div className={wrapperClass}>
@@ -64,7 +64,7 @@ export const ChatItem = memo(({ role, text, children }: ChatItemProps) => {
       {/* User Avatar */}
       {isUser && (
         <div className='rounded-full size-10 bg-white/30 p-1 flex items-center justify-center'>
-          {avatar('/images/user.webp', 'User', 'size-6 object-contain')}
+          {avatar('/icons/user.webp', 'User', 'size-6 object-contain')}
         </div>
       )}
     </div>

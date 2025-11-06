@@ -1,12 +1,13 @@
 'use client';
 
 import ReactMarkdown from 'react-markdown';
-import { ProjectCard } from './ProjectCard';
-import { ContactCard } from './ContactCard';
+import Image from 'next/image';
+
+import { ProjectCard } from './projectCard';
+import { ContactCard } from './contactCard';
 import { memo } from 'react';
 
 const CardComponent = (card: DataItemProps) => {
-  console.log({card})
   switch (card.type) {
     case 'project':
       return <ProjectCard {...card} />;
@@ -22,13 +23,30 @@ const CardComponent = (card: DataItemProps) => {
       );
     case 'experience':
       return (
-        <div>
-          <h3 className="font-semibold text-base sm:text-lg">{card.company}</h3>
-          <p className="text-sm text-gray-700">
-            {card.role} - {card.location}
-          </p>
-          <p className="text-xs text-gray-400">{card.year}</p>
-          <div className="text-sm mt-1">{card.jobdesk}</div>
+        <div className='flex flex-col gap-2'>
+          <div className='flex gap-3 items-center'>
+
+          {
+            card.icon && typeof card.icon === 'string' && (
+              <Image
+                src={card.icon}
+                alt='company logo'
+                height={32}
+                width={32}
+              />
+            )
+          }
+          <div>
+            <h3 className="font-semibold text-base sm:text-lg">{card.company}</h3>
+            <p className="text-sm text-gray-700">
+                {card.role}
+            </p>
+            <p className="text-xs text-gray-400 mt-2">{card.year}</p>
+          </div>
+          
+          </div>
+          <p className="text-sm mt-1">{card.description}</p>
+
         </div>
       );
     case 'address':

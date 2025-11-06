@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 import { Tooltip } from './tooltip';
-import { getColor } from '@/utils/getColor';
+import { getColor } from '@/utils';
 
 export const ProgressCircle = ({
   value,
@@ -23,7 +23,7 @@ export const ProgressCircle = ({
         )}
       >
         <svg
-          className='rotate-[-90deg]'
+          className='-rotate-90'
           width={radius * 2 + stroke * 2}
           height={radius * 2 + stroke * 2}
         >
@@ -53,9 +53,9 @@ export const ProgressCircle = ({
 
         {/* Value in center */}
         <div className='absolute flex flex-col items-center justify-center'>
-          <span className='text-white font-light text-[14px] capitalize'>
+          <span className='text-gray-900/90 font-light text-[14px] capitalize'>
             {value}
-            <span className='text-xs text-white/70'>%</span>
+            <span className='text-xs text-gray-900/70'>%</span>
           </span>
         </div>
       </div>

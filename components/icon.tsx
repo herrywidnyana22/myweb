@@ -19,7 +19,7 @@ export const Icon = ({
   const iconContent = (
     <div
       className={clsx(
-        'rounded-full p-1 flex items-center justify-center transition hover:bg-gray-900/30',
+        'rounded-full p-1 flex items-center justify-center transition hover:bg-gray-900/30 z-20',
         className
       )}
     >

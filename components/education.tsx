@@ -1,56 +1,83 @@
 'use client';
-import React from 'react';
 
-type Node = {
-  id: string;
-  icon: string;
-  text: string;
-};
+import Image from 'next/image';
+import { useData } from '@/lib/useData';
 
-const nodes: Node[] = [
-  { id: '1', icon: 'SD', text: 'text 1' },
-  { id: '2', icon: 'SMP', text: 'text 1' },
-  { id: '3', icon: 'SMK', text: 'text 2' },
-  { id: '4', icon: 'icon 2', text: 'text 2' },
-  { id: '5', icon: 'icon 2', text: 'text 2' },
-];
+export const Education = () => {
+  const { data, isLoading, error } = useData<EducationProps>('educations');
 
-export default function Education() {
+  if (isLoading) {
+    return (
+      <div className="flex items-center gap-6 overflow-x-auto p-4 sm:p-6">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div
+            key={i}
+            className="flex flex-col items-center gap-3 animate-pulse"
+          >
+            <div className="relative flex items-center justify-center size-16 bg-gray-300 rounded-full" />
+            <div className="h-3 w-24 bg-gray-300 rounded" />
+            <div className="h-3 w-20 bg-gray-200 rounded" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return <p className="text-center text-red-400 p-4">Gagal memuat data pendidikan.</p>;
+  }
+
+  if (!data?.length) {
+    return <p className="text-center text-gray-400 p-4">Belum ada data pendidikan.</p>;
+  }
+
   return (
-    <div className="relative flex items-start justify-center gap-10">
-      {/* SVG untuk garis antar icon */}
-      <svg
-        className="absolute top-0 left-0 w-full h-20"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {nodes.map((node, i) => {
-          if (i === nodes.length - 1) return null;
-          return (
-            <line
-              key={i}
-              x1={`${(i + 0.5) * (100 / nodes.length)}%`}
-              y1="30"
-              x2={`${(i + 1.5) * (100 / nodes.length)}%`}
-              y2="30"
-              stroke="white"
-              strokeWidth="1"
-            />
-          );
-        })}
-      </svg>
+    <div className="relative w-full overflow-x-auto">
+      <div className="flex w-full items-start justify-center gap-10 px-4 sm:px-6 py-8">
+        {data.map((edu, i) => (
+          <div key={i} className="relative flex flex-col items-center text-center">
+            {/* Icon utama */}
+            <div className="relative flex items-center justify-center size-16 bg-white rounded-full border-2 border-orange-400 shadow-md">
+              {typeof edu.icon === 'string' && (
+                  <Image
+                    src={edu.icon}
+                    alt={edu.school}
+                    width={40}
+                    height={40}
+                    className="object-contain size-10"
+                  />
+                )
 
-      {/* Node */}
-      {nodes.map((node) => (
-        <div key={node.id} className="flex flex-col items-center relative z-10">
-          <div className="size-12 border-2 border-gray-400 rounded-full flex items-center justify-center bg-white shadow">
-            <span className='text-slate-600 font-bold'>{node.icon}</span>
+              }
+              {typeof edu.subIcon === 'string' && (
+                <Image
+                  src={edu.subIcon}
+                  alt="graduation"
+                  width={20}
+                  height={20}
+                  className="absolute bottom-0 right-0 size-5 object-contain"
+                />
+              )}
+            </div>
+
+            {/* Garis penghubung */}
+            {i < data.length - 1 && (
+              <div className="absolute h-0.5 w-24 top-8 left-[calc(100%-3rem)] sm:w-32 bg-linear-to-r from-orange-500 to-yellow-400" />
+            )}
+
+            {/* Info pendidikan */}
+            <div className="mt-3 w-40 sm:w-48">
+              <h3 className="font-bold text-sm sm:text-base text-orange-500 uppercase">
+                {edu.school}
+              </h3>
+              <p className="text-neutral-300 text-xs sm:text-sm mt-1">
+                {edu.major}
+              </p>
+              <p className="text-neutral-200 text-xs mt-0.5">{edu.year}</p>
+            </div>
           </div>
-          <div className="w-0.5 h-8 bg-black"></div>
-          <div className="border border-black px-4 py-2 bg-white shadow rounded-2xl">
-            {node.text}
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
-}
+};

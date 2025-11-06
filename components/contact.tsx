@@ -1,37 +1,58 @@
-import contacts from '@/app/data/contacts.json';
+'use client';
+
 import Image from 'next/image';
-import { useState } from 'react';
+import Link from 'next/link';
+import { Tooltip } from './tooltip';
+import { useData } from '@/lib/useData';
 
 export const Contact = () => {
-  const [hovered, setHovered] = useState<number | null>(null);
-  return (
-    <div className='relative grid grid-cols-3 place-items-center gap-3'>
-      {contacts?.map((item, i) => (
-        <div key={i} className='flex flex-col items-center'>
-          <div
-            key={i}
-            onMouseEnter={() => setHovered(i)}
-            onMouseLeave={() => setHovered(null)}
-            className='relative group size-12 flex items-center justify-center transition-transform duration-300 hover:scale-110 cursor-pointer'
-          >
-            <Image
-              src={item.icon}
-              alt={'contact icon'}
-              height={80}
-              width={80}
-              className='size-10 object-contain'
-            />
-            {/* Tooltip */}
-            <div
-              className={`absolute -top-5 left-1/2 -translate-x-1/2 px-2 py-1 text-xs rounded-2xl bg-black/80 text-white whitespace-nowrap transition-opacity duration-200 ${
-                hovered === i ? 'opacity-100' : 'opacity-0'
-              }`}
-            >
-              {item.description}
+  const { data, isLoading, error } = useData<ContactProps>('contacts');
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-2 place-items-center gap-3 p-4 sm:p-6">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="flex flex-col items-center">
+            <div className="relative flex flex-col gap-2 items-center justify-center">
+              <div className="flex items-center justify-center p-2 bg-gray-700 rounded-2xl size-16 animate-pulse" />
+              <div className="h-3 w-12 bg-gray-600 rounded mt-2 animate-pulse" />
             </div>
           </div>
-          <p className='text-xs text-slate-200 capitalize'>{item.title}</p>
-        </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return <p className="text-center text-red-400 p-4">Gagal memuat kontak.</p>;
+  }
+
+  return (
+    <div className="grid grid-cols-2 place-items-center gap-3 p-4 sm:p-6">
+      {data?.map((item, i) => (
+        <Tooltip key={i} label={item.description}>
+          <Link 
+            href={item.href || '#'} 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center"
+          >
+            <div className="relative flex flex-col gap-2 items-center justify-center transition-transform duration-300 hover:scale-110 cursor-pointer">
+              <div className="flex items-center justify-center p-2 bg-amber-50 rounded-2xl size-16">
+                {item.icon && typeof item.icon === 'string' && (
+                  <Image
+                    src={item.icon}
+                    alt="contact icon"
+                    height={80}
+                    width={80}
+                    className="size-20 object-contain"
+                  />
+                )}
+              </div>
+              <p className="text-xs text-slate-200 capitalize">{item.title}</p>
+            </div>
+          </Link>
+        </Tooltip>
       ))}
     </div>
   );
