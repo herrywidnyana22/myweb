@@ -2,12 +2,22 @@ version: "3.8"
 
 services:
   web:
-    image: myweb-web:${TAG:-latest}
+    build: .
     container_name: myweb-app
     ports:
       - "3000:3000"
     env_file:
       - .env
-    restart: always
-    environment:
-      - NODE_ENV=production
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-proxy
+    depends_on:
+      - web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    restart: unless-stopped
+
