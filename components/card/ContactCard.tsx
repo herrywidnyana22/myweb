@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useMemo } from 'react';
 
 export const ContactCard = (card: ContactProps) => {
-  // 🔹 Hitung font size otomatis berdasar panjang deskripsi
   const fontSizeStyle = useMemo(() => {
     const len = card.description?.length || 0;
     const size = len > 45 ? 11 : len > 25 ? 12 : 14;
@@ -25,7 +24,6 @@ export const ContactCard = (card: ContactProps) => {
         p-1.5 sm:p-2
       "
     >
-      {/* 🔹 Icon Contact */}
       {card.icon && typeof card.icon === 'string' && (
         <Image
           src={card.icon}
@@ -36,7 +34,6 @@ export const ContactCard = (card: ContactProps) => {
         />
       )}
 
-      {/* 🔹 Teks */}
       <div className="flex flex-col min-w-0">
         <span className="text-xs sm:text-sm font-medium text-gray-700 capitalize truncate">
           {card.title}
