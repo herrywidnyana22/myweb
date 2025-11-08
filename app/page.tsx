@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <main
       className="
-        relative min-h-screen w-full overflow-x-hidden overflow-y-auto
+        relative h-screen w-full overflow-x-hidden overflow-y-auto
         px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64 
         py-4 sm:py-10 md:py-16 lg:py-20
       "

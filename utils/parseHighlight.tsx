@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 
 export function parseHighlight(text: string): React.ReactNode[] {
@@ -42,7 +43,7 @@ export function parseHighlight(text: string): React.ReactNode[] {
     }
 
     return (
-      <span key={i} className={`${color} transition-colors duration-300`}>
+      <span key={i} className={clsx('transition-colors duration-300', color)}>
         {value}
       </span>
     );

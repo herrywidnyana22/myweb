@@ -1,24 +1,30 @@
-// lib/fetchData.ts
-import { getCached } from './cache';
+interface CacheEntry<T> {
+  data: T[];
+  timestamp: number;
+}
 
-export async function fetchSheetData<T>(endpoint: string): Promise<T[]> {
-  return getCached(endpoint, async () => {
-    try {
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-      const res = await fetch(`${baseUrl}/api/${endpoint}`, {
-        cache: 'no-store', // tetap no-store supaya fetch ini tidak di-cache oleh Next
-      });
+const cache = new Map<string, CacheEntry<unknown>>();
 
-      if (!res.ok) {
-        console.error(`Failed to fetch /api/${endpoint}`, res.status);
-        return [];
-      }
+const CACHE_TTL_MS = 1000 * 60 * 10; // 10 menit
 
-      const data = await res.json();
-      return data as T[];
-    } catch (err) {
-      console.error(`Error fetching /api/${endpoint}:`, err);
-      return [];
-    }
+export async function fetchSheetData<T>(sheetName: string): Promise<T[]> {
+  const cached = cache.get(sheetName);
+  const now = Date.now();
+
+  // Jika cache masih valid dan isinya sesuai tipe
+  if (cached && now - cached.timestamp < CACHE_TTL_MS) {
+    return cached.data as T[];
+  }
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/${sheetName}`, {
+    next: { revalidate: 600 },
   });
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch ${sheetName}`);
+  }
+
+  const data = (await res.json()) as T[];
+  cache.set(sheetName, { data, timestamp: now });
+  return data;
 }

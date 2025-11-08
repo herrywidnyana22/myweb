@@ -1,5 +1,6 @@
 'use client';
 
+import clsx from 'clsx';
 import { SendHorizonal } from 'lucide-react';
 import { memo, useRef } from 'react';
 
@@ -41,11 +42,11 @@ export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, 
       <button
         type="submit"
         disabled={input === ''}
-        className={`size-7 sm:size-8 flex items-center justify-center rounded-full transition-colors ${
+        className={clsx('size-7 sm:size-8 flex items-center justify-center rounded-full transition-colors', 
           input === ''
             ? 'bg-gray-300 cursor-not-allowed'
             : 'bg-white hover:bg-gray-100 cursor-pointer'
-        }`}
+        )}
       >
         <SendHorizonal size={14} className="text-gray-800" />
       </button>

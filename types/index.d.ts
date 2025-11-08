@@ -115,6 +115,8 @@ declare interface ChatResponseProps {
   role: 'user' | 'bot';
   text?: string;
   cards?: DataItemProps[];
+  isStreaming?: boolean
+  isLoading?: boolean
   children?: React.ReactNode;
 }
 
@@ -166,3 +168,29 @@ declare interface IconProps{
   className?: string;
   newTab?: boolean;
 }
+
+declare interface AIResponse {
+  text: string;
+  cards: Partial<DataItemProps>[];
+}
+
+declare interface ApiResponse {
+  text: string;
+  cards: DataItemProps[];
+}
+
+declare interface PortfolioCache {
+  profile: ProfileProps;
+  address: AddressProps;
+  projects: ProjectProps[];
+  contacts: ContactProps[];
+  educations: EducationProps[];
+  experiences: ExperienceProps[];
+  timestamp: number;
+}
+
+declare interface ChatCache {
+  text: string;
+  timestamp: number;
+}
+
