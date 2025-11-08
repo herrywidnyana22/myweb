@@ -13,9 +13,9 @@ export const Dock = ({ items, onIconClick, isOpenById }: DockProps) => {
 
     const distance = Math.abs(index - hoveredIndex);
 
-    if (distance === 0) return { scale: 1.6, y: -10 }; // main
-    if (distance === 1) return { scale: 1.3, y: -6 }; // neighbor
-    if (distance === 2) return { scale: 1.15, y: -3 }; // next neighbor
+    if (distance === 0) return { scale: 1.6, y: -10 };
+    if (distance === 1) return { scale: 1.3, y: -6 }; 
+    if (distance === 2) return { scale: 1.15, y: -3 }; 
     return { scale: 1, y: 0 };
   };
 
@@ -55,7 +55,7 @@ export const Dock = ({ items, onIconClick, isOpenById }: DockProps) => {
 
             {/* Active indicator dot (absolute, does not affect layout) */}
             {isOpenById?.[item.id] && (
-              <div className='absolute -bottom-2 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-white/90 shadow-[0_0_6px_rgba(255,255,255,0.9)] pointer-events-none' />
+              <div className='absolute -bottom-2 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-primary/90 shadow-[0_0_6px_rgba(255,255,255,0.9)] pointer-events-none' />
             )}
           </div>
         ))}

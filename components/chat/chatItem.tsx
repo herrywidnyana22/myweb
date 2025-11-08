@@ -1,6 +1,8 @@
+'use client';
+
+import { parseHighlight } from '@/utils/parseHighlight';
 import Image from 'next/image';
 import { memo } from 'react';
-import ReactMarkdown from 'react-markdown';
 
 export const ChatItem = memo(({ role, text, children }: ChatResponseProps) => {
   const isUser = role === 'user';
@@ -12,7 +14,7 @@ export const ChatItem = memo(({ role, text, children }: ChatResponseProps) => {
   const bubbleClass = [
     'relative',
     'max-w-[85%] sm:max-w-[70%]',
-    'px-2 py-1.5 sm:px-4 sm:py-3',
+    'px-2.5 py-1.5 sm:px-4 sm:py-3',
     'rounded-2xl sm:rounded-3xl',
     'text-xs sm:text-sm md:text-base',
     'leading-relaxed sm:leading-7 font-normal tracking-normal',
@@ -43,7 +45,9 @@ export const ChatItem = memo(({ role, text, children }: ChatResponseProps) => {
       {/* Chat Bubble */}
       <div className={bubbleClass}>
         {children}
-        <ReactMarkdown>{text}</ReactMarkdown>
+        <p className="whitespace-pre-line wrap-break-word">
+          {parseHighlight(text || '')}
+        </p>
       </div>
 
       {/* User Avatar */}

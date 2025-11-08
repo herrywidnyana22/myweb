@@ -49,7 +49,7 @@ export const Education = () => {
               w-full sm:w-auto
             "
           >
-            {/* 🎓 Icon utama */}
+            {/* Icon utama */}
             <div
               className="
                 relative flex items-center justify-center 
@@ -80,12 +80,12 @@ export const Education = () => {
 
             {/* Garis penghubung (Desktop only) */}
             {i < data.length - 1 && (
-              <div className="hidden sm:block absolute top-8 left-[calc(100%-1rem)] h-0.5 w-20 sm:w-24 bg-linear-to-r from-orange-500 to-yellow-400" />
+              <div className="hidden sm:block absolute top-8 left-[calc(100%-2rem)] h-0.5 w-20 sm:w-24 bg-linear-to-r from-primary to-yellow-400" />
             )}
 
             {/* Info pendidikan */}
             <div className="mt-3 w-36 sm:w-44">
-              <h3 className="font-bold text-xs sm:text-sm md:text-base text-orange-500 uppercase leading-tight">
+              <h3 className="font-bold text-xs sm:text-sm md:text-base text-primary uppercase leading-tight">
                 {edu.school}
               </h3>
               <p className="text-neutral-300 text-[11px] sm:text-xs mt-1 leading-snug">

@@ -34,7 +34,7 @@ export const ProjectItem = (project: ProjectProps) => {
           className="
             font-extrabold 
             text-sm sm:text-base lg:text-lg 
-            uppercase text-orange-500 
+            uppercase text-primary 
             leading-snug sm:leading-tight
           "
         >
@@ -71,47 +71,53 @@ export const ProjectItem = (project: ProjectProps) => {
           {/* Buttons */}
           <div className="mt-4 sm:mt-5 flex gap-2 justify-end flex-wrap">
             {project.githubLink && typeof project.githubLink === "string" && (
-              <Link
-                href={project.githubLink}
-                target="_blank"
-                className="
-                  flex items-center gap-1.5 
-                  bg-black 
-                  px-2.5 py-1.5 
-                  rounded-2xl 
-                  text-xs font-medium 
-                  text-white hover:bg-gray-800 
-                  transition-all duration-200 
-                  sm:text-xs sm:px-3 sm:py-1.5 
-                  lg:text-sm lg:px-3 lg:py-1.5 
-                  whitespace-nowrap
-                "
-              >
-                <Github size={14} className="shrink-0" />
-                Source
-              </Link>
+              <Tooltip label="View Source">
+                <Link
+                  href={project.githubLink}
+                  target="_blank"
+                  className="
+                    flex items-center gap-1.5 
+                    bg-black 
+                    px-2.5 py-1.5 
+                    rounded-2xl 
+                    text-xs font-medium 
+                    text-white hover:bg-gray-800 
+                    transition-all duration-200 
+                    sm:text-xs sm:px-3 sm:py-1.5 
+                    lg:text-sm lg:px-3 lg:py-1.5 
+                    whitespace-nowrap
+                  "
+                >
+                  <Github size={14} className="shrink-0" />
+                  <p className="xl:hidden">Source</p>
+                </Link>
+
+              </Tooltip>
             )}
 
             {project.demoLink && typeof project.demoLink === "string" && (
-              <Link
-                href={project.demoLink}
-                target="_blank"
-                className="
-                  flex items-center gap-1.5 
-                  bg-orange-500/90 
-                  px-2.5 py-1.5 
-                  rounded-2xl 
-                  text-xs font-medium 
-                  text-white hover:bg-orange-600 
-                  transition-all duration-200 
-                  sm:text-xs sm:px-3 sm:py-1.5 
-                  lg:text-sm lg:px-3 lg:py-1.5 
-                  whitespace-nowrap
-                "
-              >
-                <Eye size={14} className="shrink-0" />
-                Demo
-              </Link>
+              <Tooltip label="Preview">
+                <Link
+                  href={project.demoLink}
+                  target="_blank"
+                  className="
+                    flex items-center gap-1.5 
+                    bg-primary/90
+                    px-2.5 py-1.5 
+                    rounded-2xl 
+                    text-xs font-medium 
+                    text-white hover:bg-primary-hover
+                    transition-all duration-200 
+                    sm:text-xs sm:px-3 sm:py-1.5 
+                    lg:text-sm lg:px-3 lg:py-1.5 
+                    whitespace-nowrap
+                  "
+                >
+                  <Eye size={14} className="shrink-0" />
+                  <p className="xl:hidden">Preview</p>
+                </Link>
+
+              </Tooltip>
             )}
           </div>
           

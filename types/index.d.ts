@@ -74,6 +74,7 @@ declare interface BuildPromptProps{
 }
 
 declare interface ProfileProps{
+  name: string
   fullName: string 
   role: string 
   summary: string 

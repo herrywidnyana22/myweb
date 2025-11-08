@@ -9,7 +9,6 @@ export const Contact = () => {
   const { data, isLoading, error } = useData<ContactProps>('contacts');
 
   if (isLoading) {
-    // 🦴 Skeleton Loader
     return (
       <div className="grid grid-cols-2 place-items-center gap-2 sm:gap-3 p-3 sm:p-6">
         {Array.from({ length: 4 }).map((_, i) => (
@@ -40,7 +39,7 @@ export const Contact = () => {
           >
             <div className="relative flex flex-col gap-1.5 sm:gap-2 items-center justify-center transition-transform duration-300 hover:scale-105 sm:hover:scale-110 cursor-pointer">
               {/* Icon container */}
-              <div className="flex items-center justify-center p-1.5 sm:p-2 bg-amber-50 rounded-xl sm:rounded-2xl size-12 sm:size-16 shadow-sm">
+              <div className="flex items-center justify-center p-1.5 sm:p-2 bg-amber-50 rounded-xl sm:rounded-2xl size-12 sm:size-12 shadow-sm">
                 {item.icon && typeof item.icon === 'string' && (
                   <Image
                     src={item.icon}
@@ -53,7 +52,7 @@ export const Contact = () => {
               </div>
 
               {/* Label */}
-              <p className="text-[10px] sm:text-xs text-slate-200 capitalize mt-1 sm:mt-2 truncate">
+              <p className="text-[10px] md:w-14 lg:w-full text-center sm:text-xs text-slate-200 capitalize truncate">
                 {item.title}
               </p>
             </div>

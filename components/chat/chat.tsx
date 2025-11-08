@@ -76,7 +76,7 @@ export const Chat = ({
       } catch {
           setMessages((prev: ChatResponseProps[]) => [
               ...prev,
-              { role: 'bot', text: '⚠️ Sorry, something went wrong.', cards: [] },
+              { role: 'bot', text: 'Sorry, something went wrong.', cards: [] },
           ]);
 
       } finally {
@@ -122,7 +122,7 @@ export const Chat = ({
         <div
           className={`relative z-1000 w-full mx-auto transition-all duration-300 ease-in-out
           ${isInputFocused ? '-translate-y-20' : 'translate-y-0'}
-          sm:translate-y-0`} // desktop tetap
+          sm:translate-y-0`}
         >
           <div className='w-full mx-auto rounded-3xl overflow-hidden shadow-2xl border border-gray-600/50 '>
             {/* Chat Header */}
@@ -145,7 +145,7 @@ export const Chat = ({
                     <ChatItem role={msg.role} text={msg.text} />
 
                     {msg.cards && msg.cards.length > 0 && (
-                      <div className='max-w-[80%] sm:max-w-[70%] grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 ml-13 mb-2'>
+                      <div className='max-w-[80%] sm:max-w-[70%] grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 ml-10 sm:ml-13 mb-2'>
                         {msg.cards.map((proj, j) => (
                           <Card key={j} {...proj} />
                         ))}
@@ -178,11 +178,11 @@ export const Chat = ({
 
         {/* Konfirmasi Clear */}
         {showConfirm && (
-            <DialogConfirm
-                text='Yakin ingin menghapus semua chat ini?'
-                onConfirm={onConfirmClear}
-                onCancel={onCancelClear}
-            />
+          <DialogConfirm
+            text='Yakin ingin menghapus semua chat ini?'
+            onConfirm={onConfirmClear}
+            onCancel={onCancelClear}
+          />
         )}
     </>
     );

@@ -9,7 +9,6 @@ export const Experiences = () => {
   const { data, isLoading, error } = useData<ExperienceProps>('experiences');
 
   if (isLoading) {
-    // 🦴 Skeleton loader mengikuti struktur asli ExperienceCard
     return (
       <Swiper
         grabCursor={true}
@@ -19,7 +18,7 @@ export const Experiences = () => {
           next: { translate: ['100%', 0, 0] },
         }}
         modules={[EffectCreative, Pagination]}
-        className="mySwiper w-full h-full overflow-hidden"
+        className="mySwiper w-full h-full relative pb-10"
       >
         {Array.from({ length: 3 }).map((_, i) => (
           <SwiperSlide key={i}>
@@ -59,22 +58,28 @@ export const Experiences = () => {
   }
 
   return (
-    <Swiper
-      grabCursor={true}
-      effect={'creative'}
-      creativeEffect={{
-        prev: { shadow: true, translate: [0, 0, -400] },
-        next: { translate: ['100%', 0, 0] },
-      }}
-      pagination={{ clickable: true }}
-      modules={[EffectCreative, Pagination]}
-      className="mySwiper w-full h-full overflow-hidden"
-    >
-      {data.map((exp: ExperienceProps, i: number) => (
-        <SwiperSlide key={i}>
-          <ExperienceCard {...exp} />
-        </SwiperSlide>
-      ))}
-    </Swiper>
+    <div className="relative w-full h-full">
+      <Swiper
+        grabCursor
+        effect="creative"
+        creativeEffect={{
+          prev: { shadow: true, translate: [0, 0, -400] },
+          next: { translate: ['100%', 0, 0] },
+        }}
+        pagination={{
+          clickable: true,
+          el: '.experience-pagination',
+        }}
+        modules={[EffectCreative, Pagination]}
+        className="mySwiper w-full h-full overflow-hidden"
+      >
+        {data.map((project, i) => (
+          <SwiperSlide key={i}>
+            <ExperienceCard {...project} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+      <div className="experience-pagination mt-4 mb-1 flex justify-center w-full" />
+    </div>
   );
 };

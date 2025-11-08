@@ -7,13 +7,13 @@ export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, 
     const handleFocus = () => {
       setIsMinimized(false)
       onFocus?.();
-      setTimeout(() => {
-        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-      }, 200);
+      // setTimeout(() => {
+      //   window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      // }, 200);
     };
 
     return (
-      <form onSubmit={sendMessage} className="flex items-center w-full px-2 py-1 sm:px-4 sm:py-2">
+      <form onSubmit={sendMessage} className="flex items-center w-full px-2 sm:px-4">
         <input
           type="text"
           value={input}

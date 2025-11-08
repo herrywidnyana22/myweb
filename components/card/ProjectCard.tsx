@@ -57,6 +57,7 @@ export const ProjectCard = (card: ProjectProps) => {
         className="
           flex justify-between items-center 
           mt-2 sm:mt-3
+          gap-4
         "
       >
         {/* Tech Stack */}

@@ -2,7 +2,7 @@ import { memo } from 'react';
 
 export default memo(function DialogConfirm({ text, onConfirm, onCancel }: DialogConfirmProps) {
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] px-4">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-9999 px-4">
       <div
         className="
           bg-gray-900 

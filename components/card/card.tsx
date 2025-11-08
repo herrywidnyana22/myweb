@@ -7,6 +7,7 @@ import { ProjectCard } from './projectCard';
 import { ContactCard } from './contactCard';
 
 const CardComponent = (card: DataItemProps) => {
+  console.log({card})
   switch (card.type) {
     case 'project':
       return <ProjectCard {...card} />;
@@ -14,10 +15,21 @@ const CardComponent = (card: DataItemProps) => {
       return <ContactCard {...card} />;
     case 'education':
       return (
-        <div>
-          <h3 className="font-semibold text-sm sm:text-base md:text-lg">{card.school}</h3>
-          <p className="text-xs sm:text-sm text-gray-600">{card.major}</p>
-          <p className="text-[11px] sm:text-xs text-gray-400">{card.year}</p>
+        <div className='flex items-center gap-4'>
+          {card.icon && typeof card.icon === 'string' && (
+              <Image
+                src={card.icon}
+                alt="company logo"
+                height={32}
+                width={32}
+                className="size-10"
+              />
+            )}
+          <div>
+            <h3 className="font-semibold text-primary text-sm sm:text-base md:text-lg">{card.school}</h3>
+            <p className="text-xs sm:text-sm text-gray-600">{card.major}</p>
+            <p className="text-[11px] sm:text-xs text-gray-400">{card.year}</p>
+          </div>
         </div>
       );
     case 'experience':
@@ -34,7 +46,7 @@ const CardComponent = (card: DataItemProps) => {
               />
             )}
             <div>
-              <h3 className="font-semibold text-sm sm:text-base md:text-lg">{card.company}</h3>
+              <h3 className="font-semibold text-primary text-sm sm:text-base md:text-lg">{card.company}</h3>
               <p className="text-xs sm:text-sm text-gray-700">{card.role}</p>
               <p className="text-[11px] sm:text-xs text-gray-400 mt-1">{card.year}</p>
             </div>
@@ -60,8 +72,8 @@ const CardComponent = (card: DataItemProps) => {
     default:
       return (
         <div>
-          <h3 className="font-semibold text-sm sm:text-base md:text-lg">{card.title}</h3>
-          <div className="text-xs sm:text-sm text-gray-600">
+          <h3 className="text-sm sm:text-md text-gray-600">{card.title}</h3>
+          <div className="font-semibold text-sm sm:text-base md:text-md">
             <ReactMarkdown>{card.description}</ReactMarkdown>
           </div>
         </div>

@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import { MapPin, Calendar } from 'lucide-react';
 import { useSingleData } from '@/lib/useData';
-import { Tooltip } from './tooltip';
 
 export const Profile = () => {
   const { data: profileData, isLoading: loadingProfile } = useSingleData<ProfileProps>('profile');
@@ -38,7 +37,7 @@ export const Profile = () => {
           height={80}
           className="size-16 sm:size-20 rounded-full object-cover border-2 border-white/30"
         />
-        <div className="absolute bottom-1 right-1 size-5 bg-green-500 rounded-full border-2 border-white/30" />
+        <div className="absolute bottom-1 right-1 size-5 bg-success rounded-full border-2 border-white/30" />
       </div>
 
       {/* Info */}

@@ -1,7 +1,7 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
 import clsx from 'clsx';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useLayoutEffect, useRef, useState } from 'react';
 
 export const Widget = ({ dockTarget, isOpen, children, className, isChatMaximized = false }: WidgetProps & { isChatMaximized?: boolean }) => {

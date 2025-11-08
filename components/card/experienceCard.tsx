@@ -18,7 +18,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
         className="
           flex items-center justify-center 
           w-8 sm:w-12 md:w-14 
-          bg-linear-to-br from-green-600 to-green-500
+          bg-linear-to-br from-green-600 to-success
           shrink-0
         "
       >
@@ -47,7 +47,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
             className="
               font-extrabold 
               text-sm sm:text-base md:text-lg 
-              uppercase text-orange-500
+              uppercase text-primary
               leading-tight
             "
           >

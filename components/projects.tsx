@@ -9,7 +9,6 @@ export const Projects = () => {
   const { data, isLoading, error } = useData<ProjectProps>('projects');
 
   if (isLoading) {
-    // 🦴 Skeleton Loader (ikut layout Swiper)
     return (
       <Swiper
         grabCursor
@@ -53,22 +52,29 @@ export const Projects = () => {
   }
 
   return (
-    <Swiper
-      grabCursor
-      effect="creative"
-      creativeEffect={{
-        prev: { shadow: true, translate: [0, 0, -400] },
-        next: { translate: ['100%', 0, 0] },
-      }}
-      pagination={{ clickable: true }}
-      modules={[EffectCreative, Pagination]}
-      className="mySwiper w-full h-full overflow-hidden"
-    >
-      {data.map((project, i) => (
-        <SwiperSlide key={i}>
-          <ProjectItem {...project} />
-        </SwiperSlide>
-      ))}
-    </Swiper>
+    <div className="relative w-full h-full">
+      <Swiper
+        grabCursor
+        effect="creative"
+        creativeEffect={{
+          prev: { shadow: true, translate: [0, 0, -400] },
+          next: { translate: ['100%', 0, 0] },
+        }}
+        pagination={{
+          clickable: true,
+          el: '.project-pagination',
+        }}
+        modules={[EffectCreative, Pagination]}
+        className="mySwiper w-full h-full overflow-hidden"
+      >
+        {data.map((project, i) => (
+          <SwiperSlide key={i}>
+            <ProjectItem {...project} />
+          </SwiperSlide>
+        ))}
+      </Swiper>
+      <div className="project-pagination mt-4 mb-1 flex justify-center w-full" />
+    </div>
   );
 };
+
