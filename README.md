@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧠 Herry Widnyana — AI-Powered Portfolio (Next.js + Gemini + Google Sheets)
 
-## Getting Started
+> 🚀 **Personal Portfolio & Chat Assistant**, built with **Next.js 15**, **Google Gemini 2.5 Flash**, and **Google Sheets** as dynamic CMS.  
+> Visitors can chat directly with “Herry” — a conversational AI that dynamically reads real portfolio data.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## ✨ Overview
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This project is a **Next.js full-stack portfolio** enhanced with an **AI Chat System** powered by Gemini.  
+All portfolio data (projects, education, experience, etc.) are stored in **Google Sheets**, fetched via custom APIs, and then interpreted by the AI — giving **real-time, context-aware answers** about your profile.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 💬 Example Interaction
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> **User:** “Apa proyek terbaru kamu?”  
+> **AI (Herry):**  
+> Hai! Proyek terbaru saya adalah **AI Portfolio Chat**, dibangun dengan **Next.js**, **Gemini 2.5 Flash**, dan **Google Sheets**.  
+> Kamu bisa lihat detailnya di bagian project!
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🧩 Core Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Feature                              | Description                                                                     |
+| ------------------------------------ | ------------------------------------------------------------------------------- |
+| 🧠 **Gemini 2.5 Flash Integration**  | Smart, context-aware responses with JSON-structured output                      |
+| 📊 **Google Sheets as Headless CMS** | Dynamic data source for profile, projects, and experience                       |
+| 💬 **Chat System with Memory**       | Remembers chat history using localStorage                                       |
+| 🎨 **Responsive UI**                 | Fully adaptive for mobile, MacBook, and large screens                           |
+| 🧊 **Dynamic Dock Widgets**          | macOS-style dock to open widgets (Chat, Projects, Contact, etc.)                |
+| 💡 **Highlight AI Responses**        | Important data points (name, role, contact) are automatically color-highlighted |
+| 🔒 **Secure Prompt Rules**           | Strict prompt formatting, safe JSON-only output                                 |
+| 🧰 **Clean Tailwind v4 Setup**       | Custom CSS variables with design tokens and color palettes                      |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🧠 Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Layer                     | Technology                                         |
+| ------------------------- | -------------------------------------------------- |
+| **Frontend**              | Next.js 15 (App Router), React 19, TypeScript      |
+| **Styling**               | Tailwind CSS v4 + custom theme (`:root` variables) |
+| **AI Engine**             | Google Gemini 2.5 Flash (`@google/genai`)          |
+| **Data Source**           | Google Sheets API (via custom `fetchSheetData`)    |
+| **UI Components**         | Framer Motion, Swiper, Shadcn/UI                   |
+| **Hosting (recommended)** | Vercel or Cloudflare Pages                         |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+🧡 Author
+Gede Herry Widnyana
+💼 Fullstack Developer • Denpasar, Bali
