@@ -97,24 +97,24 @@ export const Chat = ({
       scrollToBottom()
   }, [messages, setPropMessages, scrollToBottom])
 
-  useEffect(() => {
-    if (typeof window === 'undefined' || !window.visualViewport) return;
+  // useEffect(() => {
+  //   if (typeof window === 'undefined' || !window.visualViewport) return;
 
-    const handleResize = () => {
-      const visual = window.visualViewport;
-      if (!visual) return;
+  //   const handleResize = () => {
+  //     const visual = window.visualViewport;
+  //     if (!visual) return;
 
-      // Keyboard dianggap muncul kalau tinggi viewport lebih kecil dari tinggi window
-      setIsInputFocused(visual.height < window.innerHeight - 100);
-    };
+  //     // Keyboard dianggap muncul kalau tinggi viewport lebih kecil dari tinggi window
+  //     setIsInputFocused(visual.height < window.innerHeight - 100);
+  //   };
 
-    window.visualViewport.addEventListener('resize', handleResize);
+  //   window.visualViewport.addEventListener('resize', handleResize);
 
-    // Jalankan sekali di awal agar state sinkron saat load
-    handleResize();
+  //   // Jalankan sekali di awal agar state sinkron saat load
+  //   handleResize();
 
-    return () => window.visualViewport?.removeEventListener('resize', handleResize);
-  }, [setIsInputFocused]);
+  //   return () => window.visualViewport?.removeEventListener('resize', handleResize);
+  // }, [setIsInputFocused]);
     
     return ( 
     <>
