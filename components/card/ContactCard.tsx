@@ -1,5 +1,6 @@
 'use client'
 
+import { parseHighlight } from '@/utils/parseHighlight';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useMemo } from 'react';
@@ -36,7 +37,7 @@ export const ContactCard = (card: ContactProps) => {
 
       <div className="flex flex-col min-w-0">
         <span className="text-xs sm:text-sm font-medium text-gray-700 capitalize truncate">
-          {card.title}
+          {parseHighlight(card.title || '')}
         </span>
 
         {card.href ? (
@@ -51,7 +52,7 @@ export const ContactCard = (card: ContactProps) => {
               text-[11px] sm:text-[13px] md:text-[15px]
             "
           >
-            {card.description}
+            {parseHighlight(card.description || '')}
           </Link>
         ) : (
           <span
@@ -62,7 +63,7 @@ export const ContactCard = (card: ContactProps) => {
               text-[11px] sm:text-[13px] md:text-[15px]
             "
           >
-            {card.description}
+            {parseHighlight(card.description || '')}
           </span>
         )}
       </div>

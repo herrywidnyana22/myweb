@@ -1,11 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import ReactMarkdown from 'react-markdown';
 import { Tooltip } from '@/components/tooltip';
 import { Eye, Github } from 'lucide-react';
 import { Icon } from '../icon';
 import { getColor } from '@/utils';
+import { parseHighlight } from '@/utils/parseHighlight';
 
 export const ProjectCard = (card: ProjectProps) => {
   return (
@@ -27,14 +27,14 @@ export const ProjectCard = (card: ProjectProps) => {
             className="object-contain sm:w-10 sm:h-10"
           />
         )}
-        <h3 className="font-semibold text-sm sm:text-base md:text-lg text-gray-700 leading-tight">
-          <ReactMarkdown>{card.title}</ReactMarkdown>
+        <h3 className="font-semibold text-sm sm:text-base md:text-lg text-primary leading-tight">
+          {parseHighlight(card.title || '')}
         </h3>
       </div>
 
       {/* Description */}
       <div className="text-xs sm:text-sm text-gray-600 leading-snug sm:leading-normal mt-1">
-        <ReactMarkdown>{card.description}</ReactMarkdown>
+        {parseHighlight(card.description || '')}
       </div>
 
       {/* Progress Bar */}

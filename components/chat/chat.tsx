@@ -121,7 +121,7 @@ export const Chat = ({
         {/* Chat Window */}
         <div
           className={`relative z-1000 w-full mx-auto transition-all duration-300 ease-in-out
-          ${isInputFocused ? '-translate-y-20' : 'translate-y-0'}
+          ${isInputFocused ? '-translate-y-10' : 'translate-y-0'}
           sm:translate-y-0`}
         >
           <div className='w-full mx-auto rounded-3xl overflow-hidden shadow-2xl border border-gray-600/50 '>

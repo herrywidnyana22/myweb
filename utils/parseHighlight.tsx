@@ -14,31 +14,31 @@ export function parseHighlight(text: string): React.ReactNode[] {
 
     switch (type) {
       case 'name':
-        color = 'text-primary-hover font-semibold'; // lebih deep, masih sesuai brand
+        color = 'text-primary-hover font-semibold'; 
         break;
       case 'role':
-        color = 'text-indigo-600 font-semibold'; // kontras bagus di putih
+        color = 'text-indigo-600 font-semibold'; 
         break;
       case 'location':
-        color = 'text-emerald-600 font-semibold'; // natural, nyaman di light bg
+        color = 'text-emerald-600 font-semibold';
         break;
       case 'skill':
-        color = 'text-blue-700 font-medium'; // tetap kuat tapi tidak silau
+        color = 'text-blue-700 font-medium'; 
         break;
       case 'contact':
-        color = 'text-rose-600 font-semibold underline'; // untuk link-like
+        color = 'text-rose-600 font-semibold underline'; 
         break;
       case 'project':
-        color = 'text-teal-700 font-semibold'; // tambahan, jika nanti dipakai
+        color = 'text-teal-700 font-semibold';
         break;
       case 'education':
-        color = 'text-yellow-700 font-semibold'; // tambahan
+        color = 'text-yellow-700 font-semibold';
         break;
       case 'experience':
-        color = 'text-violet-700 font-semibold'; // tambahan
+        color = 'text-violet-700 font-semibold'; 
         break;
       default:
-        color = 'text-gray-800 font-medium'; // fallback netral
+        color = 'text-gray-800 font-medium';
     }
 
     return (

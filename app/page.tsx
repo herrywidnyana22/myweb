@@ -33,7 +33,7 @@ export default function Home() {
 
       {/* Overlay saat input aktif */}
       {isInputFocused && (
-        <div className="absolute inset-0 z-40 backdrop-blur-sm bg-black/30 transition-opacity" />
+        <div className="absolute inset-0 z-50 backdrop-blur-sm bg-black/30 transition-opacity" />
       )}
 
       {/* Content Wrapper */}

@@ -4,9 +4,9 @@ import Image from "next/image";
 import { Eye, Github } from "lucide-react";
 import { ProgressCircle } from "./progressCircle";
 import Link from "next/link";
-import ReactMarkdown from "react-markdown";
 import { Icon } from "./icon";
 import { Tooltip } from "./tooltip";
+import { parseHighlight } from "@/utils/parseHighlight";
 
 export const ProjectItem = (project: ProjectProps) => {
   return (
@@ -38,7 +38,7 @@ export const ProjectItem = (project: ProjectProps) => {
             leading-snug sm:leading-tight
           "
         >
-          <ReactMarkdown>{project.title}</ReactMarkdown>
+          {parseHighlight(project.title || '')}
         </h3>
       </div>
 
@@ -51,7 +51,7 @@ export const ProjectItem = (project: ProjectProps) => {
 
         {/* Description */}
         <div className="text-xs sm:text-sm font-light text-gray-600 leading-relaxed mt-6 sm:mt-4">
-          <ReactMarkdown>{project.description}</ReactMarkdown>
+          {parseHighlight(project.description || '')}
         </div>
 
         <div className="flex items-center justify-between">

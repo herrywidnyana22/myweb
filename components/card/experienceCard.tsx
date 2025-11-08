@@ -1,8 +1,8 @@
 'use client';
 
 import Image from "next/image";
-import ReactMarkdown from "react-markdown";
 import { MapPin } from "lucide-react";
+import { parseHighlight } from "@/utils/parseHighlight";
 
 export const ExperienceCard = (exp: ExperienceProps) => {
   return (
@@ -18,7 +18,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
         className="
           flex items-center justify-center 
           w-8 sm:w-12 md:w-14 
-          bg-linear-to-br from-green-600 to-success
+          bg-linear-to-br from-green-700 to-success
           shrink-0
         "
       >
@@ -51,7 +51,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
               leading-tight
             "
           >
-            <ReactMarkdown>{exp.company}</ReactMarkdown>
+           {parseHighlight(exp.company || '')}
           </h3>
           <span className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase whitespace-nowrap">
             {exp.year}
@@ -61,18 +61,18 @@ export const ExperienceCard = (exp: ExperienceProps) => {
         {/* Job Title + Description */}
         <div className="flex flex-col gap-1 sm:gap-1.5 mt-1">
           <h4 className="text-gray-600 font-semibold text-xs sm:text-sm mb-2 sm:mb-3">
-            <ReactMarkdown>{exp.role}</ReactMarkdown>
+            {parseHighlight(exp.role || '')}
           </h4>
 
           <span className="text-gray-500 text-xs sm:text-sm leading-snug">
-            <ReactMarkdown>{exp.description}</ReactMarkdown>
+            {parseHighlight(exp.description || '')}
           </span>
 
           {/* Location */}
           <div className="flex gap-1 sm:gap-1.5 text-gray-500 mt-2 items-center">
             <MapPin size={12} className="rotate-10 sm:size-4" />
             <span className="text-[10px] sm:text-xs italic truncate">
-              <ReactMarkdown>{exp.location}</ReactMarkdown>
+              {parseHighlight(exp.location || '')}
             </span>
           </div>
         </div>

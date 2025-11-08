@@ -1,13 +1,12 @@
 'use client';
 
-import ReactMarkdown from 'react-markdown';
 import Image from 'next/image';
 import { memo } from 'react';
 import { ProjectCard } from './projectCard';
 import { ContactCard } from './contactCard';
+import { parseHighlight } from '@/utils/parseHighlight';
 
 const CardComponent = (card: DataItemProps) => {
-  console.log({card})
   switch (card.type) {
     case 'project':
       return <ProjectCard {...card} />;
@@ -26,9 +25,9 @@ const CardComponent = (card: DataItemProps) => {
               />
             )}
           <div>
-            <h3 className="font-semibold text-primary text-sm sm:text-base md:text-lg">{card.school}</h3>
-            <p className="text-xs sm:text-sm text-gray-600">{card.major}</p>
-            <p className="text-[11px] sm:text-xs text-gray-400">{card.year}</p>
+            <h3 className="font-semibold text-primary text-sm sm:text-base md:text-lg">{parseHighlight(card.school || '')}</h3>
+            <p className="text-xs sm:text-sm text-gray-600">{parseHighlight(card.major || '')}</p>
+            <p className="text-[11px] sm:text-xs text-gray-400">{parseHighlight(card.year || '')}</p>
           </div>
         </div>
       );
@@ -46,18 +45,24 @@ const CardComponent = (card: DataItemProps) => {
               />
             )}
             <div>
-              <h3 className="font-semibold text-primary text-sm sm:text-base md:text-lg">{card.company}</h3>
-              <p className="text-xs sm:text-sm text-gray-700">{card.role}</p>
-              <p className="text-[11px] sm:text-xs text-gray-400 mt-1">{card.year}</p>
+              <h3 className="font-semibold text-primary text-sm sm:text-base md:text-lg">
+                {parseHighlight(card.company || '')}
+              </h3>
+              <p className="text-xs sm:text-sm text-gray-700">
+                {parseHighlight(card.role || '')}
+              </p>
+              <p className="text-[11px] sm:text-xs text-gray-500 mt-1">
+                {parseHighlight(card.year || '')}
+              </p>
             </div>
           </div>
-          <p className="text-xs sm:text-sm mt-1 sm:mt-2">{card.description}</p>
+          <p className="text-xs sm:text-sm mt-1 sm:mt-2">{parseHighlight(card.description || '')}</p>
         </div>
       );
     case 'address':
       return (
         <div>
-          <h3 className="font-semibold text-sm sm:text-base">{card.address}</h3>
+          <h3 className="font-semibold text-sm sm:text-base">{parseHighlight(card.address || '')}</h3>
           {card.mapUrl && (
             <iframe
               src={`${card.mapUrl}&output=embed`}
@@ -72,9 +77,9 @@ const CardComponent = (card: DataItemProps) => {
     default:
       return (
         <div>
-          <h3 className="text-sm sm:text-md text-gray-600">{card.title}</h3>
+          <h3 className="text-sm sm:text-md text-gray-600">{parseHighlight(card.title || '')}</h3>
           <div className="font-semibold text-sm sm:text-base md:text-md">
-            <ReactMarkdown>{card.description}</ReactMarkdown>
+            <p>{parseHighlight(card.description || '')}</p>
           </div>
         </div>
       );
