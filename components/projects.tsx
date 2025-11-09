@@ -3,7 +3,7 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCreative, Pagination } from 'swiper/modules';
 import { ProjectItem } from './projectItem';
-import { useData } from '@/lib/useData';
+import { useData } from '@/hooks/useData';
 
 export const Projects = () => {
   const { data, isLoading, error } = useData<ProjectProps>('projects');

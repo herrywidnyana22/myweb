@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { MapPin, Calendar } from 'lucide-react';
-import { useSingleData } from '@/lib/useData';
+import { useSingleData } from '@/hooks/useData';
 
 export const Profile = () => {
   const { data: profileData, isLoading: loadingProfile } = useSingleData<ProfileProps>('profile');

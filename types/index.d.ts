@@ -127,10 +127,6 @@ declare interface ChatMemory {
   lastMessageTime?: number;
 }
 
-declare declare interface ChatCache {
-  text: string;
-  timestamp: number;
-}
 declare interface ChatInputProps {
   input: string;
   setInput: React.Dispatch<React.SetStateAction<string>>;

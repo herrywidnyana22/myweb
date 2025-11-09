@@ -2,10 +2,11 @@ import clsx from "clsx";
 import Image from "next/image";
 
 type PageTitleProps = {
-  isWidgetOpen: boolean;
+  isWidgetOpen: boolean
+  isMinimize: boolean
 };
 
-export const PageTitle = ({ isWidgetOpen }: PageTitleProps) => {
+export const PageTitle = ({ isWidgetOpen, isMinimize }: PageTitleProps) => {
   return (
     <header className={isWidgetOpen ? "" : "mb-3 sm:mb-4 lg:mb-6"}>
       <div className="flex items-center justify-center gap-2 sm:gap-4 px-2 sm:px-0">
@@ -34,7 +35,7 @@ export const PageTitle = ({ isWidgetOpen }: PageTitleProps) => {
       </div>
 
       {/* Subtitle — disembunyikan di HP */}
-      {isWidgetOpen && (
+      {!isWidgetOpen || isMinimize && (
         <p className="hidden sm:block text-center text-base sm:text-lg lg:text-xl text-white/80 max-w-xl sm:max-w-2xl mx-auto mt-2 sm:mt-3 lg:mt-4 transition-opacity duration-300">
           Just a guy who loves coding & running 🏃‍♂️💻
         </p>

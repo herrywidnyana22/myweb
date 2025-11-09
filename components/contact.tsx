@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Tooltip } from './tooltip';
-import { useData } from '@/lib/useData';
+import { useData } from '@/hooks/useData';
 
 export const Contact = () => {
   const { data, isLoading, error } = useData<ContactProps>('contacts');

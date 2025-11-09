@@ -4,7 +4,6 @@ import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { ChatHeader } from '@/components/chat/chatHeader';
 import { ChatInput } from '@/components/chat/chatInput';
 import { ChatItem } from '@/components/chat/chatItem';
-import { ChatLoader } from '@/components/chat/chatLoader';
 import { Card } from '@/components/card/card';
 import DialogConfirm from '../dialogConfirm';
 import clsx from 'clsx';
@@ -42,9 +41,10 @@ export const Chat = ({
   const [messages, dispatch] = useReducer(chatReducer, propMessages || []);
   const [input, setInput] = useState('');
   const [showConfirm, setShowConfirm] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
 
-  // ========== MEMORI ==========
+  // ========== MEMORY ==========
   const getMemory = useCallback((): ChatMemory => {
     try {
       return JSON.parse(localStorage.getItem('chatMemory') || '{}');
@@ -76,7 +76,6 @@ export const Chat = ({
   );
 
   // ========== UTIL ==========
-
   const scrollToBottom = useCallback(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
@@ -107,12 +106,14 @@ export const Chat = ({
       });
 
       try {
-        const memory = getMemory();
-
         const res = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: input, memory }),
+          body: JSON.stringify({
+            message: input,
+            memory: getMemory(),
+            history: messages.slice(-6).map(({ role, text }) => ({ role, text })), // kirim 6 pesan terakhir
+          }),
         });
 
         const data: ApiResponse = await res.json();
@@ -148,25 +149,37 @@ export const Chat = ({
         });
       }
     },
-    [input, detectUserName, getMemory]
+    [input, detectUserName, getMemory, messages]
   );
 
   // ========== STORAGE ==========
-  useEffect(() => {
-    localStorage.setItem('chatHistory', JSON.stringify(messages));
-    setPropMessages(messages);
-    scrollToBottom();
-  }, [messages, scrollToBottom, setPropMessages]);
-
+  // Load once
   useEffect(() => {
     const saved = localStorage.getItem('chatHistory');
     if (saved) {
       const parsed = JSON.parse(saved) as ChatResponseProps[];
       parsed.forEach((m) => dispatch({ type: 'ADD', payload: m }));
     }
+    setHasLoaded(true);
   }, []);
 
-  // ========== VISUAL VIEWPORT ==========
+  // Save after loaded
+  useEffect(() => {
+    if (!hasLoaded) return; // Hindari overwrite saat render pertama
+    localStorage.setItem('chatHistory', JSON.stringify(messages));
+    setPropMessages(messages);
+    scrollToBottom();
+  }, [messages, scrollToBottom, setPropMessages, hasLoaded]);
+
+  // Scroll ke bawah saat input difokus
+  useEffect(() => {
+    if (isInputFocused) {
+      const timer = setTimeout(scrollToBottom, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isInputFocused, scrollToBottom]);
+
+  // Keyboard handler untuk HP
   useEffect(() => {
     if (typeof window === 'undefined' || !window.visualViewport) return;
     const handleResize = () => {
@@ -185,7 +198,7 @@ export const Chat = ({
       <div
         className={clsx(
           'relative z-50 w-full mx-auto transition-all duration-300 ease-in-out',
-          isInputFocused ? '-translate-y-8' : 'translate-y-0'
+          isInputFocused ? '-translate-y-10' : 'translate-y-0'
         )}
       >
         <div className="w-full mx-auto rounded-3xl overflow-hidden shadow-2xl border border-gray-600/50">
@@ -211,7 +224,6 @@ export const Chat = ({
                   )}
                 </div>
               ))}
-
               <div ref={chatEndRef} />
             </div>
           )}

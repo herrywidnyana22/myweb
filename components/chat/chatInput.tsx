@@ -31,7 +31,7 @@ export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, 
         value={input}
         onChange={(e) => setInput(e.target.value)}
         placeholder="Sini-sini kenalan sama aku..."
-        className="w-full bg-transparent text-white placeholder-white/50 text-sm sm:text-base focus:outline-none"
+        className="w-full bg-transparent text-white placeholder-white/50 text-base focus:outline-none"
         onFocus={handleFocus}
         onBlur={onBlur}
         onKeyDown={handleKeyDown}

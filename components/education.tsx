@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useData } from '@/lib/useData';
+import { useData } from '@/hooks/useData';
 import { Tooltip } from './tooltip';
 
 export const Education = () => {

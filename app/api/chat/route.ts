@@ -40,7 +40,11 @@ function normalizeCard(card: Partial<DataItemProps>): DataItemProps {
 
 export async function POST(req: Request) {
   try {
-    const { message, memory } = (await req.json()) as { message: string; memory?: Record<string, string> };
+     const { message, memory, history } = (await req.json()) as {
+      message: string;
+      memory?: Record<string, string>;
+      history?: { role: string; text: string }[];
+    }
 
     const now = Date.now();
     if (!cachedPortfolio || now - cachedPortfolio.timestamp > CACHE_TTL_MS) {
@@ -64,9 +68,15 @@ export async function POST(req: Request) {
       };
     }
 
+    const lastMessages = history?.slice(-4) || []; // ambil 4 pesan terakhir
+
+    const contextText = lastMessages
+      .map((m) => `${m.role === 'user' ? 'User' : 'AI'}: ${m.text}`)
+      .join('\n');
+
     // Tambahkan memory ke prompt
     const prompt = buildPrompt({
-      message,
+      message: `${contextText}\nUser: ${message}`,
       memory,
       profile: cachedPortfolio.profile,
       address: cachedPortfolio.address,
@@ -74,7 +84,7 @@ export async function POST(req: Request) {
       contacts: cachedPortfolio.contacts,
       educations: cachedPortfolio.educations,
       experiences: cachedPortfolio.experiences,
-    });
+    })
 
     const response = await client.models.generateContent({
       model: 'gemini-2.5-flash',
