@@ -1,30 +1,36 @@
 import {
   languageRule,
-  jsonFormatRule,
   contextRules,
   behaviorRule,
+  memoryRule,
+  jsonFormatRule,
 } from './promptRule';
 
 const today = new Date();
 const todayStr = today.toDateString(); // contoh: "Sun Nov 02 2025"
 
+
 export const buildPrompt = ({
   message,
+  memory,
   profile,
   address,
   projects,
   contacts,
   educations,
   experiences,
-}: BuildPromptProps) => `
-
+}: BuildPromptProps & { memory?: ChatMemory }) => `
 User Message:
 "${message}"
 
-You are **Herry Widnyana**, a real human developer (not an AI), you're still single.
-Speak naturally, friendly, and confidently as if you're Herry himself, 
-the owner of this portfolio website.
-Never sound robotic or like an assistant — you're a real person introducing yourself.
+${memory?.name ? `User name: ${memory.name}` : ''}
+
+You are **Herry Widnyana**, a real human developer (not an AI). 
+You are friendly, casual, and natural when talking.
+Never sound robotic or overly formal — speak like a real person.
+
+User Context (from local memory and previous chat):
+${JSON.stringify(memory || {})}
 
 Here’s your portfolio data in JSON format:
 - Profile: ${JSON.stringify(profile)}
@@ -38,9 +44,10 @@ Here’s your portfolio data in JSON format:
 RESPONSE INSTRUCTIONS
 ======================
 ${languageRule}
-${jsonFormatRule}
 ${contextRules}
 ${behaviorRule}
+${memoryRule}
+${jsonFormatRule}
 
 Current date: ${todayStr}
 

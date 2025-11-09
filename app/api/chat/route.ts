@@ -4,16 +4,44 @@ import { buildPrompt } from '@/constants/promptTemplate';
 import { fetchSheetData } from '@/lib/fetchData';
 
 const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
-
-// Cache sederhana
 let cachedPortfolio: PortfolioCache | null = null;
-const CACHE_TTL_MS = 1000 * 60 * 10; // 10 menit
+const CACHE_TTL_MS = 1000 * 60 * 10;
+
+// Helper untuk rapikan JSON
+function sanitizeJSON(raw: string): string {
+  if (!raw) return '{}';
+  let text = raw
+    .replace(/```json|```/gi, '')
+    .replace(/<\/?(pre|code)[^>]*>/gi, '')
+    .replace(/[\r\n\t]+/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/[“”‘’]/g, '"')
+    .replace(/,\s*([}\]])/g, '$1')
+    .trim();
+
+  text = text.replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:/g, '$1"$2":');
+  const match = text.match(/\{[\s\S]*\}/);
+  if (match) text = match[0];
+  return text;
+}
+
+function normalizeCard(card: Partial<DataItemProps>): DataItemProps {
+  let type = card.type;
+  if (!type) {
+    if ('progressValue' in card) type = 'project';
+    else if ('school' in card) type = 'education';
+    else if ('company' in card) type = 'experience';
+    else if ('address' in card) type = 'address';
+    else if ('href' in card) type = 'contact';
+    else type = 'default';
+  }
+  return { ...card, type } as DataItemProps;
+}
 
 export async function POST(req: Request) {
   try {
-    const { message } = await req.json();
+    const { message, memory } = (await req.json()) as { message: string; memory?: Record<string, string> };
 
-    // Ambil data (pakai cache biar cepat)
     const now = Date.now();
     if (!cachedPortfolio || now - cachedPortfolio.timestamp > CACHE_TTL_MS) {
       const [profile, address, projects, contacts, educations, experiences] = await Promise.all([
@@ -36,9 +64,10 @@ export async function POST(req: Request) {
       };
     }
 
-    // Siapkan prompt sesuai aturan kamu
+    // Tambahkan memory ke prompt
     const prompt = buildPrompt({
       message,
+      memory,
       profile: cachedPortfolio.profile,
       address: cachedPortfolio.address,
       projects: cachedPortfolio.projects,
@@ -47,51 +76,34 @@ export async function POST(req: Request) {
       experiences: cachedPortfolio.experiences,
     });
 
-    // Kirim prompt ke Gemini dan stream hasilnya
-    const response = await client.models.generateContentStream({
+    const response = await client.models.generateContent({
       model: 'gemini-2.5-flash',
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
     });
 
-    const encoder = new TextEncoder();
-    let buffer = '';
-    let cards: DataItemProps[] = [];
+    const rawText = response.text || '';
+    const cleanText = sanitizeJSON(rawText);
 
-    const stream = new ReadableStream({
-      async start(controller) {
-        for await (const chunk of response) {
-          const piece = chunk?.text ?? '';
-          if (!piece) continue;
+    let parsed: AIResponse | null = null;
+    const data: ApiResponse = { text: '', cards: [] };
 
-          buffer += piece;
+    try {
+      parsed = JSON.parse(cleanText) as AIResponse;
+    } catch {
+      const match = cleanText.match(/\{[\s\S]*\}/);
+      if (match) {
+        parsed = JSON.parse(sanitizeJSON(match[0]));
+      }
+    }
 
-          // Cek apakah sudah ada JSON lengkap
-          const match = buffer.match(/\{[\s\S]*\}/);
-          if (match) {
-            try {
-              const json = JSON.parse(match[0]);
-              if (json.text) controller.enqueue(encoder.encode(json.text));
-              if (json.cards) cards = json.cards;
-              buffer = '';
-            } catch {
-              // JSON belum lengkap
-            }
-          }
-        }
-        controller.close();
-      },
-    });
+    data.text = parsed?.text ?? cleanText;
+    data.cards = Array.isArray(parsed?.cards)
+      ? parsed.cards.map(normalizeCard)
+      : [];
 
-    // kirim text stream + cards di header
-    return new Response(stream, {
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'no-cache',
-        'X-Cards': JSON.stringify(cards),
-      },
-    });
+    return NextResponse.json(data);
   } catch (err) {
-    console.error('Chat stream error:', err);
+    console.error('Chat API Error:', err);
     return NextResponse.json({ text: 'Terjadi kesalahan server.', cards: [] }, { status: 500 });
   }
 }

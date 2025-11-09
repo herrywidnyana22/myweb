@@ -38,6 +38,9 @@ export function parseHighlight(text: string): React.ReactNode[] {
       case 'experience':
         color = 'text-violet-700 font-semibold'; 
         break;
+      case 'memory':
+        color = 'text-sky-600 font-semibold'; 
+        break;
       default:
         color = 'text-gray-800 font-medium';
     }

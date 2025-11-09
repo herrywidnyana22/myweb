@@ -116,10 +116,21 @@ declare interface ChatResponseProps {
   text?: string;
   cards?: DataItemProps[];
   isStreaming?: boolean
-  isLoading?: boolean
+  isLoading?:boolean
   children?: React.ReactNode;
 }
 
+declare interface ChatMemory {
+  name?: string;
+  location?: string;
+  job?: string;
+  lastMessageTime?: number;
+}
+
+declare declare interface ChatCache {
+  text: string;
+  timestamp: number;
+}
 declare interface ChatInputProps {
   input: string;
   setInput: React.Dispatch<React.SetStateAction<string>>;
@@ -189,8 +200,4 @@ declare interface PortfolioCache {
   timestamp: number;
 }
 
-declare interface ChatCache {
-  text: string;
-  timestamp: number;
-}
 

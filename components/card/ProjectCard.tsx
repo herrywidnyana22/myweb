@@ -89,7 +89,7 @@ export const ProjectCard = (card: ProjectProps) => {
               IconComponent={Github}
               size={18}
               className="
-                bg-black text-white 
+                bg-black
                 p-1 sm:p-1.5 
                 rounded-full 
                 hover:bg-gray-800 transition
@@ -103,10 +103,10 @@ export const ProjectCard = (card: ProjectProps) => {
               IconComponent={Eye}
               size={18}
               className="
-                bg-black/10 
+                bg-primary
                 p-1 sm:p-1.5 
                 rounded-full 
-                hover:bg-black/20 transition
+                hover:bg-primary-light transition
               "
             />
           )}

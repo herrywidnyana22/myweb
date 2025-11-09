@@ -32,7 +32,7 @@ export const Icon = ({
           className="opacity-80 hover:opacity-100 transition"
         />
       ) : IconComponent ? (
-        <IconComponent size={size} className="text-neutral-400" />
+        <IconComponent size={size} className="text-white/80" />
       ) : null}
     </div>
   );
