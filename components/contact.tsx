@@ -39,7 +39,7 @@ export const Contact = () => {
           >
             <div className="relative flex flex-col gap-1.5 sm:gap-2 items-center justify-center transition-transform duration-300 hover:scale-105 sm:hover:scale-110 cursor-pointer">
               {/* Icon container */}
-              <div className="flex items-center justify-center p-1.5 sm:p-2 bg-amber-50 rounded-xl sm:rounded-2xl size-12 sm:size-12 shadow-sm">
+              <div className="flex items-center justify-center p-1.5 sm:p-2 bg-amber-50 rounded-xl sm:rounded-2xl size-13 sm:size-12 shadow-sm">
                 {item.icon && typeof item.icon === 'string' && (
                   <Image
                     src={item.icon}
