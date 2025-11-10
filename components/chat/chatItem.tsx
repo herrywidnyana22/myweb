@@ -49,9 +49,7 @@ export const ChatItem = memo(({ role, text, children, isStreaming, isLoading }: 
         {children}
         {isLoading ? (
           // Loader aktif
-          <div className="flex items-center justify-start py-1">
-            <ChatLoader />
-          </div>
+          <ChatLoader />
         ) : isStreaming ? (
           // Efek mengetik (streaming)
           <div className="whitespace-pre-wrap">

@@ -80,7 +80,7 @@ export default function Home() {
 
       {/* DOCK */}
         <div className={clsx("fixed bottom-0 left-1/2 -translate-x-1/2 z-50",
-          !isMinimized ? 'hidden sm:block' : 'block'
+          isInputFocused ? 'hidden sm:block' : 'block'
         )}>
           <Dock
             items={dockItems}

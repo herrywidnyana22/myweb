@@ -31,18 +31,19 @@ function chatReducer(state: ChatResponseProps[], action: ChatAction): ChatRespon
 
 // =============== COMPONENT ===============
 export const Chat = ({
-  messages: propMessages,
   setMessages: setPropMessages,
   isInputFocused,
   setIsInputFocused,
   isMinimized,
   setIsMinimized,
 }: ChatProps) => {
-  const [messages, dispatch] = useReducer(chatReducer, propMessages || []);
+  const [messages, dispatch] = useReducer(chatReducer, []);
   const [input, setInput] = useState('');
   const [showConfirm, setShowConfirm] = useState(false);
-  const [hasLoaded, setHasLoaded] = useState(false);
+
   const chatEndRef = useRef<HTMLDivElement | null>(null);
+  const hasLoadedRef = useRef(false);
+
 
   // ========== MEMORY ==========
   const getMemory = useCallback((): ChatMemory => {
@@ -160,16 +161,27 @@ export const Chat = ({
       const parsed = JSON.parse(saved) as ChatResponseProps[];
       parsed.forEach((m) => dispatch({ type: 'ADD', payload: m }));
     }
-    setHasLoaded(true);
+    hasLoadedRef.current = true;
   }, []);
 
   // Save after loaded
-  useEffect(() => {
-    if (!hasLoaded) return; // Hindari overwrite saat render pertama
-    localStorage.setItem('chatHistory', JSON.stringify(messages));
-    setPropMessages(messages);
-    scrollToBottom();
-  }, [messages, scrollToBottom, setPropMessages, hasLoaded]);
+useEffect(() => {
+  if (!hasLoadedRef) return;
+
+  localStorage.setItem('chatHistory', JSON.stringify(messages));
+
+  const timeout = setTimeout(() => {
+    setPropMessages((prev: ChatResponseProps[]) => {
+      if (prev.length !== messages.length) return messages;
+      return prev;
+    });
+  }, 300); // delay 300ms biar gak ikut tiap karakter typewriter
+
+  scrollToBottom();
+
+  return () => clearTimeout(timeout);
+}, [messages, scrollToBottom, setPropMessages, hasLoadedRef]);
+
 
   // Scroll ke bawah saat input difokus
   useEffect(() => {
@@ -228,7 +240,7 @@ export const Chat = ({
             </div>
           )}
 
-          <div className="bg-gray-900/90 border-t border-gray-700 p-3">
+          <div className="bg-gray-900/90 border-t border-gray-700">
             <ChatInput
               input={input}
               setInput={setInput}

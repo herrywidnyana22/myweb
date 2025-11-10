@@ -1,33 +1,49 @@
+import { useState } from "react";
+import { createPortal } from "react-dom";
 import clsx from "clsx";
-import { ReactNode, useState } from "react";
 
-type TooltipProps = {
-  children: ReactNode;
-  label: string;
-};
 
 export const Tooltip = ({ children, label }: TooltipProps) => {
   const [visible, setVisible] = useState(false);
+  const [coords, setCoords] = useState({ top: 0, left: 0 });
+
+  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setCoords({
+      top: rect.top - 8, // offset 8px ke atas
+      left: rect.left + rect.width / 2,
+    });
+    setVisible(true);
+  };
 
   return (
-    <div
-      className="relative flex items-center"
-      onMouseEnter={() => setVisible(true)}
-      onMouseLeave={() => setVisible(false)}
-    >
-      {/* Icon atau elemen yang di-wrap */}
-      {children}
-
-      {/* Tooltip Box */}
+    <>
       <div
-        className={clsx(`absolute bottom-full mb-2 left-1/2 -translate-x-1/2 whitespace-nowrap 
-          bg-gray-900 text-white text-xs px-2 py-1 rounded shadow-lg z-50
-          transition-all duration-200`,
-          visible ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-1"
-        )}
+        className="relative inline-block"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={() => setVisible(false)}
       >
-        {label}
+        {children}
       </div>
-    </div>
+
+      {visible &&
+        createPortal(
+          <div
+            style={{
+              position: "fixed",
+              top: coords.top,
+              left: coords.left,
+              transform: "translate(-50%, -100%)",
+            }}
+            className={clsx(
+              "bg-gray-900 text-white text-xs px-2 py-1 rounded shadow-lg z-99999",
+              "transition-all duration-200"
+            )}
+          >
+            {label}
+          </div>,
+          document.body
+        )}
+    </>
   );
 };

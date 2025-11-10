@@ -2,10 +2,11 @@
 
 import clsx from 'clsx';
 import { SendHorizonal } from 'lucide-react';
-import { memo, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 
 export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, setIsMinimized }: ChatInputProps) => {
   const formRef = useRef<HTMLFormElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleFocus = () => {
     setIsMinimized(false);
@@ -13,12 +14,20 @@ export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, 
   };
 
   // Handle Enter key (untuk mobile & desktop)
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       formRef.current?.requestSubmit(); // native submit trigger
     }
-  };
+  }
+
+  useEffect(() => {
+    const el = textareaRef.current;
+    if (!el) return;
+
+    el.style.height = 'auto';
+    el.style.height = `${Math.min(el.scrollHeight, 160)}px`; // max tinggi 160px
+  }, [input])
 
   return (
     <form
@@ -26,17 +35,27 @@ export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, 
       onSubmit={sendMessage}
       className="flex items-center w-full px-2 sm:px-4"
     >
-      <input
-        type="text"
+      <textarea
+        ref={textareaRef}
         value={input}
         onChange={(e) => setInput(e.target.value)}
         placeholder="Sini-sini kenalan sama aku..."
-        className="w-full bg-transparent text-white placeholder-white/50 text-base focus:outline-none"
         onFocus={handleFocus}
         onBlur={onBlur}
         onKeyDown={handleKeyDown}
-        enterKeyHint="send"
-        autoComplete="off"
+        rows={1}
+        className="
+          flex-1 w-full resize-none bg-transparent text-white
+          placeholder-gray-400 text-sm sm:text-base
+          py-2.5 sm:py-3 pr-3
+          outline-none focus:ring-0
+          max-h-40 overflow-y-auto
+          transition-all duration-150 ease-in-out
+        "
+        style={{
+          lineHeight: '1.5',
+          scrollbarWidth: 'none',
+        }}
       />
 
       <button
