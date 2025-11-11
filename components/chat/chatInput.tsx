@@ -46,7 +46,7 @@ export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, 
         rows={1}
         className="
           flex-1 w-full resize-none bg-transparent text-white
-          placeholder-gray-400 text-sm sm:text-base
+          placeholder-gray-400 text-base
           py-3 pr-3
           outline-none focus:ring-0
           max-h-40 overflow-y-auto
