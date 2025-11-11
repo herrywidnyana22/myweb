@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { Eye, Github } from "lucide-react";
 import { ProgressCircle } from "./progressCircle";
-import Link from "next/link";
 import { Icon } from "./icon";
 import { Tooltip } from "./tooltip";
 import { parseHighlight } from "@/utils/parseHighlight";
@@ -14,7 +13,7 @@ export const ProjectItem = (project: ProjectProps) => {
       className="
         w-full h-full flex flex-col gap-2 
         p-3 sm:p-5 lg:p-6 
-        rounded-xl sm:rounded-2xl 
+        rounded-xl sm:rounded-3xl 
         text-slate-800 bg-white
         transition-all duration-300
       "
@@ -71,53 +70,36 @@ export const ProjectItem = (project: ProjectProps) => {
           {/* Buttons */}
           <div className="mt-4 sm:mt-5 flex gap-2 justify-end flex-wrap">
             {project.githubLink && typeof project.githubLink === "string" && (
-              <Tooltip label="View Source">
-                <Link
-                  href={project.githubLink}
-                  target="_blank"
-                  className="
-                    flex items-center gap-1.5 
-                    bg-black 
-                    px-2.5 py-1.5 
-                    rounded-2xl 
-                    text-xs font-medium 
-                    text-white hover:bg-gray-800 
-                    transition-all duration-200 
-                    sm:text-xs sm:px-3 sm:py-1.5 
-                    lg:text-sm lg:px-3 lg:py-1.5 
-                    whitespace-nowrap
-                  "
-                >
-                  <Github size={14} className="shrink-0" />
-                  <p className="xl:hidden">Source</p>
-                </Link>
-
-              </Tooltip>
-            )}
+              <Icon
+                tooltipLabel="Lihat code"
+                textLabel="Source"
+                href={project.githubLink}
+                IconComponent={Github}
+                size={14}
+                className="
+                  px-2.5 py-1.5
+                  bg-black
+                  rounded-full 
+                  hover:bg-gray-800 transition
+                "
+              />
+              )}
 
             {project.demoLink && typeof project.demoLink === "string" && (
-              <Tooltip label="Preview">
-                <Link
-                  href={project.demoLink}
-                  target="_blank"
-                  className="
-                    flex items-center gap-1.5 
-                    bg-primary/90
-                    px-2.5 py-1.5 
-                    rounded-2xl 
-                    text-xs font-medium 
-                    text-white hover:bg-primary-hover
-                    transition-all duration-200 
-                    sm:text-xs sm:px-3 sm:py-1.5 
-                    lg:text-sm lg:px-3 lg:py-1.5 
-                    whitespace-nowrap
-                  "
-                >
-                  <Eye size={14} className="shrink-0" />
-                  <p className="xl:hidden">Preview</p>
-                </Link>
-
-              </Tooltip>
+              <Icon
+                tooltipLabel="Lihat demo"
+                textLabel="Preview"
+                href={project.demoLink}
+                IconComponent={Eye}
+                size={14}
+                className="
+                  px-2.5 py-1.5
+                  bg-primary
+                  rounded-full 
+                  hover:bg-primary-hover transition
+                  
+                "
+              />
             )}
           </div>
           

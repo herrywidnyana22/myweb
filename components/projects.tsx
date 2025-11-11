@@ -22,7 +22,7 @@ export const Projects = () => {
       >
         {Array.from({ length: 3 }).map((_, i) => (
           <SwiperSlide key={i}>
-            <div className="w-full h-full flex flex-col gap-3 p-6 rounded-2xl bg-white animate-pulse">
+            <div className="w-full h-full flex flex-col gap-3 p-6 rounded-3xl bg-white animate-pulse">
               <div className="flex items-center gap-3">
                 <div className="rounded-full size-14 bg-gray-300" />
                 <div className="h-5 w-1/2 bg-gray-300 rounded" />

@@ -66,7 +66,7 @@ export const ProjectCard = (card: ProjectProps) => {
             {card.iconCategory.map((icon: IconCategoryProps, idx: number) => (
               <Icon
                 key={idx}
-                label={icon.label}
+                tooltipLabel={icon.label}
                 src={icon.src}
                 size={18}
                 className="
@@ -84,7 +84,7 @@ export const ProjectCard = (card: ProjectProps) => {
         <div className="flex gap-1 sm:gap-1.5">
           {card.githubLink && typeof card.githubLink === 'string' && (
             <Icon
-              label="Source code"
+              tooltipLabel="Source code"
               href={card.githubLink}
               IconComponent={Github}
               size={18}
@@ -98,7 +98,7 @@ export const ProjectCard = (card: ProjectProps) => {
           )}
           {card.demoLink && typeof card.demoLink === 'string' && (
             <Icon
-              label="View demo"
+              tooltipLabel="View demo"
               href={card.demoLink}
               IconComponent={Eye}
               size={18}

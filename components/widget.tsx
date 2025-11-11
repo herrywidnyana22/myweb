@@ -55,7 +55,7 @@ export const Widget = ({ dockTarget, isOpen, children, className, isChatMaximize
           }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
           className={clsx(
-            'relative bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto max-h-[70vh] overflow-auto',
+            'relative bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl sm:rounded-3xl shadow-2xl w-full max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto max-h-[70vh] overflow-auto',
             className
           )}
         >

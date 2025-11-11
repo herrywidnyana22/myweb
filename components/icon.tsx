@@ -8,7 +8,8 @@ import clsx from 'clsx';
 
 
 export const Icon = ({
-  label,
+  tooltipLabel,
+  textLabel,
   href,
   src,
   IconComponent,
@@ -23,17 +24,22 @@ export const Icon = ({
         className
       )}
     >
-      {src ? (
-        <Image
-          src={src}
-          alt={label || 'icon'}
-          width={size}
-          height={size}
-          className="opacity-80 hover:opacity-100 transition"
-        />
-      ) : IconComponent ? (
-        <IconComponent size={size} className="text-white/80" />
-      ) : null}
+      {src 
+      ? <div className='text-white flex items-center justify-center gap-1.5'>
+          <Image
+            src={src}
+            alt={tooltipLabel || 'icon'}
+            width={size}
+            height={size}
+            className="opacity-80 hover:opacity-100 transition"
+          />
+          {textLabel && <p className="hidden sm:block xl:hidden text-xs font-medium">{textLabel}</p>}
+      </div> : IconComponent 
+      ? <div className='text-white flex items-center justify-center gap-1.5'>
+          <IconComponent size={size}/>
+          {textLabel && <p className="hidden sm:block xl:hidden text-xs font-medium">{textLabel}</p>}
+        </div> 
+      : null}
     </div>
   );
 
@@ -49,8 +55,8 @@ export const Icon = ({
     iconContent
   );
 
-  return label ? (
-    <Tooltip label={label}>{wrappedContent}</Tooltip>
+  return tooltipLabel ? (
+    <Tooltip label={tooltipLabel}>{wrappedContent}</Tooltip>
   ) : (
     wrappedContent
   );

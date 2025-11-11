@@ -16,14 +16,14 @@ export const ChatItem = memo(({ role, text, children, isStreaming, isLoading }: 
   const bubbleClass = [
     'relative',
     'max-w-[85%] sm:max-w-[70%]',
-    'px-2.5 py-1.5 sm:px-4 sm:py-3',
-    'rounded-2xl sm:rounded-3xl',
+    'px-3 py-2 sm:px-4 sm:py-2.5',
+    'rounded-3xl',
     'text-xs sm:text-sm md:text-base',
     'leading-relaxed sm:leading-7 font-normal tracking-normal',
     'transition-all duration-300',
     isUser
-      ? 'bg-primary-hover text-white rounded-tr-none sm:rounded-tr-none'
-      : 'bg-white border text-slate-900 rounded-tl-none sm:rounded-tl-none',
+      ? 'bg-primary-hover text-white whatsapp-bubble-user'
+      : 'bg-white border text-slate-900 whatsapp-bubble-bot',
   ].join(' ');
 
   const avatar = (src: string, alt: string, className: string) => (

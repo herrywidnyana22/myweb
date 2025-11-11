@@ -8,7 +8,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
   return (
     <div
       className="
-        flex w-full h-full rounded-xl sm:rounded-2xl 
+        flex w-full h-full rounded-xl sm:rounded-3xl 
         overflow-hidden shadow-md bg-white
         transition-all duration-300
       "
@@ -17,21 +17,11 @@ export const ExperienceCard = (exp: ExperienceProps) => {
       <div
         className="
           flex items-center justify-center 
-          w-8 sm:w-12 md:w-14 
-          bg-linear-to-br from-green-700 to-success
+          w-2
+          bg-linear-to-br from-primary to-primary-hover
           shrink-0
         "
-      >
-        {exp.icon && typeof exp.icon === "string" && (
-          <Image
-            src={exp.icon}
-            alt={exp.company}
-            width={20}
-            height={20}
-            className="object-contain opacity-90 sm:w-6 sm:h-6"
-          />
-        )}
-      </div>
+      />
 
       {/*Right Content Section */}
       <div
@@ -43,16 +33,33 @@ export const ExperienceCard = (exp: ExperienceProps) => {
       >
         {/* Header: Company + Year */}
         <div className="flex justify-between items-center">
-          <h3
-            className="
-              font-extrabold 
-              text-sm sm:text-base md:text-lg 
-              uppercase text-primary
-              leading-tight
-            "
-          >
-           {parseHighlight(exp.company || '')}
-          </h3>
+          <div className="flex items-center gap-2">
+            {exp.icon && typeof exp.icon === "string" && (
+              <Image
+                src={exp.icon}
+                alt={exp.company}
+                width={24}
+                height={24}
+                className="object-contain opacity-90 sm:w-6 sm:h-6"
+              />
+            )}
+            <div>
+              <h3
+                className="
+                  font-extrabold 
+                  text-sm sm:text-base md:text-lg 
+                  uppercase text-primary
+                  leading-tight
+                "
+              >
+                {parseHighlight(exp.company || '')}
+              </h3>
+              <p className="text-gray-500 font-semibold text-xs sm:text-sm mb-2 sm:mb-3">
+                {parseHighlight(exp.role || '')}
+              </p>
+            </div>
+
+          </div>
           <span className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase whitespace-nowrap">
             {exp.year}
           </span>
@@ -60,9 +67,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
 
         {/* Job Title + Description */}
         <div className="flex flex-col gap-1 sm:gap-1.5 mt-1">
-          <h4 className="text-gray-600 font-semibold text-xs sm:text-sm mb-2 sm:mb-3">
-            {parseHighlight(exp.role || '')}
-          </h4>
+          
 
           <span className="text-gray-500 text-xs sm:text-sm leading-snug">
             {parseHighlight(exp.description || '')}

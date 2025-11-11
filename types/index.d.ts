@@ -167,7 +167,8 @@ declare interface TooltipProps{
 };
 
 declare interface IconProps{
-  label?: string;
+  tooltipLabel?: string;
+  textLabel?: string;
   href?: string;
   src?: string;
   IconComponent?: LucideIcon;

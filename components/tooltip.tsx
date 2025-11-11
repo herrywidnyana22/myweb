@@ -36,7 +36,7 @@ export const Tooltip = ({ children, label }: TooltipProps) => {
               transform: "translate(-50%, -100%)",
             }}
             className={clsx(
-              "bg-gray-900 text-white text-xs px-2 py-1 rounded shadow-lg z-99999",
+              "bg-gray-900 text-white text-xs px-3 py-1 rounded-xl shadow-lg z-99999",
               "transition-all duration-200"
             )}
           >
