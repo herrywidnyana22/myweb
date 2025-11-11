@@ -79,15 +79,18 @@ export default function Home() {
       </div>
 
       {/* DOCK */}
-        <div className={clsx("fixed bottom-0 left-1/2 -translate-x-1/2 z-50",
+      <div
+        className={clsx(
+          'fixed bottom-0 left-1/2 -translate-x-1/2 z-50',
           isInputFocused ? 'hidden sm:block' : 'block'
-        )}>
-          <Dock
-            items={dockItems}
-            onIconClick={handleDockClick}
-            isOpenById={openById}
-          />
-        </div>
+        )}
+      >
+        <Dock
+          items={dockItems}
+          onIconClick={handleDockClick}
+          isOpenById={openById}
+        />
+      </div>
     </main>
   );
 }

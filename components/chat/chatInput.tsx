@@ -33,7 +33,7 @@ export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, 
     <form
       ref={formRef}
       onSubmit={sendMessage}
-      className="flex items-center w-full px-2 sm:px-4"
+      className="flex items-center w-full px-3 sm:px-4"
     >
       <textarea
         ref={textareaRef}

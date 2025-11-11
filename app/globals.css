@@ -58,13 +58,6 @@ body {
   letter-spacing: 0.01em; /* readability */
 }
 
-html, body {
-  height: 100%;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-}
-
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
