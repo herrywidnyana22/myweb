@@ -33,7 +33,7 @@ export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, 
     <form
       ref={formRef}
       onSubmit={sendMessage}
-      className="flex items-center w-full px-3 sm:px-4"
+      className="flex items-center w-full px-3 pl-4 sm:px-4"
     >
       <textarea
         ref={textareaRef}
@@ -46,7 +46,7 @@ export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, 
         rows={1}
         className="
           flex-1 w-full resize-none bg-transparent text-white
-          placeholder-gray-400 sm:text-base
+          placeholder-gray-400 text-sm sm:text-base
           py-3 pr-3
           outline-none focus:ring-0
           max-h-40 overflow-y-auto
@@ -61,7 +61,7 @@ export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, 
       <button
         type="submit"
         disabled={input === ''}
-        className={clsx('size-7 sm:size-8 flex items-center justify-center rounded-full transition-colors', 
+        className={clsx('size-8 flex items-center justify-center rounded-full transition-colors', 
           input === ''
             ? 'bg-gray-400 cursor-not-allowed'
             : 'bg-white hover:bg-primary-light cursor-pointer'

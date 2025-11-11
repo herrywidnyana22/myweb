@@ -26,6 +26,7 @@ export default function Home() {
         relative min-h-screen w-full overflow-x-hidden overflow-y-auto
         px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64 
         py-4 sm:py-10
+        pb-24 sm:pb-32
       "
     >
       {/* Background Layer */}
