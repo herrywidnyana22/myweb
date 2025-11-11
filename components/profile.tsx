@@ -1,15 +1,22 @@
+'use client'
+
 import Image from 'next/image';
 import { MapPin, Calendar } from 'lucide-react';
-import { useSingleData } from '@/hooks/useData';
+import { useData, useSingleData } from '@/hooks/useData';
 import { Highlight } from './highlight';
 
 export const Profile = () => {
   const { data: profileData, isLoading: loadingProfile } = useSingleData<ProfileProps>('profile');
   const { data: addressData, isLoading: loadingAddress } = useSingleData<AddressProps>('address');
+  const { data: highlightData, isLoading: loadingHighlight } = useData<HighlightProps>('highlight');
 
-  if (loadingProfile || loadingAddress) {
+  if (loadingProfile || loadingAddress || loadingHighlight) {
     return (
-      <div className="flex items-center gap-4 p-4 animate-pulse">
+      <div className="relative flex items-center gap-4 p-4 animate-pulse">
+        <div className='absolute flex gap-2 top-2 right-2'>
+          <div className="size-8 bg-gray-700 rounded" />
+          <div className="size-8 bg-gray-700 rounded" />
+        </div>
         <div className="size-20 bg-gray-700 rounded-full" />
         <div className="flex-1 space-y-2">
           <div className="h-5 bg-gray-700 rounded w-1/2" />
@@ -31,14 +38,15 @@ export const Profile = () => {
     <div className="relative flex gap-4 p-4 sm:p-6 overflow-hidden">
       {/* Foto profil */}
       <div className='absolute flex gap-2 top-2 right-2'>
-        <Highlight
-          title='3+'
-          label='Years'
-        />
-        <Highlight
-          title='6+'
-          label='Project'
-        />
+        {
+          highlightData.map((item, i) => (
+            <Highlight
+              key={i}
+              title={item.title}
+              label={item.label}
+            />
+          ))
+        }
       </div>
       <div className="relative size-16 sm:size-20">
         <Image
