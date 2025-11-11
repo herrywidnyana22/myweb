@@ -14,7 +14,7 @@ export const ChatItem = memo(({ role, text, children, isStreaming, isLoading }: 
   }`;
 
   const bubbleClass = [
-    'relative',
+    'relative z-20',
     'max-w-[85%] sm:max-w-[70%]',
     'px-3 py-2 sm:px-4 sm:py-2.5',
     'rounded-3xl',

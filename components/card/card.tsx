@@ -91,7 +91,7 @@ export const Card = memo(({ ...card }: DataItemProps) => (
     className="
       flex flex-col gap-2 sm:gap-3 
       border p-3 sm:p-4
-      rounded-xl sm:rounded-3xl 
+      rounded-3xl 
       shadow-sm bg-white text-neutral-800 
       w-full sm:max-w-[450px] 
       transition hover:shadow-md
