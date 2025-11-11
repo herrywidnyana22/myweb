@@ -112,9 +112,14 @@ export const Chat = ({
           body: JSON.stringify({
             message: input,
             memory: getMemory(),
-            history: messages.slice(-6).map(({ role, text }) => ({ role, text })), // kirim 6 pesan terakhir
+            history: messages.slice(-6).map(({ role, text }) => ({ role, text })),
           }),
         });
+
+        if (!res.ok) {
+          const errText = await res.text();
+          console.log(`HTTP ${res.status}: ${errText}`);
+        }
 
         const data: ApiResponse = await res.json();
         const text = data.text ?? 'Data tidak tersedia.';
@@ -142,12 +147,15 @@ export const Chat = ({
           payload: { text, cards, isStreaming: false },
         });
       } catch (err) {
-        console.error('Chat error:', err);
+        console.error('Chat API Error:', err);
         dispatch({
           type: 'UPDATE_LAST',
-          payload: { text: 'Terjadi kesalahan server.', isLoading: false, isStreaming: false },
+          payload: {
+            text: 'Maaf kak, chat lagi gangguan nih. Coba lagi sebentar ya 🙏',
+            isLoading: false,
+            isStreaming: false,
+          },
         });
-
       }
     },
     [input, detectUserName, getMemory, messages]
