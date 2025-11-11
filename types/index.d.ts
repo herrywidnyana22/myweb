@@ -197,4 +197,10 @@ declare interface PortfolioCache {
   timestamp: number;
 }
 
+declare interface HighlightProps{
+  title: string
+  label: string
+  className?: string
+}
+
 

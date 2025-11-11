@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { MapPin, Calendar } from 'lucide-react';
 import { useSingleData } from '@/hooks/useData';
+import { Highlight } from './highlight';
 
 export const Profile = () => {
   const { data: profileData, isLoading: loadingProfile } = useSingleData<ProfileProps>('profile');
@@ -27,8 +28,18 @@ export const Profile = () => {
   const { address } = addressData;
 
   return (
-    <div className="flex gap-4 p-4 sm:p-6 overflow-hidden">
+    <div className="relative flex gap-4 p-4 sm:p-6 overflow-hidden">
       {/* Foto profil */}
+      <div className='absolute flex gap-2 top-2 right-2'>
+        <Highlight
+          title='3+'
+          label='Years'
+        />
+        <Highlight
+          title='6+'
+          label='Project'
+        />
+      </div>
       <div className="relative size-16 sm:size-20">
         <Image
           src={image}
