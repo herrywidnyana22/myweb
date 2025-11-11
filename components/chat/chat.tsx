@@ -144,9 +144,10 @@ export const Chat = ({
       } catch (err) {
         console.error('Chat error:', err);
         dispatch({
-          type: 'ADD',
-          payload: { role: 'bot', text: 'Terjadi kesalahan server.', isLoading: false },
+          type: 'UPDATE_LAST',
+          payload: { text: 'Terjadi kesalahan server.', isLoading: false, isStreaming: false },
         });
+
       }
     },
     [input, detectUserName, getMemory, messages]
