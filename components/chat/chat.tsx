@@ -145,7 +145,7 @@ export const Chat = ({
         console.error('Chat error:', err);
         dispatch({
           type: 'ADD',
-          payload: { role: 'bot', text: 'Terjadi kesalahan server.' },
+          payload: { role: 'bot', text: 'Terjadi kesalahan server.', isLoading: false },
         });
       }
     },
