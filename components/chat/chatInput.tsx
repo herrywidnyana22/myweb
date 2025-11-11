@@ -46,8 +46,8 @@ export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, 
         rows={1}
         className="
           flex-1 w-full resize-none bg-transparent text-white
-          placeholder-gray-400 text-sm sm:text-base
-          py-2.5 sm:py-3 pr-3
+          placeholder-gray-400 sm:text-base
+          py-3 pr-3
           outline-none focus:ring-0
           max-h-40 overflow-y-auto
           transition-all duration-150 ease-in-out
@@ -63,8 +63,8 @@ export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, 
         disabled={input === ''}
         className={clsx('size-7 sm:size-8 flex items-center justify-center rounded-full transition-colors', 
           input === ''
-            ? 'bg-gray-300 cursor-not-allowed'
-            : 'bg-white hover:bg-gray-100 cursor-pointer'
+            ? 'bg-gray-400 cursor-not-allowed'
+            : 'bg-white hover:bg-primary-light cursor-pointer'
         )}
       >
         <SendHorizonal size={14} className="text-gray-800" />

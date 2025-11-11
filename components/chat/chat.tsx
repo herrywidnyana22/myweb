@@ -194,26 +194,56 @@ useEffect(() => {
   // Keyboard handler untuk HP
   useEffect(() => {
     if (typeof window === 'undefined' || !window.visualViewport) return;
-    const handleResize = () => {
-      const visual = window.visualViewport;
-      if (!visual) return;
-      setIsInputFocused(visual.height < window.innerHeight - 100);
+
+    const chatContainer = document.querySelector('.chat-container') as HTMLElement | null;
+
+    const handleViewportChange = () => {
+      const viewport = window.visualViewport;
+      if (!viewport || !chatContainer) return;
+
+      // Jika keyboard muncul
+      if (viewport.height < window.innerHeight - 100) {
+        chatContainer.style.paddingBottom = `${window.innerHeight - viewport.height + 8}px`;
+        setIsInputFocused(true);
+      } else {
+        chatContainer.style.paddingBottom = '0px';
+        setIsInputFocused(false);
+      }
     };
-    window.visualViewport.addEventListener('resize', handleResize);
-    handleResize();
-    return () => window.visualViewport?.removeEventListener('resize', handleResize);
+
+    window.visualViewport.addEventListener('resize', handleViewportChange);
+    window.visualViewport.addEventListener('scroll', handleViewportChange);
+
+    handleViewportChange(); // trigger awal
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleViewportChange);
+        window.visualViewport.removeEventListener('scroll', handleViewportChange);
+      }
+    };
   }, [setIsInputFocused]);
+
+
 
   // ========== RENDER ==========
   return (
     <>
       <div
-        className={clsx(
-          'relative z-50 w-full mx-auto transition-all duration-300 ease-in-out',
-          isInputFocused ? '-translate-y-10' : 'translate-y-0'
-        )}
+      className={clsx(
+        // biar window tetap float tapi punya padding aman
+        'relative z-50 w-full max-w-xl sm:max-w-2xl mx-auto transition-all duration-300 ease-in-out',
+        isInputFocused ? '-translate-y-10' : 'translate-y-0'
+      )}
+    >
+      {/* Chat Window Bubble */}
+      <div
+        className="
+          relative w-full bg-gray-900/90
+          rounded-3xl overflow-hidden shadow-2xl border border-gray-700/50
+          backdrop-blur-md transition-all duration-300 mb-4
+        "
       >
-        <div className="w-full mx-auto rounded-3xl overflow-hidden shadow-2xl border border-gray-600/50">
           {messages.length > 0 && (
             <ChatHeader
               isMinimized={isMinimized}
@@ -250,6 +280,7 @@ useEffect(() => {
               setIsMinimized={setIsMinimized}
             />
           </div>
+
         </div>
       </div>
 
