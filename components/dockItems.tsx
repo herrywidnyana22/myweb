@@ -20,7 +20,7 @@ export const dockItems: DockItemProps[] = [
         alt='icon'
         height={240}
         width={240}
-        className='size-10 sm:size-12 md:size-14 rounded-full object-cover border border-white/30'
+        className='size-10 sm:size-12 rounded-full object-cover border border-white/30'
       />
     ),
     className:
@@ -36,7 +36,7 @@ export const dockItems: DockItemProps[] = [
         alt='icon'
         height={128}
         width={128}
-        className='size-10 sm:size-12 md:size-14 object-cover'
+        className='size-10 sm:size-12 object-cover'
       />
     ),
 
@@ -53,7 +53,7 @@ export const dockItems: DockItemProps[] = [
         alt='icon'
         height={128}
         width={128}
-        className='size-10 sm:size-12 md:size-14 object-cover'
+        className='size-10 sm:size-12  object-cover'
       />
     ),
     className:
@@ -70,7 +70,7 @@ export const dockItems: DockItemProps[] = [
         alt='icon'
         height={128}
         width={128}
-        className='size-10 sm:size-12 md:size-14 object-cover'
+        className='size-10 sm:size-12 object-cover'
       />
     ),
     className:
@@ -86,7 +86,7 @@ export const dockItems: DockItemProps[] = [
         alt='icon'
         height={128}
         width={128}
-        className='size-10 sm:size-12 md:size-14 object-cover'
+        className='size-10 sm:size-12 object-cover'
       />
     ),
     className:

@@ -8,8 +8,8 @@ type PageTitleProps = {
 
 export const PageTitle = ({ isWidgetOpen, isMinimize }: PageTitleProps) => {
   return (
-    <header className={isWidgetOpen ? "" : "mb-3 sm:mb-4 lg:mb-6"}>
-      <div className="flex items-center justify-center gap-2 sm:gap-4 px-2 sm:px-0">
+    <header className={isWidgetOpen ? "" : "mb-3"}>
+      <div className="flex items-center justify-center gap-2 sm:gap-4">
         {/* Logo */}
         <Image
           src={"/icons/logo.webp"}

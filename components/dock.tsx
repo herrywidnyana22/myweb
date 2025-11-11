@@ -21,7 +21,7 @@ export const Dock = ({ items, onIconClick, isOpenById }: DockProps) => {
 
   return (
     <div className='fixed z-10 bottom-4 sm:bottom-6 md:bottom-10 lg:bottom-12 left-1/2 -translate-x-1/2'>
-      <div className='flex gap-4 sm:gap-5 md:gap-6 lg:gap-7 px-3 sm:px-4 md:px-5 lg:px-6 py-2 sm:py-3 shadow-2xl bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl'>
+      <div className='flex gap-4 sm:gap-6 px-4 sm:px-8 py-2 sm:py-3 shadow-2xl bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl'>
         {items.map((item, index) => (
           <div
             key={item.id}
@@ -47,7 +47,7 @@ export const Dock = ({ items, onIconClick, isOpenById }: DockProps) => {
                   damping: 18,
                   mass: 0.5,
                 }}
-                className='size-10 sm:size-12 md:size-14 flex items-center justify-center'
+                className='size-10 sm:size-12 flex items-center justify-center'
               >
                 {item.icon}
               </motion.button>

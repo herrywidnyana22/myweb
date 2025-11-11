@@ -25,7 +25,7 @@ export default function Home() {
       className="
         relative min-h-screen w-full overflow-x-hidden overflow-y-auto
         px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64 
-        py-4 sm:py-10 md:py-16 lg:py-20
+        py-4 sm:py-10
       "
     >
       {/* Background Layer */}
@@ -41,9 +41,8 @@ export default function Home() {
       <div
         className="
           relative flex flex-col w-full
-          space-y-2 sm:space-y-4 md:space-y-8 lg:space-y-10 xl:space-y-12
+          space-y-2 sm:space-y-4 md:space-y-8
           max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto
-          pb-21 sm:pb-25
         "
       >
         <PageTitle isWidgetOpen={Object.values(openById).every(v => !v)} isMinimize={isMinimized} />

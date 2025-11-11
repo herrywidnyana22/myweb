@@ -207,7 +207,7 @@ export const Chat = ({
       <div
         className={clsx(
           'relative z-50 w-full mx-auto transition-all duration-300 ease-in-out',
-          isInputFocused ? '-translate-y-10' : 'translate-y-0'
+          isInputFocused ? '-translate-y-12 sm:-translate-y-26' : 'translate-y-0'
         )}
       >
         <div className="w-full mx-auto rounded-3xl overflow-hidden shadow-2xl border border-gray-600/50">
