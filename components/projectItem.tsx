@@ -44,12 +44,12 @@ export const ProjectItem = (project: ProjectProps) => {
       {/* CONTENT */}
       <div className="w-full">
         {/* Progress Circle */}
-        <div className="absolute right-6 top-4 sm:float-right sm:ml-3 sm:mb-2">
+        <div className="absolute right-6 top-2 sm:float-right sm:ml-3">
           <ProgressCircle value={project.progressValue} label="Progress" />
         </div>
 
         {/* Description */}
-        <div className="text-xs sm:text-sm font-light text-gray-600 leading-relaxed mt-6 sm:mt-4">
+        <div className="text-xs sm:text-sm font-light text-gray-600 leading-relaxed">
           {parseHighlight(project.description || '')}
         </div>
 

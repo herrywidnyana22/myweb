@@ -90,7 +90,7 @@ body {
   padding-bottom: 0.5rem;
 }
 
-.experience-pagination .swiper-pagination-bull,
+.experience-pagination .swiper-pagination-bullet,
 .project-pagination .swiper-pagination-bullet {
   background: var(--text-muted);
   opacity: 1;

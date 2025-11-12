@@ -32,7 +32,7 @@ export const ProgressCircle = ({
             cx={radius + stroke}
             cy={radius + stroke}
             r={radius}
-            stroke='#2C2C2E'
+            stroke='#D4D4D4' //bg-neutral-300
             strokeWidth={stroke}
             fill='none'
           />

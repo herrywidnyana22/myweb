@@ -11,11 +11,9 @@ export function safeParseJSON(value: string | undefined) {
 }
 
 export const getColor = (value: number) => {
-  if (value > 80) return '#32D74B'; 
-  if (value > 50) return '#FFA500'; 
-
-  return '#FF3B30'; // Merah (iOS red)
-}
-
+  if (value > 80) return '#059669' // bg-emerald-600
+  if (value > 50) return '#EA580C' // bg-orange-600
+  return '#E11D48'                 // bg-rose-600
+};
 
 

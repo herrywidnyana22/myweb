@@ -13,7 +13,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
         transition-all duration-300
       "
     >
-      {/* Left Icon Area */}
+      {/* Left Area */}
       <div
         className="
           flex items-center justify-center 
@@ -33,7 +33,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
       >
         {/* Header: Company + Year */}
         <div className="flex justify-between items-center">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center gap-3">
             {exp.icon && typeof exp.icon === "string" && (
               <Image
                 src={exp.icon}
@@ -43,7 +43,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
                 className="object-contain opacity-90 sm:w-6 sm:h-6"
               />
             )}
-            <div>
+            <div className="flex flex-col justify-center"> 
               <h3
                 className="
                   font-extrabold 
@@ -54,7 +54,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
               >
                 {parseHighlight(exp.company || '')}
               </h3>
-              <p className="text-gray-500 font-semibold text-xs sm:text-sm mb-2 sm:mb-3">
+              <p className="text-gray-500 font-semibold text-xs sm:text-sm">
                 {parseHighlight(exp.role || '')}
               </p>
             </div>
