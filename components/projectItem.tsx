@@ -37,7 +37,7 @@ export const ProjectItem = (project: ProjectProps) => {
             leading-snug sm:leading-tight
           "
         >
-          {parseHighlight(project.title || '')}
+          {parseHighlight(project.title ?? '')}
         </h3>
       </div>
 
@@ -50,7 +50,7 @@ export const ProjectItem = (project: ProjectProps) => {
 
         {/* Description */}
         <div className="text-xs sm:text-sm font-light text-gray-600 leading-relaxed">
-          {parseHighlight(project.description || '')}
+          {parseHighlight(project.description ?? '')}
         </div>
 
         <div className="flex items-center justify-between">

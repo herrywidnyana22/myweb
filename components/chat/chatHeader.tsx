@@ -1,28 +1,40 @@
-import { CircleChevronDown, CircleMinus, CircleX } from 'lucide-react';
-import { memo } from 'react';
+'use client';
 
-export const ChatHeader = memo(({ isMinimized, onClear, onMinimize }: ChatHeaderProps) => {
+import clsx from 'clsx';
+import { Minimize2, Trash2 } from 'lucide-react';
+
+export const ChatHeader = ({ onMinimize, onClear, isMinimized }: ChatHeaderProps) => {
   return (
-    <div className=' px-5 py-2 bg-gray-900 border-b border-gray-700'>
-      <div className='flex items-center gap-2 text-gray-300'>
+    <div className="flex items-center justify-between px-4 py-3 bg-gray-900/80 border-b border-gray-700">
+      <div className="flex items-center gap-3">
+        <div className="rounded-full bg-linear-to-tr from-primary to-primary-light w-9 h-9 flex items-center justify-center text-white">
+          H
+        </div>
+        <div>
+          <div className="text-sm font-medium">Herry Chat</div>
+          <div className="text-xs text-gray-400">Portfolio Assistant</div>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3">
         <button
-          className='size-4 flex items-center justify-center rounded-full bg-red-500 text-white transition cursor-pointer'
-          onClick={onClear}
+          onClick={() => onClear()}
+          title="Clear chat"
+          className={clsx('p-2 rounded-md hover:bg-gray-500/80 cursor-pointer')}
+          type="button"
         >
-          <CircleX size={20} />
+          <Trash2 size={16} />
         </button>
+
         <button
-          className='size-4 flex items-center justify-center rounded-full bg-yellow-500 text-white transition cursor-pointer'
-          onClick={onMinimize}
+          onClick={() => onMinimize()}
+          title={isMinimized ? 'Open' : 'Minimize'}
+          className={clsx('p-2 rounded-md hover:bg-gray-500/80 cursor-pointer')}
+          type="button"
         >
-          {isMinimized 
-            ? <CircleChevronDown size={20} /> 
-            : <CircleMinus size={20} />
-          }
+          <Minimize2 size={16} />
         </button>
       </div>
     </div>
-  )
-})
-
-ChatHeader.displayName = 'ChatHeader';
+  );
+};

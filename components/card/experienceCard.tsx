@@ -52,10 +52,10 @@ export const ExperienceCard = (exp: ExperienceProps) => {
                   leading-tight
                 "
               >
-                {parseHighlight(exp.company || '')}
+                {parseHighlight(exp.company ?? '')}
               </h3>
               <p className="text-gray-500 font-semibold text-xs sm:text-sm">
-                {parseHighlight(exp.role || '')}
+                {parseHighlight(exp.role ?? '')}
               </p>
             </div>
 
@@ -70,14 +70,14 @@ export const ExperienceCard = (exp: ExperienceProps) => {
           
 
           <span className="text-gray-500 text-xs sm:text-sm leading-snug">
-            {parseHighlight(exp.description || '')}
+            {parseHighlight(exp.description ?? '')}
           </span>
 
           {/* Location */}
           <div className="flex gap-1 sm:gap-1.5 text-gray-500 mt-2 items-center">
             <MapPin size={12} className="rotate-10 sm:size-4" />
             <span className="text-[10px] sm:text-xs italic truncate">
-              {parseHighlight(exp.location || '')}
+              {parseHighlight(exp.location ?? '')}
             </span>
           </div>
         </div>

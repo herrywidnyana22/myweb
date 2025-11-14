@@ -1,14 +1,23 @@
 'use client'
 
 import Image from 'next/image';
-import { MapPin, Calendar } from 'lucide-react';
-import { useData, useSingleData } from '@/hooks/useData';
+import { MapPin, Calendar } from 'lucide-react'
 import { Highlight } from './highlight';
+import { useLocalizedData } from '@/hooks/useLocalizedData';
 
 export const Profile = () => {
-  const { data: profileData, isLoading: loadingProfile } = useSingleData<ProfileProps>('profile');
-  const { data: addressData, isLoading: loadingAddress } = useSingleData<AddressProps>('address');
-  const { data: highlightData, isLoading: loadingHighlight } = useData<HighlightProps>('highlight');
+
+  const { data: profileData, isLoading: loadingProfile } = useLocalizedData<ProfileProps>('profile', {
+    type: 'single'
+  })
+
+  const { data: addressData, isLoading: loadingAddress } = useLocalizedData<AddressProps>('address', {
+    type: 'single'
+  })
+
+  const { data: highlightData, isLoading: loadingHighlight } = useLocalizedData<HighlightProps>('highlight', {
+    type: 'array'
+  })
 
   if (loadingProfile || loadingAddress || loadingHighlight) {
     return (
@@ -39,7 +48,7 @@ export const Profile = () => {
       {/* Foto profil */}
       <div className='absolute flex gap-2 top-2 right-2'>
         {
-          highlightData.map((item, i) => (
+          highlightData?.map((item, i) => (
             <Highlight
               key={i}
               title={item.title}

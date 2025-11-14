@@ -3,10 +3,13 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCreative, Pagination } from 'swiper/modules';
 import { ProjectItem } from './projectItem';
-import { useData } from '@/hooks/useData';
+import { useLocalizedData } from '@/hooks/useLocalizedData';
 
 export const Projects = () => {
-  const { data, isLoading, error } = useData<ProjectProps>('projects');
+
+  const { data, isLoading, error } = useLocalizedData<ProjectProps>('projects', {
+    type: 'array'
+  });
 
   if (isLoading) {
     return (
@@ -47,7 +50,7 @@ export const Projects = () => {
     return <p className="text-center text-red-400 p-4">Gagal memuat project.</p>;
   }
 
-  if (!data?.length) {
+  if (!data) {
     return <p className="text-center text-gray-400 p-4">Belum ada data project.</p>;
   }
 
@@ -67,7 +70,7 @@ export const Projects = () => {
         modules={[EffectCreative, Pagination]}
         className="mySwiper w-full h-full overflow-hidden"
       >
-        {data.map((project, i) => (
+        {Array.isArray(data) && data.map((project, i) => (
           <SwiperSlide key={i}>
             <ProjectItem {...project} />
           </SwiperSlide>

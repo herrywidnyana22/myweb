@@ -1,5 +1,6 @@
 'use client';
 
+import { useLang } from '@/context/LanguageContext';
 import clsx from 'clsx';
 import { SendHorizonal } from 'lucide-react';
 import { memo, useEffect, useRef } from 'react';
@@ -7,6 +8,8 @@ import { memo, useEffect, useRef } from 'react';
 export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, setIsMinimized }: ChatInputProps) => {
   const formRef = useRef<HTMLFormElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const { t } = useLang();
 
   const handleFocus = () => {
     setIsMinimized(false);
@@ -39,7 +42,7 @@ export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, 
         ref={textareaRef}
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder="Sini-sini kenalan sama aku..."
+        placeholder={t.sendPlaceholder}
         onFocus={handleFocus}
         onBlur={onBlur}
         onKeyDown={handleKeyDown}
@@ -60,11 +63,9 @@ export const ChatInput = memo(({ sendMessage, input, setInput, onFocus, onBlur, 
 
       <button
         type="submit"
-        disabled={input === ''}
-        className={clsx('size-8 flex items-center justify-center rounded-full transition-colors', 
-          input === ''
-            ? 'bg-gray-400 cursor-not-allowed'
-            : 'bg-white hover:bg-primary-light cursor-pointer'
+        disabled={!input.trim()}
+        className={clsx('size-8 flex items-center justify-center rounded-full transition-colors bg-white hover:bg-primary-light cursor-pointer', 
+          !input.trim() && 'bg-gray-400 cursor-not-allowed'
         )}
       >
         <SendHorizonal size={14} className="text-gray-800" />

@@ -41,7 +41,7 @@ All portfolio data (projects, education, experience, etc.) are stored in **Googl
 | **Frontend**              | Next.js 15 (App Router), React 19, TypeScript      |
 | **Styling**               | Tailwind CSS v4 + custom theme (`:root` variables) |
 | **AI Engine**             | Google Gemini 2.5 Flash (`@google/genai`)          |
-| **Data Source**           | Google Sheets API (via custom `fetchSheetData`)    |
+| **Data Source**           | Google Sheets API (via custom `fetchData`)    |
 | **UI Components**         | Framer Motion, Swiper, Shadcn/UI                   |
 | **Hosting (recommended)** | Vercel or Cloudflare Pages                         |
 

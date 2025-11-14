@@ -1,11 +1,13 @@
 'use client';
 
-import Image from 'next/image';
-import { useData } from '@/hooks/useData';
+import Image from 'next/image'
 import { Tooltip } from './tooltip';
+import { useLocalizedData } from '@/hooks/useLocalizedData';
 
 export const Education = () => {
-  const { data, isLoading, error } = useData<EducationProps>('educations');
+  const { data, isLoading, error } = useLocalizedData<EducationProps>('educations', {
+    type: 'array'
+  })
 
   // Skeleton loader
   if (isLoading) {
@@ -29,7 +31,7 @@ export const Education = () => {
     return <p className="text-center text-red-400 p-4">Gagal memuat data pendidikan.</p>;
   }
 
-  if (!data?.length) {
+  if (!data) {
     return <p className="text-center text-gray-400 p-4">Belum ada data pendidikan.</p>;
   }
 
@@ -42,7 +44,7 @@ export const Education = () => {
           gap-2 sm:gap-4 xl:gap-10 p-3 sm:px-6 sm:py-8
         "
       >
-        {data.map((edu, i) => (
+        {Array.isArray(data) && data.map((edu, i) => (
           <Tooltip key={i} label={edu.school}>
             <div
               className="

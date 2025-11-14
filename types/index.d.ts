@@ -1,98 +1,124 @@
+// ===========================
+// GLOBAL LANGUAGE TYPE
+// ===========================
+type UILanguage = 'id' | 'en'
 
-declare type DataItemProps = 
+// ===========================
+// DATA CARD TYPES
+// ===========================
+declare type DataItemProps =
   | ({ type: 'project' } & ProjectProps)
   | ({ type: 'contact' } & ContactProps)
   | ({ type: 'address' } & AddressProps)
   | ({ type: 'education' } & EducationProps)
   | ({ type: 'experience' } & ExperienceProps)
-  | ({ type: 'default' } & DefaultCardData)
+  | ({ type: 'action' } & ActionCardProps)
+  | ({ type: 'default' } & DefaultCardData);
 
-declare interface DefaultCardData{
-  id?: string 
-  title: string 
-  description: string 
-  icon?: string | React.ReactNode 
-  subIcon?: string | React.ReactNode 
-  href?: string
+// Default card
+declare interface DefaultCardData {
+  id?: string;
+  title: string;
+  description: string;
+  icon?: string | React.ReactNode;
+  subIcon?: string | React.ReactNode;
+  href?: string;
 }
 
-declare interface AddressProps{
-  address: string
-  lat: number | string
-  lng: number | string
-  mapUrl?: string
+// ===========================
+// NEW — ACTION CARD
+// ===========================
+declare interface ActionCardProps {
+  action: 'request_language_switch';
+  targetLanguage: UILanguage;
+  message?: string; 
 }
 
-declare interface ExperienceProps{
-  company: string
-  role: string
-  location: string
-  year: string
-  jobdesk: string
-  description: string
-  icon: string | React.ReactNode
+// ===========================
+// PORTFOLIO TYPES
+// ===========================
+declare interface AddressProps {
+  address: string;
+  lat: number | string;
+  lng: number | string;
+  mapUrl?: string;
 }
 
-declare interface EducationProps{
-  school: string
-  major: string
-  year: string
-  icon?: string | React.ReactNode 
-  subIcon?: string | React.ReactNode 
+declare interface ExperienceProps {
+  company: string;
+  role: string;
+  location: string;
+  year: string;
+  jobdesk: string;
+  description: string;
+  icon: string | React.ReactNode;
 }
 
-declare interface ProjectProps{
-  title: string
-  description: string
-  icon: string
-  progressValue: number
-  demoLink?: string
-  githubLink: string
-  iconCategory: IconCategoryProps[]
+declare interface EducationProps {
+  school: string;
+  major: string;
+  year: string;
+  icon?: string | React.ReactNode;
+  subIcon?: string | React.ReactNode;
+}
+
+declare interface ProjectProps {
+  title: string;
+  description: string;
+  icon: string;
+  progressValue: number;
+  demoLink?: string;
+  githubLink: string;
+  iconCategory: IconCategoryProps[];
 }
 
 declare interface ContactProps {
-  title: string
-  description: string 
-  icon?: string | React.ReactNode
-  href?: string
+  title: string;
+  description: string;
+  icon?: string | React.ReactNode;
+  href?: string;
 }
 
-declare interface IconCategoryProps{
-  src: string
-  label: string
+declare interface IconCategoryProps {
+  src: string;
+  label: string;
 }
 
-declare interface BuildPromptProps{
-  message: string
-  projects: ProjectProps[]
-  profile: ProfileProps
-  address: AddressProps
-  contacts: DefaultCardData[]
-  educations: EducationProps[]
-  experiences: ExperienceProps[]
+declare interface BuildPromptProps {
+  message: string;
+  projects: ProjectProps[];
+  profile: ProfileProps;
+  address: AddressProps;
+  contacts: DefaultCardData[];
+  educations: EducationProps[];
+  experiences: ExperienceProps[];
+  memory?: ChatMemory;
+  language: UILanguage
 }
 
-declare interface ProfileProps{
-  name: string
-  fullName: string 
-  role: string 
-  summary: string 
-  image: string
-  birth: BirthdayProps
+declare interface ProfileProps {
+  name: string;
+  fullName: string;
+  role: string;
+  summary: string;
+  image: string;
+  birth: BirthdayProps;
 }
 
 type BirthdayProps = {
-  date: string
-  place: string
-}
+  date: string;
+  place: string;
+};
 
+// ===========================
+// UI + COMPONENT TYPES
+// ===========================
 
 declare interface DockProps {
   items: DockItemProps[];
   onIconClick: (id: string, rect: DOMRect) => void;
   isOpenById?: Record<string, boolean>;
-};
+}
 
 declare interface DockItemProps {
   id: string;
@@ -104,20 +130,27 @@ declare interface DockItemProps {
 
 declare interface ChatProps {
   messages: ChatResponseProps[];
-  setMessages: React.Dispatch<React.SetStateAction<messages>>
-  isInputFocused: boolean
-  setIsInputFocused: React.Dispatch<React.SetStateAction<boolean>>
-  isMinimized: boolean
-  setIsMinimized: React.Dispatch<React.SetStateAction<boolean>>
+  setMessages: React.Dispatch<React.SetStateAction<ChatResponseProps[]>>;
+  isInputFocused: boolean;
+  setIsInputFocused: React.Dispatch<React.SetStateAction<boolean>>;
+  isMinimized: boolean;
+  setIsMinimized: React.Dispatch<React.SetStateAction<boolean>>;
+
+  // OPTIONAL — jika UI ikut berubah via AI
+  language?: UILanguage;
+  setLanguage?: React.Dispatch<React.SetStateAction<UILanguage>>;
+  onAction?: (action: ActionCard) => void; 
 }
 
 declare interface ChatResponseProps {
   role: 'user' | 'bot';
   text?: string;
   cards?: DataItemProps[];
-  isStreaming?: boolean
-  isLoading?:boolean
-  children?: React.ReactNode;
+  isStreaming?: boolean;
+  isLoading?: boolean;
+
+  special?: 'lang_confirm';  
+  langTarget?: 'id' | 'en';
 }
 
 declare interface ChatMemory {
@@ -155,18 +188,18 @@ declare interface WidgetProps {
   className?: string;
 }
 
-declare interface ProgressCircleProps{
-  value: number
-  label: string
-  className?: string
+declare interface ProgressCircleProps {
+  value: number;
+  label: string;
+  className?: string;
 }
 
-declare interface TooltipProps{
+declare interface TooltipProps {
   children: ReactNode;
   label: string;
-};
+}
 
-declare interface IconProps{
+declare interface IconProps {
   tooltipLabel?: string;
   textLabel?: string;
   href?: string;
@@ -178,11 +211,6 @@ declare interface IconProps{
 }
 
 declare interface AIResponse {
-  text: string;
-  cards: Partial<DataItemProps>[];
-}
-
-declare interface ApiResponse {
   text: string;
   cards: DataItemProps[];
 }
@@ -197,10 +225,8 @@ declare interface PortfolioCache {
   timestamp: number;
 }
 
-declare interface HighlightProps{
-  title: string
-  label: string
-  className?: string
+declare interface HighlightProps {
+  title: string;
+  label: string;
+  className?: string;
 }
-
-

@@ -3,10 +3,12 @@
 import { SwiperSlide, Swiper } from "swiper/react";
 import { EffectCreative, Pagination } from "swiper/modules";
 import { ExperienceCard } from './card/experienceCard';
-import { useData } from "@/hooks/useData";
+import { useLocalizedData } from "@/hooks/useLocalizedData";
 
 export const Experiences = () => {
-  const { data, isLoading, error } = useData<ExperienceProps>('experiences');
+  const { data, isLoading, error } = useLocalizedData<ExperienceProps>('experiences', {
+    type: 'array'
+  })
 
   if (isLoading) {
     return (
@@ -53,7 +55,7 @@ export const Experiences = () => {
     return <p className="text-center text-red-400 p-4">Gagal memuat pengalaman.</p>;
   }
 
-  if (!data?.length) {
+  if (!data) {
     return <p className="text-center text-gray-400 p-4">Belum ada data pengalaman.</p>;
   }
 
@@ -73,7 +75,7 @@ export const Experiences = () => {
         modules={[EffectCreative, Pagination]}
         className="mySwiper w-full h-full overflow-hidden"
       >
-        {data.map((project, i) => (
+        {Array.isArray(data) && data.map((project, i) => (
           <SwiperSlide key={i}>
             <ExperienceCard {...project} />
           </SwiperSlide>

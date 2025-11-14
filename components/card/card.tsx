@@ -5,13 +5,30 @@ import { memo } from 'react';
 import { ProjectCard } from './projectCard';
 import { ContactCard } from './contactCard';
 import { parseHighlight } from '@/utils/parseHighlight';
+import { ConfirmCard } from './confirmCard';
 
-const CardComponent = (card: DataItemProps) => {
+
+type CardProps = DataItemProps & {
+  onSwitchLang?: (language: UILanguage, action: 'yes' | 'no') => void;
+}
+
+const CardComponent = (card: CardProps) => {
   switch (card.type) {
     case 'project':
-      return <ProjectCard {...card} />;
+      return <ProjectCard {...card} />
+
     case 'contact':
-      return <ContactCard {...card} />;
+      return <ContactCard {...card} />
+
+    case 'action':
+      return (
+        <ConfirmCard
+          target={card.targetLanguage}
+          onConfirm={(lang: UILanguage) => card.onSwitchLang?.(lang, "yes")}
+          onCancel={() => card.onSwitchLang?.(card.targetLanguage, "no")}
+        />
+      );
+
     case 'education':
       return (
         <div className='flex items-center gap-4'>
@@ -25,9 +42,9 @@ const CardComponent = (card: DataItemProps) => {
               />
             )}
           <div>
-            <h3 className="font-semibold text-primary text-sm sm:text-base md:text-lg">{parseHighlight(card.school || '')}</h3>
-            <p className="text-xs sm:text-sm text-gray-600">{parseHighlight(card.major || '')}</p>
-            <p className="text-[11px] sm:text-xs text-gray-400">{parseHighlight(card.year || '')}</p>
+            <h3 className="font-semibold text-primary text-sm sm:text-base md:text-lg">{parseHighlight(card.school ?? '')}</h3>
+            <p className="text-xs sm:text-sm text-gray-600">{parseHighlight(card.major ?? '')}</p>
+            <p className="text-[11px] sm:text-xs text-gray-400">{parseHighlight(card.year ?? '')}</p>
           </div>
         </div>
       );
@@ -46,23 +63,23 @@ const CardComponent = (card: DataItemProps) => {
             )}
             <div>
               <h3 className="font-semibold text-primary text-sm sm:text-base md:text-lg">
-                {parseHighlight(card.company || '')}
+                {parseHighlight(card.company ?? '')}
               </h3>
               <p className="text-xs sm:text-sm text-gray-700">
-                {parseHighlight(card.role || '')}
+                {parseHighlight(card.role ?? '')}
               </p>
               <p className="text-[11px] sm:text-xs text-gray-500 mt-1">
-                {parseHighlight(card.year || '')}
+                {parseHighlight(card.year ?? '')}
               </p>
             </div>
           </div>
-          <p className="text-xs sm:text-sm mt-1 sm:mt-2">{parseHighlight(card.description || '')}</p>
+          <p className="text-xs sm:text-sm mt-1 sm:mt-2">{parseHighlight(card.description ?? '')}</p>
         </div>
       );
     case 'address':
       return (
         <div>
-          <h3 className="font-semibold text-sm sm:text-base">{parseHighlight(card.address || '')}</h3>
+          <h3 className="font-semibold text-sm sm:text-base">{parseHighlight(card.address ?? '')}</h3>
           {card.mapUrl && (
             <iframe
               src={`${card.mapUrl}&output=embed`}
@@ -74,19 +91,20 @@ const CardComponent = (card: DataItemProps) => {
           )}
         </div>
       );
+
     default:
       return (
         <div>
-          <h3 className="text-sm sm:text-md text-gray-600">{parseHighlight(card.title || '')}</h3>
+          <h3 className="text-sm sm:text-md text-gray-600">{parseHighlight(card.title ?? '')}</h3>
           <div className="font-semibold text-sm sm:text-base md:text-md">
-            <p>{parseHighlight(card.description || '')}</p>
+            <p>{parseHighlight(card.description ?? '')}</p>
           </div>
         </div>
       );
   }
 };
 
-export const Card = memo(({ ...card }: DataItemProps) => (
+export const Card = memo((props: CardProps) => (
   <div
     className="
       flex flex-col gap-2 sm:gap-3 
@@ -97,7 +115,7 @@ export const Card = memo(({ ...card }: DataItemProps) => (
       transition hover:shadow-md
     "
   >
-    <CardComponent {...card} />
+    <CardComponent {...props} />
   </div>
 ));
 

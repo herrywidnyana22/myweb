@@ -1,19 +1,24 @@
 'use client';
 
+import clsx from 'clsx';
+
 import { Dock } from '@/components/dock';
 import { PageTitle } from '@/components/pageTitle';
 import { useCallback, useState } from 'react';
 import { Widget } from '@/components/widget';
 import { dockItems } from '@/components/dockItems';
 import { Chat } from '@/components/chat/chat';
-import clsx from 'clsx';
+import { useLang } from '@/context/LanguageContext';
 
 export default function Home() {
   const [messages, setMessages] = useState<ChatResponseProps[]>([]);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
+
   const [openById, setOpenById] = useState<Record<string, boolean>>({});
   const [targetById, setTargetById] = useState<Record<string, DOMRect | null>>({});
+
+const { language } = useLang()
 
   const handleDockClick = useCallback((id: string, rect: DOMRect) => {
     setTargetById(prev => ({ ...prev, [id]: rect }));
@@ -55,6 +60,7 @@ export default function Home() {
           setIsInputFocused={setIsInputFocused}
           isMinimized={isMinimized}
           setIsMinimized={setIsMinimized}
+          language={language}
         />
 
         {/* WIDGET */}

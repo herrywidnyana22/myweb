@@ -3,17 +3,7 @@
 import { parseHighlight } from '@/utils/parseHighlight';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo } from 'react';
-
 export const ContactCard = (card: ContactProps) => {
-  const fontSizeStyle = useMemo(() => {
-    const len = card.description?.length || 0;
-    const size = len > 45 ? 11 : len > 25 ? 12 : 14;
-    return {
-      fontSize: `${size}px`,
-      transition: 'font-size 0.2s ease',
-    };
-  }, [card.description]);
 
   return (
     <div
@@ -36,8 +26,8 @@ export const ContactCard = (card: ContactProps) => {
       )}
 
       <div className="flex flex-col min-w-0">
-        <span className="text-xs sm:text-sm font-medium text-gray-700 capitalize truncate">
-          {parseHighlight(card.title || '')}
+        <span className="text-sm font-medium text-gray-700 capitalize truncate">
+          {parseHighlight(card.title ?? '')}
         </span>
 
         {card.href ? (
@@ -46,24 +36,22 @@ export const ContactCard = (card: ContactProps) => {
             href={card.href}
             target="_blank"
             rel="noopener noreferrer"
-            style={fontSizeStyle}
             className="
               text-sky-600 hover:underline truncate
-              text-[11px] sm:text-[13px] md:text-[15px]
+              text-sm
             "
           >
-            {parseHighlight(card.description || '')}
+            {parseHighlight(card.description ?? '')}
           </Link>
         ) : (
           <span
             title={card.description}
-            style={fontSizeStyle}
             className="
               text-gray-600 truncate
-              text-[11px] sm:text-[13px] md:text-[15px]
+              text-sm
             "
           >
-            {parseHighlight(card.description || '')}
+            {parseHighlight(card.description ?? '')}
           </span>
         )}
       </div>

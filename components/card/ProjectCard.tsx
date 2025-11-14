@@ -28,13 +28,13 @@ export const ProjectCard = (card: ProjectProps) => {
           />
         )}
         <h3 className="font-semibold text-sm sm:text-base md:text-lg text-primary leading-tight">
-          {parseHighlight(card.title || '')}
+          {parseHighlight(card.title ?? '')}
         </h3>
       </div>
 
       {/* Description */}
       <div className="text-xs sm:text-sm text-gray-600 leading-snug sm:leading-normal mt-1">
-        {parseHighlight(card.description || '')}
+        {parseHighlight(card.description ?? '')}
       </div>
 
       {/* Progress Bar */}

@@ -3,10 +3,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Tooltip } from './tooltip';
-import { useData } from '@/hooks/useData';
+import { useLocalizedData } from '@/hooks/useLocalizedData';
 
 export const Contact = () => {
-  const { data, isLoading, error } = useData<ContactProps>('contacts');
+  const { data, isLoading, error } = useLocalizedData<ContactProps>('contacts', {
+    type: "array"
+  })
 
   if (isLoading) {
     return (
@@ -29,7 +31,7 @@ export const Contact = () => {
 
   return (
     <div className="grid grid-cols-2 place-items-center gap-2 sm:gap-3 p-3 sm:p-6">
-      {data?.map((item, i) => (
+      {Array.isArray(data) && data.map((item, i) => (
         <Tooltip key={i} label={item.description}>
           <Link
             href={item.href || '#'}
