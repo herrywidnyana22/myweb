@@ -19,7 +19,8 @@ export const buildPrompt = ({
   contacts,
   educations,
   experiences,
-}: BuildPromptProps & { memory?: ChatMemory }) => `
+}: BuildPromptProps ) => `
+
 User Message:
 "${message}"
 
