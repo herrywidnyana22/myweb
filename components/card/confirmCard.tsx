@@ -2,19 +2,18 @@ import { useLang } from "@/context/LanguageContext";
 import { parseHighlight } from "@/utils/parseHighlight";
 
 type ConfirmCardProps = {
-    target: UILanguage;
-    onConfirm: (lang: UILanguage) => void;
+    onConfirm: () => void;
     onCancel: () => void;
-}
+} & ActionCardProps
 
-export const ConfirmCard = ({target, onConfirm, onCancel}: ConfirmCardProps) => {
+export const ConfirmCard = ({onConfirm, onCancel, action, targetLanguage, message}: ConfirmCardProps) => {
     const { t } = useLang();
     
     return ( 
         <div className="flex justify-start sm:text-sm md:text-base">
             <div className="rounded-xl">
                 <p className="mb-3 text-slate-900">
-                {target === 'en'
+                {targetLanguage && targetLanguage === 'en'
                     ? parseHighlight(t.confirmLangEN)
                     : parseHighlight(t.confirmLangID)
                 }
@@ -30,7 +29,7 @@ export const ConfirmCard = ({target, onConfirm, onCancel}: ConfirmCardProps) => 
 
                 <button
                     className="px-3 py-1 rounded-lg bg-primary-hover hover:bg-primary-light text-white cursor-pointer"
-                    onClick={() => onConfirm(target)}
+                    onClick={onConfirm}
                 >
                      {parseHighlight(t.confirm ?? '')}
                 </button>

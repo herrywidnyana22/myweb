@@ -121,7 +121,7 @@ export const Chat = ({
           console.log(`HTTP ${res.status}: ${errText}`);
         }
 
-        const data: ApiResponse = await res.json();
+        const data: AIResponse = await res.json();
         const text = data.text ?? 'Data tidak tersedia.';
         const cards = data.cards ?? [];
 

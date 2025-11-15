@@ -31,9 +31,10 @@ export const languageRule = `
       {
         "cards": [
           {
-            "type": "action",
-            "action": "request_language_switch",
-            "targetLanguage": "en"  // atau "id"
+            type: "action",
+            action: "language" | "telegram",
+            targetLanguage?: 'id' | 'en',
+            message?: string,
           }
         ]
       }
@@ -111,12 +112,14 @@ export const jsonFormatRule = `
   - "text" berisi jawaban utama.
   - "cards" berisi data relevan dari portofolio dengan format yang sesuai konteks.
 
+
   Rules:
   - Jika pertanyaan tentang "project", "portfolio", "kerjaan", atau "aplikasi" → isi "cards" dengan data projects.
   - Jika pertanyaan tentang "contact", "hubungi", "kontak", "sosial media", atau "email" → isi "cards" dengan data contacts.
   - Jika pertanyaan tentang "education", "pendidikan", "kuliah" → isi "cards" dengan data educations.
   - Jika pertanyaan tentang "experience", "riwayat kerja", "pengalaman" → isi "cards" dengan data experiences.
   - Jika pertanyaan tentang "alamat", "lokasi", "tinggal" → isi "cards" dengan data address.
+  - Jika pertanyaan tentang ingin menghubungi melalui telegram, berbicara dengan herry, chat pribadi, atau meminta akses langsung →  Tambahkan cards dengan type: "action" dan action: "telegram"
 
   WAJIB: Semua respons harus memiliki properti "cards", meskipun kosong.
 
@@ -175,6 +178,14 @@ export const jsonFormatRule = `
     "href"?: string
   }
 
+  Action
+  {
+    type: "action",
+    action: "language" | "telegram",
+    targetLanguage?: 'id' | 'en',
+    message?: string,
+  }
+
   Default
   {
     "type": "default",
@@ -206,11 +217,22 @@ export const contextRules = `
   Jika pertanyaan tentang "profile" (identitas, tanggal lahir, asal, dll):
   - Jawab di "text" dan sertakan data dari profile & address jika relevan.
 
-  Jika pertanyaan tentang "contact" (email, phone, media sosial):
+  Jika pertanyaan tentang "contact" (email, phone, media sosial), KECUALI telegram:
   - Jawab di "text" dan tambahkan "cards" berisi data kontak.
 
   Jika pertanyaan tentang lokasi / address:
   - Jawab di "text" dan tambahkan address mapUrl jika ada.
+
+  Trigger Telegram Action:
+    Jika user menggunakan kata-kata seperti:
+      "telegram", "hubungkan herry", "hubungi herry", "chat herry", "kontak herry",
+      "bicara langsung", "ngobrol pribadi", "tele", "dm", "pesan langsung"
+      → selalu kirim card:
+      {
+        "type": "action",
+        "action": "telegram",
+        "message": "Klik tombol ini untuk terhubung via Telegram."
+      }
 `
 
 // Behavior & Highlighting

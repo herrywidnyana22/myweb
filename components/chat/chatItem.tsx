@@ -5,13 +5,23 @@ import Image from 'next/image';
 import { memo } from 'react';
 import { parseHighlight } from '@/utils/parseHighlight';
 import { ChatLoader } from './chatLoader';
+import { useChatMode } from "@/context/ChatModeContext";
 
-export const ChatItem = memo(({ role, text, children, isStreaming, isLoading }: ChatResponseProps) => {
+export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatResponseProps) => {
   const isUser = role === 'user';
 
   const wrapperClass = `flex items-start gap-2 sm:gap-3 pb-2 sm:pb-3 ${
     isUser ? 'justify-end' : 'justify-start'
   }`;
+
+
+  const { mode } = useChatMode();
+
+  const isTelegram = mode === "telegram";
+
+  const bubbleColor = isTelegram
+    ? (isUser ? "bg-[#0088cc] text-white whatsapp-bubble-user" : "bg-[#5ab5e8] text-slate-900 whatsapp-bubble-bot")
+    : (isUser ? 'bg-primary-hover text-white whatsapp-bubble-user' : 'bg-white border text-slate-900 whatsapp-bubble-bot');
 
   const bubbleClass = [
     'relative z-20',
@@ -21,9 +31,7 @@ export const ChatItem = memo(({ role, text, children, isStreaming, isLoading }: 
     'text-xs sm:text-sm md:text-base',
     'leading-relaxed sm:leading-7 font-normal tracking-normal',
     'transition-all duration-300',
-    isUser
-      ? 'bg-primary-hover text-white whatsapp-bubble-user'
-      : 'bg-white border text-slate-900 whatsapp-bubble-bot',
+    bubbleColor,
   ].join(' ');
 
   const avatar = (src: string, alt: string, className: string) => (
@@ -46,7 +54,6 @@ export const ChatItem = memo(({ role, text, children, isStreaming, isLoading }: 
 
       {/* Chat Bubble */}
       <div className={bubbleClass}>
-        {children}
         {isLoading ? (
           // Loader aktif
           <ChatLoader />

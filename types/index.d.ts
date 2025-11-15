@@ -1,7 +1,9 @@
 // ===========================
 // GLOBAL LANGUAGE TYPE
 // ===========================
-type UILanguage = 'id' | 'en'
+declare type UILanguage = 'id' | 'en'
+declare type ChatMode = "default" | "telegram"
+declare type Action = "language" | "telegram"
 
 // ===========================
 // DATA CARD TYPES
@@ -29,8 +31,8 @@ declare interface DefaultCardData {
 // NEW — ACTION CARD
 // ===========================
 declare interface ActionCardProps {
-  action: 'request_language_switch';
-  targetLanguage: UILanguage;
+  action: action;
+  targetLanguage?: UILanguage;
   message?: string; 
 }
 
