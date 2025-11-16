@@ -44,6 +44,10 @@ export function parseHighlight(text: string): React.ReactNode[] {
       case 'language':
         color = 'text-emerald-600 font-semibold'; 
         break;
+
+      case 'telegram':
+        color = 'text-telegram font-semibold'
+        break;
       default:
         color = 'text-gray-800 font-medium';
     }

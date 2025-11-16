@@ -7,6 +7,8 @@ import { ChatItem } from '@/components/chat/chatItem';
 import { Card } from '@/components/card/card';
 import DialogConfirm from '../dialogConfirm';
 import clsx from 'clsx';
+import { useApp } from '@/context/AppContextProps';
+import { sendToTelegram } from '@/lib/telegram/telegram-client';
 
 // =============== REDUCER ===============
 type ChatAction =
@@ -43,6 +45,8 @@ export const Chat = ({
 
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const hasLoadedRef = useRef(false);
+
+  const { language, setLanguage, setChatMode, chatMode, t } = useApp()
 
   // ========== MEMORY ==========
   const getMemory = useCallback((): ChatMemory => {
@@ -84,14 +88,15 @@ export const Chat = ({
     dispatch({ type: 'RESET' });
     localStorage.removeItem('chatHistory');
     localStorage.removeItem('chatMemory');
-    setShowConfirm(false);
+    setShowConfirm(false)
+
+    setChatMode('default')
   };
 
   const onMinimize = useCallback(() => setIsMinimized((p) => !p), [setIsMinimized]);
 
   // ========== SEND MESSAGE ==========
-  const sendMessage = useCallback(
-    async (e: React.FormEvent) => {
+  const sendMessage = useCallback(async (e: React.FormEvent) => {
       e.preventDefault();
       if (!input.trim()) return;
 
@@ -100,9 +105,13 @@ export const Chat = ({
       setInput('');
 
       detectUserName(input);
+
+      // pilih role placeholder bot berdasarkan chatMode
+      const botRole: ChatRole = chatMode === 'telegram' ? 'bot_telegram' : 'bot';
+
       dispatch({
         type: 'ADD',
-        payload: { role: 'bot', text: '', isLoading: true },
+        payload: { role: botRole, text: '', isLoading: true },
       });
 
       try {
@@ -113,6 +122,8 @@ export const Chat = ({
             message: input,
             memory: getMemory(),
             history: messages.slice(-6).map(({ role, text }) => ({ role, text })),
+            chatMode,
+            language
           }),
         });
 
@@ -125,7 +136,7 @@ export const Chat = ({
         const text = data.text ?? 'Data tidak tersedia.';
         const cards = data.cards ?? [];
 
-        // Stop loading, mulai ketik
+        // Update last placeholder -> stop loading -> streaming
         dispatch({
           type: 'UPDATE_LAST',
           payload: { isLoading: false, isStreaming: true, text: '' },
@@ -141,7 +152,7 @@ export const Chat = ({
           await new Promise((r) => setTimeout(r, 15));
         }
 
-        // Final text + cards
+        // Final text + cards (role sudah sesuai karena placeholder dipilih di atas)
         dispatch({
           type: 'UPDATE_LAST',
           payload: { text, cards, isStreaming: false },
@@ -158,8 +169,55 @@ export const Chat = ({
         });
       }
     },
-    [input, detectUserName, getMemory, messages]
+    [input, detectUserName, getMemory, messages, chatMode] // tambahkan chatMode di dep list
   );
+
+
+  const onConfirmActionCard = async(action: 'yes' | 'no', typeAction:Action, targetLang?: UILanguage ) => {
+    // 1. Hapus confirm card dari pesan bot terakhir
+    dispatch({
+      type: "UPDATE_LAST",
+      payload: { cards: [] }
+    });
+
+    if (action === "yes") {
+      // 2. Push system confirmation text
+      let text = ""
+      if (typeAction === 'language'){
+        if(targetLang){
+          setLanguage(targetLang)
+          text = `Ok, kita akan mengobrol dalam <mark data-type="language">${language}</mark>, aku juga mengubah semua konten ke <mark data-type="language">${language}</mark>`
+        }
+      } else {
+        setChatMode('telegram')
+        text = `Sekarang chat kamu akan saya teruskan langsung ke <mark data-type="telegram">telegramnya Herry Widnyana</mark>`
+        // kirim pesan ke Herry setelah mode switched
+        await sendToTelegram("User baru masuk mode Telegram dari website.");
+        dispatch({
+          type: "ADD",
+          payload: {
+            role: "bot_telegram",
+            text,
+            isStreaming: false,
+            isLoading: false,
+          }
+        })
+      }
+
+      // TODO:CHAT translate
+        
+    } else {
+      dispatch({
+        type: "ADD",
+        payload: {
+          role: "bot",
+          text: "Ok, request saya batalkan",
+          isStreaming: false,
+          isLoading: false,
+        }
+      });
+    }
+  }
 
   // ========== STORAGE ==========
   // Load once
@@ -210,6 +268,30 @@ export const Chat = ({
     return () => window.visualViewport?.removeEventListener('resize', handleResize);
   }, [setIsInputFocused]);
 
+
+  // TELEGRAM
+  useEffect(() => {
+    const es = new EventSource("/api/telegram/sse");
+
+    es.addEventListener("message", (e) => {
+      const data = JSON.parse(e.data);
+
+      dispatch({
+        type: "ADD",
+        payload: {
+          role: "herry_telegram",
+          text: data.text,
+          isLoading: false,
+          isStreaming: false,
+        },
+      });
+    });
+
+    return () => es.close();
+  }, []);
+
+
+
   // ========== RENDER ==========
   return (
     <>
@@ -236,7 +318,11 @@ export const Chat = ({
                   {!!msg.cards?.length && (
                     <div className="max-w-[80%] sm:max-w-[70%] grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 ml-10 sm:ml-13 mb-2">
                       {msg.cards.map((card, j) => (
-                        <Card key={j} {...card} />
+                        <Card 
+                          key={j} 
+                          {...card} 
+                          onConfirm={onConfirmActionCard}
+                        />
                       ))}
                     </div>
                   )}

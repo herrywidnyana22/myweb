@@ -27,17 +27,15 @@ export const languageRule = `
     Maka lakukan dua hal:
     1. Balas dulu dalam bahasa yang diminta.
     2. Kirimkan ACTION CARD dalam format:
-
       {
-        "cards": [
-          {
+        "cards": [{
             type: "action",
-            action: "language" | "telegram",
+            action: "language",
             targetLanguage?: 'id' | 'en',
-            message?: string,
-          }
-        ]
+            message?: Switch semua konten website menjadi Bahasa Indonesia juga?,
+        }]
       }
+    3. ACTION CARD field "message" jawab dalam bahasa yg diminta
 
   - Jangan langsung mengubah UI atau layout.
   - Jangan menerjemahkan konten web langsung — tunggu user konfirmasi via button.
@@ -231,8 +229,12 @@ export const contextRules = `
       {
         "type": "action",
         "action": "telegram",
-        "message": "Klik tombol ini untuk terhubung via Telegram."
+        "message": "Klik tombol ini untuk terhubung via <mark data-type="telegram">Telegram.</mark>"
       }
+
+    field "message" jawab dalam bahasa percakapan saat ini
+
+  jika chatMode === "telegram", maka jawab di "text" kalau sudah terhubung ke telegram
 `
 
 // Behavior & Highlighting

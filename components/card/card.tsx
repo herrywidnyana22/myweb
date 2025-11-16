@@ -9,10 +9,12 @@ import { ConfirmCard } from './confirmCard';
 
 
 type CardProps = DataItemProps & {
-  onSwitchLang?: (language: UILanguage, action: 'yes' | 'no') => void;
+  onConfirm: (action: 'yes' | 'no', actionType: Action, targetLang?: UILanguage) => void;
 }
 
 const CardComponent = (card: CardProps) => {
+  console.log({card})
+
   switch (card.type) {
     case 'project':
       return <ProjectCard {...card} />
@@ -22,12 +24,12 @@ const CardComponent = (card: CardProps) => {
 
     case 'action':
       return (
-        <ConfirmCard
-          target={card.targetLanguage}
-          onConfirm={(lang: UILanguage) => card.onSwitchLang?.(lang, "yes")}
-          onCancel={() => card.onSwitchLang?.(card.targetLanguage, "no")}
+        <ConfirmCard 
+          {...card}
+          onConfirm={() => card.onConfirm('yes', card.action, card.targetLanguage)}
+          onCancel={() => card.onConfirm('no', card.action, card.targetLanguage)}
         />
-      );
+      )
 
     case 'education':
       return (

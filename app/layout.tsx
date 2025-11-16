@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Sora, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
-import { LanguageProvider } from '@/context/LanguageContext';
+import { AppProvider } from '@/context/AppContextProps';
 
 const sora = Sora({
   variable: '--font-sans',
@@ -28,9 +28,9 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${sora.variable} ${jetbrainsMono.variable} antialiased`}>
-        <LanguageProvider>
+        <AppProvider>
           {children}
-        </LanguageProvider>
+        </AppProvider>
       </body>
     </html>
   );

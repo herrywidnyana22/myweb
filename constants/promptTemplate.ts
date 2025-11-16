@@ -19,6 +19,9 @@ export const buildPrompt = ({
   contacts,
   educations,
   experiences,
+  language,
+  chatMode,
+  action,
 }: BuildPromptProps ) => `
 
 User Message:
@@ -51,6 +54,9 @@ ${memoryRule}
 ${jsonFormatRule}
 
 Current date: ${todayStr}
+language: ${language}
+chatMode: ${chatMode}
+actionMode: ${action}
 
 Return only **one single valid JSON object** with this structure:
 {

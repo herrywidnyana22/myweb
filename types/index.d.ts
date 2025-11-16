@@ -2,9 +2,9 @@
 // GLOBAL LANGUAGE TYPE
 // ===========================
 declare type UILanguage = 'id' | 'en'
-declare type ChatMode = "default" | "telegram"
 declare type Action = "language" | "telegram"
-
+declare type ChatMode = "default" | "telegram"
+declare type ChatRole = 'user' | 'bot' | 'herry_telegram' | 'bot_telegram';
 // ===========================
 // DATA CARD TYPES
 // ===========================
@@ -31,7 +31,7 @@ declare interface DefaultCardData {
 // NEW — ACTION CARD
 // ===========================
 declare interface ActionCardProps {
-  action: action;
+  action: Action;
   targetLanguage?: UILanguage;
   message?: string; 
 }
@@ -95,7 +95,9 @@ declare interface BuildPromptProps {
   educations: EducationProps[];
   experiences: ExperienceProps[];
   memory?: ChatMemory;
-  language: UILanguage
+  language: UILanguage,
+  chatMode: ChatMode
+  action: Action
 }
 
 declare interface ProfileProps {
@@ -145,14 +147,11 @@ declare interface ChatProps {
 }
 
 declare interface ChatResponseProps {
-  role: 'user' | 'bot';
+  role: ChatRole
   text?: string;
   cards?: DataItemProps[];
   isStreaming?: boolean;
   isLoading?: boolean;
-
-  special?: 'lang_confirm';  
-  langTarget?: 'id' | 'en';
 }
 
 declare interface ChatMemory {
@@ -232,3 +231,36 @@ declare interface HighlightProps {
   label: string;
   className?: string;
 }
+declare interface TelegramUser {
+  id: number;
+  is_bot: boolean;
+  first_name?: string;
+  last_name?: string;
+  username?: string;
+}
+
+declare type ChatType = "private" | "group" | "supergroup" | "channel";
+
+declare interface TelegramChat { id: number; type: ChatType; }
+
+declare interface TelegramMessage {
+  message_id: number;
+  from?: TelegramUser;
+  chat: TelegramChat;
+  date: number;
+  text?: string;
+  reply_to_message?: { message_id: number; text?: string; from?: TelegramUser };
+}
+
+declare interface TelegramUpdate {
+  update_id: number;
+  message?: TelegramMessage;
+}
+
+declare interface TelegramPayload {
+  id: number;
+  text: string;
+  from: string;
+}
+
+

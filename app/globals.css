@@ -12,6 +12,9 @@
   --primary-hover: #ea580c;
   --primary-light: #fdba74;
 
+  --telegram:#0088cc;
+  --telegram-secondary: #5ab5e8;
+
   --secondary: #1e293b;
   --accent: #fbbf24;
   --accent-light: #fde68a;
@@ -35,6 +38,8 @@
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
   --color-primary-light: var(--primary-light);
+  --color-telegram: var(--telegram);
+  --color-telegram-secondary: var(--telegram-secondary);
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
   --color-accent-light: var(--accent-light);
@@ -116,7 +121,9 @@ body {
 }
 
 /* WhatsApp-style chat bubble tails */
-.whatsapp-bubble-user {
+.whatsapp-bubble-user,
+.whatsapp-bubble-bot,
+.telegram-bubble-bot {
   position: relative;
   z-index: 5;
 }
@@ -134,10 +141,6 @@ body {
   z-index: -1;
 }
 
-.whatsapp-bubble-bot {
-  position: relative;
-}
-
 .whatsapp-bubble-bot::before {
   content: '';
   position: absolute;
@@ -148,6 +151,18 @@ body {
   border-style: solid;
   border-width: 10px 32px 10px 5px;
   border-color: transparent white transparent transparent;
+  z-index: -1;
+}
+.telegram-bubble-bot::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -10px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 32px 10px 5px;
+  border-color: transparent var(--telegram) transparent transparent;
   z-index: -1;
 }
 

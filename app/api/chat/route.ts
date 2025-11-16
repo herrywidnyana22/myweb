@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
 import { buildPrompt } from '@/constants/promptTemplate';
 import { fetchSheetData } from '@/lib/fetchData';
-import { sendToTelegram } from '@/lib/telegram';
+import { sendToTelegram } from '@/lib/telegram/telegram-server';
 
 const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 let cachedPortfolio: PortfolioCache | null = null;
@@ -41,11 +41,13 @@ function normalizeCard(card: Partial<DataItemProps>): DataItemProps {
 
 export async function POST(req: Request) {
   try {
-     const { message, memory, history, language } = (await req.json()) as {
+     const { message, memory, history, language, chatMode, actionMode } = (await req.json()) as {
       message: string;
       memory?: Record<string, string>;
       history?: { role: string; text: string }[];
-      language?: UILanguage
+      language: UILanguage,
+      chatMode: ChatMode
+      actionMode: Action
     }
 
     const now = Date.now();
@@ -72,7 +74,6 @@ export async function POST(req: Request) {
 
     const lastMessages = history?.slice(-4) || []; // ambil 4 pesan terakhir
 
-    const lang = language === "en" ? "en" : "id";
     const contextText = lastMessages
       .map((m) => `${m.role === 'user' ? 'User' : 'AI'}: ${m.text}`)
       .join('\n');
@@ -87,21 +88,22 @@ export async function POST(req: Request) {
       contacts: cachedPortfolio.contacts,
       educations: cachedPortfolio.educations,
       experiences: cachedPortfolio.experiences,
-      language: lang
+      language,
+      chatMode,
+      action: actionMode
     })
 
-    // const mode = await getUserMode(userId);
-
-    // if (mode === "telegram") {
-    //   // Kirim pesan user ke Herry via Telegram
-    //   await sendToTelegram(`Dari User Web:\n${message}`);
+    if (chatMode === "telegram") {
+      // Kirim pesan user ke Herry via Telegram
+      await sendToTelegram(`Dari User Web:\n${message}`);
       
-    //   return NextResponse.json({
-    //     answer: "Meneruskan ke Herry via Telegram...",
-    //     mode: "telegram"
-    //   });
-    // }
-
+      return NextResponse.json(
+        { 
+          text: message, 
+          cards: [] 
+        }
+      );
+    }
 
     const response = await client.models.generateContent({
       model: 'gemini-2.5-flash',
@@ -131,6 +133,9 @@ export async function POST(req: Request) {
     return NextResponse.json(data);
   } catch (err) {
     console.error('Chat API Error:', err);
-    return NextResponse.json({ text: 'Terjadi kesalahan server.', cards: [] }, { status: 500 });
+    return NextResponse.json(
+      { text: 'Terjadi kesalahan server.', cards: [] }, 
+      { status: 500 }
+    );
   }
 }
