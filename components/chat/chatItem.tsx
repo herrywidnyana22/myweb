@@ -58,10 +58,10 @@ export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatRespon
     }
 
     // Case 3: Mode telegram, message dari TELEGRAM (Herry)
-    if (chatMode === "telegram" && role === "herry_telegram") {
+    if (chatMode === "telegram" && isTelegram) {
       return (
         <div className="whitespace-pre-wrap flex flex-col gap-3">
-          <div className="flex gap-2 items-center italic">
+          <div className="flex gap-1 items-center italic py-1 px-1.5 bg-telegram-secondary rounded-lg">
             <MousePointer2 size={16} className="rotate-90" />
             <p className="text-xs">@herrywidnyana</p>
           </div>
@@ -84,7 +84,7 @@ export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatRespon
   return (
     <div className={wrapperClass}>
       {/* Bot Avatar */}
-      {!isUser && (
+      {(role === 'bot' || role === 'bot_telegram') && (
         <div className="relative flex items-center justify-center">
           <div className="absolute inset-0 rounded-full ring-1 ring-white/30" />
           <Avatar
@@ -92,6 +92,12 @@ export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatRespon
             alt="Bot"
             className="rounded-full size-8 sm:size-9 object-cover relative z-10 transition-all duration-300"
           />
+        </div>
+      )}
+
+      {isTelegram && (
+        <div className="rounded-full bg-linear-to-tr from-primary to-primary-light w-9 h-9 flex items-center justify-center text-white">
+          H
         </div>
       )}
 

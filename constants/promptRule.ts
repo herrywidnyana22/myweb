@@ -77,24 +77,38 @@ export const translationChatRules = `
 `
 
 export const translationDataRules =`
-  Translate ONLY the text fields inside each object, such as:
+  Translate ONLY the text-based fields inside each object:
   - title
   - description
+  - subtitle
+  - summary
+  - jobdesk
+  - highlight text fields
 
   DO NOT translate:
-  - project type
-  - icon filename
+  - type
+  - icon
   - iconCategory.src
   - demoLink
   - githubLink
+  - image filename
+  - array keys
+  - object keys
+  - numbers
+  - coordinates
+  - URLs
+  - JSON structure
 
-  DO NOT change:
-  - JSON keys
-  - property order
-  - array structure
-  - object structure
+  YOU MUST KEEP THE ORIGINAL JSON STRUCTURE IDENTICAL.
+  - Do not add keys
+  - Do not remove keys
+  - Do not reorder keys
+  - Do not wrap JSON in arrays or metadata
+  - Return ONLY a pure JSON object or array, matching the original shape
 
-  Return ONLY the translated JSON.
+  IMPORTANT:
+  - iconCategory.label MAY be translated (optional), tetapi iconCategory.src TIDAK BOLEH diubah.
+
 `
 
 // Format JSON
@@ -263,10 +277,53 @@ export const behaviorRule = `
 
 
 export const memoryRule = `
-  Memory Handling:
-  - Jika user memperkenalkan diri, ingat nama tersebut untuk sesi berikutnya.
-  - Gunakan data dari "User Context" jika tersedia (misal nama, lokasi, preferensi, umur).
-  - Saat menyebut data memory (seperti nama user, umur), beri highlight HTML:
-    <mark data-type="memory">Nama User</mark>
-  - Jangan menanyakan ulang hal yang sudah diketahui dari memory.
+ Memory Handling Rules:
+
+  1. WHEN TO SAVE USER NAME
+    Kamu HANYA boleh menyimpan nama user jika user menyatakan dirinya SECARA JELAS menggunakan salah satu format berikut:
+    - "nama saya adalah ..."
+    - "nama saya ..."
+    - "namaku ..."
+    - "panggil aku ..."
+    - "you can call me ..."
+    - "my name is ..."
+    - "i am <name>" (jika konteksnya jelas bahwa <name> adalah nama)
+    
+    Jika user memperkenalkan diri dengan jelas, simpan ke:
+    memory.name = "<nama user>"
+
+  2. WHEN **NOT** TO SAVE ANYTHING
+    Jangan pernah menyimpulkan nama user hanya dari kata-kata seperti:
+    - "aku mau ..."
+    - "aku bisa ..."
+    - "aku perlu ..."
+    - "aku ingin ..."
+    - "bantu aku ..."
+    - "bantu saya ..."
+    - "hubungkan aku ..."
+    - "aku pusing ..."
+    - "aku bingung ..."
+    - atau frasa lain di mana "aku" hanya menunjukkan subjek kalimat.
+
+    Jangan menyimpulkan kata setelah "aku" sebagai nama.
+
+  3. DO NOT GUESS
+    - Jika user tidak jelas memperkenalkan diri, JANGAN menebak nama.
+    - Jangan menggunakan kata benda, kata kerja, atau pronoun sebagai nama.
+    - Jangan simpan nama jika user menyebut orang lain (contoh: "hubungi herry", "aku bicara dengan budi").
+
+  4. HOW TO USE MEMORY
+    - Jika memory.name ada, panggil user dengan nama tersebut.
+    - Saat menyebut memory.name, gunakan highlight:
+      <mark data-type="memory">Nama User</mark>
+
+  5. NEVER ASK AGAIN
+    - Jika nama sudah ada di memory, jangan tanya ulang.
+    - Jika user mengganti nama (contoh: "panggil aku Andi"), update memory.name.
+
+  6. IMPORTANT EDGE CASES
+    - Jika user berkata: "aku, Andi, mau tanya..." → nama user = Andi
+    - Jika user berkata: "aku mau, Andi bantu aku" → TIDAK ADA nama user
+    - Jika user berkata: "bantu aku Herry" → itu bukan nama user → abaikan
+    - Jika user berkata: "namaku bukan Andi, tapi Budi" → update memory
 `

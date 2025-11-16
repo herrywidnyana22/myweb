@@ -106,13 +106,10 @@ declare interface ProfileProps {
   role: string;
   summary: string;
   image: string;
-  birth: BirthdayProps;
+  birth_place: string;
+  birth_date: string
 }
 
-type BirthdayProps = {
-  date: string;
-  place: string;
-};
 
 // ===========================
 // UI + COMPONENT TYPES

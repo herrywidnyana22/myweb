@@ -60,7 +60,7 @@ export const ProjectItem = (project: ProjectProps) => {
               <Tooltip key={i} label={tech.label}>
                 <Icon
                   src={tech.src}
-                  size={20}
+                  size={14}
                   className="rounded-full bg-gray-900/10 sm:bg-gray-900/20 p-0.5 sm:p-1 border border-white/20"
                 />
               </Tooltip>

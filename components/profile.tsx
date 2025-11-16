@@ -27,12 +27,19 @@ export const Profile = () => {
     );
   }
 
+  
   if (!profileData || !addressData) {
     return <p className="text-gray-400 p-4">Data profile tidak ditemukan.</p>;
   }
-
-  const { fullName, role, summary, image, birth } = profileData;
+  
+  const { fullName, role, summary, image, birth_date } = profileData;
   const { address } = addressData;
+
+  console.log({profileData})
+  console.log({addressData})
+  console.log({highlightData})
+  console.log({fullName})
+  console.log({role})
 
   return (
     <div className="relative flex gap-4 p-4 sm:p-6 overflow-hidden">
@@ -79,7 +86,7 @@ export const Profile = () => {
           <div className="flex items-center gap-2 text-white/80">
             <Calendar size={14} className="text-white/60 shrink-0" />
             <span className="text-xs sm:text-sm">
-              {new Date(birth.date).toLocaleDateString('id-ID', {
+              {new Date(birth_date).toLocaleDateString('id-ID', {
                 year: 'numeric',
                 month: 'short',
                 day: 'numeric',
@@ -89,5 +96,6 @@ export const Profile = () => {
         </div>
       </div>
     </div>
+    
   );
 };

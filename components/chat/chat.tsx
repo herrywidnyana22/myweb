@@ -9,6 +9,8 @@ import DialogConfirm from '../dialogConfirm';
 import clsx from 'clsx';
 import { useApp } from '@/context/AppContextProps';
 import { sendToTelegram } from '@/lib/telegram/telegram-client';
+import { ChatNotice } from './chatNotice';
+import { translateAll } from '@/lib/translate/app-data';
 
 // =============== REDUCER ===============
 type ChatAction =
@@ -66,18 +68,26 @@ export const Chat = ({
     [getMemory]
   );
 
-  const detectUserName = useCallback(
-    (msg: string): string | null => {
-      const match = msg.match(/\b(namaku|aku|saya)\s+(adalah|:)?\s*([A-Za-zÀ-ÖØ-öø-ÿ]+)/i);
+  const detectUserName = useCallback( (msg: string): string | null => {
+    const patterns = [
+      /\b(?:nama saya|nama aku|namaku)\s+(adalah\s+)?([A-Za-zÀ-ÖØ-öø-ÿ]+)/i,
+      /\bpanggil aku\s+([A-Za-zÀ-ÖØ-öø-ÿ]+)/i,
+    ];
+
+    for (const p of patterns) {
+      const match = msg.match(p);
       if (match) {
-        const name = match[3].trim();
-        saveMemory({ name });
-        return name;
+        const name = match[2] ?? match[1];
+        if (name) {
+          saveMemory({ name });
+          return name.trim();
+        }
       }
-      return null;
-    },
-    [saveMemory]
-  );
+    }
+
+    return null;
+  }, [saveMemory]);
+
 
   // ========== UTIL ==========
   const scrollToBottom = useCallback(() => {
@@ -172,32 +182,40 @@ export const Chat = ({
     [input, detectUserName, getMemory, messages, chatMode] // tambahkan chatMode di dep list
   );
 
-
   const onConfirmActionCard = async(action: 'yes' | 'no', typeAction:Action, targetLang?: UILanguage ) => {
-    // 1. Hapus confirm card dari pesan bot terakhir
+    // Hapus confirm card dari pesan bot terakhir
     dispatch({
       type: "UPDATE_LAST",
       payload: { cards: [] }
     });
 
     if (action === "yes") {
-      // 2. Push system confirmation text
-      let text = ""
-      if (typeAction === 'language'){
-        if(targetLang){
-          setLanguage(targetLang)
-          text = `Ok, kita akan mengobrol dalam <mark data-type="language">${language}</mark>, aku juga mengubah semua konten ke <mark data-type="language">${language}</mark>`
-        }
+      
+      if (typeAction === 'language' && targetLang){
+        setLanguage(targetLang);
+
+        await translateAll(targetLang);
+
+        dispatch({
+          type: "ADD",
+          payload: {
+            role: "bot",
+            text: `Ok, aku juga mengubah bahasa semua konten`,
+            isStreaming: false,
+            isLoading: false,
+        }})
+        
       } else {
         setChatMode('telegram')
-        text = `Sekarang chat kamu akan saya teruskan langsung ke <mark data-type="telegram">telegramnya Herry Widnyana</mark>`
         // kirim pesan ke Herry setelah mode switched
-        await sendToTelegram("User baru masuk mode Telegram dari website.");
+        await sendToTelegram("User baru masuk mode Telegram dari website.")
+
+        // Push system confirmation text
         dispatch({
           type: "ADD",
           payload: {
             role: "bot_telegram",
-            text,
+            text: `Sekarang chat kamu akan saya teruskan langsung ke <mark data-type="telegram">telegramnya Herry Widnyana</mark>`,
             isStreaming: false,
             isLoading: false,
           }
@@ -328,6 +346,10 @@ export const Chat = ({
                   )}
                 </div>
               ))}
+              {chatMode === 'telegram' && (
+                <ChatNotice />
+              )}
+
               <div ref={chatEndRef} />
             </div>
           )}

@@ -10,8 +10,7 @@ type ConfirmCardProps = {
 
 export const ConfirmCard = ({action, message, onConfirm, onCancel}: ConfirmCardProps) => {
     const { t } = useApp()
-
-
+    
     return ( 
         <div className="flex justify-start text-sm md:text-base">
             <div className="rounded-xl">

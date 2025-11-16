@@ -3,28 +3,11 @@ import { GoogleGenAI } from '@google/genai';
 import { buildPrompt } from '@/constants/promptTemplate';
 import { fetchSheetData } from '@/lib/fetchData';
 import { sendToTelegram } from '@/lib/telegram/telegram-server';
+import { sanitizeJSON } from '@/utils';
 
 const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 let cachedPortfolio: PortfolioCache | null = null;
 const CACHE_TTL_MS = 1000 * 60 * 10;
-
-// Helper untuk rapikan JSON
-function sanitizeJSON(raw: string): string {
-  if (!raw) return '{}';
-  let text = raw
-    .replace(/```json|```/gi, '')
-    .replace(/<\/?(pre|code)[^>]*>/gi, '')
-    .replace(/[\r\n\t]+/g, ' ')
-    .replace(/\s{2,}/g, ' ')
-    .replace(/[“”‘’]/g, '"')
-    .replace(/,\s*([}\]])/g, '$1')
-    .trim();
-
-  text = text.replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:/g, '$1"$2":');
-  const match = text.match(/\{[\s\S]*\}/);
-  if (match) text = match[0];
-  return text;
-}
 
 function normalizeCard(card: Partial<DataItemProps>): DataItemProps {
   let type = card.type;
@@ -95,7 +78,7 @@ export async function POST(req: Request) {
 
     if (chatMode === "telegram") {
       // Kirim pesan user ke Herry via Telegram
-      await sendToTelegram(`Dari User Web:\n${message}`);
+      await sendToTelegram(message);
       
       return NextResponse.json(
         { 

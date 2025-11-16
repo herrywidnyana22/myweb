@@ -51,6 +51,8 @@ export const Projects = () => {
     return <p className="text-center text-gray-400 p-4">Belum ada data project.</p>;
   }
 
+  console.log({data})
+
   return (
     <div className="relative w-full h-full">
       <Swiper
