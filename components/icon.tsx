@@ -1,11 +1,10 @@
 'use client';
 
-import { Tooltip } from '@/components/tooltip';
-
 import Image from 'next/image';
 import Link from 'next/link';
 import clsx from 'clsx';
 
+import { Tooltip } from '@/components/tooltip';
 
 export const Icon = ({
   tooltipLabel,

@@ -1,9 +1,10 @@
 'use client'
 
-import { parseHighlight } from '@/utils/parseHighlight';
 import Image from 'next/image';
 import Link from 'next/link';
+
 import { useMemo } from 'react';
+import { parseHighlight } from '@/utils/parseHighlight';
 
 export const ContactCard = (card: ContactProps) => {
   const fontSizeStyle = useMemo(() => {

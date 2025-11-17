@@ -2,9 +2,10 @@
 "use client";
 
 import clsx from "clsx";
+import DialogConfirm from "../dialogConfirm";
+
 import { ChatHeader } from "./chatHeader";
 import { ChatInput } from "./chatInput";
-import DialogConfirm from "../dialogConfirm";
 
 import { useChatCore } from "../../hooks/useChatCore";
 import { useChatLanguage } from "../../hooks/useChatLanguage";

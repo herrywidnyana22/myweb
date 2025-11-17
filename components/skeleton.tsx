@@ -10,7 +10,7 @@ interface SkeletonProps {
 /**
  * Skeleton loading shimmer
  */
-export const Skeleton: React.FC<SkeletonProps> = ({ className }) => {
+export const Skeleton = ({ className }:SkeletonProps) => {
   return (
     <div
       className={clsx(

@@ -1,7 +1,8 @@
 "use client";
 
-import { useApp } from "@/context/AppContextProps";
 import Image from "next/image";
+
+import { useApp } from "@/context/AppContextProps";
 import { Tooltip } from "./tooltip";
 
 export const TelegramStatus = () =>{

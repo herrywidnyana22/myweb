@@ -1,8 +1,9 @@
 'use client';
 
+import clsx from 'clsx';
+
 import { PLACEHOLDERS } from '@/constants/placeholder';
 import { useApp } from '@/context/AppContextProps';
-import clsx from 'clsx';
 import { SendHorizonal } from 'lucide-react';
 import { memo, useEffect, useRef, useState } from 'react';
 

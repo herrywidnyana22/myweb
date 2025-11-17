@@ -1,6 +1,6 @@
+import './globals.css';
 import type { Metadata } from 'next';
 import { Sora, JetBrains_Mono } from 'next/font/google';
-import './globals.css';
 import { AppProvider } from '@/context/AppContextProps';
 import { ChatProvider } from '@/context/ChatContex';
 

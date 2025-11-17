@@ -1,12 +1,9 @@
 import Image from "next/image";
 import { useState } from "react";
-import { Tooltip } from "../tooltip";
-import { useApp } from "@/context/AppContextProps";
 import { languageToFlagCode } from "@/utils";
 
 export const FlagIcon = ({ code, size = 20 }: FlagIconProps) => {
     const [error, setError] = useState(false);
-    const {ui} = useApp()
     const flag = languageToFlagCode(code);  
 
     if (error) {

@@ -1,6 +1,7 @@
-import { useApp } from "@/context/AppContextProps";
 import clsx from "clsx";
 import Image from "next/image";
+
+import { useApp } from "@/context/AppContextProps";
 
 type PageTitleProps = {
   isWidgetOpen: boolean

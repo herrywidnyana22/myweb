@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { createPortal } from "react-dom";
 import clsx from "clsx";
 
+import { useState } from "react";
+import { createPortal } from "react-dom";
 
 export const Tooltip = ({ children, label }: TooltipProps) => {
   const [visible, setVisible] = useState(false);
