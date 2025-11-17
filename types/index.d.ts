@@ -111,7 +111,6 @@ declare interface ProfileProps {
   birth_date: string
 }
 
-
 // ===========================
 // UI + COMPONENT TYPES
 // ===========================
@@ -137,11 +136,6 @@ declare interface ChatProps {
   setIsInputFocused: React.Dispatch<React.SetStateAction<boolean>>;
   isMinimized: boolean;
   setIsMinimized: React.Dispatch<React.SetStateAction<boolean>>;
-
-  // OPTIONAL — jika UI ikut berubah via AI
-  language?: UILanguage;
-  setLanguage?: React.Dispatch<React.SetStateAction<UILanguage>>;
-  onAction?: (action: ActionCard) => void; 
 }
 
 declare interface ChatResponseProps {
@@ -166,7 +160,7 @@ declare interface ChatInputProps {
   sendMessage: (e: React.FormEvent) => Promise<void>;
   onFocus?: () => void;
   onBlur?: () => void;
-  isMinimized?: boolean
+  isActive?: boolean
 }
 
 declare interface DialogConfirmProps {

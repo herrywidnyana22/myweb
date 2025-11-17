@@ -16,8 +16,11 @@ export const languageRule = `
     • Respond casually in English.
     • Warm, friendly, not too formal.
 
-  - Jika user campur bahasa:
+  - Jika user campur bahasa atau bahasa selain English dan Indonesia:
     • Ikuti bahasa dominan user.
+    • Balas dalam bahasa tersebut sejauh mungkin.
+    • Jangan membatasi diri hanya pada Indonesia atau English.
+    • Jika user meminta mengganti bahasa, kirim ACTION CARD sesuai aturan language switch.
 
   Language Switch (IMPORTANT):
   - Jika user meminta:

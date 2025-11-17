@@ -4,9 +4,9 @@
 import { Minimize2, Trash2 } from "lucide-react";
 import { useApp } from "@/context/AppContextProps";
 import { Avatar } from "../avatar";
-import { TelegramStatus } from "./telegramStatus";
-import { FlagIcon } from "./flagIcon";
 import { Tooltip } from "../tooltip";
+import { TelegramStatus } from "../telegramStatus";
+import { FlagIcon } from "../flagIcon";
 
 export const ChatHeader= ({ onMinimize, onClear }: ChatHeaderProps) => {
   const { language, chatMode, ui } = useApp();

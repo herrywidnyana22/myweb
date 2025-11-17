@@ -34,7 +34,7 @@ export const ConfirmCard = ({action, message, onConfirm, onCancel}: ConfirmCardP
                         )}
                         onClick={onConfirm}
                     >
-                        {parseHighlight(ui.confirm ?? '')}
+                        {ui.confirm}
                     </button>
                 </div>
             </div>

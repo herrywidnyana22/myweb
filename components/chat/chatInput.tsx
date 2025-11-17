@@ -5,7 +5,6 @@ import { useApp } from '@/context/AppContextProps';
 import clsx from 'clsx';
 import { SendHorizonal } from 'lucide-react';
 import { memo, useEffect, useRef, useState } from 'react';
-import { FlagIcon } from './flagIcon';
 
 export const ChatInput = memo(({
   sendMessage,
@@ -13,7 +12,7 @@ export const ChatInput = memo(({
   setInput,
   onFocus,
   onBlur,
-  isMinimized,
+  isActive,
   setIsMinimized,
 }: ChatInputProps) => {
 
@@ -34,7 +33,7 @@ export const ChatInput = memo(({
       - input kosong
   ============================================================ */
   useEffect(() => {
-    if (!isMinimized) return;     
+    if (!isActive) return;     
     if (input.length > 0) return;
 
     setTypedText("");
@@ -57,7 +56,7 @@ export const ChatInput = memo(({
       clearInterval(typing);
       clearTimeout(rotate);
     };
-  }, [currentIndex, input, isMinimized, language]);
+  }, [currentIndex, input, isActive, language]);
 
 
   /* ============================================================
@@ -84,9 +83,9 @@ export const ChatInput = memo(({
   };
 
   const placeholderText =
-    !isMinimized
-      ? ui.sendPlaceholder   // static
-      : typedText;           // typewriter
+    isActive
+      ? typedText           
+      : ui.sendPlaceholder   
 
 
   return (

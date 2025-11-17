@@ -7,11 +7,15 @@ import { Widget } from '@/components/widget';
 import { dockItems } from '@/components/dockItems';
 import { Chat } from '@/components/chat/chat';
 import clsx from 'clsx';
+import { useChat } from '@/context/ChatContex';
 
 export default function Home() {
-  const [messages, setMessages] = useState<ChatResponseProps[]>([]);
-  const [isMinimized, setIsMinimized] = useState(false);
-  const [isInputFocused, setIsInputFocused] = useState(false);
+  const {
+    messages,
+    isMinimized,
+    isInputFocused,
+  } = useChat();
+
   const [openById, setOpenById] = useState<Record<string, boolean>>({});
   const [targetById, setTargetById] = useState<Record<string, DOMRect | null>>({});
 
@@ -48,14 +52,7 @@ export default function Home() {
       >
         <PageTitle isWidgetOpen={Object.values(openById).every(v => !v)} isMinimize={isMinimized} />
 
-        <Chat
-          messages={messages}
-          setMessages={setMessages}
-          isInputFocused={isInputFocused}
-          setIsInputFocused={setIsInputFocused}
-          isMinimized={isMinimized}
-          setIsMinimized={setIsMinimized}
-        />
+        <Chat />
 
         {/* WIDGET */}
         <div

@@ -17,7 +17,7 @@ export const baseUIText = {
   cancel: "Batal",
   confirm: "Konfirmasi",
 
-  langSwitched: `Sip! Aku sudah ganti semua konten website:`,
+  langSwitched: `Sip! Aku sudah ganti semua konten website`,
   langStatus: 'Bahasa saat ini',
   translateOnProgressConfirm: "Mohon tunggu ya, lagi menerjemahkan konten...",
 
