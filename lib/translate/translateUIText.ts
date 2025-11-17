@@ -1,5 +1,5 @@
 import { getLS, setLS } from "@/utils/local";
-import { baseUIText } from "./baseUIText";
+import { baseUIText } from "../../constants/baseUIText";
 
 export async function loadUI(language: string) {
   // default 'id'

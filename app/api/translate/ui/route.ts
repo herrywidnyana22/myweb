@@ -1,10 +1,7 @@
 import { translationUIRules } from "@/constants/promptRule";
-import { GoogleGenAI } from "@google/genai";
+import { generatePrompt } from "@/lib/gemini/generatePrompt";
 import { NextResponse } from "next/server";
 
-const client = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY!,
-});
 
 export async function POST(req: Request) {
   try {
@@ -17,12 +14,9 @@ export async function POST(req: Request) {
         ${JSON.stringify(base, null, 2)}
     `;
 
-    const result = await client.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-    });
+    const result = await generatePrompt(prompt)
 
-    const output = result.text;
+    const output = result || '';
     const clean = output?.replace(/```json|```/g, "").trim();
     const parsed = JSON.parse(clean || '');
 

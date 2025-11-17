@@ -1,6 +1,5 @@
 
 import clsx from "clsx";
-
 import { useApp } from "@/context/AppContextProps";
 import { parseHighlight } from "@/utils/parseHighlight";
 

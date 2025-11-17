@@ -27,7 +27,7 @@ export const ChatHeader= ({ onMinimize, onClear }: ChatHeaderProps) => {
         </div>
       </div>
 
-      <span>
+      <span className="flex gap-2 items-center justify-center">
         <Tooltip label={ui.langStatus}>
           <FlagIcon code={language} size={20} />
         </Tooltip>

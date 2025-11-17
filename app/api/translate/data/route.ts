@@ -1,14 +1,11 @@
 import { NextResponse } from "next/server";
-import { GoogleGenAI } from "@google/genai";
 import { translationDataRules } from "@/constants/promptRule";
+import { generatePrompt } from "@/lib/gemini/generatePrompt";
 
-const client = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY!,
-});
 
 export async function POST(req: Request) {
   try {
-    const { key, data, target } = await req.json();
+    const { data, target } = await req.json();
 
     const prompt = `
       Terjemahkan field text berikut ke bahasa ${target}.
@@ -20,12 +17,9 @@ export async function POST(req: Request) {
       ${JSON.stringify(data, null, 2)}
     `.trim();
 
-    const result = await client.models.generateContent({
-      model: "gemini-2.5-flash",
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-    });
+    const result = await generatePrompt(prompt)
 
-    const output = result.text;
+    const output = result || ''
     const clean = output?.replace(/```json|```/g, "").trim();
     const parsed = JSON.parse(clean || '');
 

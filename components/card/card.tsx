@@ -17,6 +17,8 @@ const CardComponent = (card: CardProps) => {
 
   const {language} = useApp()
 
+  console.log({card})
+
   switch (card.type) {
     case 'project':
       return <ProjectCard {...card} />
@@ -26,7 +28,7 @@ const CardComponent = (card: CardProps) => {
 
     case 'action':
       if (card.targetLanguage === language) {
-        return null; // ⬅ jangan tampilkan apa-apa
+        return null; 
       }
 
       return (

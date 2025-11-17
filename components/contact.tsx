@@ -4,10 +4,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Tooltip } from './tooltip';
 import { useData } from '@/hooks/useData';
+import { useApp } from '@/context/AppContextProps';
 
 export const Contact = () => {
   const { data, isLoading, error } = useData<ContactProps>('contacts');
-
+  const {ui} = useApp()
   if (isLoading) {
     return (
       <div className="grid grid-cols-2 place-items-center gap-2 sm:gap-3 p-3 sm:p-6">
@@ -24,7 +25,7 @@ export const Contact = () => {
   }
 
   if (error) {
-    return <p className="text-center text-red-400 p-4">Gagal memuat kontak.</p>;
+    return <p className="text-center text-red-400 p-4">{ui.dataLoadFailed}</p>;
   }
 
   return (

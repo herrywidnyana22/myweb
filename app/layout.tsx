@@ -2,7 +2,6 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Sora, JetBrains_Mono } from 'next/font/google';
 import { AppProvider } from '@/context/AppContextProps';
-import { ChatProvider } from '@/context/ChatContex';
 
 const sora = Sora({
   variable: '--font-sans',
@@ -30,9 +29,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={`${sora.variable} ${jetbrainsMono.variable} antialiased`}>
         <AppProvider>   
-          <ChatProvider>
-            {children}
-          </ChatProvider>
+          {children}
         </AppProvider>
       </body>
     </html>

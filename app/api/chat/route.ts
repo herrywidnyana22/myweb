@@ -4,6 +4,7 @@ import { buildPrompt } from '@/constants/promptTemplate';
 import { fetchSheetData } from '@/lib/fetchData';
 import { sendToTelegram } from '@/lib/telegram/telegram-server';
 import { sanitizeJSON } from '@/utils';
+import { generatePrompt } from '@/lib/gemini/generatePrompt';
 
 const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 let cachedPortfolio: PortfolioCache | null = null;
@@ -88,12 +89,8 @@ export async function POST(req: Request) {
       );
     }
 
-    const response = await client.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-    });
-
-    const rawText = response.text || '';
+    const response = await generatePrompt(prompt)
+    const rawText = response || '';
     const cleanText = sanitizeJSON(rawText);
 
     let parsed: AIResponse | null = null;
