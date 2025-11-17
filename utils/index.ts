@@ -1,4 +1,4 @@
-
+import { LANGUAGE_COUNTRY_MAP } from "@/constants/languageCountry";
 
 export function safeParseJSON(value: string | undefined) {
   if (!value) return [];
@@ -59,6 +59,27 @@ export function safeJson(raw: string) {
     throw new Error("Invalid JSON from AI");
   }
 }
+
+export function languageToFlagCode(lang: string): string {
+  if (!lang) return "unknown";
+
+  lang = lang.toLowerCase();
+
+  // Case: en-US, zh-CN
+  if (lang.includes("-")) {
+    return lang.split("-")[1].toLowerCase(); // country code langsung
+  }
+
+  // Check dictionary mapping
+  if (LANGUAGE_COUNTRY_MAP[lang]) {
+    return LANGUAGE_COUNTRY_MAP[lang];
+  }
+
+  // Fallback → pakai 2 huruf pertama
+  return lang.slice(0, 2);
+}
+
+
 
 
 

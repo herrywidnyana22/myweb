@@ -31,7 +31,7 @@ export const languageRule = `
         "cards": [{
             type: "action",
             action: "language",
-            targetLanguage?: 'id' | 'en',
+            targetLanguage?: The target language may be any language name or ISO code provided (e.g., "en", "id", "jp", "fr").,
             message?: Switch semua konten website menjadi Bahasa Indonesia juga?,
         }]
       }
@@ -55,6 +55,13 @@ export const languageRule = `
   - Kamu boleh playful sedikit tapi tetap profesional sebagai developer Bali.
 `
 
+export const translationUIRules = `
+  Translate ONLY UI text.
+  Do NOT change JSON keys.
+  DO NOT add comments.
+  DO NOT wrap in markdown.
+  Return ONLY valid JSON.
+`;
 
 export const translationChatRules = `
   Translate ONLY natural language text.
@@ -108,7 +115,6 @@ export const translationDataRules =`
 
   IMPORTANT:
   - iconCategory.label MAY be translated (optional), tetapi iconCategory.src TIDAK BOLEH diubah.
-
 `
 
 // Format JSON
@@ -194,7 +200,7 @@ export const jsonFormatRule = `
   {
     type: "action",
     action: "language" | "telegram",
-    targetLanguage?: 'id' | 'en',
+    targetLanguage?: string -> (ISO code provided),
     message?: string,
   }
 

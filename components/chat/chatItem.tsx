@@ -6,11 +6,14 @@ import { ChatLoader } from './chatLoader';
 import { Avatar } from '../avatar';
 import { useApp } from '@/context/AppContextProps';
 import { Forward, MousePointer2 } from 'lucide-react';
+import { ChatItemTelegram } from './chatItemTelegram';
 
 export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatResponseProps) => {
+
+  const { chatMode, ui } = useApp();
+
   const isUser = role === 'user';
   const isTelegram = role === 'herry_telegram';
-  const { chatMode } = useApp();
 
   const wrapperClass = `flex items-start gap-2 sm:gap-3 pb-2 sm:pb-3 ${
     isUser ? 'justify-end' : 'justify-start'
@@ -31,9 +34,7 @@ export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatRespon
     bubbleColor,
   ].join(' ');
 
-  // ============================================================
   // RENDER TEXT SESUAI MODE DAN ROLE
-  // ============================================================
   const renderText = () => {
     // Case 1: Default mode
     if (chatMode === "default") {
@@ -47,26 +48,23 @@ export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatRespon
     // Case 2: Mode telegram, message dari BOT
     if (chatMode === "telegram" && role === "bot_telegram") {
       return (
-        <div className="whitespace-pre-wrap flex flex-col gap-3">
-          <div className="flex gap-2 items-center italic">
-            <Forward size={16} />
-            <p className="text-xs">Diteruskan ke @herrywidnyana</p>
-          </div>
-          {parseHighlight(text || '')}
-        </div>
+        <ChatItemTelegram 
+          headerText={`${ui.forwarding} @herrywidnyana`}
+          message={text || ''}
+          icon={Forward}
+        />
       );
     }
 
     // Case 3: Mode telegram, message dari TELEGRAM (Herry)
     if (chatMode === "telegram" && isTelegram) {
       return (
-        <div className="whitespace-pre-wrap flex flex-col gap-3">
-          <div className="flex gap-1 items-center italic py-1 px-1.5 bg-telegram-secondary rounded-lg">
-            <MousePointer2 size={16} className="rotate-90" />
-            <p className="text-xs">@herrywidnyana</p>
-          </div>
-          {parseHighlight(text || '')}
-        </div>
+        <ChatItemTelegram 
+          headerText='@herrywidnyana'
+          message={text || ''}
+          icon={MousePointer2}
+          className='py-1 px-1.5 bg-telegram-secondary rounded-lg'
+        />
       );
     }
 
@@ -77,9 +75,6 @@ export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatRespon
       </div>
     );
   }
-
-  console.log({role})
-  console.log({chatMode})
 
   return (
     <div className={wrapperClass}>

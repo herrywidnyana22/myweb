@@ -4,11 +4,14 @@ import Image from 'next/image';
 import { MapPin, Calendar } from 'lucide-react';
 import { useData, useSingleData } from '@/hooks/useData';
 import { Highlight } from './highlight';
+import { useApp } from '@/context/AppContextProps';
 
 export const Profile = () => {
-  const { data: profileData, isLoading: loadingProfile } = useSingleData<ProfileProps>('profile');
-  const { data: addressData, isLoading: loadingAddress } = useSingleData<AddressProps>('address');
+  const { data: profileData, isLoading: loadingProfile, error: errorProfile } = useSingleData<ProfileProps>('profile');
+  const { data: addressData, isLoading: loadingAddress, error: errorAddress } = useSingleData<AddressProps>('address');
   const { data: highlightData, isLoading: loadingHighlight } = useData<HighlightProps>('highlight');
+
+  const { ui } = useApp()
 
   if (loadingProfile || loadingAddress || loadingHighlight) {
     return (
@@ -28,19 +31,17 @@ export const Profile = () => {
   }
 
   
+  if (errorProfile || errorAddress) {
+    return <p className="text-center text-red-400 p-4">{ui.dataLoadFailed}</p>;
+  }
+
   if (!profileData || !addressData) {
-    return <p className="text-gray-400 p-4">Data profile tidak ditemukan.</p>;
+    return <p className="text-center text-gray-400 p-4">{ui.dataEmpty}</p>;
   }
   
   const { fullName, role, summary, image, birth_date } = profileData;
   const { address } = addressData;
-
-  console.log({profileData})
-  console.log({addressData})
-  console.log({highlightData})
-  console.log({fullName})
-  console.log({role})
-
+  
   return (
     <div className="relative flex gap-4 p-4 sm:p-6 overflow-hidden">
       {/* Foto profil */}

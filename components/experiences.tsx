@@ -4,9 +4,11 @@ import { SwiperSlide, Swiper } from "swiper/react";
 import { EffectCreative, Pagination } from "swiper/modules";
 import { ExperienceCard } from './card/experienceCard';
 import { useData } from "@/hooks/useData";
+import { useApp } from "@/context/AppContextProps";
 
 export const Experiences = () => {
   const { data, isLoading, error } = useData<ExperienceProps>('experiences');
+  const { ui } = useApp()
 
   if (isLoading) {
     return (
@@ -50,11 +52,11 @@ export const Experiences = () => {
   }
 
   if (error) {
-    return <p className="text-center text-red-400 p-4">Gagal memuat pengalaman.</p>;
+    return <p className="text-center text-red-400 p-4">{ui.dataLoadFailed}</p>;
   }
 
   if (!data?.length) {
-    return <p className="text-center text-gray-400 p-4">Belum ada data pengalaman.</p>;
+    return <p className="text-center text-gray-400 p-4">{ui.dataEmpty}</p>;
   }
 
   return (

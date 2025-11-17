@@ -4,10 +4,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCreative, Pagination } from 'swiper/modules';
 import { ProjectItem } from './projectItem';
 import { useData } from '@/hooks/useData';
+import { useApp } from '@/context/AppContextProps';
 
 export const Projects = () => {
   const { data, isLoading, error } = useData<ProjectProps>('projects');
-
+  const { ui } = useApp()
+  
   if (isLoading) {
     return (
       <Swiper
@@ -43,15 +45,13 @@ export const Projects = () => {
     );
   }
 
-  if (error) {
-    return <p className="text-center text-red-400 p-4">Gagal memuat project.</p>;
+   if (error) {
+    return <p className="text-center text-red-400 p-4">{ui.dataLoadFailed}</p>;
   }
 
   if (!data?.length) {
-    return <p className="text-center text-gray-400 p-4">Belum ada data project.</p>;
+    return <p className="text-center text-gray-400 p-4">{ui.dataEmpty}</p>;
   }
-
-  console.log({data})
 
   return (
     <div className="relative w-full h-full">

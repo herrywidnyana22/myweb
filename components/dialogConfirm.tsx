@@ -1,6 +1,8 @@
+import { useApp } from '@/context/AppContextProps';
 import { memo } from 'react';
 
 export default memo(function DialogConfirm({ text, onConfirm, onCancel }: DialogConfirmProps) {
+  const {ui} = useApp()
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-9999 px-4">
       <div
@@ -22,21 +24,6 @@ export default memo(function DialogConfirm({ text, onConfirm, onCancel }: Dialog
         {/* Buttons */}
         <div className="flex justify-center gap-3 sm:gap-4">
           <button
-            onClick={onConfirm}
-            className="
-              px-3 sm:px-4 py-1.5 sm:py-2 
-              bg-red-500 
-              rounded-md sm:rounded-lg 
-              text-white text-sm sm:text-base
-              hover:bg-red-600 
-              active:scale-[0.98] 
-              transition
-            "
-          >
-            Ya, hapus
-          </button>
-
-          <button
             onClick={onCancel}
             className="
               px-3 sm:px-4 py-1.5 sm:py-2 
@@ -48,7 +35,22 @@ export default memo(function DialogConfirm({ text, onConfirm, onCancel }: Dialog
               transition
             "
           >
-            Batal
+            {ui.cancel}
+          </button>
+
+           <button
+            onClick={onConfirm}
+            className="
+              px-3 sm:px-4 py-1.5 sm:py-2 
+              bg-red-500 
+              rounded-md sm:rounded-lg 
+              text-white text-sm sm:text-base
+              hover:bg-red-600 
+              active:scale-[0.98] 
+              transition
+            "
+          >
+            {ui.confirm}
           </button>
         </div>
       </div>

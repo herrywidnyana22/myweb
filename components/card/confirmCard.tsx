@@ -9,7 +9,7 @@ type ConfirmCardProps = {
 } & ActionCardProps
 
 export const ConfirmCard = ({action, message, onConfirm, onCancel}: ConfirmCardProps) => {
-    const { t } = useApp()
+    const { ui } = useApp()
     
     return ( 
         <div className="flex justify-start text-sm md:text-base">
@@ -23,7 +23,7 @@ export const ConfirmCard = ({action, message, onConfirm, onCancel}: ConfirmCardP
                         className="w-full px-3 py-1 rounded-lg bg-gray-700 hover:bg-gray-500 text-white cursor-pointer"
                         onClick={onCancel}
                     >
-                        {parseHighlight(t.cancel ?? '')}
+                        {parseHighlight(ui.cancel ?? '')}
                     </button>
 
                     <button
@@ -34,7 +34,7 @@ export const ConfirmCard = ({action, message, onConfirm, onCancel}: ConfirmCardP
                         )}
                         onClick={onConfirm}
                     >
-                        {parseHighlight(t.confirm ?? '')}
+                        {parseHighlight(ui.confirm ?? '')}
                     </button>
                 </div>
             </div>

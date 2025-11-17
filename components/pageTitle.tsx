@@ -1,3 +1,4 @@
+import { useApp } from "@/context/AppContextProps";
 import clsx from "clsx";
 import Image from "next/image";
 
@@ -7,6 +8,8 @@ type PageTitleProps = {
 };
 
 export const PageTitle = ({ isWidgetOpen, isMinimize }: PageTitleProps) => {
+  const { ui } = useApp()
+  
   return (
     <header className={isWidgetOpen ? "" : "mb-3"}>
       <div className="flex items-center justify-center gap-2 sm:gap-4">
@@ -37,7 +40,7 @@ export const PageTitle = ({ isWidgetOpen, isMinimize }: PageTitleProps) => {
       {/* Subtitle — disembunyikan di HP */}
       {!isWidgetOpen || isMinimize && (
         <p className="hidden sm:block text-center text-base sm:text-lg lg:text-xl text-white/80 max-w-xl sm:max-w-2xl mx-auto mt-2 sm:mt-3 lg:mt-4 transition-opacity duration-300">
-          Just a guy who loves coding & running 🏃‍♂️💻
+          {ui.quote}
         </p>
       )}
     </header>

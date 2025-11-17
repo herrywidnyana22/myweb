@@ -3,9 +3,11 @@
 import Image from 'next/image';
 import { useData } from '@/hooks/useData';
 import { Tooltip } from './tooltip';
+import { useApp } from '@/context/AppContextProps';
 
 export const Education = () => {
   const { data, isLoading, error } = useData<EducationProps>('educations');
+  const { ui } = useApp()
 
   // Skeleton loader
   if (isLoading) {
@@ -26,11 +28,11 @@ export const Education = () => {
   }
 
   if (error) {
-    return <p className="text-center text-red-400 p-4">Gagal memuat data pendidikan.</p>;
+    return <p className="text-center text-red-400 p-4">{ui.dataLoadFailed}</p>;
   }
 
   if (!data?.length) {
-    return <p className="text-center text-gray-400 p-4">Belum ada data pendidikan.</p>;
+    return <p className="text-center text-gray-400 p-4">{ui.dataEmpty}</p>;
   }
 
   return (

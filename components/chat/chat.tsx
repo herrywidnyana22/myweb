@@ -11,6 +11,7 @@ import { useApp } from '@/context/AppContextProps';
 import { sendToTelegram } from '@/lib/telegram/telegram-client';
 import { ChatNotice } from './chatNotice';
 import { translateAll } from '@/lib/translate/app-data';
+import { loadUI } from '@/lib/translate/translateUIText';
 
 // =============== REDUCER ===============
 type ChatAction =
@@ -48,7 +49,7 @@ export const Chat = ({
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const hasLoadedRef = useRef(false);
 
-  const { language, setLanguage, setChatMode, chatMode, t } = useApp()
+  const { language, setLanguage, setChatMode, chatMode, ui, setUI } = useApp()
 
   // ========== MEMORY ==========
   const getMemory = useCallback((): ChatMemory => {
@@ -143,7 +144,7 @@ export const Chat = ({
         }
 
         const data: AIResponse = await res.json();
-        const text = data.text ?? 'Data tidak tersedia.';
+        const text = data.text ?? ui.dataEmpty
         const cards = data.cards ?? [];
 
         // Update last placeholder -> stop loading -> streaming
@@ -162,7 +163,6 @@ export const Chat = ({
           await new Promise((r) => setTimeout(r, 15));
         }
 
-        // Final text + cards (role sudah sesuai karena placeholder dipilih di atas)
         dispatch({
           type: 'UPDATE_LAST',
           payload: { text, cards, isStreaming: false },
@@ -172,106 +172,147 @@ export const Chat = ({
         dispatch({
           type: 'UPDATE_LAST',
           payload: {
-            text: 'Maaf kak, chat lagi gangguan nih. Coba lagi sebentar ya 🙏',
+            text: ui.chatError,
             isLoading: false,
             isStreaming: false,
           },
         });
       }
     },
-    [input, detectUserName, getMemory, messages, chatMode] // tambahkan chatMode di dep list
+    [input, detectUserName, getMemory, messages, chatMode]
   );
 
-  const onConfirmActionCard = async(action: 'yes' | 'no', typeAction:Action, targetLang?: UILanguage ) => {
-    // Hapus confirm card dari pesan bot terakhir
+  const onConfirmActionCard = async (action: ConfirmAction, typeAction: Action, targetLang?: UILanguage) => {
+  // Hapus card dari bubble sebelumnya
     dispatch({
       type: "UPDATE_LAST",
       payload: { cards: [] }
     });
 
     if (action === "yes") {
-      
-      if (typeAction === 'language' && targetLang){
-        setLanguage(targetLang);
+      if (typeAction === "language" && targetLang) {
 
-        await translateAll(targetLang);
-
+        // Tambahkan bubble dengan text pertama (typewriter)
         dispatch({
           type: "ADD",
           payload: {
             role: "bot",
-            text: `Ok, aku juga mengubah bahasa semua konten`,
-            isStreaming: false,
+            text: ui.translateOnProgressConfirm,
             isLoading: false,
-        }})
-        
-      } else {
-        setChatMode('telegram')
-        // kirim pesan ke Herry setelah mode switched
-        await sendToTelegram("User baru masuk mode Telegram dari website.")
+          }
+        });
 
-        // Push system confirmation text
+        // Delay sedikit biar typewriter kelihatan
+        await new Promise((r) => setTimeout(r, 600));
+
+        // Jadikan bubble tadi = LOADING
         dispatch({
           type: "ADD",
           payload: {
-            role: "bot_telegram",
-            text: `Sekarang chat kamu akan saya teruskan langsung ke <mark data-type="telegram">telegramnya Herry Widnyana</mark>`,
+            role: 'bot',
             isStreaming: false,
-            isLoading: false,
+            isLoading: true,   // spinner
+            text: "",
           }
-        })
+        });
+
+        // PROSES TRANSLATE
+        // 1. FORCE update UI instantly
+        const newUI = await loadUI(targetLang);
+        setUI(newUI);
+
+        // 2. Baru set bahasa global (biar persist)
+        setLanguage(targetLang);
+
+        // 3. Lanjut translate dataset
+        await translateAll(targetLang);
+
+        await translateAll(targetLang);
+
+        // Update global language
+        setLanguage(targetLang);
+
+        // Ganti bubble loading → bubble hasil final
+        dispatch({
+          type: "UPDATE_LAST",
+          payload: {
+            isLoading: false,
+            isStreaming: false,
+            text: ui.langSwitched, // "Bahasa berhasil diganti!"
+          }
+        });
+
+        return;
       }
 
-      // TODO:CHAT translate
-        
-    } else {
+      // =========================
+      // TELEGRAM MODE
+      // =========================
+      setChatMode("telegram");
+      await sendToTelegram(ui.telegramConnectConfirm);
+
       dispatch({
-        type: "ADD",
+        type: "UPDATE_LAST",
         payload: {
-          role: "bot",
-          text: "Ok, request saya batalkan",
-          isStreaming: false,
+          role: "bot_telegram",
+          text: ui.telegramChatConfirm,
+          isStreaming: true,
           isLoading: false,
         }
       });
+
+      return;
     }
-  }
+
+    // =========================
+    // Cancel (No)
+    // =========================
+    dispatch({
+      type: "UPDATE_LAST",
+      payload: {
+        role: "bot",
+        text: ui.actionCanceled,
+        isStreaming: false,
+        isLoading: false,
+      }
+    });
+  };
 
   // ========== STORAGE ==========
   // Load once
   useEffect(() => {
-    const saved = localStorage.getItem('chatHistory');
+    const saved = localStorage.getItem('chatHistory')
     if (saved) {
-      const parsed = JSON.parse(saved) as ChatResponseProps[];
-      parsed.forEach((m) => dispatch({ type: 'ADD', payload: m }));
+      const parsed = JSON.parse(saved) as ChatResponseProps[]
+      parsed.forEach((m) => dispatch({ type: 'ADD', payload: m }))
     }
-    hasLoadedRef.current = true;
+    hasLoadedRef.current = true
   }, []);
 
   // Save after loaded
   useEffect(() => {
-    if (!hasLoadedRef) return;
-    localStorage.setItem('chatHistory', JSON.stringify(messages));
+    if (!hasLoadedRef) return
+    localStorage.setItem('chatHistory', JSON.stringify(messages))
 
     const timeout = setTimeout(() => {
       setPropMessages((prev: ChatResponseProps[]) => {
-        if (prev.length !== messages.length) return messages;
+        if (prev.length !== messages.length) return messages
         return prev;
-      });
-    }, 300); // delay 300ms biar gak ikut tiap karakter typewriter
+      })
+    }, 300) // delay 300ms biar gak ikut tiap karakter typewriter
 
     scrollToBottom();
 
     return () => clearTimeout(timeout);
-  }, [messages, scrollToBottom, setPropMessages, hasLoadedRef]);
+  }, [messages, scrollToBottom, setPropMessages, hasLoadedRef])
 
   // Scroll ke bawah saat input difokus
   useEffect(() => {
     if (isInputFocused) {
-      const timer = setTimeout(scrollToBottom, 500);
-      return () => clearTimeout(timer);
+      const timer = setTimeout(scrollToBottom, 500)
+      return () => clearTimeout(timer)
     }
-  }, [isInputFocused, scrollToBottom]);
+  }, [isInputFocused, scrollToBottom])
 
   // Keyboard handler untuk HP
   useEffect(() => {
@@ -279,11 +320,11 @@ export const Chat = ({
     const handleResize = () => {
       const visual = window.visualViewport;
       if (!visual) return;
-      setIsInputFocused(visual.height < window.innerHeight - 100);
+      setIsInputFocused(visual.height < window.innerHeight - 100)
     };
-    window.visualViewport.addEventListener('resize', handleResize);
+    window.visualViewport.addEventListener('resize', handleResize)
     handleResize();
-    return () => window.visualViewport?.removeEventListener('resize', handleResize);
+    return () => window.visualViewport?.removeEventListener('resize', handleResize)
   }, [setIsInputFocused]);
 
 
@@ -307,8 +348,6 @@ export const Chat = ({
 
     return () => es.close();
   }, []);
-
-
 
   // ========== RENDER ==========
   return (
@@ -362,6 +401,7 @@ export const Chat = ({
               onFocus={() => setIsInputFocused(true)}
               onBlur={() => setIsInputFocused(false)}
               setIsMinimized={setIsMinimized}
+              isMinimized={isMinimized}
             />
           </div>
         </div>
@@ -369,7 +409,7 @@ export const Chat = ({
 
       {showConfirm && (
         <DialogConfirm
-          text="Yakin ingin menghapus semua chat ini?"
+          text={ui.clearChatConfirm}
           onConfirm={clearChat}
           onCancel={() => setShowConfirm(false)}
         />

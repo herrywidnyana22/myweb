@@ -1,15 +1,14 @@
 'use client';
 
+import { loadUI } from "@/lib/translate/translateUIText";
 import { createContext, useContext, useState, useEffect } from "react";
-import { Lang, translations } from "@/lib/translate";
 
 interface AppContextProps {
-  // Language
-  language: Lang;
-  setLanguage: (l: Lang) => void;
-  t: typeof translations['id'];
+  language: string;
+  setLanguage: (l: string) => void;
+  ui: Record<string, string>
+  setUI: (data: Record<string, string>) => void;
 
-  // Chat Mode
   chatMode: ChatMode;
   setChatMode: (m: ChatMode) => void;
 }
@@ -17,45 +16,52 @@ interface AppContextProps {
 const AppContext = createContext<AppContextProps | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  // ===== LANGUAGE STATE =====
-  const [language, setLanguage] = useState<Lang>("id");
+  // LANGUAGE
+  const [language, setLanguage] = useState<string>("id");
+  const [ui, setUI] = useState<Record<string, string>>({});
 
+  // load language
   useEffect(() => {
-    const saved = localStorage.getItem("app_language") as Lang | null;
-    if (saved === "id" || saved === "en") {
-      setLanguage(saved);
-    }
+    const saved = localStorage.getItem("app_language");
+    if (saved) setLanguage(saved);
   }, []);
 
   useEffect(() => {
     localStorage.setItem("app_language", language);
+
+    (async () => {
+      const translated = await loadUI(language);
+      setUI(translated);
+    })();
   }, [language]);
 
-  // ===== CHAT MODE STATE =====
+  // CHAT MODE
   const [chatMode, setChatMode] = useState<ChatMode>("default");
 
   useEffect(() => {
-    const saved = localStorage.getItem("app_chat_mode") as ChatMode | null;
-    if (saved === "default" || saved === "telegram") {
-      setChatMode(saved);
-    }
+    const saved = localStorage.getItem("app_chat_mode") as ChatMode;
+    if (saved) setChatMode(saved);
   }, []);
 
   useEffect(() => {
     localStorage.setItem("app_chat_mode", chatMode);
   }, [chatMode]);
 
-  // ===== VALUE =====
-  const value: AppContextProps = {
-    language,
-    setLanguage,
-    t: translations[language],
+  return (
+    <AppContext.Provider
+      value={{
+        language,
+        setLanguage,
+        ui,
+        setUI,
 
-    chatMode,
-    setChatMode,
-  };
-
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+        chatMode,
+        setChatMode,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
 }
 
 export const useApp = () => {

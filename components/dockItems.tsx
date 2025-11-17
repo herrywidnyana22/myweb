@@ -58,7 +58,6 @@ export const dockItems: DockItemProps[] = [
     ),
     className:
       'col-span-1 sm:col-span-4 md:col-span-4 lg:col-span-6 xl:col-span-8 overflow-hidden'
-      // 'col-span-2 sm:col-span-4 md:col-span-4 lg:col-span-6 xl:col-span-8 overflow-hidden',
   },
   {
     id: 'experience',

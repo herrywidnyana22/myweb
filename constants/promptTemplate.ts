@@ -1,9 +1,13 @@
+import { baseUIText } from '@/lib/translate/baseUIText';
 import {
   languageRule,
   contextRules,
   behaviorRule,
   memoryRule,
   jsonFormatRule,
+  translationUIRules,
+  translationDataRules,
+  translationChatRules,
 } from './promptRule';
 
 const today = new Date();
@@ -44,10 +48,16 @@ Here’s your portfolio data in JSON format:
 - Educations: ${JSON.stringify(educations)}
 - Experiences: ${JSON.stringify(experiences)}
 
+Here’s your Base Text UI data yang akan ditranslate ke ${language}:
+- Base UI Text:  ${JSON.stringify(baseUIText)}
+
 ======================
 RESPONSE INSTRUCTIONS
 ======================
 ${languageRule}
+${translationUIRules}
+${translationChatRules}
+${translationDataRules}
 ${contextRules}
 ${behaviorRule}
 ${memoryRule}

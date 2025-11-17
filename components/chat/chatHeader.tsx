@@ -1,15 +1,16 @@
 // components/chat/chatHeader.tsx
 "use client";
 
-import TelegramStatus from "./telegramStatus";
-
 import { Minimize2, Trash2 } from "lucide-react";
 import { useApp } from "@/context/AppContextProps";
 import { Avatar } from "../avatar";
+import { TelegramStatus } from "./telegramStatus";
+import { FlagIcon } from "./flagIcon";
+import { Tooltip } from "../tooltip";
 
 export const ChatHeader= ({ onMinimize, onClear }: ChatHeaderProps) => {
-  const { chatMode, t } = useApp();
-  
+  const { language, chatMode, ui } = useApp();
+
   return (
     <div className="flex items-center justify-between p-3 border-b bg-gray-900/80">
       <div className="flex items-center gap-3">
@@ -26,17 +27,22 @@ export const ChatHeader= ({ onMinimize, onClear }: ChatHeaderProps) => {
         </div>
       </div>
 
-      {
-        chatMode === 'telegram' && (
-          <TelegramStatus />
-        )
-      }
+      <span>
+        <Tooltip label={ui.langStatus}>
+          <FlagIcon code={language} size={20} />
+        </Tooltip>
+        {
+          chatMode === 'telegram' && (
+            <TelegramStatus />
+          )
+        }
+      </span>
 
       <div className="flex gap-2">
-        <button onClick={onMinimize} title={t.minimize} className="p-2 rounded-md hover:bg-white/5">
+        <button onClick={onMinimize} title={ui.minimize} className="p-2 rounded-md hover:bg-white/5">
           <Minimize2 size={16} />
         </button>
-        <button onClick={onClear} title={t.clear} className="p-2 rounded-md hover:bg-white/5">
+        <button onClick={onClear} title={ui.clear} className="p-2 rounded-md hover:bg-white/5">
           <Trash2 size={16} />
         </button>
       </div>

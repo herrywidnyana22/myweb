@@ -1,7 +1,7 @@
 import clsx from 'clsx';
-import React from 'react';
+import { ReactNode } from 'react';
 
-export function parseHighlight(text: string): React.ReactNode[] {
+export function parseHighlight(text: string): ReactNode[] {
   if (!text) return [];
 
   const parts = text.split(/(<mark.*?<\/mark>)/g);

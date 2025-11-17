@@ -97,7 +97,6 @@ export const ProjectItem = (project: ProjectProps) => {
                   bg-primary
                   rounded-full 
                   hover:bg-primary-hover transition
-                  
                 "
               />
             )}

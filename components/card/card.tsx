@@ -6,14 +6,16 @@ import { ProjectCard } from './projectCard';
 import { ContactCard } from './contactCard';
 import { parseHighlight } from '@/utils/parseHighlight';
 import { ConfirmCard } from './confirmCard';
+import { useApp } from '@/context/AppContextProps';
 
 
 type CardProps = DataItemProps & {
-  onConfirm: (action: 'yes' | 'no', actionType: Action, targetLang?: UILanguage) => void;
+  onConfirm: (action: ConfirmAction, actionType: Action, targetLang?: UILanguage) => void;
 }
 
 const CardComponent = (card: CardProps) => {
-  console.log({card})
+
+  const {language} = useApp()
 
   switch (card.type) {
     case 'project':
@@ -23,6 +25,10 @@ const CardComponent = (card: CardProps) => {
       return <ContactCard {...card} />
 
     case 'action':
+      if (card.targetLanguage === language) {
+        return null; // ⬅ jangan tampilkan apa-apa
+      }
+
       return (
         <ConfirmCard 
           {...card}

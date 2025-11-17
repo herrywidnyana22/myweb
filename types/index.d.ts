@@ -1,8 +1,9 @@
 // ===========================
 // GLOBAL LANGUAGE TYPE
 // ===========================
-declare type UILanguage = 'id' | 'en'
+declare type UILanguage = string
 declare type Action = "language" | "telegram"
+declare type ConfirmAction = 'yes' | 'no'
 declare type ChatMode = "default" | "telegram"
 declare type ChatRole = 'user' | 'bot' | 'herry_telegram' | 'bot_telegram';
 // ===========================
@@ -165,6 +166,7 @@ declare interface ChatInputProps {
   sendMessage: (e: React.FormEvent) => Promise<void>;
   onFocus?: () => void;
   onBlur?: () => void;
+  isMinimized?: boolean
 }
 
 declare interface DialogConfirmProps {
@@ -258,6 +260,11 @@ declare interface TelegramPayload {
   id: number;
   text: string;
   from: string;
+}
+
+declare type FlagIconProps = {
+  code: string;
+  size?: number; 
 }
 
 
