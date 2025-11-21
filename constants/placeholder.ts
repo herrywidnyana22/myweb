@@ -5,6 +5,7 @@ export const PLACEHOLDERS: Record<string, string[]> = {
     "Tanya apa aja kak...",
     "Lagi ngapain nih kak?",
   ],
+
   en: [
     "Say hello to me...",
     "Ask me anything...",
@@ -12,9 +13,12 @@ export const PLACEHOLDERS: Record<string, string[]> = {
     "Change to english...",
     "Want to chat?",
   ],
-  // Tambah bahasa lain bebas
-  ja: [
-    "こんにちは！話しましょう〜",
-    "何でも聞いてくださいね",
+
+  jp: [
+    "こんにちは！話しましょう〜", //Hallo! Yuk ngobrol
+    "何でも聞いてね〜", //Tanya apa saja ya
+    "手伝えることある？", //Ada yang bisa kubantu
+    "今何してるの？", //Lagi ngapain
+    "一緒に作ろう！", //Yuk bikin sesuatu bareng!
   ],
 };

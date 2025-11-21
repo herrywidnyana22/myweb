@@ -1,18 +1,32 @@
 'use client';
 
 import clsx from 'clsx';
-import { Tooltip } from './tooltip';
+import { Tooltip } from '../tooltip';
 import { getColor } from '@/utils';
+import { useEffect, useState } from 'react';
 
 export const ProgressCircle = ({
   value,
   label,
   className,
-}: ProgressCircleProps) => {
-  const radius = 25; // circle radius
-  const stroke = 6; // stroke width
+}: CircleProgressProps) => {
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => {
+      setIsMobile(window.matchMedia("(max-width: 640px)").matches);
+    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  // ukuran menyesuaikan device
+  const radius = isMobile ? 18 : 25;     
+  const stroke = isMobile ? 4 : 6;       
   const circumference = 2 * Math.PI * radius;
-  const progress = circumference - (value / 100) * circumference
+  const progress = circumference - (value / 100) * circumference;
 
   return (
     <Tooltip label={`${label} ${value}%`}>
@@ -32,11 +46,12 @@ export const ProgressCircle = ({
             cx={radius + stroke}
             cy={radius + stroke}
             r={radius}
-            stroke='#D4D4D4' //bg-neutral-300
+            stroke='#D4D4D4'
             strokeWidth={stroke}
             fill='none'
           />
-          {/* Progress Circle */}
+
+          {/* Progress circle */}
           <circle
             cx={radius + stroke}
             cy={radius + stroke}
@@ -53,16 +68,15 @@ export const ProgressCircle = ({
 
         {/* Value in center */}
         <div className='absolute flex flex-col items-center justify-center'>
-          <span className='text-gray-900/90 font-light text-[14px] capitalize'>
+          <span className={clsx(
+            'text-gray-900/90 font-light capitalize',
+            isMobile ? 'text-[12px]' : 'text-[14px]'      // font juga ikut kecil
+          )}>
             {value}
-            <span className='text-xs text-gray-900/70'>%</span>
+            <span className={isMobile ? 'text-[10px]' : 'text-xs text-gray-900/70'}>%</span>
           </span>
         </div>
       </div>
     </Tooltip>
   );
 };
-
-
-
-

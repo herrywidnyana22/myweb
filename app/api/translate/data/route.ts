@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { translationDataRules } from "@/constants/promptRule";
 import { generatePrompt } from "@/lib/gemini/generatePrompt";
 
-
 export async function POST(req: Request) {
   try {
     const { data, target } = await req.json();

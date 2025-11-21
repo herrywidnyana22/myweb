@@ -45,6 +45,7 @@ export const Chat = ({
   const [messages, dispatch] = useReducer(chatReducer, []);
   const [input, setInput] = useState('');
   const [showConfirm, setShowConfirm] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const hasLoadedRef = useRef(false);
@@ -117,12 +118,19 @@ export const Chat = ({
       detectUserName(input);
 
       // pilih role placeholder bot berdasarkan chatMode
-      const botRole: ChatRole = chatMode === 'telegram' ? 'bot_telegram' : 'bot';
+      const botRole: ChatRole = chatMode === 'telegram' 
+      ? 'bot_telegram' 
+      : 'bot';
 
+      setIsLoading(true)
       dispatch({
         type: 'ADD',
-        payload: { role: botRole, text: '', isLoading: true },
-      });
+        payload: { 
+          role: botRole, 
+          text: '', 
+          isLoading: true 
+        },
+      })
 
       try {
         const res = await fetch('/api/chat', {
@@ -139,7 +147,14 @@ export const Chat = ({
 
         if (!res.ok) {
           const errText = await res.text();
-          console.log(`HTTP ${res.status}: ${errText}`);
+          dispatch({
+          type: 'UPDATE_LAST',
+          payload: { 
+            isLoading: false, 
+            isStreaming: true, 
+            text: errText 
+          },
+        });
         }
 
         const data: AIResponse = await res.json();
@@ -147,9 +162,14 @@ export const Chat = ({
         const cards = data.cards ?? [];
 
         // Update last placeholder -> stop loading -> streaming
+        setIsLoading(false)
         dispatch({
           type: 'UPDATE_LAST',
-          payload: { isLoading: false, isStreaming: true, text: '' },
+          payload: { 
+            isLoading: false, 
+            isStreaming: true, 
+            text: '' 
+          },
         });
 
         let typed = '';
@@ -157,17 +177,25 @@ export const Chat = ({
           typed += char;
           dispatch({
             type: 'UPDATE_LAST',
-            payload: { text: typed, isStreaming: true },
+            payload: { 
+              text: typed, 
+              isStreaming: true 
+            },
           });
           await new Promise((r) => setTimeout(r, 15));
         }
 
         dispatch({
           type: 'UPDATE_LAST',
-          payload: { text, cards, isStreaming: false },
+          payload: { 
+            text, 
+            cards, 
+            isStreaming: false 
+          },
         });
       } catch (err) {
         console.error('Chat API Error:', err);
+        setIsLoading(false)
         dispatch({
           type: 'UPDATE_LAST',
           payload: {
@@ -181,95 +209,97 @@ export const Chat = ({
     [input, detectUserName, getMemory, messages, chatMode]
   );
 
-  const onConfirmActionCard = async (action: ConfirmAction, typeAction: Action, targetLang?: UILanguage) => {
-  // Hapus card dari bubble sebelumnya
-    dispatch({
-      type: "UPDATE_LAST",
-      payload: { cards: [] }
+  const onConfirmActionCard = async (
+    action: ConfirmAction,
+    type: Action,
+    targetLang?: UILanguage
+  ) => {
+    // hapus kartu
+    dispatch({ 
+      type: "UPDATE_LAST", 
+      payload: { 
+        cards: [] 
+      } 
     });
 
-    if (action === "yes") {
-      if (typeAction === "language" && targetLang) {
+    // kalau user menekan "No"
+    if (action === "no") {
+      dispatch({
+        type: "UPDATE_LAST",
+        payload: { 
+          role: 'bot',
+          text: ui.actionCanceled 
+        },
+      })
 
-        // Tambahkan bubble dengan text pertama (typewriter)
-        dispatch({
-          type: "ADD",
-          payload: {
-            role: "bot",
-            text: ui.translateOnProgressConfirm,
-            isLoading: false,
-          }
-        });
+      return;
+    }
 
-        // Delay sedikit biar typewriter kelihatan
-        await new Promise((r) => setTimeout(r, 600));
+    // LANGUAGE SWITCH
+    if (type === "language" && targetLang) {
+      dispatch({
+        type: "ADD",
+        payload: { 
+          role: "bot", 
+          text: ui.translateOnProgressConfirm 
+        },
+      });
 
-        // Jadikan bubble tadi = LOADING
-        dispatch({
-          type: "ADD",
-          payload: {
-            role: 'bot',
-            isStreaming: false,
-            isLoading: true,   // spinner
-            text: "",
-          }
-        });
+      await new Promise((r) => setTimeout(r, 400));
 
-        // PROSES TRANSLATE
-        const newUI = await loadUI(targetLang);
-        setUI(newUI);
+      setIsLoading(true)
+      dispatch({
+        type: "ADD",
+        payload: { 
+          role: "bot", 
+          text: "", 
+          isLoading: true 
+        },
+      });
 
-        // Baru set bahasa global (biar persist)
-        setLanguage(targetLang);
 
-        // Lanjut translate dataset
-        await translateAll(targetLang);
+      // PROSES TRANSLATE
+      const newUI = await loadUI(targetLang);
+      setUI(newUI);
 
-        // Ganti bubble loading → bubble hasil final
-        dispatch({
-          type: "UPDATE_LAST",
-          payload: {
-            isLoading: false,
-            isStreaming: false,
-            text: ui.langSwitched,
-          }
-        });
+      setLanguage(targetLang);
 
-        return;
-      }
+      await translateAll(targetLang);
 
-      // =========================
-      // TELEGRAM MODE
-      // =========================
+      dispatch({
+        type: "UPDATE_LAST",
+        payload: {
+          isLoading: false,
+          isStreaming: false,
+          text: ui.langSwitched,
+        }
+      });
+
+      setIsLoading(false)
+
+      return;
+    }
+
+    // TELEGRAM CONNECT
+    if (type === "telegram") {
+
+      // call backend to generate link
       setChatMode("telegram");
       await sendToTelegram(ui.telegramConnectConfirm);
 
       dispatch({
         type: "UPDATE_LAST",
         payload: {
-          role: "bot_telegram",
+          role: "bot",
           text: ui.telegramChatConfirm,
-          isStreaming: true,
           isLoading: false,
         }
-      });
+      })
 
-      return;
+      return
     }
 
-    // =========================
-    // Cancel (No)
-    // =========================
-    dispatch({
-      type: "UPDATE_LAST",
-      payload: {
-        role: "bot",
-        text: ui.actionCanceled,
-        isStreaming: false,
-        isLoading: false,
-      }
-    });
-  };
+  }
 
   // ========== STORAGE ==========
   // Load once
@@ -348,7 +378,6 @@ export const Chat = ({
       <div
         className={clsx(
           'relative z-50 w-full mx-auto transition-all duration-300 ease-in-out',
-          isInputFocused ? '-translate-y-12 sm:-translate-y-26' : 'translate-y-0'
         )}
       >
         <div className="w-full mx-auto rounded-3xl overflow-hidden shadow-2xl border border-gray-600/50">
@@ -367,15 +396,19 @@ export const Chat = ({
                   <ChatItem {...msg} />
                   {!!msg.cards?.length && (
                     <div className="max-w-[80%] sm:max-w-[70%] grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 ml-10 sm:ml-13 mb-2">
-                      {msg.cards.map((card, j) => (
-                        <Card 
-                          key={j} 
-                          {...card} 
-                          onConfirm={onConfirmActionCard}
-                        />
-                      ))}
+                      {msg.cards
+                        .filter(card => !(card.type === "action" && card.targetLanguage === language))
+                        .map((card, j) => (
+                          <Card
+                            key={j}
+                            {...card}
+                            onConfirm={onConfirmActionCard}
+                          />
+                        ))}
+
                     </div>
                   )}
+
                 </div>
               ))}
               {chatMode === 'telegram' && (
@@ -395,6 +428,7 @@ export const Chat = ({
               onBlur={() => setIsInputFocused(false)}
               setIsMinimized={setIsMinimized}
               isActive={(messages.length <= 0 && !isInputFocused) || isMinimized}
+              disabled={isLoading}
             />
           </div>
         </div>

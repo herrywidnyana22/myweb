@@ -83,6 +83,7 @@ export async function POST(req: Request) {
       
       return NextResponse.json(
         { 
+          role: '',
           text: message, 
           cards: [] 
         }

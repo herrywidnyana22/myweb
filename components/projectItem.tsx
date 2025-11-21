@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Eye, Github } from "lucide-react";
-import { ProgressCircle } from "./progressCircle";
+import { ProgressCircle } from "./charts/circleProgress";
 import { Icon } from "./icon";
 import { Tooltip } from "./tooltip";
 import { parseHighlight } from "@/utils/parseHighlight";

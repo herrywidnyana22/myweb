@@ -6,6 +6,18 @@ declare type Action = "language" | "telegram"
 declare type ConfirmAction = 'yes' | 'no'
 declare type ChatMode = "default" | "telegram"
 declare type ChatRole = 'user' | 'bot' | 'herry_telegram' | 'bot_telegram';
+
+declare interface AppContextProps {
+  language: string;
+  setLanguage: (l: string) => void;
+  ui: Record<string, string>
+  setUI: (data: Record<string, string>) => void;
+
+  chatMode: ChatMode;
+  setChatMode: (m: ChatMode) => void;
+}
+
+
 // ===========================
 // DATA CARD TYPES
 // ===========================
@@ -161,6 +173,7 @@ declare interface ChatInputProps {
   onFocus?: () => void;
   onBlur?: () => void;
   isActive?: boolean
+  disabled?: boolean
 }
 
 declare interface DialogConfirmProps {
@@ -182,7 +195,13 @@ declare interface WidgetProps {
   className?: string;
 }
 
-declare interface ProgressCircleProps {
+declare interface CircleProgressProps {
+  value: number;
+  label: string;
+  className?: string;
+}
+
+declare interface BarProgressProps {
   value: number;
   label: string;
   className?: string;

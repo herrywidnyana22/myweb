@@ -36,17 +36,8 @@ export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatRespon
 
   // RENDER TEXT SESUAI MODE DAN ROLE
   const renderText = () => {
-    // Case 1: Default mode
-    if (chatMode === "default") {
-      return (
-        <div className="whitespace-pre-wrap">
-          {parseHighlight(text || '')}
-        </div>
-      );
-    }
-
-    // Case 2: Mode telegram, message dari BOT
-    if (chatMode === "telegram" && role === "bot_telegram") {
+    // Mode telegram, message dari BOT
+    if (role === "bot_telegram") {
       return (
         <ChatItemTelegram 
           headerText={`${ui.forwarding} @herrywidnyana`}

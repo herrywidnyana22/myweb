@@ -6,6 +6,7 @@ import { Eye, Github } from 'lucide-react';
 import { Icon } from '../icon';
 import { getColor } from '@/utils';
 import { parseHighlight } from '@/utils/parseHighlight';
+import { BarProgressChart } from '../charts/barProgress';
 
 export const ProjectCard = (card: ProjectProps) => {
   return (
@@ -39,17 +40,10 @@ export const ProjectCard = (card: ProjectProps) => {
 
       {/* Progress Bar */}
       {typeof card.progressValue === 'number' && (
-        <Tooltip label={`Progress: ${card.progressValue}%`}>
-          <div className="w-full bg-gray-200 rounded-full h-1.5 sm:h-2 mt-2 overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all duration-500"
-              style={{
-                width: `${Math.min(card.progressValue, 100)}%`,
-                backgroundColor: getColor(card.progressValue),
-              }}
-            />
-          </div>
-        </Tooltip>
+        <BarProgressChart 
+          label={`Progress: ${card.progressValue}%`} 
+          value={card.progressValue}
+        />
       )}
 
       {/* Footer: Tech icons + Action buttons */}

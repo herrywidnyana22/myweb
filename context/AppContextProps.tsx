@@ -3,16 +3,6 @@
 import { loadUI } from "@/lib/translate/translateUIText";
 import { createContext, useContext, useState, useEffect } from "react";
 
-interface AppContextProps {
-  language: string;
-  setLanguage: (l: string) => void;
-  ui: Record<string, string>
-  setUI: (data: Record<string, string>) => void;
-
-  chatMode: ChatMode;
-  setChatMode: (m: ChatMode) => void;
-}
-
 const AppContext = createContext<AppContextProps | null>(null);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {

@@ -6,18 +6,12 @@ import { ProjectCard } from './projectCard';
 import { ContactCard } from './contactCard';
 import { parseHighlight } from '@/utils/parseHighlight';
 import { ConfirmCard } from './confirmCard';
-import { useApp } from '@/context/AppContextProps';
-
 
 type CardProps = DataItemProps & {
   onConfirm: (action: ConfirmAction, actionType: Action, targetLang?: UILanguage) => void;
 }
 
 const CardComponent = (card: CardProps) => {
-
-  const {language} = useApp()
-
-  console.log({card})
 
   switch (card.type) {
     case 'project':
@@ -27,10 +21,6 @@ const CardComponent = (card: CardProps) => {
       return <ContactCard {...card} />
 
     case 'action':
-      if (card.targetLanguage === language) {
-        return null; 
-      }
-
       return (
         <ConfirmCard 
           {...card}
@@ -114,19 +104,20 @@ const CardComponent = (card: CardProps) => {
   }
 };
 
-export const Card = memo((props: CardProps) => (
-  <div
-    className="
-      flex flex-col gap-2 sm:gap-3 
-      border p-3 sm:p-4
-      rounded-3xl 
-      shadow-sm bg-white text-neutral-800 
-      w-full sm:max-w-[450px] 
-      transition hover:shadow-md
-    "
-  >
-    <CardComponent {...props} />
-  </div>
-));
+export const Card = memo((props: CardProps) => {
+  return (
+    <div
+      className="
+        flex flex-col gap-2 sm:gap-3 
+        border p-3 sm:p-4
+        rounded-3xl 
+        shadow-sm bg-white text-neutral-800 
+        w-full sm:max-w-[450px] 
+        transition hover:shadow-md
+      "
+    >
+      <CardComponent {...props} />
+    </div>
+)});
 
 Card.displayName = 'Card';
