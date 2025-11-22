@@ -1,12 +1,10 @@
 import { NextResponse } from 'next/server';
-import { GoogleGenAI } from '@google/genai';
 import { buildPrompt } from '@/constants/promptTemplate';
 import { fetchSheetData } from '@/lib/fetchData';
 import { sendToTelegram } from '@/lib/telegram/telegram-server';
 import { sanitizeJSON } from '@/utils';
 import { generatePrompt } from '@/lib/gemini/generatePrompt';
 
-const client = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 let cachedPortfolio: PortfolioCache | null = null;
 const CACHE_TTL_MS = 1000 * 60 * 10;
 
