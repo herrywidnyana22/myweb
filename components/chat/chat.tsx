@@ -360,7 +360,7 @@ export const Chat = ({
     const handleResize = () => {
       const visual = window.visualViewport;
       if (!visual) return;
-      setIsInputFocused(visual.height < window.innerHeight - 100)
+      setIsInputFocused(visual.height < window.innerHeight - 80)
     };
     window.visualViewport.addEventListener('resize', handleResize)
     handleResize();

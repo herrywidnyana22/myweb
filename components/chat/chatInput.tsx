@@ -62,19 +62,7 @@ export const ChatInput = memo(({
       clearInterval(typing);
       clearTimeout(rotate);
     };
-  }, [currentIndex, input, isActive, language]);
-
-
-  /* ============================================================
-      AUTO HEIGHT
-  ============================================================ */
-  // useEffect(() => {
-  //   const el = textareaRef.current;
-  //   if (!el) return;
-  //   el.style.height = "auto";
-  //   el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
-  // }, [input]);
-
+  }, [currentIndex, input, isActive, language, placeholders]);
 
   const handleFocus = () => {
     setIsMinimized(false);
@@ -125,7 +113,7 @@ export const ChatInput = memo(({
       clearInterval(typing);
       clearTimeout(rotate);
     };
-  }, [currentIndex, input, isActive, language]);
+  }, [currentIndex, input, isActive, language, placeholders]);
 
 
   return (
