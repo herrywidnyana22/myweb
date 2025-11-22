@@ -35,4 +35,9 @@ export const baseUIText = {
 
   dataEmpty: 'Belum ada data',
   dataLoadFailed: 'Gagal memuat data',
+
+  viewCode: 'Lihat code',
+  source: 'Sumber',
+  viewDemo: 'Lihat Demo',
+  preview: 'Pratinjau',
 };

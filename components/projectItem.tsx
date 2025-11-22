@@ -6,8 +6,11 @@ import { ProgressCircle } from "./charts/circleProgress";
 import { Icon } from "./icon";
 import { Tooltip } from "./tooltip";
 import { parseHighlight } from "@/utils/parseHighlight";
+import { useApp } from "@/context/AppContextProps";
 
 export const ProjectItem = (project: ProjectProps) => {
+  const {ui} = useApp()
+
   return (
     <div
       className="
@@ -71,8 +74,8 @@ export const ProjectItem = (project: ProjectProps) => {
           <div className="mt-4 sm:mt-5 flex gap-2 justify-end flex-wrap">
             {project.githubLink && typeof project.githubLink === "string" && (
               <Icon
-                tooltipLabel="Lihat code"
-                textLabel="Source"
+                tooltipLabel={ui.viewCode}
+                textLabel={ui.source}
                 href={project.githubLink}
                 IconComponent={Github}
                 size={14}
@@ -87,8 +90,8 @@ export const ProjectItem = (project: ProjectProps) => {
 
             {project.demoLink && typeof project.demoLink === "string" && (
               <Icon
-                tooltipLabel="Lihat demo"
-                textLabel="Preview"
+                tooltipLabel={ui.viewDemo}
+                textLabel={ui.preview}
                 href={project.demoLink}
                 IconComponent={Eye}
                 size={14}

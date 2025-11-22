@@ -11,6 +11,8 @@ import { ChatItemTelegram } from './chatItemTelegram';
 export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatResponseProps) => {
 
   const { chatMode, ui } = useApp();
+  console.log({chatMode})
+  console.log({ role, text, isStreaming, isLoading })
 
   const isUser = role === 'user';
   const isTelegram = role === 'herry_telegram';
@@ -81,7 +83,7 @@ export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatRespon
         </div>
       )}
 
-      {isTelegram && (
+      {(chatMode === "telegram" && isTelegram) && (
         <div className="rounded-full bg-linear-to-tr from-primary to-primary-light w-9 h-9 flex items-center justify-center text-white">
           H
         </div>

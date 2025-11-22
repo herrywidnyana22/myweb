@@ -1,4 +1,5 @@
-import { getLS, setLS } from "@/utils/local";
+
+import { getLS, setLS } from "@/utils/getChange";
 import { baseUIText } from "../../constants/baseUIText";
 
 export async function loadUI(language: string) {

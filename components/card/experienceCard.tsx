@@ -17,7 +17,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
       <div
         className="
           flex items-center justify-center 
-          w-2
+          w-3
           bg-linear-to-br from-primary to-primary-hover
           shrink-0
         "

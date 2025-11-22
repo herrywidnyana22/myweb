@@ -44,18 +44,15 @@ export const Profile = () => {
   
   return (
     <div className="relative flex gap-4 p-4 sm:p-6 overflow-hidden">
-      {/* Foto profil */}
-      <div className='absolute flex gap-2 top-2 right-2'>
-        {
-          highlightData.map((item, i) => (
-            <Highlight
-              key={i}
-              title={item.title}
-              label={item.label}
-            />
-          ))
-        }
+
+      {/* === HIGHLIGHT (DESKTOP ONLY) === */}
+      <div className="hidden sm:flex gap-2 absolute top-2 right-2">
+        {highlightData.map((item, i) => (
+          <Highlight key={i} title={item.title} label={item.label} />
+        ))}
       </div>
+
+      {/* Foto */}
       <div className="relative size-16 sm:size-20">
         <Image
           src={image}
@@ -69,9 +66,30 @@ export const Profile = () => {
 
       {/* Info */}
       <div className="flex-1">
+
         <div>
-          <h2 className="text-lg sm:text-xl font-bold text-white truncate">{fullName}</h2>
-          <p className="text-sm sm:text-base text-white/80 mb-3">{role}</p>
+
+          <h2 className="text-lg sm:text-xl font-bold text-white truncate">
+            {fullName}
+          </h2>
+
+          <p className="text-sm sm:text-base text-white/80 mb-2">
+            {role}
+          </p>
+
+          {/* === HIGHLIGHT (MOBILE ONLY) === */}
+          <div className="flex gap-1.5 flex-wrap mb-2 sm:hidden">
+            {highlightData.map((item, i) => (
+              <Highlight
+                key={i}
+                title={item.title}
+                label={item.label}
+                className="scale-90"
+              />
+            ))}
+          </div>
+
+          {/* SUMMARY */}
           <p className="text-xs sm:text-sm text-white/60 leading-relaxed line-clamp-2 mb-3">
             {summary}
           </p>
@@ -84,19 +102,20 @@ export const Profile = () => {
             <MapPin size={14} className="text-white/60 shrink-0" />
             <span className="text-xs sm:text-sm truncate">{address}</span>
           </div>
+
           <div className="flex items-center gap-2 text-white/80">
             <Calendar size={14} className="text-white/60 shrink-0" />
             <span className="text-xs sm:text-sm">
-              {new Date(birth_date).toLocaleDateString('id-ID', {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
+              {new Date(birth_date).toLocaleDateString("id-ID", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
               })}
             </span>
           </div>
         </div>
       </div>
     </div>
-    
   );
+
 };

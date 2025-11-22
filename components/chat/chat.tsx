@@ -112,7 +112,11 @@ export const Chat = ({
       if (!input.trim()) return;
 
       const userMessage: ChatResponseProps = { role: 'user', text: input };
-      dispatch({ type: 'ADD', payload: userMessage });
+      dispatch({ 
+        type: 'ADD', 
+        payload: userMessage 
+      });
+
       setInput('');
 
       detectUserName(input);
@@ -206,7 +210,16 @@ export const Chat = ({
         });
       }
     },
-    [input, detectUserName, getMemory, messages, chatMode]
+    [
+      input, 
+      detectUserName, 
+      getMemory, 
+      messages, 
+      chatMode, 
+      language, 
+      ui.chatError,
+      ui.dataEmpty
+    ]
   );
 
   const onConfirmActionCard = async (
@@ -228,7 +241,9 @@ export const Chat = ({
         type: "UPDATE_LAST",
         payload: { 
           role: 'bot',
-          text: ui.actionCanceled 
+          text: ui.actionCanceled,
+          isLoading: false,
+          isStreaming: false,
         },
       })
 
@@ -241,7 +256,9 @@ export const Chat = ({
         type: "ADD",
         payload: { 
           role: "bot", 
-          text: ui.translateOnProgressConfirm 
+          text: ui.translateOnProgressConfirm, 
+          isLoading: false,
+          isStreaming: false,
         },
       });
 
@@ -253,7 +270,8 @@ export const Chat = ({
         payload: { 
           role: "bot", 
           text: "", 
-          isLoading: true 
+          isLoading: true,
+          isStreaming: false
         },
       });
 
@@ -269,9 +287,9 @@ export const Chat = ({
       dispatch({
         type: "UPDATE_LAST",
         payload: {
+          text: ui.langSwitched,
           isLoading: false,
           isStreaming: false,
-          text: ui.langSwitched,
         }
       });
 
@@ -283,12 +301,12 @@ export const Chat = ({
     // TELEGRAM CONNECT
     if (type === "telegram") {
 
-      // call backend to generate link
-      setChatMode("telegram");
+      setChatMode("telegram")
+
       await sendToTelegram(ui.telegramConnectConfirm);
 
       dispatch({
-        type: "UPDATE_LAST",
+        type: "ADD",
         payload: {
           role: "bot",
           text: ui.telegramChatConfirm,
@@ -298,7 +316,6 @@ export const Chat = ({
 
       return
     }
-
   }
 
   // ========== STORAGE ==========

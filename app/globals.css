@@ -99,8 +99,8 @@ body {
 .project-pagination .swiper-pagination-bullet {
   background: var(--text-muted);
   opacity: 1;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 9999px;
   transition: all 0.3s ease;
 }
@@ -108,9 +108,44 @@ body {
 .experience-pagination .swiper-pagination-bullet-active,
 .project-pagination .swiper-pagination-bullet-active {
   background: var(--primary);
-  width: 24px; 
-  border-radius: 9999px; 
-  transform: none; 
+  width: 18px;
+  border-radius: 9999px;
+  transform: none;
+}
+
+
+/* ======================================
+   SMALL DEVICES (< 480px)
+   Bullet lebih kecil
+====================================== */
+@media (max-width: 480px) {
+  .experience-pagination .swiper-pagination-bullet,
+  .project-pagination .swiper-pagination-bullet {
+    width: 6px;
+    height: 6px;
+  }
+
+  .experience-pagination .swiper-pagination-bullet-active,
+  .project-pagination .swiper-pagination-bullet-active {
+    width: 14px;
+  }
+}
+
+/* ======================================
+   MID-SMALL (480–640px)
+   Sedikit lebih besar dari HP kecil
+====================================== */
+@media (min-width: 480px) and (max-width: 640px) {
+  .experience-pagination .swiper-pagination-bullet,
+  .project-pagination .swiper-pagination-bullet {
+    width: 7px;
+    height: 7px;
+  }
+
+  .experience-pagination .swiper-pagination-bullet-active,
+  .project-pagination .swiper-pagination-bullet-active {
+    width: 15px;
+  }
 }
 
 

@@ -4,10 +4,11 @@ import clsx from 'clsx';
 
 import { Dock } from '@/components/dock';
 import { PageTitle } from '@/components/pageTitle';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Widget } from '@/components/widget';
 import { dockItems } from '@/components/dockItems';
 import { Chat } from '@/components/chat/chat';
+import { preloadPortfolio } from '@/lib/preloadPortfolio';
 
 export default function Home() {
   const [messages, setMessages] = useState<ChatResponseProps[]>([]);
@@ -19,7 +20,12 @@ export default function Home() {
   const handleDockClick = useCallback((id: string, rect: DOMRect) => {
     setTargetById(prev => ({ ...prev, [id]: rect }));
     setOpenById(prev => ({ ...prev, [id]: !prev[id] }));
+  }, [])
+
+  useEffect(() => {
+    preloadPortfolio();
   }, []);
+
 
   return (
     <main

@@ -1,14 +1,5 @@
+import { DATASETS } from "@/constants/sheet";
 import { getLS, setLS } from "@/utils/getChange";
-
-export const DATASETS = [
-  "profile",
-  "address",
-  "projects",
-  "contacts",
-  "educations",
-  "experiences",
-  "highlight",
-];
 
 export async function translateAll(target: UILanguage) {
   for (const key of DATASETS) {

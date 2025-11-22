@@ -43,13 +43,16 @@ export async function GET(
     const header = rows[0];
 
     const formatted = rows.slice(1).map((row) => {
-      const obj: Record<string, any> = {};
+      const obj: Record<string, unknown> = {}; // FIXED: no any
 
       header.forEach((key, i) => {
         const value = row[i];
 
         // Auto JSON parse for array or object
-        if (typeof value === "string" && (value.startsWith("[") || value.startsWith("{"))) {
+        if (
+          typeof value === "string" &&
+          (value.startsWith("[") || value.startsWith("{"))
+        ) {
           obj[key] = safeParseJSON(value);
         } else {
           obj[key] = value ?? "";
@@ -62,6 +65,9 @@ export async function GET(
     return NextResponse.json(formatted);
   } catch (err) {
     console.error("API ERROR:", err);
-    return NextResponse.json({ error: "Server failed" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Server failed" },
+      { status: 500 }
+    );
   }
 }
