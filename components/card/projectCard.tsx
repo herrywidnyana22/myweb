@@ -4,8 +4,8 @@ import Image from 'next/image';
 import { Tooltip } from '@/components/tooltip';
 import { Eye, Github } from 'lucide-react';
 import { Icon } from '../icon';
-import { getColor } from '@/utils';
-import { parseHighlight } from '@/utils/parseHighlight';
+import { getColor } from '@/lib/utils';
+import { parseHighlight } from '@/lib/utils/parseHighlight';
 import { BarProgressChart } from '../charts/barProgress';
 
 export const ProjectCard = (card: ProjectProps) => {

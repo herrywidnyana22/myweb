@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { MapPin } from "lucide-react";
-import { parseHighlight } from "@/utils/parseHighlight";
+import { parseHighlight } from "@/lib/utils/parseHighlight";
 
 export const ExperienceCard = (exp: ExperienceProps) => {
   return (

@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 
-import { PLACEHOLDERS } from '@/constants/placeholder';
+import { PLACEHOLDERS } from '@/lib/constants/placeholder';
 import { useApp } from '@/context/AppContextProps';
 import { SendHorizonal } from 'lucide-react';
 import { memo, useEffect, useRef, useState } from 'react';

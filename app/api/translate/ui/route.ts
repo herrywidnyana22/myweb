@@ -1,4 +1,4 @@
-import { translationUIRules } from "@/constants/promptRule";
+import { translationUIRules } from "@/lib/constants/promptRule";
 import { generatePrompt } from "@/lib/gemini/generatePrompt";
 import { NextResponse } from "next/server";
 

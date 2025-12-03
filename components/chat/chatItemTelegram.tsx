@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-import { parseHighlight } from "@/utils/parseHighlight";
+import { parseHighlight } from "@/lib/utils/parseHighlight";
 import { LucideIcon } from "lucide-react";
 
 type ChatTelegramProps = {

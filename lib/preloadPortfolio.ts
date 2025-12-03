@@ -1,5 +1,5 @@
-import { DATASETS } from "@/constants/sheet";
-import { setLS, getLS } from "@/utils/getChange";
+import { DATASETS } from "@/lib/constants/sheet";
+import { setLS, getLS } from "@/lib/utils/getChange";
 
 export async function preloadPortfolio() {
   // cek jika sudah pernah preload

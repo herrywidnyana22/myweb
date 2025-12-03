@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 import { Tooltip } from '../tooltip';
-import { getColor } from '@/utils';
+import { getColor } from '@/lib/utils';
 import { useEffect, useState } from 'react';
 
 export const ProgressCircle = ({

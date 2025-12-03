@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useState } from "react";
-import { languageToFlagCode } from "@/utils";
+import { languageToFlagCode } from "@/lib/utils";
 
 export const FlagIcon = ({ code, size = 20 }: FlagIconProps) => {
     const [error, setError] = useState(false);

@@ -1,5 +1,5 @@
-import { DATASETS } from "@/constants/sheet";
-import { getLS, setLS } from "@/utils/getChange";
+import { DATASETS } from "@/lib/constants/sheet";
+import { getLS, setLS } from "@/lib/utils/getChange";
 
 export async function translateAll(target: UILanguage) {
   for (const key of DATASETS) {

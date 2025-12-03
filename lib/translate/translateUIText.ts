@@ -1,6 +1,6 @@
 
-import { getLS, setLS } from "@/utils/getChange";
-import { baseUIText } from "../../constants/baseUIText";
+import { getLS, setLS } from "@/lib/utils/getChange";
+import { baseUIText } from "../constants/baseUIText";
 
 export async function loadUI(language: string) {
   // default 'id'

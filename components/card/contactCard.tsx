@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { useMemo } from 'react';
-import { parseHighlight } from '@/utils/parseHighlight';
+import { parseHighlight } from '@/lib/utils/parseHighlight';
 
 export const ContactCard = (card: ContactProps) => {
 

@@ -1,4 +1,4 @@
-import { baseUIText } from '@/constants/baseUIText';
+import { baseUIText } from '@/lib/constants/baseUIText';
 import {
   languageRule,
   contextRules,

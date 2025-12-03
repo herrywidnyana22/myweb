@@ -1,7 +1,7 @@
 
 import clsx from "clsx";
 import { useApp } from "@/context/AppContextProps";
-import { parseHighlight } from "@/utils/parseHighlight";
+import { parseHighlight } from "@/lib/utils/parseHighlight";
 
 type ConfirmCardProps = {
     onConfirm: () => void

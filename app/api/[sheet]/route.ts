@@ -1,4 +1,4 @@
-import { safeParseJSON } from "@/utils";
+import { safeParseJSON } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
 const SHEET_ID = process.env.GOOGLE_SHEET_ID!;

@@ -5,7 +5,7 @@ import { Eye, Github } from "lucide-react";
 import { ProgressCircle } from "./charts/circleProgress";
 import { Icon } from "./icon";
 import { Tooltip } from "./tooltip";
-import { parseHighlight } from "@/utils/parseHighlight";
+import { parseHighlight } from "@/lib/utils/parseHighlight";
 import { useApp } from "@/context/AppContextProps";
 
 export const ProjectItem = (project: ProjectProps) => {

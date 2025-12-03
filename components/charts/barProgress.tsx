@@ -1,4 +1,4 @@
-import { getColor } from "@/utils";
+import { getColor } from "@/lib/utils";
 import { Tooltip } from "../tooltip";
 
 

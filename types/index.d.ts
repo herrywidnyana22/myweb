@@ -1,6 +1,4 @@
-// ===========================
-// GLOBAL LANGUAGE TYPE
-// ===========================
+
 declare type UILanguage = string
 declare type Action = "language" | "telegram"
 declare type ConfirmAction = 'yes' | 'no'
@@ -17,10 +15,28 @@ declare interface AppContextProps {
   setChatMode: (m: ChatMode) => void;
 }
 
+declare type WindowKey = keyof typeof WINDOW_CONFIG;
 
-// ===========================
-// DATA CARD TYPES
-// ===========================
+declare type WindowMap = Record<WindowKey, WindowState>;
+
+declare interface WindowStore {
+  windows: WindowMap;
+  nextZIndex: number;
+
+  openWindow: (key: WindowKey, data?: unknown) => void;
+  closeWindow: (key: WindowKey) => void;
+  focusWindow: (key: WindowKey) => void;
+}
+
+declare type LocationKey = keyof typeof locations;
+declare type LocationValue = (typeof locations)[LocationKey];
+
+declare interface LocationStore {
+  activeLocation: LocationValue;
+  setActiveLocation: (location: LocationValue | null) => void;
+  resetActiveLocation: () => void;
+}
+
 declare type DataItemProps =
   | ({ type: 'project' } & ProjectProps)
   | ({ type: 'contact' } & ContactProps)
@@ -40,18 +56,11 @@ declare interface DefaultCardData {
   href?: string;
 }
 
-// ===========================
-// NEW — ACTION CARD
-// ===========================
 declare interface ActionCardProps {
   action: Action;
   targetLanguage?: UILanguage;
   message?: string; 
 }
-
-// ===========================
-// PORTFOLIO TYPES
-// ===========================
 declare interface AddressProps {
   address: string;
   lat: number | string;
@@ -122,10 +131,6 @@ declare interface ProfileProps {
   birth_place: string;
   birth_date: string
 }
-
-// ===========================
-// UI + COMPONENT TYPES
-// ===========================
 
 declare interface DockProps {
   items: DockItemProps[];
@@ -279,5 +284,6 @@ declare type FlagIconProps = {
   code: string;
   size?: number; 
 }
+
 
 

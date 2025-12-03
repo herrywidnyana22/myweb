@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { memo } from 'react';
 import { ProjectCard } from './projectCard';
 import { ContactCard } from './contactCard';
-import { parseHighlight } from '@/utils/parseHighlight';
+import { parseHighlight } from '@/lib/utils/parseHighlight';
 import { ConfirmCard } from './confirmCard';
 
 type CardProps = DataItemProps & {

@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import { buildPrompt } from '@/constants/promptTemplate';
+import { buildPrompt } from '@/lib/constants/promptTemplate';
 import { fetchSheetData } from '@/lib/fetchData';
 import { sendToTelegram } from '@/lib/telegram/telegram-server';
-import { sanitizeJSON } from '@/utils';
+import { sanitizeJSON } from '@/lib/utils';
 import { generatePrompt } from '@/lib/gemini/generatePrompt';
 
 let cachedPortfolio: PortfolioCache | null = null;

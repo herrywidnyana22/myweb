@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { translationDataRules } from "@/constants/promptRule";
+import { translationDataRules } from "@/lib/constants/promptRule";
 import { generatePrompt } from "@/lib/gemini/generatePrompt";
 
 export async function POST(req: Request) {

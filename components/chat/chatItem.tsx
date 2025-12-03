@@ -1,7 +1,7 @@
 'use client';
 
 import { memo } from 'react';
-import { parseHighlight } from '@/utils/parseHighlight';
+import { parseHighlight } from '@/lib/utils/parseHighlight';
 import { ChatLoader } from './chatLoader';
 import { Avatar } from '../avatar';
 import { useApp } from '@/context/AppContextProps';

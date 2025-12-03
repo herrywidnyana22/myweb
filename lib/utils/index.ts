@@ -1,4 +1,4 @@
-import { LANGUAGE_COUNTRY_MAP } from "@/constants/languageCountry";
+import { LANGUAGE_COUNTRY_MAP } from "@/lib/constants/languageCountry";
 
 export function safeParseJSON(value: string | undefined) {
   if (!value) return [];
