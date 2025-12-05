@@ -339,7 +339,7 @@ export const Chat = ({
         if (prev.length !== messages.length) return messages
         return prev;
       })
-    }, 300) // delay 300ms biar gak ikut tiap karakter typewriter
+    }, 300)
 
     scrollToBottom();
 
@@ -387,7 +387,9 @@ export const Chat = ({
     });
 
     return () => es.close();
-  }, []);
+  }, [])
+
+  console.log({isInputFocused})
 
   // ========== RENDER ==========
   return (
@@ -397,7 +399,7 @@ export const Chat = ({
           'relative z-50 w-full mx-auto transition-all duration-300 ease-in-out',
         )}
       >
-        <div className="w-full mx-auto rounded-3xl overflow-hidden shadow-2xl border border-gray-600/50">
+        <div className="w-full mx-auto rounded-2xl overflow-hidden shadow-2xl border border-gray-600/50">
           {messages.length > 0 && (
             <ChatHeader
               isMinimized={isMinimized}

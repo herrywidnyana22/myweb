@@ -9,7 +9,7 @@ export default memo(function DialogConfirm({ text, onConfirm, onCancel }: Dialog
         className="
           bg-gray-900 
           p-4 sm:p-6 
-          rounded-lg sm:rounded-xl 
+          rounded-xl
           shadow-lg text-center 
           border border-white/20 
           w-full max-w-xs sm:max-w-sm
@@ -28,7 +28,7 @@ export default memo(function DialogConfirm({ text, onConfirm, onCancel }: Dialog
             className="
               px-3 sm:px-4 py-1.5 sm:py-2 
               bg-gray-600 
-              rounded-md sm:rounded-lg 
+              rounded-md
               text-white text-sm sm:text-base
               hover:bg-gray-700 
               active:scale-[0.98] 

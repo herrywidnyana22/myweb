@@ -4,12 +4,12 @@ import Image from 'next/image';
 import { Profile } from '@/components/profile';
 import { Contact } from '@/components/contact';
 import { Projects } from '@/components/projects';
-
 import { Experiences } from '@/components/experiences';
 import { Education } from '@/components/education';
 
 
-export const dockItems: DockItemProps[] = [
+export const dockItems: DockItemProps[] = 
+[
   {
     id: 'profile',
     name: 'Profile',
@@ -25,6 +25,20 @@ export const dockItems: DockItemProps[] = [
     ),
     className:
       'col-span-2 sm:col-span-3 md:col-span-3 lg:col-span-4 xl:col-span-6',
+  },
+  {
+    id: 'explorer',
+    name: 'File Explorer',
+    children: <Profile />,
+    icon: (
+      <Image
+        src={'/icons/folder.png'}
+        alt='icon'
+        height={240}
+        width={240}
+        className='size-11 object-cover'
+      />
+    ),
   },
   {
     id: 'contact',
@@ -90,5 +104,18 @@ export const dockItems: DockItemProps[] = [
     ),
     className:
       'col-span-2 sm:col-span-4 md:col-span-4 lg:col-span-6 xl:col-span-4',
+  },
+  {
+    id: 'resume',
+    name: 'Resume',
+    icon: (
+      <Image
+        src={'/icons/pdf.png'}
+        alt='icon'
+        height={128}
+        width={128}
+        className='size-10 sm:size-12 object-cover'
+      />
+    ),
   },
 ];

@@ -110,7 +110,7 @@ export const Card = memo((props: CardProps) => {
       className="
         flex flex-col gap-2 sm:gap-3 
         border p-3 sm:p-4
-        rounded-3xl 
+        rounded-xl 
         shadow-sm bg-white text-neutral-800 
         w-full sm:max-w-[450px] 
         transition hover:shadow-md

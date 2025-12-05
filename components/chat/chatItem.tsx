@@ -29,7 +29,7 @@ export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatRespon
     'relative z-20',
     'max-w-[85%] sm:max-w-[70%]',
     'px-3 py-2 sm:px-4 sm:py-2.5',
-    'rounded-3xl',
+    'rounded-2xl',
     'text-sm md:text-base',
     'leading-relaxed  font-normal tracking-normal',
     'transition-all duration-300',
@@ -83,7 +83,7 @@ export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatRespon
         </div>
       )}
 
-      {(chatMode === "telegram" && isTelegram) && (
+      {isTelegram && (
         <div className="rounded-full bg-linear-to-tr from-primary to-primary-light w-9 h-9 flex items-center justify-center text-white">
           H
         </div>

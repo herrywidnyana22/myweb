@@ -24,7 +24,7 @@ export const Experiences = () => {
       >
         {Array.from({ length: 3 }).map((_, i) => (
           <SwiperSlide key={i}>
-            <div className="flex w-full h-full rounded-3xl overflow-hidden shadow-md bg-white animate-pulse">
+            <div className="flex w-full h-full rounded-2xl overflow-hidden shadow-md bg-white animate-pulse">
               {/* Left icon section */}
               <div className="flex items-center justify-center w-8 sm:w-12 bg-gray-300" />
 

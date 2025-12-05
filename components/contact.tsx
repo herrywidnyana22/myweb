@@ -29,7 +29,7 @@ export const Contact = () => {
   }
 
   return (
-    <div className="grid grid-cols-2 place-items-center gap-2 sm:gap-3 p-3 sm:p-6">
+    <div className="grid grid-cols-2 place-items-center gap-3 p-3">
       {data?.map((item, i) => (
         <Tooltip key={i} label={item.description}>
           <Link
@@ -38,9 +38,9 @@ export const Contact = () => {
             rel="noopener noreferrer"
             className="flex flex-col items-center"
           >
-            <div className="relative flex flex-col gap-1.5 sm:gap-2 items-center justify-center transition-transform duration-300 hover:scale-105 sm:hover:scale-110 cursor-pointer">
+            <div className="relative flex flex-col gap-1 items-center justify-center transition-transform duration-300 hover:scale-105 sm:hover:scale-110 cursor-pointer">
               {/* Icon container */}
-              <div className="flex items-center justify-center p-1.5 sm:p-2 bg-amber-50 rounded-xl sm:rounded-2xl size-13 sm:size-12 shadow-sm">
+              <div className="flex items-center justify-center p-1.5 sm:p-2 bg-amber-50 rounded-md sm:rounded-xl size-13 sm:size-12 shadow-sm">
                 {item.icon && typeof item.icon === 'string' && (
                   <Image
                     src={item.icon}

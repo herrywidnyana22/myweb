@@ -8,7 +8,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
   return (
     <div
       className="
-        flex w-full h-full rounded-xl sm:rounded-3xl 
+        flex w-full h-full rounded-xl sm:rounded-2xl 
         overflow-hidden shadow-md bg-white
         transition-all duration-300
       "

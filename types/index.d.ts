@@ -28,6 +28,10 @@ declare interface WindowStore {
   focusWindow: (key: WindowKey) => void;
 }
 
+declare type WindowControlProps = {
+  target: WindowKey;
+}
+
 declare type LocationKey = keyof typeof locations;
 declare type LocationValue = (typeof locations)[LocationKey];
 

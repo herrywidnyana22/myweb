@@ -13,21 +13,21 @@ export const ConfirmCard = ({action, message, onConfirm, onCancel}: ConfirmCardP
     
     return ( 
         <div className="flex justify-start text-sm md:text-base">
-            <div className="rounded-xl">
+            <div className="rounded-md">
                 <p className="mb-3 text-slate-900">
                     {parseHighlight(message ?? '')}
                 </p>
 
                 <div className="flex flex-row gap-3">
                     <button
-                        className="w-full px-3 py-1 rounded-lg bg-gray-700 hover:bg-gray-500 text-white cursor-pointer"
+                        className="w-full px-3 py-1 rounded-md bg-gray-700 hover:bg-gray-500 text-white cursor-pointer"
                         onClick={onCancel}
                     >
                         {parseHighlight(ui.cancel ?? '')}
                     </button>
 
                     <button
-                        className={clsx("w-full px-3 py-1 rounded-lg text-white cursor-pointer",
+                        className={clsx("w-full px-3 py-1 rounded-md text-white cursor-pointer",
                             action === 'telegram'
                             ? 'bg-telegram hover:bg-telegram-secondary'
                             : 'bg-primary-hover hover:bg-primary-light'

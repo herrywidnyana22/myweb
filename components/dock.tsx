@@ -3,11 +3,13 @@
 import { useState, useRef } from 'react';
 import { motion, } from 'framer-motion';
 import { Tooltip } from './tooltip';
+import userWindowStore from '@/store/window';
 
 export const Dock = ({ items, onIconClick, isOpenById }: DockProps) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const refs = useRef<Record<string, HTMLDivElement | null>>({});
-
+  const {openWindow} = userWindowStore()
+  
   const getTransform = (index: number) => {
     if (hoveredIndex === null) return { scale: 1, y: 0 };
 
@@ -17,11 +19,24 @@ export const Dock = ({ items, onIconClick, isOpenById }: DockProps) => {
     if (distance === 1) return { scale: 1.3, y: -6 }; 
     if (distance === 2) return { scale: 1.15, y: -3 }; 
     return { scale: 1, y: 0 };
-  };
+  }
+
+  const onClick = (id: string) => {
+    if(id ==='resume'){
+      openWindow(id as WindowKey)
+
+      return
+    }
+
+    const rect = refs.current[id]?.getBoundingClientRect();
+    if (rect) {
+      onIconClick(id, rect)
+    }
+  }
 
   return (
     <div className='fixed z-10 bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2'>
-      <div className='flex gap-6 sm:gap-6 px-4 sm:px-8 py-2 sm:py-3 shadow-2xl bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl'>
+      <div className='flex gap-6 sm:gap-6 px-6 py-2 sm:py-3 shadow-2xl bg-white/20 backdrop-blur-2xl border border-white/20 rounded-2xl'>
         {items.map((item, index) => (
           <div
             key={item.id}
@@ -36,10 +51,7 @@ export const Dock = ({ items, onIconClick, isOpenById }: DockProps) => {
             <Tooltip label={item.name}>
 
               <motion.button
-                onClick={() => {
-                  const rect = refs.current[item.id]?.getBoundingClientRect();
-                  if (rect) onIconClick(item.id, rect);
-                }}
+                onClick={() => onClick(item.id)}
                 animate={getTransform(index)}
                 transition={{
                   type: 'spring',

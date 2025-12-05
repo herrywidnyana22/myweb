@@ -16,7 +16,7 @@ export const ProjectItem = (project: ProjectProps) => {
       className="
         w-full h-full flex flex-col gap-2 
         p-3 sm:p-5 lg:p-6 
-        rounded-xl sm:rounded-3xl 
+        rounded-xl sm:rounded-2xl 
         text-slate-800 bg-white
         transition-all duration-300
       "
