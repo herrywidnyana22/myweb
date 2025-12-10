@@ -3,18 +3,15 @@
 import clsx from 'clsx';
 
 import { PLACEHOLDERS } from '@/lib/constants/placeholder';
-import { useApp } from '@/context/AppContextProps';
 import { SendHorizonal } from 'lucide-react';
 import { memo, useEffect, useRef, useState } from 'react';
+import { useAppStore } from '@/store/app';
 
 export const ChatInput = memo(({
   sendMessage,
   input,
   setInput,
-  onFocus,
-  onBlur,
   isActive,
-  setIsMinimized,
   disabled
 }: ChatInputProps) => {
 
@@ -25,7 +22,7 @@ export const ChatInput = memo(({
   const placeholderRef = useRef<HTMLDivElement>(null);
 
 
-  const { language, ui } = useApp();
+  const { language, ui, setIsMinimized, setIsInputFocused } = useAppStore();
 
   // Typewriter state
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -66,7 +63,7 @@ export const ChatInput = memo(({
 
   const handleFocus = () => {
     setIsMinimized(false);
-    onFocus?.();
+    setIsInputFocused(true)
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -149,7 +146,7 @@ export const ChatInput = memo(({
         onChange={(e) => setInput(e.target.value)}
         placeholder=" "
         onFocus={handleFocus}
-        onBlur={onBlur}
+        onBlur={() => setIsInputFocused(false)}
         onKeyDown={handleKeyDown}
         rows={1}
         disabled={disabled}

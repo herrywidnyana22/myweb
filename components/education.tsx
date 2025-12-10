@@ -1,13 +1,14 @@
 'use client';
 
 import Image from 'next/image';
+
 import { useData } from '@/hooks/useData';
 import { Tooltip } from './tooltip';
-import { useApp } from '@/context/AppContextProps';
+import { useAppStore } from '@/store/app';
 
 export const Education = () => {
   const { data, isLoading, error } = useData<EducationProps>('educations');
-  const { ui } = useApp()
+  const { ui } = useAppStore()
 
   // Skeleton loader
   if (isLoading) {

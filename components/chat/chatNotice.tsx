@@ -1,8 +1,8 @@
-import { useApp } from "@/context/AppContextProps";
+import { useAppStore } from "@/store/app";
 import { Power } from "lucide-react";
 
 export const ChatNotice = () => {
-    const { setChatMode, ui } = useApp()
+    const { setChatMode, ui } = useAppStore()
     return ( 
         <div className='flex items-center justify-center flex-col text-white pt-4'>
             <p className='text-xs font-light text-center'>{ui.telegramNotice}</p>

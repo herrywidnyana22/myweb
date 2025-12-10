@@ -4,15 +4,13 @@ import { memo } from 'react';
 import { parseHighlight } from '@/lib/utils/parseHighlight';
 import { ChatLoader } from './chatLoader';
 import { Avatar } from '../avatar';
-import { useApp } from '@/context/AppContextProps';
 import { Forward, MousePointer2 } from 'lucide-react';
 import { ChatItemTelegram } from './chatItemTelegram';
+import { useAppStore } from '@/store/app';
 
 export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatResponseProps) => {
 
-  const { chatMode, ui } = useApp();
-  console.log({chatMode})
-  console.log({ role, text, isStreaming, isLoading })
+  const { chatMode, ui } = useAppStore();
 
   const isUser = role === 'user';
   const isTelegram = role === 'herry_telegram';

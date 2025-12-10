@@ -1,7 +1,7 @@
 
 import clsx from "clsx";
-import { useApp } from "@/context/AppContextProps";
 import { parseHighlight } from "@/lib/utils/parseHighlight";
+import { useAppStore } from "@/store/app";
 
 type ConfirmCardProps = {
     onConfirm: () => void
@@ -9,7 +9,7 @@ type ConfirmCardProps = {
 } & ActionCardProps
 
 export const ConfirmCard = ({action, message, onConfirm, onCancel}: ConfirmCardProps) => {
-    const { ui } = useApp()
+    const { ui } = useAppStore()
     
     return ( 
         <div className="flex justify-start text-sm md:text-base">

@@ -1,18 +1,16 @@
 import clsx from "clsx";
 import Image from "next/image";
 
-import { useApp } from "@/context/AppContextProps";
+import { useAppStore } from "@/store/app";
 
-type PageTitleProps = {
-  isWidgetOpen: boolean
-  isMinimize: boolean
-};
 
-export const PageTitle = ({ isWidgetOpen, isMinimize }: PageTitleProps) => {
-  const { ui } = useApp()
-  
+export const PageTitle = () => {
+  const { ui, openedDockId, isMinimized } = useAppStore()
+
+  const isWidgetOpen=Object.values(openedDockId).every(v => !v)
+
   return (
-    <header className={isWidgetOpen ? "" : "mb-3"}>
+    <div className={isWidgetOpen ? "" : "mb-3"}>
       <div className="flex items-center justify-center gap-2 sm:gap-4">
         {/* Logo */}
         <Image
@@ -39,11 +37,11 @@ export const PageTitle = ({ isWidgetOpen, isMinimize }: PageTitleProps) => {
       </div>
 
       {/* Subtitle — disembunyikan di HP */}
-      {!isWidgetOpen || isMinimize && (
+      {!isWidgetOpen || isMinimized && (
         <p className="hidden sm:block text-center text-base sm:text-lg lg:text-xl text-white/80 max-w-xl sm:max-w-2xl mx-auto mt-2 sm:mt-3 lg:mt-4 transition-opacity duration-300">
           {ui.quote}
         </p>
       )}
-    </header>
+    </div>
   );
 };

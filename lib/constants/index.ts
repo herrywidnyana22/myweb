@@ -35,172 +35,39 @@ export const navUtilsIcons = [
   },
 ];
 
-export const dockApps = [
-  {
-    id: "finder",
-    name: "Portfolio", // was "Finder"
-    iconSrc: "/images/finder.png",
-    isOpen: false,
-  },
-  {
-    id: "safari",
-    name: "Articles", // was "Safari"
-    iconSrc: "/images/safari.png",
-    isOpen: false,
-  },
-  {
-    id: "photos",
-    name: "Gallery", // was "Photos"
-    iconSrc: "/images/photos.png",
-    isOpen: false,
-  },
-  {
-    id: "contact",
-    name: "Contact", // or "Get in touch"
-    iconSrc: "/images/contact.png",
-    isOpen: false,
-  },
-  {
-    id: "terminal",
-    name: "Skills", // was "Terminal"
-    iconSrc: "/images/terminal.png",
-    isOpen: false,
-  },
-  {
-    id: "trash",
-    name: "Archive", // was "Trash"
-    iconSrc: "/images/trash.png",
-    isOpen: false,
-  },
-];
-
-export const blogPosts = [
-  {
-    id: 1,
-    date: "Sep 2, 2025",
-    title:
-      "TypeScript Explained: What It Is, Why It Matters, and How to Master It",
-    image: "/images/blog1.png",
-    link: "https://jsmastery.com/blog/typescript-explained-what-it-is-why-it-matters-and-how-to-master-it",
-  },
-  {
-    id: 2,
-    date: "Aug 28, 2025",
-    title: "The Ultimate Guide to Mastering Three.js for 3D Development",
-    image: "/images/blog2.png",
-    link: "https://jsmastery.com/blog/the-ultimate-guide-to-mastering-three-js-for-3d-development",
-  },
-  {
-    id: 3,
-    date: "Aug 15, 2025",
-    title: "The Ultimate Guide to Mastering GSAP Animations",
-    image: "/images/blog3.png",
-    link: "https://jsmastery.com/blog/the-ultimate-guide-to-mastering-gsap-animations",
-  },
-];
-
-export const techStack = [
-  {
-    category: "Frontend",
-    items: ["React.js", "Next.js", "TypeScript"],
-  },
-  {
-    category: "Mobile",
-    items: ["React Native", "Expo"],
-  },
-  {
-    category: "Styling",
-    items: ["Tailwind CSS", "Sass", "CSS"],
-  },
-  {
-    category: "Backend",
-    items: ["Node.js", "Express", "NestJS", "Hono"],
-  },
-  {
-    category: "Database",
-    items: ["MongoDB", "PostgreSQL"],
-  },
-  {
-    category: "Dev Tools",
-    items: ["Git", "GitHub", "Docker"],
-  },
-];
-
 export const socials = [
   {
     id: 1,
-    text: "Github",
-    icon: "/icons/github.svg",
-    bg: "#f4656b",
-    link: "https://github.com/JavaScript-Mastery-Pro",
+    text: "Whatsapp",
+    icon: "/icons/whatsapp-white.png",
+    bg: "#075E54",
+    link: "https://wa.me/6283130000094",
+    tooltipText: 'Hubungi lewat Whatsapp'
   },
+  
   {
     id: 2,
-    text: "Platform",
-    icon: "/icons/atom.svg",
-    bg: "#4bcb63",
-    link: "https://jsmastery.com/",
+    text: "Telegram",
+    icon: "/icons/telegram-white.png",
+    bg: "#0088CC",
+    link: "https://t.me/herrywidnyana",
+    tooltipText: 'Hubungi lewat Telegram'
   },
   {
     id: 3,
-    text: "Twitter/X",
-    icon: "/icons/twitter.svg",
-    bg: "#ff866b",
-    link: "https://x.com/jsmasterypro",
+    text: "Github",
+    icon: "/icons/github.svg",
+    bg: "#000",
+    link: "https://github.com/herrywidnyana22",
+    tooltipText: 'Lihat di Github'
   },
   {
     id: 4,
     text: "LinkedIn",
     icon: "/icons/linkedin.svg",
-    bg: "#05b6f6",
-    link: "https://www.linkedin.com/company/javascriptmastery/posts/?feedView=all",
-  },
-];
-
-export const photosLinks = [
-  {
-    id: 1,
-    icon: "/icons/gicon1.svg",
-    title: "Library",
-  },
-  {
-    id: 2,
-    icon: "/icons/gicon2.svg",
-    title: "Memories",
-  },
-  {
-    id: 3,
-    icon: "/icons/file.svg",
-    title: "Places",
-  },
-  {
-    id: 4,
-    icon: "/icons/gicon4.svg",
-    title: "People",
-  },
-  {
-    id: 5,
-    icon: "/icons/gicon5.svg",
-    title: "Favorites",
-  },
-];
-
-export const gallery = [
-  {
-    id: 1,
-    img: "/images/gal1.png",
-  },
-  {
-    id: 2,
-    img: "/images/gal2.png",
-  },
-  {
-    id: 3,
-    img: "/images/gal3.png",
-  },
-  {
-    id: 4,
-    img: "/images/gal4.png",
+    bg: "#0077B5",
+    link: "https://linkedin.com/in/herrywidnyana",
+    tooltipText: 'Lihat di LinkedIn'
   },
 ];
 
@@ -208,165 +75,607 @@ export const gallery = [
 const PROJECT_LOCATION = {
   id: 1,
   type: "work",
-  name: "Work",
+  name: "My Work",
   icon: "/icons/work.svg",
   kind: "folder",
+  tooltipText: "Lihat semua project",
   children: [
     // ▶ Project 1
     {
-      id: 5,
-      name: "Nike Ecommerce Website Application",
-      icon: "/images/folder.png",
+      id: "project1",
+      name: "MyDrive",
+      icon: "/icons/folder.png",
+      subIcon: "/icons/mydrive-logo.svg",
       kind: "folder",
-      position: "top-10 left-5", // icon position inside Finder
-      windowPosition: "top-[5vh] left-5", // optional: Finder window position
+      tooltipText: "MyDrive",
       children: [
         {
-          id: 1,
-          name: "Nike Project.txt",
-          icon: "/images/txt.png",
+          id: "mydrive1",
+          name: "README.txt",
+          projectName: "MyDrive",
+          projectIcon: "/icons/mydrive-logo.svg",
+          tooltipText: "Lihat detail",
+          progressValue: 85,
+          icon: "/icons/txt.png",
           kind: "file",
-          fileType: "txt",
-          position: "top-5 left-10",
+          fileType: "projectInfo",
           description: [
-            "The Nike eCommerce website is a sleek and modern platform designed for shopping the latest Nike collections.",
-            "Instead of a simple online store, it delivers an immersive experience with bold visuals, interactive product displays, and smooth navigation.",
-            "Think of it like walking into a flagship Nike store—but right from your phone or laptop.",
-            "It's built with Next.js and Tailwind, ensuring fast performance, responsive design, and a clean, premium look.",
+            "MyDrive merupakah website cloud storage yang dirancang untuk memberikan pengalaman penyimpanan file yang cepat, aman, dan mudah diakses.",
+            "Dengan MyDrive, kamu dapat mengunggah, mengelola, dan berbagi file dengan beberapa klik saja.",
+            "Antarmuka yang intuitif memungkinkan pengguna dari berbagai tingkat keahlian untuk menavigasi dan mengorganisir file mereka tanpa kesulitan.",
+            "Dibangun dengan Next.js dan Appwrite, MyDrive menggabungkan teknologi modern untuk memastikan performa optimal dan keamanan data.",
+          ],
+
+          techStack: [
+            {
+              "src": "/icons/nextjs.webp",
+              "label": "Next.js"
+            },
+            {
+              "src": "/icons/typescript.webp",
+              "label": "Typescript"
+            },
+            {
+              "src": "/icons/python.png",
+              "label": "Python"
+            },
+            {
+              "src": "/icons/tailwind.webp",
+              "label": "TailwindCSS"
+            },
+            {
+              "src": "/icons/fastAPI.webp",
+              "label": "FastAPI"
+            }
           ],
         },
         {
-          id: 2,
-          name: "nike.com",
-          icon: "/images/safari.png",
+          id: "mydrive2",
+          name: "MyDrive Demo",
+          icon: "/icons/safari.png",
           kind: "file",
           fileType: "url",
-          href: "https://youtu.be/fZdTYswuZjU?si=Awjl-pIst9e09_UU",
-          position: "top-10 right-20",
+          href: "https://www.mydrive.herrywidnyana.com",
+          tooltipText: "Lihat demo",
         },
         {
-          id: 4,
-          name: "nike.png",
-          icon: "/images/image.png",
+          id: "mydrive3",
+          name: "Tech Stack",
+          projectName: "AI Agent Portfolio",
+          icon: "/icons/terminal.png",
+          kind: "file",
+          fileType: "techstack",
+          tooltipText: "Lihat tech stack",
+          techStack:[
+            {
+              category: "Frontend",
+              items: ["React.js", "Next.js", "TypeScript"],
+            },
+            {
+              category: "Styling",
+              items: ["Tailwind CSS", "CSS"],
+            },
+            {
+              category: "Backend",
+              items: ["Python", "FastAPI", "CloudFlare"],
+            },
+            {
+              category: "Dev Tools",
+              items: ["Git", "GitHub", "Docker"],
+            },
+          ],
+        },
+        {
+          id: "mydrive4",
+          name: "preview.png",
+          icon: "/icons/image.png",
           kind: "file",
           fileType: "img",
-          position: "top-52 right-80",
-          imageUrl: "/images/project-1.png",
+          imageUrl: "/icons/project-2.png",
+          tooltipText: "Lihat sample preview",
         },
         {
-          id: 5,
-          name: "Design.fig",
-          icon: "/images/plain.png",
+          id: "mydrive5",
+          name: "Github",
+          icon: "/icons/github.webp",
           kind: "file",
           fileType: "fig",
-          href: "https://google.com",
-          position: "top-60 right-20",
+          href: "https://github.com/herrywidnyana22/mydrive",
+          tooltipText: "Lihat source",
         },
       ],
     },
 
     // ▶ Project 2
     {
-      id: 6,
-      name: "AI Resume Analyzer",
-      icon: "/images/folder.png",
+      id: "project2",
+      name: "AI Agent Portfolio",
+      icon: "/icons/folder.png",
+      subIcon: "/icons/logo.webp",
       kind: "folder",
-      position: "top-52 right-80",
-      windowPosition: "top-[20vh] left-7",
+      tooltipText: "AI Agent Portfolio",
       children: [
         {
-          id: 1,
-          name: "AI Resume Analyzer Project.txt",
-          icon: "/images/txt.png",
+          id: "myweb1",
+          name: "README.txt",
+          projectName: "AI Agent Portfolio",
+          projectIcon: "/icons/logo.webp",
+          tooltipText: "Lihat detail",
+          progressValue: 100,
+          icon: "/icons/txt.png",
           kind: "file",
-          fileType: "txt",
-          position: "top-5 right-10",
+          fileType: "projectInfo",
           description: [
-            "AI Resume Analyzer is a smart tool that helps you perfect your resume with instant feedback.",
-            "Instead of guessing what recruiters want, you get AI-powered insights on keywords, formatting, and overall impact.",
-            "Think of it like having a career coach—pointing out strengths, fixing weaknesses, and boosting your chances of landing interviews.",
-            "It's built with Next.js and Tailwind, so it runs fast, looks professional, and works seamlessly on any device.",
+            "Sebuah portfolio pribadi berbasis Next.js dan Tailwind yang menampilkan project-project serta tulisan blog.",
+            "Didukung AI Agent canggih yang akan menemanimu mengeksplore portfolio ini dengan cara yang interaktif dan personal.",
+            "Kamu bisa bertanya tentang project, teknologi yang digunakan, atau bahkan proses developmentnya.",
+            "Bahkan kamu bisa langsung menghubungi saya lewat chat yang terintegrasi dengan Telegram!",
+          ],
+
+          techStack: [
+            {
+              "src": "/icons/nextjs.webp",
+              "label": "Next.js"
+            },
+            {
+              "src": "/icons/geminiAI.png",
+              "label": "Gemini AI"
+            },
+            {
+              "src": "/icons/gsap.png",
+              "label": "GSAP Animations"
+            },
+            {
+              "src": "/icons/typescript.webp",
+              "label": "Typescript"
+            },
+            {
+              "src": "/icons/tailwind.webp",
+              "label": "Tailwind"
+            },
+            
           ],
         },
         {
-          id: 2,
-          name: "ai-resume-analyzer.com",
-          icon: "/images/safari.png",
+          id: "myweb2",
+          name: "Demo",
+          icon: "/icons/safari.png",
           kind: "file",
           fileType: "url",
-          href: "https://youtu.be/iYOz165wGkQ?si=R1hs8Legl200m0Cl",
-          position: "top-20 left-20",
+          href: "https://www.herrywidnyana.com",
+          tooltipText: "Lihat demo",
         },
         {
-          id: 4,
-          name: "ai-resume-analyzer.png",
-          icon: "/images/image.png",
+          id: "myweb3",
+          name: "Tech Stack",
+          projectName: "AI Agent Portfolio",
+          icon: "/icons/terminal.png",
+          kind: "file",
+          fileType: "techstack",
+          tooltipText: "Lihat tech stack",
+          techStack:[
+            {
+              category: "Frontend",
+              items: ["React.js", "Next.js", "TypeScript"],
+            },
+            {
+              category: "Styling",
+              items: ["Tailwind CSS", "CSS"],
+            },
+            {
+              category: "Backend",
+              items: ["Gemini AI", "SpreedSheet API"],
+            },
+            {
+              category: "Dev Tools",
+              items: ["Git", "GitHub", "Docker"],
+            },
+          ],
+        },
+        {
+          id: "myweb4",
+          name: "preview.png",
+          icon: "/icons/image.png",
           kind: "file",
           fileType: "img",
-          position: "top-52 left-80",
-          imageUrl: "/images/project-2.png",
+          imageUrl: "/icons/project-2.png",
+          tooltipText: "Lihat sample preview",
         },
         {
-          id: 5,
-          name: "Design.fig",
-          icon: "/images/plain.png",
+          id: "myweb5",
+          name: "Github",
+          icon: "/icons/github.webp",
           kind: "file",
           fileType: "fig",
-          href: "https://google.com",
-          position: "top-60 left-5",
+          href: "https://github.com/herrywidnyana22/myweb",
+          tooltipText: "Lihat source",
         },
       ],
     },
 
     // ▶ Project 3
     {
-      id: 7,
-      name: "Food Delivery App",
-      icon: "/images/folder.png",
+      id: "project3",
+      name: "Livenote",
+      icon: "/icons/folder.png",
+      subIcon: "/icons/livenote.svg",
       kind: "folder",
-      position: "top-10 left-80",
-      windowPosition: "top-[33vh] left-7",
+      tooltipText: "AI Agent Portfolio",
       children: [
         {
-          id: 1,
-          name: "Food Delivery App Project.txt",
-          icon: "/images/txt.png",
+          id: "livenote1",
+          name: "README.txt",
+          projectName: "LiveNote",
+          projectIcon: "/icons/livenote.svg",
+          tooltipText: "Lihat detail",
+          progressValue: 100,
+          icon: "/icons/txt.png",
           kind: "file",
-          fileType: "txt",
-          position: "top-5 left-10",
+          fileType: "projectInfo",
           description: [
-            "Our Food Delivery App is a fast and convenient way to order meals from your favorite restaurants.",
-            "Instead of making calls or waiting in line, you can browse menus, customize orders, and track deliveries in real time.",
-            "Think of it like having your favorite restaurants in your pocket—ready to deliver anytime, anywhere.",
-            "It’s built with React Native, so it works smoothly on both iOS and Android with a clean, modern design.",
+            "Livenote adalah aplikasi catatan real-time yang mendukung berbagi catatan, edit langsung, dan fitur scratch, dengan autentikasi dari Clerk dan backend Convex.",
+            "Aplikasi ini memungkinkan pengguna untuk membuat, mengedit, dan berbagi catatan secara kolaboratif dalam waktu nyata.",
+            "Fitur scratch memungkinkan pengguna untuk menambahkan catatan cepat tanpa harus membuat dokumen baru.",
+            "Dibangun dengan teknologi modern, Livenote menjamin keamanan data pengguna serta performa aplikasi yang optimal.",
+          ],
+
+          techStack: [
+            {
+                "src": "/icons/nextjs.webp",
+                "label": "Next.js"
+            },
+            {
+                "src": "/icons/typescript.webp",
+                "label": "Typescript"
+            },
+            {
+                "src": "/icons/convex.webp",
+                "label": "convex"
+            },
+            {
+                "src": "/icons/clerk.svg",
+                "label": "Clerk"
+            },
+            {
+                "src": "/icons/tailwind.webp",
+                "label": "TailwindCSS"
+            }
           ],
         },
         {
-          id: 2,
-          name: "food-delivery-app.com",
-          icon: "/images/safari.png",
+          id: "livenote2",
+          name: "Livenote Demo",
+          icon: "/icons/safari.png",
           kind: "file",
           fileType: "url",
-          href: "https://youtu.be/LKrX390fJMw?si=cExkuVhf2DTV9G2-",
-          position: "top-10 right-20",
+          href: "https://www.livenote.herrywidnyana.com",
+          tooltipText: "Lihat demo",
         },
         {
-          id: 4,
-          name: "food-delivery-app.png",
-          icon: "/images/image.png",
+          id: "livenote3",
+          name: "Tech Stack",
+          projectName: "Livenote",
+          icon: "/icons/terminal.png",
+          kind: "file",
+          fileType: "techstack",
+          tooltipText: "Lihat tech stack",
+          techStack:[
+            {
+              category: "Frontend",
+              items: ["React.js", "Next.js", "TypeScript"],
+            },
+            {
+              category: "Styling",
+              items: ["Tailwind CSS", "CSS"],
+            },
+            {
+              category: "Backend",
+              items: ["Convex", "Clerk"],
+            },
+            {
+              category: "Dev Tools",
+              items: ["Git", "GitHub", "Docker"],
+            },
+          ],
+        },
+        {
+          id: "livenote4",
+          name: "preview.png",
+          icon: "/icons/image.png",
           kind: "file",
           fileType: "img",
-          position: "top-52 right-80",
-          imageUrl: "/images/project-3.png",
+          imageUrl: "/icons/project-2.png",
+          tooltipText: "Lihat sample preview",
         },
         {
-          id: 5,
-          name: "Design.fig",
-          icon: "/images/plain.png",
+          id: "livenote5",
+          name: "Github",
+          icon: "/icons/github.webp",
           kind: "file",
           fileType: "fig",
-          href: "https://google.com",
-          position: "top-60 right-20",
+          href: "https://github.com/herrywidnyana22/livenote",
+          tooltipText: "Lihat source",
+        },
+      ],
+    },
+    // ▶ Project 4
+    {
+      id: "project4",
+      name: "Real Chat",
+      icon: "/icons/folder.png",
+      subIcon: "/icons/realchat.png",
+      kind: "folder",
+      tooltipText: "Real Chat",
+      children: [
+        {
+          id: "realchat1",
+          name: "README.txt",
+          projectName: "Real Chat",
+          projectIcon: "/icons/realchat.png",
+          tooltipText: "Lihat detail",
+          progressValue: 100,
+          icon: "/icons/txt.png",
+          kind: "file",
+          fileType: "projectInfo",
+          description: [
+            "Realchat adalah aplikasi chat real-time lengkap dengan sistem autentikasi, dibuat menggunakan Next.js, MongoDB, Prisma, dan Tailwind.",
+            "Aplikasi ini memungkinkan pengguna untuk mendaftar, masuk, dan berkomunikasi secara langsung dengan pengguna lain melalui antarmuka yang bersih dan intuitif.",
+            "Fitur-fitur seperti obrolan grup, pengiriman pesan instan, dan notifikasi real-time membuat pengalaman berkomunikasi menjadi lancar dan menyenangkan.",
+            "Dibangun dengan teknologi modern, Realchat menjamin keamanan data pengguna serta performa aplikasi yang optimal.",
+          ],
+
+          techStack: [
+            {
+              "src": "/icons/nextjs.webp",
+              "label": "Next.js"
+            },
+            {
+              "src": "/icons/typescript.webp",
+              "label": "Typescript"
+            },
+            {
+              "src": "/icons/prisma.png",
+              "label": "Prisma"
+            },
+            {
+              "src": "/icons/mongodb.png",
+              "label": "MongoDB"
+            },
+            {
+              "src": "/icons/tailwind.webp",
+              "label": "TailwindCSS"
+            }
+          ],
+        },
+        {
+          id: "realchat2",
+          name: "Realchat Demo ",
+          icon: "/icons/safari.png",
+          kind: "file",
+          fileType: "url",
+          href: "https://www.realchat.herrywidnyana.com",
+          tooltipText: "Lihat demo",
+        },
+        {
+          id: "realchat3",
+          name: "Tech Stack",
+          projectName: "Realchat",
+          icon: "/icons/terminal.png",
+          kind: "file",
+          fileType: "techstack",
+          tooltipText: "Lihat tech stack",
+          techStack:[
+            {
+              category: "Frontend",
+              items: ["React.js", "Next.js", "TypeScript"],
+            },
+            {
+              category: "Styling",
+              items: ["Tailwind CSS", "CSS"],
+            },
+            {
+              category: "Backend",
+              items: ["MongoDB", "Prisma"],
+            },
+            {
+              category: "Dev Tools",
+              items: ["Git", "GitHub", "Docker"],
+            },
+          ],
+        },
+        {
+          id: "realchat4",
+          name: "preview.png",
+          icon: "/icons/image.png",
+          kind: "file",
+          fileType: "img",
+          imageUrl: "/icons/project-2.png",
+          tooltipText: "Lihat sample preview",
+        },
+        {
+          id: "realchat5",
+          name: "Github",
+          icon: "/icons/github.webp",
+          kind: "file",
+          fileType: "fig",
+          href: "https://github.com/herrywidnyana22/realchat",
+          tooltipText: "Lihat source",
+        },
+      ],
+    },
+    // ▶ Project 6
+    {
+      id: "project5",
+      name: "My Plant",
+      icon: "/icons/folder.png",
+      subIcon: "/icons/myplant.png",
+      kind: "folder",
+      tooltipText: "My Plant Watering System",
+      children: [
+        {
+          id: "myplant1",
+          name: "README.txt",
+          projectName: "MyPlant",
+          projectIcon: "/icons/myplant.png",
+          tooltipText: "Lihat detail",
+          progressValue: 100,
+          icon: "/icons/txt.png",
+          kind: "file",
+          fileType: "projectInfo",
+          description: [
+            "Automatic Watering System adalah panduan lengkap untuk membangun sistem penyiraman tanaman otomatis berbasis mikrokontroler dan sensor kelembaban tanah.",
+            "Panduan ini mencakup langkah-langkah mulai dari pemilihan komponen, instalasi perangkat keras, hingga pemrograman mikrokontroler untuk mengontrol penyiraman berdasarkan tingkat kelembaban tanah.",
+          ],
+          techStack: [
+            {
+              "src": "/icons/nextjs.webp",
+              "label": "Next.js"
+            },
+            {
+              "src": "/icons/typescript.webp",
+              "label": "Typescript"
+            },
+            {
+              "src": "/icons/arduino.webp",
+              "label": "Arduino"
+            },
+            {
+              "src": "/icons/mqtt.png",
+              "label": "MQTT"
+            },
+            {
+              "src": "/icons/tailwind.webp",
+              "label": "TailwindCSS"
+            }
+          ],
+        },
+        {
+          id: "myplant2",
+          name: "Demo MyPlant",
+          icon: "/icons/safari.png",
+          kind: "file",
+          fileType: "url",
+          href: "https://www.myplant.herrywidnyana.com",
+          tooltipText: "Lihat demo",
+        },
+        {
+          id: "myplant3",
+          name: "Tech Stack",
+          projectName: "MyPlant",
+          icon: "/icons/terminal.png",
+          kind: "file",
+          fileType: "techstack",
+          tooltipText: "Lihat tech stack",
+          techStack:[
+            {
+              category: "Frontend",
+              items: ["React.js", "Next.js", "TypeScript"],
+            },
+            {
+              category: "Styling",
+              items: ["Tailwind CSS", "CSS"],
+            },
+            {
+              category: "Backend",
+              items: ["MQTT"],
+            },
+            {
+              category: "Hardware",
+              items: ["ESP32", "Relay", "Solenoid Valve"],
+            },
+            {
+              category: "Dev Tools",
+              items: ["Git", "GitHub", "Docker", "Arduino UNO"],
+            },
+          ],
+        },
+        {
+          id: "myplant4",
+          name: "preview.png",
+          icon: "/icons/image.png",
+          kind: "file",
+          fileType: "img",
+          imageUrl: "/icons/project-2.png",
+          tooltipText: "Lihat sample preview",
+        },
+        {
+          id: "myplant5",
+          name: "Github",
+          icon: "/icons/github.webp",
+          kind: "file",
+          fileType: "fig",
+          href: "https://github.com/herrywidnyana22/myplant",
+          tooltipText: "Lihat source",
+        },
+      ],
+    },
+    // ▶ Project 5
+    {
+      id: "project6",
+      name: "Build VPS",
+      icon: "/icons/folder.png",
+      subIcon: "/icons/vps.png",
+      kind: "folder",
+      tooltipText: "Build VPS",
+      children: [
+        {
+          id: "vps1",
+          name: "README.txt",
+          projectName: "Build VPS",
+          projectIcon: "/icons/vps.png",
+          tooltipText: "Lihat detail",
+          progressValue: 100,
+          icon: "/icons/txt.png",
+          kind: "file",
+          fileType: "projectInfo",
+          description: [
+            "Build VPS adalah panduan lengkap untuk membangun infrastruktur cloud self-hosted berbasis Docker dan Cloudflare Tunnel — menjalankan banyak aplikasi Next.js secara aman di VPS rumahan.",
+            "Panduan ini mencakup langkah-langkah mulai dari pemilihan VPS, instalasi Docker, konfigurasi Cloudflare Tunnel, hingga deployment aplikasi Next.js.",
+            "Dengan mengikuti panduan ini, kamu akan dapat mengelola server pribadi yang aman dan efisien, serta memahami konsep dasar cloud computing dan containerization.",
+          ],
+
+          techStack: [
+            {
+              "src": "/icons/ubuntu.webp",
+              "label": "Ubuntu Server"
+            },
+            {
+              "src": "/icons/cloudflare.svg",
+              "label": "Cloudflared"
+            },
+            {
+              "src": "/icons/docker.webp",
+              "label": "Docker"
+            }
+          ],
+        },
+        {
+          id: "vps2",
+          name: "Tech Stack",
+          projectName: "Build VPS",
+          icon: "/icons/terminal.png",
+          kind: "file",
+          fileType: "techstack",
+          tooltipText: "Lihat tech stack",
+          techStack:[
+            {
+              category: "Server",
+              items: ["Ubuntu Server", "Cloudflare"],
+            },
+            {
+              category: "Dev Tools",
+              items: ["Git", "Docker"],
+            },
+          ],
+        },
+        {
+          id: "vps3",
+          name: "preview.png",
+          icon: "/icons/image.png",
+          kind: "file",
+          fileType: "img",
+          imageUrl: "/icons/project-2.png",
+          tooltipText: "Lihat sample preview",
         },
       ],
     },
@@ -383,45 +692,50 @@ const ABOUT_LOCATION = {
     {
       id: 1,
       name: "me.png",
-      icon: "/images/image.png",
+      icon: "/icons/image.png",
       kind: "file",
       fileType: "img",
       position: "top-10 left-5",
-      imageUrl: "/images/adrian.jpg",
+      imageUrl: "/images/profile.webp",
     },
     {
       id: 2,
       name: "casual-me.png",
-      icon: "/images/image.png",
+      icon: "/icons/image.png",
       kind: "file",
       fileType: "img",
-      position: "top-28 right-72",
-      imageUrl: "/images/adrian-2.jpg",
+      imageUrl: "/icons/adrian-2.jpg",
     },
     {
       id: 3,
       name: "conference-me.png",
-      icon: "/images/image.png",
+      icon: "/icons/image.png",
       kind: "file",
       fileType: "img",
-      position: "top-52 left-80",
-      imageUrl: "/images/adrian-3.jpeg",
+      imageUrl: "/icons/adrian-3.jpeg",
     },
     {
       id: 4,
       name: "about-me.txt",
-      icon: "/images/txt.png",
+      icon: "/icons/txt.png",
       kind: "file",
       fileType: "txt",
-      position: "top-60 left-5",
       subtitle: "Meet the Developer Behind the Code",
-      image: "/images/adrian.jpg",
+      image: "/images/profile.webp",
       description: [
-        "Hey! I’m Adrian 👋, a web developer who enjoys building sleek, interactive websites that actually work well.",
-        "I specialize in JavaScript, React, and Next.js—and I love making things feel smooth, fast, and just a little bit delightful.",
+        "Hey! I’m Herry 👋 — I build websites that look good, feel smooth, and actually work",
+        "I specialize in JavaScript, React, and Next.js, and I love building things that feel fast, clean, and intuitive.",
         "I’m big on clean UI, good UX, and writing code that doesn’t need a search party to debug.",
-        "Outside of dev work, you'll find me tweaking layouts at 2AM, sipping overpriced coffee, or impulse-buying gadgets I absolutely convinced myself I needed 😅",
+        "Outside of work, I’m usually tweaking side projects at midnight, hunting for cool gadgets, or enjoying a good cup of coffee ☕",
       ],
+    },
+    {
+      id: 5,
+      name: "Contact",
+      icon: "/icons/contact.png",
+      kind: "file",
+      fileType: "contact",
+      tooltipText: "Lihat semua contact"
     },
   ],
 };
@@ -436,7 +750,7 @@ const RESUME_LOCATION = {
     {
       id: 1,
       name: "Resume.pdf",
-      icon: "/images/pdf.png",
+      icon: "/icons/pdf.png",
       kind: "file",
       fileType: "pdf",
       // you can add `href` if you want to open a hosted resume
@@ -455,10 +769,155 @@ export const locations = {
 export const INITIAL_Z_INDEX = 1000;
 
 export const WINDOW_CONFIG = {
-  explorer: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  contact: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  resume: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  photos: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  txtfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-};
+  explorer: { isOpen: false, isMinimize: false, zIndex: INITIAL_Z_INDEX, data: null },
+  contact: { isOpen: false, isMinimize: false, zIndex: INITIAL_Z_INDEX, data: null },
+  resume: { isOpen: false, isMinimize: false, zIndex: INITIAL_Z_INDEX, data: null },
+  photos: { isOpen: false, isMinimize: false, zIndex: INITIAL_Z_INDEX, data: null },
+  txtfile: { isOpen: false, isMinimize: false, zIndex: INITIAL_Z_INDEX, data: null },
+  imgfile: { isOpen: false, isMinimize: false, zIndex: INITIAL_Z_INDEX, data: null },
+  techstack: { isOpen: false, isMinimize: false, zIndex: INITIAL_Z_INDEX, data: null },
+  projectInfo: { isOpen: false, isMinimize: false, zIndex: INITIAL_Z_INDEX, data: null },
+}
+
+export const FONT_WEIGHTS:FontWeightMap  = {
+    title: {min: 400, max: 900, base: 400},
+    subtitle: {min: 100, max: 400, base: 100},
+}
+
+export const SAMPLE_PROJECTS = [
+    {
+        "type": "project",
+        "title": "Portfolio Website",
+        "description": "Sebuah portfolio pribadi berbasis Next.js dan Tailwind yang menampilkan project-project serta tulisan blog.",
+        "icon": "/icons/logo.webp",
+        "iconCategory": [
+            {
+                "src": "/icons/nextjs.webp",
+                "label": "Next.js"
+            },
+            {
+                "src": "/icons/typescript.webp",
+                "label": "Typescript"
+            },
+            {
+                "src": "/icons/tailwind.webp",
+                "label": "Tailwind"
+            }
+        ],
+        "progressValue": "90",
+        "demoLink": "https://herrywidnyana.com",
+        "githubLink": "https://github.com/herrywidnyana22/myweb"
+    },
+    {
+        "type": "project",
+        "title": "Mydrive",
+        "description": "Aplikasi penyimpanan berbasis cloud yang menyediakan upload, berbagi, dan pengelolaan file — dibuat dengan Next.js dan Appwrite",
+        "icon": "/icons/mydrive-logo.svg",
+        "iconCategory": [
+            {
+                "src": "/icons/nextjs.webp",
+                "label": "Next.js"
+            },
+            {
+                "src": "/icons/typescript.webp",
+                "label": "Typescript"
+            },
+            {
+                "src": "/icons/appwrite.svg",
+                "label": "Appwrite"
+            },
+            {
+                "src": "/icons/tailwind.webp",
+                "label": "TailwindCSS"
+            }
+        ],
+        "progressValue": "99",
+        "demoLink": "https://mydrive.herrywidnyana.com",
+        "githubLink": "https://github.com/herrywidnyana22/mydrive"
+    },
+    {
+        "type": "project",
+        "title": "Real Chat",
+        "description": "Aplikasi chat real-time lengkap dengan sistem autentikasi, dibuat menggunakan Next.js, MongoDB, Prisma, dan Tailwind.",
+        "icon": "/icons/realchat.png",
+        "iconCategory": [
+            {
+                "src": "/icons/nextjs.webp",
+                "label": "Next.js"
+            },
+            {
+                "src": "/icons/typescript.webp",
+                "label": "Typescript"
+            },
+            {
+                "src": "/icons/prisma.png",
+                "label": "Prisma"
+            },
+            {
+                "src": "/icons/mongodb.png",
+                "label": "MongoDB"
+            },
+            {
+                "src": "/icons/tailwind.webp",
+                "label": "TailwindCSS"
+            }
+        ],
+        "progressValue": "95",
+        "demoLink": "https://mychat.herrywidnyana.com",
+        "githubLink": "https://github.com/herrywidnyana22/realchat"
+    },
+    {
+        "type": "project",
+        "title": "Livenote",
+        "description": "Aplikasi catatan real-time yang mendukung berbagi catatan, edit langsung, dan fitur scratch, dengan autentikasi dari Clerk dan backend Convex",
+        "icon": "/icons/livenote.svg",
+        "iconCategory": [
+            {
+                "src": "/icons/nextjs.webp",
+                "label": "Next.js"
+            },
+            {
+                "src": "/icons/typescript.webp",
+                "label": "Typescript"
+            },
+            {
+                "src": "/icons/convex.webp",
+                "label": "convex"
+            },
+            {
+                "src": "/icons/clerk.svg",
+                "label": "Clerk"
+            },
+            {
+                "src": "/icons/tailwind.webp",
+                "label": "TailwindCSS"
+            }
+        ],
+        "progressValue": "90",
+        "demoLink": "https://livenote.herrywidnyana.com",
+        "githubLink": "https://github.com/herrywidnyana22/livenote"
+    },
+    {
+        "type": "project",
+        "title": "Build VPS",
+        "description": "Membangun infrastruktur cloud self-hosted berbasis Docker dan Cloudflare Tunnel — menjalankan banyak aplikasi Next.js secara aman di VPS rumahan",
+        "icon": "/icons/vps.png",
+        "iconCategory": [
+            {
+                "src": "/icons/ubuntu.webp",
+                "label": "Ubuntu Server"
+            },
+            {
+                "src": "/icons/cloudflare.svg",
+                "label": "Cloudflared"
+            },
+            {
+                "src": "/icons/docker.webp",
+                "label": "Docker"
+            }
+        ],
+        "progressValue": "100",
+        "demoLink": "https://herrywidnyana.com",
+        "githubLink": "https://herrywidnyana.com"
+    }
+]

@@ -6,10 +6,10 @@ import { ProgressCircle } from "./charts/circleProgress";
 import { Icon } from "./icon";
 import { Tooltip } from "./tooltip";
 import { parseHighlight } from "@/lib/utils/parseHighlight";
-import { useApp } from "@/context/AppContextProps";
+import { useAppStore } from "@/store/app";
 
 export const ProjectItem = (project: ProjectProps) => {
-  const {ui} = useApp()
+  const { ui } = useAppStore()
 
   return (
     <div

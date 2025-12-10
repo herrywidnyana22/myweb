@@ -1,17 +1,18 @@
 'use client';
 
+import clsx from 'clsx';
+import DialogConfirm from '../dialogConfirm';
+
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { ChatHeader } from '@/components/chat/chatHeader';
 import { ChatInput } from '@/components/chat/chatInput';
 import { ChatItem } from '@/components/chat/chatItem';
 import { Card } from '@/components/card/card';
-import DialogConfirm from '../dialogConfirm';
-import clsx from 'clsx';
-import { useApp } from '@/context/AppContextProps';
 import { sendToTelegram } from '@/lib/telegram/telegram-client';
 import { ChatNotice } from './chatNotice';
 import { translateAll } from '@/lib/translate/app-data';
 import { loadUI } from '@/lib/translate/translateUIText';
+import { useAppStore } from '@/store/app';
 
 // =============== REDUCER ===============
 type ChatAction =
@@ -35,13 +36,14 @@ function chatReducer(state: ChatResponseProps[], action: ChatAction): ChatRespon
 }
 
 // =============== COMPONENT ===============
-export const Chat = ({
-  setMessages: setPropMessages,
-  isInputFocused,
-  setIsInputFocused,
-  isMinimized,
-  setIsMinimized,
-}: ChatProps) => {
+export const Chat = () => {
+  const {
+    setMessages: setPropMessages,
+    isInputFocused,
+    setIsInputFocused,
+    isMinimized,
+  } = useAppStore()
+
   const [messages, dispatch] = useReducer(chatReducer, []);
   const [input, setInput] = useState('');
   const [showConfirm, setShowConfirm] = useState(false);
@@ -50,7 +52,7 @@ export const Chat = ({
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const hasLoadedRef = useRef(false);
 
-  const { language, setLanguage, setChatMode, chatMode, ui, setUI } = useApp()
+  const { language, setLanguage, setChatMode, chatMode, ui, setUI } = useAppStore()
 
   // ========== MEMORY ==========
   const getMemory = useCallback((): ChatMemory => {
@@ -104,7 +106,7 @@ export const Chat = ({
     setChatMode('default')
   };
 
-  const onMinimize = useCallback(() => setIsMinimized((p) => !p), [setIsMinimized]);
+  
 
   // ========== SEND MESSAGE ==========
   const sendMessage = useCallback(async (e: React.FormEvent) => {
@@ -389,7 +391,6 @@ export const Chat = ({
     return () => es.close();
   }, [])
 
-  console.log({isInputFocused})
 
   // ========== RENDER ==========
   return (
@@ -401,11 +402,7 @@ export const Chat = ({
       >
         <div className="w-full mx-auto rounded-2xl overflow-hidden shadow-2xl border border-gray-600/50">
           {messages.length > 0 && (
-            <ChatHeader
-              isMinimized={isMinimized}
-              onClear={() => setShowConfirm(true)}
-              onMinimize={onMinimize}
-            />
+            <ChatHeader onClear={() => setShowConfirm(true)}/>
           )}
 
           {!isMinimized && messages.length > 0 && (
@@ -443,9 +440,6 @@ export const Chat = ({
               input={input}
               setInput={setInput}
               sendMessage={sendMessage}
-              onFocus={() => setIsInputFocused(true)}
-              onBlur={() => setIsInputFocused(false)}
-              setIsMinimized={setIsMinimized}
               isActive={(messages.length <= 0 && !isInputFocused) || isMinimized}
               disabled={isLoading}
             />

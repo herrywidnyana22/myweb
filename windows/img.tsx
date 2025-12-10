@@ -1,12 +1,13 @@
 'use client'
 
 import Image from 'next/image'
+import useWindowStore from '@/store/window'
+
 import { WindowWrapper } from '@/hoc/windowWrapper'
-import userWindowStore from '@/store/window'
 import { WindowControls } from '@/components/windowControls'
 
 const ImageWindow = () => {
-    const { windows } = userWindowStore()
+    const { windows } = useWindowStore()
     const data = windows.imgfile?.data as LocationValue | undefined
 
     if(!data) return null
@@ -14,8 +15,8 @@ const ImageWindow = () => {
     const { name, imageUrl, icon } = data
 
     return (
-        <>
-            <div id="window-header" className="flex items-center justify-between">
+        <div className='rounded-xl shadow-2xl drop-shadow-2xl overflow-hidden'>
+            <div  className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400">
                 <div className="controls-area w-24">
                     <WindowControls target={'imgfile'} />
                 </div>
@@ -54,7 +55,7 @@ const ImageWindow = () => {
                     <p className="text-gray-600">No image available</p>
                 )}
             </div>
-        </>
+        </div>
     )
 }
 

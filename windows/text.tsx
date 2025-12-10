@@ -1,13 +1,13 @@
 'use client'
 
 import Image from 'next/image'
-import userWindowStore from '@/store/window'
+import useWindowStore from '@/store/window'
 
 import { WindowWrapper } from '@/hoc/windowWrapper'
 import { WindowControls } from '@/components/windowControls'
 
 const TextWindow = () => {
-    const { windows } = userWindowStore()
+    const { windows } = useWindowStore()
     const data = windows.txtfile?.data as LocationValue | undefined
 
     if(!data) return null
@@ -15,9 +15,9 @@ const TextWindow = () => {
     const { name, image, imageUrl, icon, subtitle, description } = data
 
     return (
-        <>
-            <div id="window-header" className="flex items-center justify-between">
-                <div className="controls-area w-24">
+        <div className='rounded-xl shadow-2xl drop-shadow-2xl overflow-hidden'>
+            <div  className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400">
+                <div className="w-24">
                     <WindowControls target={'txtfile'} />
                 </div>
 
@@ -63,7 +63,7 @@ const TextWindow = () => {
                     ))}
                 </div>
             </div>
-        </>
+        </div>
     )
 }
 

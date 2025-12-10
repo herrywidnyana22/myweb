@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 
-import { useApp } from "@/context/AppContextProps";
 import { Tooltip } from "./tooltip";
+import { useAppStore } from "@/store/app";
 
 export const TelegramStatus = () =>{
-  const {ui} = useApp()
+  const { ui } = useAppStore()
 
   return (
     <Tooltip label={ui.telegramStatus}>

@@ -4,16 +4,57 @@ declare type Action = "language" | "telegram"
 declare type ConfirmAction = 'yes' | 'no'
 declare type ChatMode = "default" | "telegram"
 declare type ChatRole = 'user' | 'bot' | 'herry_telegram' | 'bot_telegram';
+declare type WindowControlAction = 'close' | 'minimize' | 'maximize';
 
 declare interface AppContextProps {
   language: string;
-  setLanguage: (l: string) => void;
-  ui: Record<string, string>
-  setUI: (data: Record<string, string>) => void;
+  setLanguage: React.Dispatch<React.SetStateAction<string>>;
+
+  ui: Record<string, string>;
+  setUI: React.Dispatch<React.SetStateAction<Record<string, string>>>;
 
   chatMode: ChatMode;
-  setChatMode: (m: ChatMode) => void;
+  setChatMode: React.Dispatch<React.SetStateAction<ChatMode>>;
+
+  messages: ChatResponseProps[];
+  setMessages: React.Dispatch<React.SetStateAction<ChatResponseProps[]>>;
+
+  isMinimized: boolean;
+  setIsMinimized: React.Dispatch<React.SetStateAction<boolean>>;
+
+  isInputFocused: boolean;
+  setIsInputFocused: React.Dispatch<React.SetStateAction<boolean>>;
+
+  openedDockId: Record<string, boolean>;
+  setOpenedDockId: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+
+  targetedDockId: Record<string, DOMRect | null>;
+  setTargetedDockId: React.Dispatch<React.SetStateAction<Record<string, DOMRect | null>>>;
 }
+
+type Updater<T> = T | ((prev: T) => T);
+
+declare interface AppStore {
+  language: string;
+  ui: Record<string, string>;
+  chatMode: ChatMode;
+  messages: ChatResponseProps[];
+  isMinimized: boolean;
+  isInputFocused: boolean;
+  openedDockId: Record<string, boolean>;
+  targetedDockId: Record<string, DOMRect | null>;
+
+  setLanguage: (l: string) => void;
+  setUI: (ui: Record<string, string>) => void;
+  setChatMode: (m: ChatMode) => void;
+  setMessages: (v: Updater<ChatResponseProps[]>) => void;
+  setIsMinimized: (v: Updater<boolean>) => void;
+  setIsInputFocused: (v: boolean) => void;
+
+  setOpenedDockId: (updater: (prev: Record<string, boolean>) => Record<string, boolean>) => void;
+  setTargetedDockId: (updater: (prev: Record<string, DOMRect | null>) => Record<string, DOMRect | null>) => void;
+}
+
 
 declare type WindowKey = keyof typeof WINDOW_CONFIG;
 
@@ -25,6 +66,8 @@ declare interface WindowStore {
 
   openWindow: (key: WindowKey, data?: unknown) => void;
   closeWindow: (key: WindowKey) => void;
+  minimizeWindow: (key: WindowKey) => void;
+  restoreWindow: (key: WindowKey) => void;
   focusWindow: (key: WindowKey) => void;
 }
 
@@ -136,12 +179,6 @@ declare interface ProfileProps {
   birth_date: string
 }
 
-declare interface DockProps {
-  items: DockItemProps[];
-  onIconClick: (id: string, rect: DOMRect) => void;
-  isOpenById?: Record<string, boolean>;
-}
-
 declare interface DockItemProps {
   id: string;
   name: string;
@@ -150,13 +187,11 @@ declare interface DockItemProps {
   className?: string;
 }
 
-declare interface ChatProps {
+declare interface ChatStore {
   messages: ChatResponseProps[];
-  setMessages: React.Dispatch<React.SetStateAction<ChatResponseProps[]>>;
-  isInputFocused: boolean;
-  setIsInputFocused: React.Dispatch<React.SetStateAction<boolean>>;
-  isMinimized: boolean;
-  setIsMinimized: React.Dispatch<React.SetStateAction<boolean>>;
+  addMessage: (msg: ChatResponseProps) => void;
+  updateLast: (msg: Partial<ChatResponseProps>) => void;
+  reset: () => void;
 }
 
 declare interface ChatResponseProps {
@@ -176,11 +211,8 @@ declare interface ChatMemory {
 
 declare interface ChatInputProps {
   input: string;
-  setInput: React.Dispatch<React.SetStateAction<string>>;
-  setIsMinimized: React.Dispatch<React.SetStateAction<boolean>>;
-  sendMessage: (e: React.FormEvent) => Promise<void>;
-  onFocus?: () => void;
-  onBlur?: () => void;
+  setInput: React.Dispatch<React.SetStateAction<string>>
+  sendMessage: (e: React.FormEvent) => Promise<void>
   isActive?: boolean
   disabled?: boolean
 }
@@ -192,9 +224,7 @@ declare interface DialogConfirmProps {
 }
 
 declare interface ChatHeaderProps {
-  onMinimize: () => void;
   onClear: () => void;
-  isMinimized: boolean;
 }
 
 declare interface WidgetProps {
@@ -219,6 +249,8 @@ declare interface BarProgressProps {
 declare interface TooltipProps {
   children: ReactNode;
   label: string;
+  bgColor?: string
+  textColor?: string
 }
 
 declare interface IconProps {
@@ -289,5 +321,51 @@ declare type FlagIconProps = {
   size?: number; 
 }
 
+declare type ChatTelegramProps = {
+  message: string
+  headerText: string
+  className?: string
+  icon: LucideIcon
+}
 
+declare type MenuProps = {
+  items: LocationValue[];
+  title?: string
+  className?: string
+  activeLocation?:LocationValue
+  onClick?: (item: LocationValue) => void;
+};
+
+declare type LocationItem = {
+  id: number;
+  name: string;
+  icon: string;
+  kind: string; // "folder" | "file" kalau mau strict
+  position?: string;
+  windowPosition?: string;
+  fileType?: string;
+  href?: string;
+  description?: string[];
+  imageUrl?: string;
+  children?: LocationItem[];
+};
+
+declare type TextRenderProps = {
+    text: string
+    className?: string
+    weight?: number
+}
+
+declare type SetHoverText = (
+    container: HTMLElement | null,
+    type: HoverTextType
+) => (() => void) | void;
+
+declare type FontWeightMap = Record<string, FontWeightConfig>;
+
+declare type HoverTextType = keyof FontWeightMap;
+
+declare interface techstackProps {
+
+}
 

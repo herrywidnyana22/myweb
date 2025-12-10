@@ -1,7 +1,6 @@
 import { getColor } from "@/lib/utils";
 import { Tooltip } from "../tooltip";
 
-
 export const BarProgressChart = ({value, label}: BarProgressProps) => {
     return ( 
         <Tooltip label={label}>

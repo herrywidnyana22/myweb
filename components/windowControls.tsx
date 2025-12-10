@@ -1,20 +1,38 @@
-import userWindowStore from "@/store/window";
-import { Maximize, Minus, X } from "lucide-react";
+
+import useWindowStore from "@/store/window";
+
+import { useAppStore } from "@/store/app";
+import { Minus, X } from "lucide-react";
 
 
 export const WindowControls = ({ target }: WindowControlProps) => {
-    const {closeWindow} = userWindowStore()
+    const { closeWindow, minimizeWindow} = useWindowStore()
+    const { setOpenedDockId } = useAppStore();
+
+    const onAction = (action: WindowControlAction) => {
+        if (action === 'minimize') {
+            minimizeWindow(target)
+            return
+        }
+
+        closeWindow(target)
+        setOpenedDockId(prev => ({ ...prev, [target]: !prev[target as string] }))
+
+    }
     
     return (
-        <div id="window-controls">
-            <div className="close" onClick={() => closeWindow(target)}>
+        <div className="flex gap-2">
+            <div 
+                onClick={() => onAction('close')}
+                className="flex items-center justify-center p-0.5 size-3.5 rounded-full bg-rose-500 cursor-pointer" 
+            >
                 <X className="size-3 text-white font-bold"/>
             </div>
-            <div className="minimize">
+            <div 
+                onClick={() => onAction('minimize')}
+                className="flex items-center justify-center p-0.5 size-3.5 rounded-full bg-orange-300 cursor-pointer"
+            >
                 <Minus className="size-3 text-white font-bold"/>
-            </div>
-            <div className="maximize">
-                <Maximize className="size-3 text-black font-bold"/>
             </div>
         </div>
     );

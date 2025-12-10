@@ -1,8 +1,8 @@
-import { useApp } from '@/context/AppContextProps';
+import { useAppStore } from '@/store/app';
 import { memo } from 'react';
 
 export default memo(function DialogConfirm({ text, onConfirm, onCancel }: DialogConfirmProps) {
-  const {ui} = useApp()
+  const { ui } = useAppStore()
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-9999 px-4">
       <div

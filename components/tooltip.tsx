@@ -1,20 +1,27 @@
 import clsx from "clsx";
-
 import { useState } from "react";
 import { createPortal } from "react-dom";
 
-export const Tooltip = ({ children, label }: TooltipProps) => {
+export const Tooltip = ({
+  children,
+  label,
+  bgColor,
+  textColor,
+}: TooltipProps) => {
   const [visible, setVisible] = useState(false);
   const [coords, setCoords] = useState({ top: 0, left: 0 });
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     setCoords({
-      top: rect.top - 8, // offset 8px ke atas
+      top: rect.top - 12,
       left: rect.left + rect.width / 2,
     });
     setVisible(true);
   };
+
+  const isHexBg = bgColor?.startsWith("#");
+  const isHexText = textColor?.startsWith("#");
 
   return (
     <>
@@ -35,12 +42,43 @@ export const Tooltip = ({ children, label }: TooltipProps) => {
               left: coords.left,
               transform: "translate(-50%, -100%)",
             }}
-            className={clsx(
-              "bg-gray-900 text-white text-xs px-3 py-1 rounded-xl shadow-lg z-99999",
-              "transition-all duration-200"
-            )}
+            className="z-99999 pointer-events-none"
           >
-            {label}
+            <div
+              className={clsx(
+                "relative px-3 py-1 text-xs rounded-md shadow-2xl max-w-[180px] text-center whitespace-normal wrap-break-word",
+                // tailwind bg / text kalau **bukan** hex
+                !isHexBg && (bgColor ?? "bg-orange-100"),
+                !isHexText && (textColor ?? "text-orange-700")
+              )}
+              style={{
+                // kalau hex → pakai inline style
+                backgroundColor: isHexBg ? bgColor : undefined,
+                color: isHexText ? textColor : undefined,
+              }}
+            >
+              {label}
+
+              {/* 🔻 ARROW */}
+              <span
+                className={clsx(
+                  "absolute left-1/2 top-full -translate-x-1/2",
+                  "size-0 border-l-[6px] border-l-transparent",
+                  "border-r-[6px] border-r-transparent",
+                  "border-t-[6px]",
+                  // kalau **bukan** hex → pakai warna default tailwind
+                  !isHexBg && "border-t-orange-100"
+                )}
+                style={
+                  isHexBg
+                    ? {
+                        // kalau hex → override warna arrow
+                        borderTopColor: bgColor,
+                      }
+                    : undefined
+                }
+              />
+            </div>
           </div>,
           document.body
         )}

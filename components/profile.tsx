@@ -1,17 +1,18 @@
 'use client'
 
 import Image from 'next/image';
+
 import { MapPin, Calendar } from 'lucide-react';
 import { useData, useSingleData } from '@/hooks/useData';
 import { Highlight } from './highlight';
-import { useApp } from '@/context/AppContextProps';
+import { useAppStore } from '@/store/app';
 
 export const Profile = () => {
   const { data: profileData, isLoading: loadingProfile, error: errorProfile } = useSingleData<ProfileProps>('profile');
   const { data: addressData, isLoading: loadingAddress, error: errorAddress } = useSingleData<AddressProps>('address');
   const { data: highlightData, isLoading: loadingHighlight } = useData<HighlightProps>('highlight');
 
-  const { ui } = useApp()
+  const { ui } = useAppStore()
 
   if (loadingProfile || loadingAddress || loadingHighlight) {
     return (

@@ -40,4 +40,9 @@ export const baseUIText = {
   source: 'Sumber',
   viewDemo: 'Lihat Demo',
   preview: 'Pratinjau',
+
+  welcomeText: 'Halo! Selamat datang di',
+  welcomeTitle: 'Halaman Pribadiku',
+
+  progressText: 'Progres',
 };

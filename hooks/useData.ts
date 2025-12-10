@@ -1,11 +1,9 @@
 "use client";
 
+import { useAppStore } from "@/store/app";
 import { useEffect, useState } from "react";
-import { useApp } from "@/context/AppContextProps";
 
-/* =======================================================================
-   Helper localStorage
-======================================================================= */
+//  Helper localStorage/
 function safeReadLS<T>(key: string): T | null {
   try {
     const raw = localStorage.getItem(key);
@@ -17,11 +15,9 @@ function safeReadLS<T>(key: string): T | null {
   }
 }
 
-/* =======================================================================
-   useData — ARRAY VERSION
-======================================================================= */
+//  useData — ARRAY VERSION
 export function useData<T>(endpoint: string) {
-  const { language } = useApp();
+  const { language } = useAppStore();
 
   const [data, setData] = useState<T[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +41,7 @@ export function useData<T>(endpoint: string) {
           setIsLoading(false);
           return;
         } else {
-          console.warn(`⚠ No translated data for "${endpoint}" (${language})`);
+          console.warn(`No translated data for "${endpoint}" (${language})`);
         }
       }
 
@@ -55,12 +51,12 @@ export function useData<T>(endpoint: string) {
       if (original) {
         if (active) setData(original);
       } else {
-        console.error(`❌ No original data found for: ${endpoint}`);
+        console.error(`No original data found for: ${endpoint}`);
         if (active) setData([]); // fallback
         setError(`Data for "${endpoint}" not found`);
       }
     } catch (err) {
-      console.error(`❌ useData(${endpoint}) error:`, err);
+      console.error(`useData(${endpoint}) error:`, err);
       if (active) {
         setError("Failed to load data from localStorage");
         setData([]);
@@ -77,11 +73,10 @@ export function useData<T>(endpoint: string) {
   return { data, isLoading, error };
 }
 
-/* =======================================================================
-   useSingleData — OBJECT VERSION
-======================================================================= */
+
+//  useSingleData — OBJECT VERSION
 export function useSingleData<T>(endpoint: string) {
-  const { language } = useApp();
+  const { language } = useAppStore();
 
   const [data, setData] = useState<T | null>(null);
   const [isLoading, setIsLoading] = useState(true);

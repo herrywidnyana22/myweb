@@ -4,11 +4,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCreative, Pagination } from 'swiper/modules';
 import { ProjectItem } from './projectItem';
 import { useData } from '@/hooks/useData';
-import { useApp } from '@/context/AppContextProps';
+import { useAppStore } from '@/store/app';
 
 export const Projects = () => {
   const { data, isLoading, error } = useData<ProjectProps>('projects');
-  const { ui } = useApp()
+  const { ui } = useAppStore()
+  console.log({data})
   
   if (isLoading) {
     return (

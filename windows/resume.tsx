@@ -1,24 +1,17 @@
 'use client'
 
-import { pdfjs, Document, Page } from 'react-pdf';
-import 'react-pdf/dist/Page/TextLayer.css';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
-
+import dynamic from 'next/dynamic';
 import Link from "next/link";
-
 import { Download } from "lucide-react";
+import { WindowControls } from "@/components/windowControls";
 import { WindowWrapper } from '@/hoc/windowWrapper';
-import { WindowControls } from '@/components/windowControls';
 
-pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.mjs',
-    import.meta.url,
-).toString();
+const PDFViewer = dynamic(() => import('@/windows/pdfViewer'), { ssr: false });
 
 const ResumeWindow = () => {
     return ( 
-        <>
-            <div id="window-header">
+        <div className='shadow-2xl drop-shadow-2xl overflow-hidden rounded-xl'>
+            <div className='flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400'>
                 <WindowControls target={'resume'}/>
 
                 <h2>Resume.pdf</h2>
@@ -29,18 +22,12 @@ const ResumeWindow = () => {
                     title="Download resume"
                     className="cursor-pointer"
                 >
-                    <Download className="icon"/>
+                    <Download className="p-1 hover:bg-gray-200 rounded hover:cursor-default"/>
                 </Link>
             </div>
 
-            <Document file="/files/resume.pdf">
-                <Page 
-                    pageNumber={1} 
-                    renderTextLayer
-                    renderAnnotationLayer
-                />
-            </Document>
-        </>
+            <PDFViewer/>
+        </div>
     );
 }
 
