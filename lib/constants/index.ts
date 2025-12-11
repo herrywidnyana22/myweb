@@ -141,7 +141,7 @@ const PROJECT_LOCATION = {
         {
           id: "mydrive3",
           name: "Tech Stack",
-          projectName: "AI Agent Portfolio",
+          projectName: "MyDrive",
           icon: "/icons/terminal.png",
           kind: "file",
           fileType: "techstack",

@@ -62,7 +62,12 @@ export const WindowWrapper = <P extends object>(
         ref={ref}
         style={{ zIndex }}
         className="absolute"
-        onMouseDown={() => focusWindow(windowKey)}
+        onMouseDown={(e) => {
+          // Jika mouseDown terjadi bukan di dalam window itu sendiri → block
+          if (!isOpen) return; // window belum muncul
+          if (e.detail > 1) return; // block double-click event
+          focusWindow(windowKey);
+        }}
       >
         <Component {...props} />
       </section>

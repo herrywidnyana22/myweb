@@ -154,7 +154,3 @@ const ExplorerWindow = () => {
 }
 
 export const Explorer = WindowWrapper(ExplorerWindow, "explorer");
-
-function focusWindow(key: any) {
-    throw new Error("Function not implemented.");
-}
