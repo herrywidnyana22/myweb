@@ -1,11 +1,11 @@
 'use client';
 
 import gsap from "gsap";
+import useWindowStore from "@/store/window";
 
 import { ComponentType, useLayoutEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { Draggable } from 'gsap/Draggable'
-import useWindowStore from "@/store/window";
 
 gsap.registerPlugin(Draggable)
 

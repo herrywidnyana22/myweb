@@ -609,7 +609,7 @@ const PROJECT_LOCATION = {
         },
       ],
     },
-    // ▶ Project 5
+    // ▶ Project 6
     {
       id: "project6",
       name: "Build VPS",
@@ -678,6 +678,43 @@ const PROJECT_LOCATION = {
           tooltipText: "Lihat sample preview",
         },
       ],
+    },
+    // ▶ Project 7
+    {
+      id: "project7",
+      name: "Styling Project",
+      icon: "/icons/css.png",
+      kind: "folder",
+      tooltipText: "Styling Project",
+      children: [
+        {
+          id: "css1",
+          name: "Stacking",
+          icon: "/icons/safari.png",
+          kind: "file",
+          fileType: "url",
+          href: "https://www.myplant.herrywidnyana.com",
+          tooltipText: "Lihat demo",
+        },
+        {
+          id: "css2",
+          name: "Stacking",
+          icon: "/icons/safari.png",
+          kind: "file",
+          fileType: "url",
+          href: "https://www.myplant.herrywidnyana.com",
+          tooltipText: "Lihat demo",
+        },
+        {
+          id: "css3",
+          name: "Stacking",
+          icon: "/icons/safari.png",
+          kind: "file",
+          fileType: "url",
+          href: "https://www.myplant.herrywidnyana.com",
+          tooltipText: "Lihat demo",
+        },
+      ]
     },
   ],
 };
