@@ -32,7 +32,12 @@ export const Contact = () => {
   return (
     <div className="grid grid-cols-2 place-items-center gap-3 p-3 sm:p-6">
       {data?.map((item, i) => (
-        <Tooltip key={i} label={item.description}>
+        <Tooltip 
+          key={i} 
+          label={item.description}
+          bgColor={item.bg}
+          textColor="text-white"
+        >
           <Link
             href={item.href || '#'}
             target="_blank"
@@ -40,7 +45,10 @@ export const Contact = () => {
             className="flex flex-col items-center"
           >
             <div className="relative flex flex-col gap-1 items-center justify-center transition-transform duration-300 hover:scale-105 sm:hover:scale-110 cursor-pointer">
-              <div className="flex items-center justify-center p-1.5 sm:p-2 bg-amber-50 rounded-xl size-13 sm:size-12 shadow-sm">
+              <div 
+                style={{ backgroundColor: item.bg }}
+                className="flex items-center justify-center p-1.5 sm:p-2 rounded-xl size-13 sm:size-12 shadow-sm"
+              >
                 {item.icon && typeof item.icon === 'string' && (
                   <Image
                     src={item.icon}

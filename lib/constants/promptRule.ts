@@ -195,8 +195,10 @@ export const jsonFormatRule = `
     "type": "contact",
     "title": string,
     "description": string,
+    "bg"?: string
     "icon"?: string,
     "href"?: string
+    "tooltipText": string
   }
 
   Action

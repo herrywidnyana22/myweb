@@ -147,7 +147,9 @@ declare interface ContactProps {
   title: string;
   description: string;
   icon?: string | React.ReactNode;
+  bg?: string
   href?: string;
+  tooltipText: string
 }
 
 declare interface IconCategoryProps {

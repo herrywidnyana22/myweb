@@ -35,39 +35,52 @@ export const navUtilsIcons = [
   },
 ];
 
-export const socials = [
+export const contacts = [
   {
-    id: 1,
-    text: "Whatsapp",
+    type: "contact",
+    title: "Whatsapp",
     icon: "/icons/whatsapp-white.png",
+    description: "083130000094",
     bg: "#075E54",
-    link: "https://wa.me/6283130000094",
-    tooltipText: 'Hubungi lewat Whatsapp'
+    href: "https://wa.me/6283130000094",
+    tooltipText: 'Hubungi via Whatsapp'
   },
   
   {
-    id: 2,
-    text: "Telegram",
+    type: "contact",
+    title: "Telegram",
+    description: "083130000094",
     icon: "/icons/telegram-white.png",
     bg: "#0088CC",
-    link: "https://t.me/herrywidnyana",
-    tooltipText: 'Hubungi lewat Telegram'
+    href: "https://t.me/herrywidnyana",
+    tooltipText: 'Hubungi via Telegram'
   },
   {
-    id: 3,
-    text: "Github",
+    type: "contact",
+    title: "Github",
+    description: "@herrywidnyana22",
     icon: "/icons/github.svg",
-    bg: "#000",
-    link: "https://github.com/herrywidnyana22",
+    bg: "#000000",
+    href: "https://github.com/herrywidnyana22",
     tooltipText: 'Lihat di Github'
   },
   {
-    id: 4,
-    text: "LinkedIn",
+    type: "contact",
+    title: "LinkedIn",
+    description: "@herrywidnyana",
     icon: "/icons/linkedin.svg",
     bg: "#0077B5",
-    link: "https://linkedin.com/in/herrywidnyana",
+    href: "https://linkedin.com/in/herrywidnyana",
     tooltipText: 'Lihat di LinkedIn'
+  },
+  {
+    type: "contact",
+    title: "Gmail",
+    description: "herrywidnyana@gmail.com",
+    icon: "/icons/mail.png",
+    bg: "#bfbfbf",
+    href: "mailto:herrywidnyana@gmail.com",
+    tooltipText: 'Hubungi via email'
   },
 ];
 
@@ -83,6 +96,7 @@ const PROJECT_LOCATION = {
     // ▶ Project 1
     {
       id: "project1",
+      type: "project",
       name: "MyDrive",
       icon: "/icons/folder.png",
       subIcon: "/icons/mydrive-logo.svg",
@@ -189,7 +203,8 @@ const PROJECT_LOCATION = {
     // ▶ Project 2
     {
       id: "project2",
-      name: "AI Agent Portfolio",
+      type: "project",
+      name: "MyWeb",
       icon: "/icons/folder.png",
       subIcon: "/icons/logo.webp",
       kind: "folder",
@@ -296,11 +311,12 @@ const PROJECT_LOCATION = {
     // ▶ Project 3
     {
       id: "project3",
+      type: "project",
       name: "Livenote",
       icon: "/icons/folder.png",
       subIcon: "/icons/livenote.svg",
       kind: "folder",
-      tooltipText: "AI Agent Portfolio",
+      tooltipText: "Liven Note",
       children: [
         {
           id: "livenote1",
@@ -401,6 +417,7 @@ const PROJECT_LOCATION = {
     // ▶ Project 4
     {
       id: "project4",
+      type: "project",
       name: "Real Chat",
       icon: "/icons/folder.png",
       subIcon: "/icons/realchat.png",
@@ -506,6 +523,7 @@ const PROJECT_LOCATION = {
     // ▶ Project 6
     {
       id: "project5",
+      type: "project",
       name: "My Plant",
       icon: "/icons/folder.png",
       subIcon: "/icons/myplant.png",
@@ -612,6 +630,7 @@ const PROJECT_LOCATION = {
     // ▶ Project 6
     {
       id: "project6",
+      type: "project",
       name: "Build VPS",
       icon: "/icons/folder.png",
       subIcon: "/icons/vps.png",
@@ -682,8 +701,10 @@ const PROJECT_LOCATION = {
     // ▶ Project 7
     {
       id: "project7",
+      type: "project",
       name: "Styling Project",
       icon: "/icons/css.png",
+      subIcon: "/icons/css.png",
       kind: "folder",
       tooltipText: "Styling Project",
       children: [
@@ -790,8 +811,7 @@ const RESUME_LOCATION = {
       icon: "/icons/pdf.png",
       kind: "file",
       fileType: "pdf",
-      // you can add `href` if you want to open a hosted resume
-      // href: "/your/resume/path.pdf",
+      href: "/files/resume.pdf",
     },
   ],
 };

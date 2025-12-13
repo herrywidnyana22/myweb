@@ -71,7 +71,7 @@ const ExplorerWindow = () => {
                         <div className="size-4 overflow-hidden rounded-md">
                             <Image
                                 src={activeLocation?.subIcon}
-                                alt={`${name} icon`}
+                                alt="icon"
                                 width={32}
                                 height={32}
                                 className="object-cover size-4"

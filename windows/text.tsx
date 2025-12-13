@@ -42,15 +42,13 @@ const TextWindow = () => {
 
             <div className="p-6 bg-white text-black max-w-3xl min-w-md">
                 { (image || imageUrl) && (
-                    <div className="mb-4 overflow-hidden rounded-md">
-                        <Image
-                            src={image || imageUrl}
-                            alt={name}
-                            width={320}
-                            height={180}
-                            className="object-cover w-full h-auto"
-                        />
-                    </div>
+                    <Image
+                        src={image || imageUrl}
+                        alt={name}
+                        width={180}
+                        height={180}
+                        className="object-cover rounded-4xl mb-4"
+                    />
                 ) }
 
                 {subtitle && (
