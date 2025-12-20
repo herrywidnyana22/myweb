@@ -2,9 +2,9 @@
 
 import { SwiperSlide, Swiper } from "swiper/react";
 import { EffectCreative, Pagination } from "swiper/modules";
-import { ExperienceCard } from './card/experienceCard';
 import { useData } from "@/hooks/useData";
 import { useAppStore } from "@/store/app";
+import { ExperienceCard } from "../card/experienceCard";
 
 export const Experiences = () => {
   const { data, isLoading, error } = useData<ExperienceProps>('experiences');

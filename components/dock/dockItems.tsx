@@ -2,11 +2,10 @@
 import Image from 'next/image';
 
 import { Profile } from '@/components/profile';
-import { Contact } from '@/components/contact';
-import { Projects } from '@/components/projects';
-import { Experiences } from '@/components/experiences';
-import { Education } from '@/components/education';
-
+import { Contact } from '@/components/widget/contact';
+import { Projects } from '@/components/widget/projects';
+import { Education } from '../widget/education';
+import { Experiences } from '../widget/experiences';
 
 export const dockItems: DockItemProps[] = 
 [

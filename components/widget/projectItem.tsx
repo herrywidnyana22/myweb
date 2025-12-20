@@ -2,11 +2,11 @@
 
 import Image from "next/image";
 import { Eye, Github } from "lucide-react";
-import { ProgressCircle } from "./charts/circleProgress";
-import { Icon } from "./icon";
-import { Tooltip } from "./tooltip";
 import { parseHighlight } from "@/lib/utils/parseHighlight";
 import { useAppStore } from "@/store/app";
+import { ProgressCircle } from "../charts/circleProgress";
+import { Tooltip } from "../tooltip";
+import { Icon } from "../icon";
 
 export const ProjectItem = (project: ProjectProps) => {
   const { ui } = useAppStore()

@@ -10,8 +10,11 @@ import { useAppStore } from "@/store/app";
 
 export const ChatHeader= ({ onClear }: ChatHeaderProps) => {
   
-  const { language, chatMode, ui, setIsMinimized } = useAppStore()
-  const onMinimize = useCallback(() => setIsMinimized((p) => !p), [setIsMinimized]);
+  const { language, chatMode, ui, setIsMinimized, setIsInputFocused } = useAppStore()
+  const onMinimize = useCallback(() => {
+    setIsMinimized((p) => !p)
+    setIsInputFocused(false)
+  },[setIsMinimized]);
   
   return (
     <div className="flex items-center justify-between p-3 border-b bg-gray-900/80">

@@ -2,9 +2,9 @@
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCreative, Pagination } from 'swiper/modules';
-import { ProjectItem } from './projectItem';
 import { useData } from '@/hooks/useData';
 import { useAppStore } from '@/store/app';
+import { ProjectItem } from './projectItem';
 
 export const Projects = () => {
   const { data, isLoading, error } = useData<ProjectProps>('projects');

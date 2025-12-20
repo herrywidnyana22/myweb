@@ -3,8 +3,8 @@
 import Image from 'next/image';
 
 import { useData } from '@/hooks/useData';
-import { Tooltip } from './tooltip';
 import { useAppStore } from '@/store/app';
+import { Tooltip } from '../tooltip';
 
 export const Education = () => {
   const { data, isLoading, error } = useData<EducationProps>('educations');
