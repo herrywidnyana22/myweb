@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { FONT_WEIGHTS } from "@/lib/constants";
 import { useAppStore } from "@/store/app";
 import { baseUIText } from "@/lib/constants/baseUIText";
@@ -68,41 +68,70 @@ export const setHoverText: SetHoverText = (container, type) => {
 export const Welcome = () => {
   const titleRef = useRef<HTMLDivElement | null>(null);
   const subTitleRef = useRef<HTMLDivElement | null>(null);
+  const sectionRef = useRef<HTMLDivElement | null>(null);
 
   const { ui, language } = useAppStore();
 
   const welcomeText = ui?.welcomeText ?? baseUIText.welcomeText;
   const welcomeTitle = ui?.welcomeTitle ?? baseUIText.welcomeTitle;
 
-  useGSAP(() => {
-    const cleanTitle = setHoverText(titleRef.current, "title");
-    const cleanSub = setHoverText(subTitleRef.current, "subtitle");
+  useGSAP(
+    () => {
+      const cleanTitle = setHoverText(titleRef.current, "title");
+      const cleanSub = setHoverText(subTitleRef.current, "subtitle");
 
-    return () => {
-      cleanTitle?.();
-      cleanSub?.();
+      return () => {
+        cleanTitle?.();
+        cleanSub?.();
+      };
+    },
+    [welcomeText, welcomeTitle, language]
+  );
+
+  // Auto-center scroll when content overflows
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const center = () => {
+      const visible = el.clientHeight;
+      const total = el.scrollHeight;
+      if (total > visible) {
+        el.scrollTop = Math.round((total - visible) / 2);
+      } else {
+        el.scrollTop = 0;
+      }
     };
-  }, [welcomeText, welcomeTitle, language])
+
+    requestAnimationFrame(center);
+    window.addEventListener("resize", center);
+    return () => window.removeEventListener("resize", center);
+  }, [welcomeText, welcomeTitle]);
 
   return (
-    <section className="text-gray-200 flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none max-sm:h-screen max-sm:w-full max-sm:px-10">
-      <p
-        ref={subTitleRef}
-        className="flex-1 text-[16px] text-center font-roboto text-gray-400"
-      >
-        <TextRender
-          text={welcomeText}
-          weight={100}
-          className="text-xl font-georama"
-        />
-      </p>
+    <section
+      ref={sectionRef}
+      className="fixed inset-0 flex items-center justify-center select-none overflow-auto px-4 sm:px-6 py-8"
+    >
+      <div className="w-full max-w-5xl text-center text-gray-200 flex flex-col justify-center gap-2 sm:gap-3 md:gap-4">
+        <p
+          ref={subTitleRef}
+          className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-400 leading-relaxed"
+        >
+          <TextRender
+            text={welcomeText}
+            weight={100}
+            className="inline-block text-xs sm:text-sm md:text-base lg:text-lg font-georama"
+          />
+        </p>
 
-      <h1 ref={titleRef} className="mt-7">
-        <TextRender
-          text={welcomeTitle}
-          className="text-7xl font-georama italic"
-        />
-      </h1>
+        <h1 ref={titleRef}>
+          <TextRender
+            text={welcomeTitle}
+            className="inline-block text-xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-georama italic leading-tight"
+          />
+        </h1>
+      </div>
     </section>
   );
 };

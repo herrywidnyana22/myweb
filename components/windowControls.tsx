@@ -15,9 +15,11 @@ export const WindowControls = ({ target }: WindowControlProps) => {
             return
         }
 
-        closeWindow(target)
-        setOpenedDockId(prev => ({ ...prev, [target]: !prev[target as string] }))
+        if(target === 'resume' || target === 'explorer'){
+            setOpenedDockId(prev => ({ ...prev, [target]: !prev[target as string] }))
+        }
 
+        closeWindow(target)
     }
     
     return (

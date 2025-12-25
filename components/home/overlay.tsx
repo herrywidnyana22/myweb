@@ -1,9 +1,7 @@
 import { useAppStore } from "@/store/app";
 
 export const Overlay = () => {
-    const { isInputFocused, isMinimized } = useAppStore();
-    console.log({isInputFocused})
-    console.log({isMinimized})
+    const { isInputFocused } = useAppStore()
     return ( 
         <>
             {(isInputFocused) && (

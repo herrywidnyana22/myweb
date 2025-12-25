@@ -1,6 +1,5 @@
 import { Chat } from "../chat/chat";
 import { Dock } from "../dock/dock";
-import { PageTitle } from "./pageTitle";
 import { Widget } from "../widget";
 
 export const Home = () => {
@@ -12,7 +11,6 @@ export const Home = () => {
                 max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto
             "
         >
-            {/* <PageTitle/> */}
             <Chat />
             <Widget />
             <Dock />

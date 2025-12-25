@@ -57,7 +57,8 @@ const ExplorerWindow = () => {
 
     return ( 
         <div className="h-[50vh] shadow-2xl drop-shadow-2xl overflow-hidden rounded-xl">
-            <div className="relative flex items-center px-4 py-3 bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400">
+            {/* HEADER */}
+            <div className="window-header relative flex items-center px-4 py-3 bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400 cursor-grab active:cursor-grabbing">
   
                 {/* Left */}
                 <div className="flex items-center gap-2 z-10">
@@ -90,8 +91,10 @@ const ExplorerWindow = () => {
 
             </div>
 
+            {/* BODY */}         
             <div className="bg-white flex h-full">
-                <div className="w-48 bg-gray-50 border-r border-gray-200 flex flex-col p-5 space-y-3">
+                {/* LEFT PANEL */}         
+                <div className="scrollable-panel w-48 bg-gray-50 border-r border-gray-200 flex flex-col p-5 space-y-3 overflow-y-auto">
                     <Menu 
                         title="Favorite"
                         items={Object.values(locations)} 
@@ -105,7 +108,9 @@ const ExplorerWindow = () => {
                         onClick={(item) => setActiveLocation(item)} 
                     />
                 </div>
-                <div className="w-[50vw] bg-white relative overflow-auto p-5">
+
+                {/* RIGHT PANEL / CONTENT */}
+                <div className="scrollable-panel w-[50vw] bg-white relative overflow-y-auto p-5">
                     <div className="flex flex-wrap items-start content-start gap-4">
                         {activeLocation?.children.map((item: LocationValue) => (
                             <Tooltip key={item.id} label={item.tooltipText ?? item.name}>

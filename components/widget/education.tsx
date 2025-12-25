@@ -58,7 +58,7 @@ export const Education = () => {
                 className="
                   relative flex items-center justify-center 
                   size-14 sm:size-16 
-                  bg-white rounded-full border-2 border-orange-400 
+                  bg-white rounded-2xl border-2 border-orange-400 
                   shadow-md
                 "
               >

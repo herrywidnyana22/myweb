@@ -44,7 +44,7 @@ export const TopBar = () => {
                         </li>
                     ))}
                 </ul>
-                <time className="text-sm font-medium text-black">{dayjs().format('ddd D MMM h:mm A')}</time>
+                <time className="text-sm font-medium text-black">{dayjs().format('ddd, D MMM h:mm A')}</time>
             </div>
         </nav>
     );

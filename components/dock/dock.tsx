@@ -17,7 +17,7 @@ export const Dock = () => {
   const dockRef = useRef<HTMLDivElement>(null);
   const iconRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const { windows, openWindow, minimizeWindow, restoreWindow } = useWindowStore();
-  const { openedDockId, setOpenedDockId, setTargetedDockId, isInputFocused } = useAppStore();
+  const { openedDockId, setOpenedDockId, setTargetedDockId, isInputFocused, setIsInputFocused, setIsMinimized } = useAppStore();
 
   useGSAP(
     () => {
@@ -73,6 +73,9 @@ export const Dock = () => {
   );
 
   const onDockClick = (id: string) => {
+    setIsInputFocused(false)
+    setIsMinimized(true)
+    
     const button = iconRefs.current[id]
     const rect = button?.getBoundingClientRect()
 

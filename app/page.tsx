@@ -25,6 +25,7 @@ export default function Page() {
     <main className='relative min-h-screen w-full overflow-x-hidden overflow-y-auto'>
       <TopBar/>
       <Welcome/>
+
       <div className="
         px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64 
         py-4 sm:py-10
@@ -39,9 +40,8 @@ export default function Page() {
         <Explorer/>
         <BackgroundHome/>
         <Overlay/>
-        {/* <PageTitle/> */}
         <Home/>
       </div>
     </main>
-  );
+  )
 }

@@ -19,7 +19,7 @@ export const dockItems: DockItemProps[] =
         alt='icon'
         height={128}
         width={128}
-        className='size-10 sm:size-12 md:size-14 rounded-full object-cover border border-white/30'
+        className='size-10 sm:size-12 md:size-14 rounded-2xl object-cover border border-white/30'
       />
     ),
     className:
@@ -35,7 +35,7 @@ export const dockItems: DockItemProps[] =
         alt='icon'
         height={128}
         width={128}
-        className='size-10 sm:size-12 md:size-14 object-cover'
+        className='size-13 sm:size-15 md:size-17 object-cover'
       />
     ),
 
@@ -48,7 +48,7 @@ export const dockItems: DockItemProps[] =
     children: <Education />,
     icon: (
       <Image
-        src={'/icons/graduation.webp'}
+        src={'/icons/education.svg'}
         alt='icon'
         height={128}
         width={128}
@@ -64,7 +64,7 @@ export const dockItems: DockItemProps[] =
     children: <Experiences/>,
     icon: (
       <Image
-        src={'/icons/experience.webp'}
+        src={'/icons/experience.svg'}
         alt='icon'
         height={128}
         width={128}
@@ -80,7 +80,7 @@ export const dockItems: DockItemProps[] =
     children: <Projects/>,
     icon: (
       <Image
-        src={'/icons/project3d.webp'}
+        src={'/icons/project.svg'}
         alt='icon'
         height={128}
         width={128}

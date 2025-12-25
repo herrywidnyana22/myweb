@@ -19,7 +19,7 @@ const ProjectInfoWindow = () => {
 
     return (
         <div className='rounded-xl shadow-2xl drop-shadow-2xl overflow-hidden'>
-            <div  className="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400">
+            <div  className="window-header flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400 cursor-grab active:cursor-grabbing">
                 <div className="w-24">
                     <WindowControls target={'projectInfo'} />
                 </div>
