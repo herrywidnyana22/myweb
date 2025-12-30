@@ -1,0 +1,216 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum JenisKelamin {
+  PRIA
+  WANITA
+}
+
+enum SectionType {
+  ABOUT
+  RESUME
+}
+
+enum ItemKind {
+  FILE
+  CONTACT
+}
+
+enum ItemType {
+  PROJECT_INFO
+  TECHSTACK
+  FIG
+  URL
+  TXT
+  IMG
+  PDF
+  OTHER
+  CONTACT
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String
+  icon      String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  contacts  Contact[]
+  profiles  Profile[]
+  educations Education[]
+  experiences Experience[]
+}
+
+model Contact {
+  id          String    @id @default(uuid())
+  title       String
+  tooltipText String?
+  icon        String?
+  bgColor     String?
+  contactURL  String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id])
+}
+
+model Profile {
+  id          String    @id @default(uuid())
+  name       String
+  fullName String
+  jenisKelamin        JenisKelamin
+  role     String
+  quote  String
+  photoURL   String?
+  birthDate  DateTime?
+  birthPlace String?
+  experienceYears Int?
+
+  description String?
+
+  address    String?
+  lat  Float?
+  lng Float?
+  mapURL    String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id])
+
+  items           ProfileItem[]
+}
+
+model Education {
+  id          String    @id @default(uuid())
+  school      String
+  major      String
+  startYear Int
+  endYear   Int
+  schoolLogo       String?
+  icon  String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+   categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id])
+}
+
+model Experience {
+  id          String    @id @default(uuid())
+  company      String
+  role      String
+  location   String
+  start String
+  end   String
+  jobdesk       String?
+  description       String?
+  icon  String?
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+   categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id])
+}
+
+model ProfileItem {
+  id           String     @id @default(uuid())
+
+  // ownership
+  profileId    String
+  profile      Profile   @relation(fields: [profileId], references: [id])
+
+  // explorer structure
+  name         String
+  kind         ItemKind
+  fileType     ItemType?
+
+  parentId     String?
+  parent       ProfileItem? @relation("ProfileItemTree", fields: [parentId], references: [id])
+  children     ProfileItem[] @relation("ProfileItemTree")
+
+  // ui / content
+  icon         String?
+  imageUrl     String?
+  href         String?
+  subtitle     String?
+  description  String[]   @db.Text
+  position     String?
+  tooltipText  String?
+
+  extra        Json?
+
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+
+
+model Project {
+  id          String         @id @default(uuid())
+  name        String
+  icon        String
+  subIcon     String?
+  tooltipText String?
+
+  entries     ProjectEntry[]
+
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+
+model ProjectEntry {
+  id           String        @id @default(uuid())
+
+  // struktur project
+  name         String
+  kind         ItemKind
+  fileType         ItemType?
+
+  parentId     String?
+  parent       ProjectEntry? @relation("ProjectEntryTree", fields: [parentId], references: [id])
+  children     ProjectEntry[]@relation("ProjectEntryTree")
+
+  // relasi ke project
+  projectId    String
+  project      Project       @relation(fields: [projectId], references: [id])
+
+  // UI & metadata
+  icon         String?
+  subIcon      String?
+  tooltipText  String?
+
+  // konten
+  href         String?
+  imageUrl     String?
+  position     String?
+  subtitle     String?
+  progress     Int?
+
+  description  String[]      @db.Text
+  techStack    Json?
+  extra        Json?
+
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+
+
