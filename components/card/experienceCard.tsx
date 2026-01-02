@@ -61,7 +61,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
 
           </div>
           <span className="text-[10px] sm:text-xs font-semibold text-gray-400 uppercase whitespace-nowrap">
-            {exp.year}
+            {exp.start} - {exp.end}
           </span>
         </div>
 

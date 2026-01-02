@@ -62,18 +62,18 @@ export const Education = () => {
                   shadow-md
                 "
               >
-                {typeof edu.icon === 'string' && (
+                {typeof edu.schoolLogo === 'string' && (
                   <Image
-                    src={edu.icon}
+                    src={edu.schoolLogo}
                     alt={edu.school}
                     width={36}
                     height={36}
                     className="object-contain size-8 sm:size-10"
                   />
                 )}
-                {typeof edu.subIcon === 'string' && (
+                {typeof edu.icon === 'string' && (
                   <Image
-                    src={edu.subIcon}
+                    src={edu.icon}
                     alt="graduation"
                     width={16}
                     height={16}
@@ -96,7 +96,7 @@ export const Education = () => {
                   {edu.major}
                 </p>
                 <p className="text-neutral-400 text-[10px] sm:text-xs mt-0.5">
-                  {edu.year}
+                  {edu.startYear} - {edu.endYear}
                 </p>
               </div>
             </div>

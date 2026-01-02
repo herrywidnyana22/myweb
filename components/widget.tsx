@@ -3,10 +3,7 @@ import { useAppStore } from "@/store/app";
 import { dockItems } from "./dock/dockItems";
 import { WidgetItem } from "./widget/widgetItem";
 
-type Props = {
- 
-}
-export const Widget = ({}: Props) => {
+export const Widget = () => {
   const { openedDockId, targetedDockId } = useAppStore()
 
   return ( 

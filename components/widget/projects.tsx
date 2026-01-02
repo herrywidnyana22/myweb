@@ -2,14 +2,48 @@
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCreative, Pagination } from 'swiper/modules';
-import { useData } from '@/hooks/useData';
 import { useAppStore } from '@/store/app';
 import { ProjectItem } from './projectItem';
+import { useEffect, useState } from 'react';
+import { readCache, writeCache } from '@/lib/cache';
 
 export const Projects = () => {
-  const { data, isLoading, error } = useData<ProjectProps>('projects');
-  const { ui } = useAppStore()
-  console.log({data})
+  const { ui } = useAppStore();
+  const [data, setData] = useState<ProjectProps[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+   console.log({data})
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Check cache first
+        const cachedProjects = readCache<ProjectProps[]>('projects_cache');
+        if (cachedProjects) {
+          setData(cachedProjects);
+          setIsLoading(false);
+          return;
+        }
+
+        // Fetch from API if not cached
+        const response = await fetch('/api/projects');
+        if (response.ok) {
+          const projects = (await response.json()) as ProjectProps[];
+          setData(projects);
+          writeCache('projects_cache', projects);
+        } else {
+          setError('Failed to fetch projects');
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
   
   if (isLoading) {
     return (

@@ -1,4 +1,5 @@
 import { LANGUAGE_COUNTRY_MAP } from "@/lib/constants/languageCountry";
+import { DEFAULT_FILE_TYPE_ICONS } from "@/lib/constants";
 
 export function safeParseJSON(value: string | undefined) {
   if (!value) return [];
@@ -77,6 +78,26 @@ export function languageToFlagCode(lang: string): string {
 
   // Fallback → pakai 2 huruf pertama
   return lang.slice(0, 2);
+}
+
+/**
+ * Get the default icon URL for a given file type
+ * Returns empty string if file type is not found
+ */
+export function getDefaultIconForFileType(fileType?: string): string {
+  if (!fileType) return '';
+  const iconUrl = DEFAULT_FILE_TYPE_ICONS[fileType];
+  return iconUrl || '';
+}
+
+/**
+ * Get effective icon URL for a project entry
+ * Uses provided icon, falls back to default icon for file type
+ */
+export function getEffectiveIcon(icon?: string | null, fileType?: string): string | null {
+  if (icon) return icon;
+  const defaultIcon = getDefaultIconForFileType(fileType);
+  return defaultIcon || null;
 }
 
 

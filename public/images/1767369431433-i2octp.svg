@@ -1,0 +1,32 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dock-style rounded background -->
+  <rect x="4" y="4" width="120" height="120" rx="28" ry="28" fill="url(#bg)"></rect>
+
+  <!-- Compass outer circle -->
+  <circle cx="64" cy="66" r="26" fill="none" stroke="#FFFFFF" stroke-width="4"></circle>
+
+  <!-- Compass needle -->
+  <polygon points="64 46 58 70 64 66 70 70" fill="#FFFFFF"></polygon>
+
+  <!-- Inner dot -->
+  <circle cx="64" cy="66" r="4" fill="#FFFFFF"></circle>
+
+  <!-- Experience spark -->
+  <path d="M64 34
+       L66 40
+       L72 42
+       L66 44
+       L64 50
+       L62 44
+       L56 42
+       L62 40
+       Z" fill="#FACC15"></path>
+
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FB923C"></stop>
+      <stop offset="100%" stop-color="#F97316"></stop>
+    </linearGradient>
+  </defs>
+</svg>

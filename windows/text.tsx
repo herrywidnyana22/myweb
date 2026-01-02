@@ -5,6 +5,7 @@ import useWindowStore from '@/store/window'
 
 import { WindowWrapper } from '@/hoc/windowWrapper'
 import { WindowControls } from '@/components/windowControls'
+import { getEffectiveIcon } from '@/lib/utils'
 
 const TextWindow = () => {
     const { windows } = useWindowStore()
@@ -12,7 +13,8 @@ const TextWindow = () => {
 
     if(!data) return null
 
-    const { name, image, imageUrl, icon, subtitle, description } = data
+    const { name, image, imageUrl, icon, subtitle, description, fileType } = data
+    const effectiveIcon = getEffectiveIcon(icon, fileType)
 
     return (
         <div className='rounded-xl shadow-2xl drop-shadow-2xl overflow-hidden'>
@@ -22,10 +24,10 @@ const TextWindow = () => {
                 </div>
 
                 <div className="flex items-center gap-1">
-                    {icon && (
+                    {effectiveIcon && (
                         <div className="size-4 overflow-hidden rounded-md">
                             <Image
-                                src={icon}
+                                src={effectiveIcon}
                                 alt={`${name} icon`}
                                 width={32}
                                 height={32}

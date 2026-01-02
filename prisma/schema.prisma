@@ -25,7 +25,7 @@ enum SectionType {
 
 enum ItemKind {
   FILE
-  CONTACT
+  FOLDER
 }
 
 enum ItemType {
@@ -51,11 +51,13 @@ model Category {
   profiles  Profile[]
   educations Education[]
   experiences Experience[]
+  projects  Project[]
 }
 
 model Contact {
   id          String    @id @default(uuid())
   title       String
+  description String
   tooltipText String?
   icon        String?
   bgColor     String?
@@ -119,7 +121,7 @@ model Experience {
   start String
   end   String
   jobdesk       String?
-  description       String?
+  description  String?      @db.Text
   icon  String?
 
   createdAt   DateTime  @default(now())
@@ -150,8 +152,7 @@ model ProfileItem {
   imageUrl     String?
   href         String?
   subtitle     String?
-  description  String[]   @db.Text
-  position     String?
+  description  String   @db.Text
   tooltipText  String?
 
   extra        Json?
@@ -160,19 +161,25 @@ model ProfileItem {
   updatedAt    DateTime   @updatedAt
 }
 
-
-
 model Project {
   id          String         @id @default(uuid())
   name        String
+  description  String      @db.Text
+  progressValue Int
+  demoURL    String?
+  repoURL    String?
   icon        String
   subIcon     String?
   tooltipText String?
+  techStack   Json?
 
   entries     ProjectEntry[]
 
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
+
+  categoryId  String
+  category    Category  @relation(fields: [categoryId], references: [id])
 }
 
 
@@ -200,11 +207,10 @@ model ProjectEntry {
   // konten
   href         String?
   imageUrl     String?
-  position     String?
   subtitle     String?
   progress     Int?
 
-  description  String[]      @db.Text
+  description  String?      @db.Text
   techStack    Json?
   extra        Json?
 

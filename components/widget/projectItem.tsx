@@ -5,7 +5,6 @@ import { Eye, Github } from "lucide-react";
 import { parseHighlight } from "@/lib/utils/parseHighlight";
 import { useAppStore } from "@/store/app";
 import { ProgressCircle } from "../charts/circleProgress";
-import { Tooltip } from "../tooltip";
 import { Icon } from "../icon";
 
 export const ProjectItem = (project: ProjectProps) => {
@@ -25,7 +24,7 @@ export const ProjectItem = (project: ProjectProps) => {
       <div className="flex items-center gap-2 sm:gap-3">
         <div className="rounded-full size-10 sm:size-12 flex items-center justify-center shrink-0">
           <Image
-            src={project.icon}
+            src={project.icon as string}
             alt="icon"
             width={40}
             height={40}
@@ -40,7 +39,7 @@ export const ProjectItem = (project: ProjectProps) => {
             leading-snug sm:leading-tight
           "
         >
-          {parseHighlight(project.title || '')}
+          {parseHighlight(project.name || '')}
         </h3>
       </div>
 
@@ -57,26 +56,26 @@ export const ProjectItem = (project: ProjectProps) => {
         </div>
 
         <div className="flex items-center justify-between">
-          {/* Tech stack icons */}
+        {/* Tech stack icons */}
           <div className="mt-4 flex flex-wrap gap-1.5 sm:gap-2">
-            {project.iconCategory.map((tech, i) => (
-              <Tooltip key={i} label={tech.label}>
+            {project.techStack && project.techStack.map((tech, i) => (
                 <Icon
-                  src={tech.src}
+                  key={i}
+                  tooltipLabel={tech.label}
+                  src={tech.techIcon}
                   size={14}
                   className="rounded-full bg-gray-900/10 sm:bg-gray-900/20 p-0.5 sm:p-1 border border-white/20"
                 />
-              </Tooltip>
             ))}
             
           </div>
           {/* Buttons */}
           <div className="mt-4 sm:mt-5 flex gap-2 justify-end flex-wrap">
-            {project.githubLink && typeof project.githubLink === "string" && (
+            {project.repoURL && typeof project.repoURL === "string" && (
               <Icon
                 tooltipLabel={ui.viewCode}
                 textLabel={ui.source}
-                href={project.githubLink}
+                href={project.repoURL}
                 IconComponent={Github}
                 size={14}
                 className="
@@ -88,11 +87,11 @@ export const ProjectItem = (project: ProjectProps) => {
               />
               )}
 
-            {project.demoLink && typeof project.demoLink === "string" && (
+            {project.demoURL && typeof project.demoURL === "string" && (
               <Icon
                 tooltipLabel={ui.viewDemo}
                 textLabel={ui.preview}
-                href={project.demoLink}
+                href={project.demoURL}
                 IconComponent={Eye}
                 size={14}
                 className="

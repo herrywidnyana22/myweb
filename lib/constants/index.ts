@@ -1,3 +1,16 @@
+// Default icons for ProjectEntry file types
+export const DEFAULT_FILE_TYPE_ICONS: Record<string, string> = {
+  PROJECT_INFO: "/icons/txt.png",
+  TECHSTACK: "/icons/terminal.png",
+  FIG: "/icons/figma.png",
+  URL: "/icons/safari.png",
+  TXT: "/icons/txt.png",
+  IMG: "/icons/image.png",
+  PDF: "/icons/pdf.png",
+  OTHER: "/icons/plain.png",
+  CONTACT: "/icons/contact.png",
+};
+
 export const navLinks = [
   {
     id: 1,

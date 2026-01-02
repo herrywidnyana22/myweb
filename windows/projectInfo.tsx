@@ -8,6 +8,7 @@ import { WindowControls } from '@/components/windowControls'
 import { Icon } from '@/components/icon'
 import { ProgressCircle } from '@/components/charts/circleProgress'
 import { BarProgressChart } from '@/components/charts/barProgress'
+import { getEffectiveIcon } from '@/lib/utils'
 
 const ProjectInfoWindow = () => {
     const { windows } = useWindowStore()
@@ -15,7 +16,8 @@ const ProjectInfoWindow = () => {
 
     if(!data) return null
 
-    const { projectName, name, techStack, projectIcon, icon, description, progressValue } = data
+    const { projectName, name, techStack, projectIcon, icon, description, progressValue, fileType } = data
+    const effectiveIcon = getEffectiveIcon(icon, fileType)
 
     return (
         <div className='rounded-xl shadow-2xl drop-shadow-2xl overflow-hidden'>
@@ -25,10 +27,10 @@ const ProjectInfoWindow = () => {
                 </div>
 
                 <div className="flex items-center gap-1">
-                    {icon && (
+                    {effectiveIcon && (
                         <div className="size-4 overflow-hidden">
                             <Image
-                                src={icon}
+                                src={effectiveIcon}
                                 alt={`${name} icon`}
                                 width={32}
                                 height={32}

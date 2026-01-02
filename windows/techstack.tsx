@@ -6,6 +6,7 @@ import useWindowStore from "@/store/window";
 import { WindowControls } from "@/components/windowControls";
 import { WindowWrapper } from "@/hoc/windowWrapper";
 import { Check, Flag } from "lucide-react";
+import { getEffectiveIcon } from "@/lib/utils";
 
 const TechstackWindow = () => {
     const { windows } = useWindowStore()
@@ -13,8 +14,9 @@ const TechstackWindow = () => {
 
     if(!data) return null
 
-    const { name, projectName, icon, techStack } = data
+    const { name, projectName, icon, techStack, fileType } = data
     const dataLength = techStack.length
+    const effectiveIcon = getEffectiveIcon(icon, fileType)
 
     return (
         <div className="rounded-xl shadow-2xl drop-shadow-2xl overflow-hidden font-mono">
@@ -24,10 +26,10 @@ const TechstackWindow = () => {
                 </div>
 
                 <div className="flex items-center gap-1">
-                    {icon && (
+                    {effectiveIcon && (
                         <div className="size-4 overflow-hidden rounded-md">
                             <Image
-                                src={icon}
+                                src={effectiveIcon}
                                 alt={`${name} icon`}
                                 width={32}
                                 height={32}

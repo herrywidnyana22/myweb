@@ -108,6 +108,18 @@ declare interface ActionCardProps {
   targetLanguage?: UILanguage;
   message?: string; 
 }
+
+
+declare interface ProfileProps {
+  name: string;
+  fullName: string;
+  role: string;
+  summary: string;
+  image: string;
+  birth_place: string;
+  birth_date: string
+}
+
 declare interface AddressProps {
   address: string;
   lat: number | string;
@@ -115,11 +127,13 @@ declare interface AddressProps {
   mapUrl?: string;
 }
 
+
 declare interface ExperienceProps {
   company: string;
   role: string;
   location: string;
-  year: string;
+  start: string;
+  end: string;
   jobdesk: string;
   description: string;
   icon: string | React.ReactNode;
@@ -128,32 +142,36 @@ declare interface ExperienceProps {
 declare interface EducationProps {
   school: string;
   major: string;
-  year: string;
+  startYear: number;
+  endYear: number;
   icon?: string | React.ReactNode;
-  subIcon?: string | React.ReactNode;
+  schoolLogo?: string | React.ReactNode;
 }
 
 declare interface ProjectProps {
-  title: string;
+  name: string;
   description: string;
-  icon: string;
+  icon: string | React.ReactNode;
+  subicon?: string | React.ReactNode;
+  tooltipText?: string;
   progressValue: number;
-  demoLink?: string;
-  githubLink: string;
-  iconCategory: IconCategoryProps[];
+  demoURL?: string;
+  repoURL: string;
+  techStack: TechStackProps[];
 }
 
 declare interface ContactProps {
+  id?: string;
   title: string;
   description: string;
   icon?: string | React.ReactNode;
-  bg?: string
+  bgColor?: string
   href?: string;
   tooltipText: string
 }
 
-declare interface IconCategoryProps {
-  src: string;
+declare interface TechStackProps {
+  techIcon: string;
   label: string;
 }
 
@@ -169,16 +187,6 @@ declare interface BuildPromptProps {
   language: UILanguage,
   chatMode: ChatMode
   action: Action
-}
-
-declare interface ProfileProps {
-  name: string;
-  fullName: string;
-  role: string;
-  summary: string;
-  image: string;
-  birth_place: string;
-  birth_date: string
 }
 
 declare interface DockItemProps {
@@ -367,7 +375,209 @@ declare type FontWeightMap = Record<string, FontWeightConfig>;
 
 declare type HoverTextType = keyof FontWeightMap;
 
-declare interface techstackProps {
-
+declare interface FormInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  required?: boolean;
+  error?: string;
 }
+
+declare interface ModalHeaderProps {
+  title: string;
+  onClose: () => void;
+  disabled?: boolean;
+}
+
+declare interface CategoryModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (category: Category) => Promise<void>;
+  category?: Category;
+}
+
+declare interface ContactModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (contact: Contact) => Promise<void>;
+  contact?: Contact;
+  categories?: Array<{ id: string; name: string }>;
+}
+
+declare interface ProfileModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (profile: Profile) => Promise<void>;
+  profile?: Profile;
+  categories?: Array<{ id: string; name: string }>;
+}
+
+declare interface EducationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (education: Education) => Promise<void>;
+  education?: Education;
+  categories?: Array<{ id: string; name: string }>;
+}
+
+declare interface FormImageUploadProps {
+  label?: string;
+  imagePreview: string | null;
+  isUploading: boolean;
+  onUpload: (file: File) => Promise<void>;
+  onRemove: () => void;
+  error?: string;
+  disabled?: boolean;
+}
+
+declare interface FormTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  label?: string;
+  required?: boolean;
+  error?: string;
+}
+
+declare interface Category {
+  id: string;
+  name: string;
+  icon?: string;
+}
+
+declare interface Contact {
+  id: string;
+  title: string;
+  description: string;
+  tooltipText?: string;
+  icon?: string;
+  bgColor?: string;
+  contactURL?: string;
+  categoryId: string;
+  category?: { id: string; name: string };
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+declare interface Profile {
+  id: string;
+  name: string;
+  fullName: string;
+  jenisKelamin: 'PRIA' | 'WANITA';
+  role: string;
+  quote: string;
+  photoURL?: string;
+  birthDate?: string;
+  birthPlace?: string;
+  experienceYears?: number;
+  description?: string;
+  address?: string;
+  lat?: number;
+  lng?: number;
+  mapURL?: string;
+  categoryId: string;
+  category?: { id: string; name: string };
+}
+
+declare interface Education {
+  id: string;
+  school: string;
+  major: string;
+  startYear: number;
+  endYear: number;
+  schoolLogo?: string;
+  icon?: string;
+  categoryId: string;
+  category?: { id: string; name: string };
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+declare interface Experience {
+  id: string;
+  company: string;
+  role: string;
+  location: string;
+  start: string;
+  end: string;
+  jobdesk?: string;
+  description?: string;
+  icon?: string;
+  categoryId: string;
+  category?: { id: string; name: string };
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+declare interface ExperienceModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (experience: Experience) => Promise<void>;
+  experience?: Experience;
+  categories?: Array<{ id: string; name: string }>;
+}
+
+declare interface ProjectEntry {
+  id: string;
+  name: string;
+  kind: 'FILE' | 'CONTACT';
+  fileType?: 'PROJECT_INFO' | 'TECHSTACK' | 'FIG' | 'URL' | 'TXT' | 'IMG' | 'PDF' | 'OTHER' | 'CONTACT';
+  parentId?: string;
+  projectId: string;
+  icon?: string;
+  subIcon?: string;
+  tooltipText?: string;
+  href?: string;
+  imageUrl?: string;
+  subtitle?: string;
+  progress?: number;
+  description?: string;
+  techStack?: any;
+  extra?: any;
+  createdAt?: string;
+  updatedAt?: string;
+  children?: ProjectEntry[];
+}
+
+declare interface Project {
+  id: string;
+  name: string;
+  icon: string;
+  subIcon?: string;
+  tooltipText?: string;
+  description?: string;
+  progressValue?: number;
+  demoURL?: string;
+  repoURL?: string;
+  techStack?: Array<{ techIcon: string; label: string }> | null;
+  categoryId: string;
+  category?: { id: string; name: string };
+  entries?: ProjectEntry[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+declare interface EducationDashboardProps {
+    categories: Category[];
+    data: Education[];
+    setData: Dispatch<SetStateAction<Education[]>>;
+    isDataLoading?: boolean;
+}
+
+interface ExperienceDashboardProps {
+    categories: Category[];
+    data: Experience[];
+    setData: Dispatch<SetStateAction<Experience[]>>;
+    isDataLoading?: boolean;
+}
+
+interface CategoryDashboardProps {
+    data: Category[];
+    setData: Dispatch<SetStateAction<Category[]>>;
+    isDataLoading?: boolean;
+}
+
+declare interface ProjectModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (project: Project) => Promise<void>;
+  project?: Project;
+  categories?: Array<{ id: string; name: string }>;
+}
+
 

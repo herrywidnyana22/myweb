@@ -1,7 +1,7 @@
 
 import Image from 'next/image';
 
-import { Profile } from '@/components/profile';
+import { Profile } from '@/components/widget/profile';
 import { Contact } from '@/components/widget/contact';
 import { Projects } from '@/components/widget/projects';
 import { Education } from '../widget/education';

@@ -2,13 +2,91 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { Tooltip } from '../tooltip';
-import { useData } from '@/hooks/useData';
 import { useAppStore } from '@/store/app';
 
+const CACHE_KEY = 'contacts_cache';
+const CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour
+
+interface CacheEntry<T> {
+  data: T[];
+  timestamp: number;
+}
+
+function readCache<T>(key: string): T[] | null {
+  try {
+    const cached = localStorage.getItem(key);
+    if (!cached) return null;
+
+    const entry: CacheEntry<T> = JSON.parse(cached);
+    const isExpired = Date.now() - entry.timestamp > CACHE_TTL_MS;
+
+    if (isExpired) {
+      localStorage.removeItem(key);
+      return null;
+    }
+
+    return entry.data;
+  } catch (err) {
+    console.error(`Failed to read cache "${key}":`, err);
+    return null;
+  }
+}
+
+function writeCache<T>(key: string, data: T[]): void {
+  try {
+    const entry: CacheEntry<T> = {
+      data,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem(key, JSON.stringify(entry));
+  } catch (err) {
+    console.error(`Failed to write cache "${key}":`, err);
+  }
+}
+
 export const Contact = () => {
-  const { ui } = useAppStore()
-  const { data, isLoading, error } = useData<ContactProps>('contacts');
+  const { ui } = useAppStore();
+  const [data, setData] = useState<ContactProps[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        setIsLoading(true);
+
+        // Check cache first
+        const cached = readCache<ContactProps>(CACHE_KEY);
+        if (cached) {
+          setData(cached);
+          setIsLoading(false);
+          return;
+        }
+
+        // Fetch from API if no cache
+        const response = await fetch('/api/contacts');
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch contacts');
+        }
+
+        const contacts = (await response.json()) as ContactProps[];
+        setData(contacts);
+        
+        // Store in cache
+        writeCache(CACHE_KEY, contacts);
+      } catch (err) {
+        console.error('Error fetching contacts:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load contacts');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchContacts();
+  }, []);
 
   if (isLoading) {
     return (
@@ -26,16 +104,16 @@ export const Contact = () => {
   }
 
   if (error) {
-    return <p className="text-center text-red-400 p-4">{ui.dataLoadFailed}</p>;
+    return <p className="text-center text-error p-4">{ui.dataLoadFailed}</p>;
   }
 
   return (
     <div className="grid grid-cols-2 place-items-center gap-3 p-3 sm:p-6">
       {data?.map((item, i) => (
         <Tooltip 
-          key={i} 
+          key={item.id || i}
           label={item.description}
-          bgColor={item.bg}
+          bgColor={item.bgColor}
           textColor="text-white"
         >
           <Link
@@ -46,7 +124,7 @@ export const Contact = () => {
           >
             <div className="relative flex flex-col gap-1 items-center justify-center transition-transform duration-300 hover:scale-105 sm:hover:scale-110 cursor-pointer">
               <div 
-                style={{ backgroundColor: item.bg }}
+                style={{ backgroundColor: item.bgColor }}
                 className="flex items-center justify-center p-1.5 sm:p-2 rounded-xl size-13 sm:size-12 shadow-sm"
               >
                 {item.icon && typeof item.icon === 'string' && (
