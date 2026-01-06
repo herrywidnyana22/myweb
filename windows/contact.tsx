@@ -9,7 +9,7 @@ import { Tooltip } from "@/components/tooltip";
 import { useLocalizedText } from "@/hooks/useLocalizedText";
 
 const ContactWindow = () => {
-    const { contacts, isLoading } = useDataStore();
+    const { contacts } = useDataStore();
     const { getText } = useLocalizedText();
 
     if(!contacts) return null
@@ -55,7 +55,7 @@ const ContactWindow = () => {
                 </p>
 
                 <ul className="flex items-center gap-3">
-                    {contacts.map((contact, i) => (
+                    {(contacts || []).map((contact, i) => (
                         <Tooltip 
                             key={i} 
                             label={contact.tooltipText ? getText(contact.tooltipText) : contact.title}

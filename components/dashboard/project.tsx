@@ -276,13 +276,13 @@ export const Project = ({isDataLoading = false}: ProjectDashboardProps) => {
                     {[1, 2].map((i) => (
                         <div key={i} className="bg-gray-600 rounded p-4 border border-gray-500 animate-pulse">
                             <div className="flex items-center gap-3 mb-3">
-                                <div className="w-10 h-10 bg-gray-500 rounded-full" />
+                                <div className="size-10 bg-gray-500 rounded-full" />
                                 <div className="h-5 w-32 bg-gray-500 rounded" />
                             </div>
                             <div className="ml-13 space-y-2">
                                 {[1, 2, 3].map((j) => (
                                     <div key={j} className="flex items-center gap-2">
-                                        <div className="w-6 h-6 bg-gray-500 rounded" />
+                                        <div className="size-6 bg-gray-500 rounded" />
                                         <div className="h-4 w-24 bg-gray-500 rounded" />
                                     </div>
                                 ))}

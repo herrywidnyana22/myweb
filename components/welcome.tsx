@@ -2,7 +2,6 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useRef, useEffect } from "react";
 import { FONT_WEIGHTS } from "@/lib/constants";
-import { useAppStore } from "@/store/app";
 import { useLocalizedText } from "@/hooks/useLocalizedText";
 
 const TextRender = ({ text = "", className, weight = 400 }: TextRenderProps) => {

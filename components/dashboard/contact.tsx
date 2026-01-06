@@ -145,7 +145,7 @@ export const Contact = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
                     <p className="text-gray-400 text-sm">No contacts found. Click "Add" to create one.</p>
                 ) : (
                     <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {contacts.map((contact) => (
+                    {(contacts || []).map((contact) => (
                         <div key={contact.id} className="group bg-gray-600 rounded p-3 border border-gray-500 flex justify-between items-center">
                             <div className='flex items-center gap-2'>
                                 {contact.icon &&(

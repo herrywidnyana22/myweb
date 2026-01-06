@@ -23,7 +23,7 @@ export const FlagIcon = ({ code, size = 20, flagCode }: FlagIconProps) => {
             alt={code}
             width={size}
             height={size}
-            className="rounded-sm"
+            className="rounded-sm object-cover h-3 w-4.5"
             onError={() => setError(true)}
         />
     </div>

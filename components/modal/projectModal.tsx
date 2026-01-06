@@ -455,7 +455,7 @@ export const ProjectModal = ({
               {/* Add New Tech Stack */}
               <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 border-dashed">
                 <label className="relative cursor-pointer disabled:cursor-not-allowed">
-                  <div className={`w-8 h-8 bg-gray-300 rounded flex items-center justify-center text-gray-500 text-xs ${isUploadingTechIcon ? 'opacity-50' : ''}`}>
+                  <div className={`size-8 bg-gray-300 rounded flex items-center justify-center text-gray-500 text-xs ${isUploadingTechIcon ? 'opacity-50' : ''}`}>
                     {isUploadingTechIcon ? '...' : '+'}
                   </div>
                   <input
