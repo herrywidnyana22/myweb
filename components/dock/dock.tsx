@@ -5,11 +5,11 @@ import Image from 'next/image';
 import clsx from 'clsx';
 import { useRef, useEffect } from 'react';
 import { useGSAP } from '@gsap/react';
-
 import useWindowStore from '@/store/window';
 import { dockItems } from './dockItems';
 import { Tooltip } from '../tooltip';
 import { useAppStore } from '@/store/app';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 gsap.registerPlugin(useGSAP);
 
@@ -18,6 +18,7 @@ export const Dock = () => {
   const iconRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const { windows, openWindow, minimizeWindow, restoreWindow } = useWindowStore();
   const { openedDockId, setOpenedDockId, setTargetedDockId, isInputFocused, setIsInputFocused, setIsMinimized } = useAppStore();
+  const { getText } = useLocalizedText();
 
   useGSAP(
     () => {
@@ -152,7 +153,7 @@ export const Dock = () => {
           {dockItems.map((item) => (
             <div key={item.id} className="relative flex flex-col items-center z-50">
               <Tooltip 
-                label={item.name}
+                label={getText(item.name)}
                 bgColor="#000"
                 textColor='text-white'
               >

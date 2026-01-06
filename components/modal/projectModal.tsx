@@ -1,14 +1,18 @@
 'use client';
 
+import Image from 'next/image';
+
 import { useEffect, useState, useCallback } from 'react';
 import { FormInput } from '../form/FormInput';
 import { FormSelect } from '../form/FormSelect';
-import { FormTextarea } from '../form/FormTextarea';
 import { FormImageUpload } from '../form/FormImageUpload';
 import { FormError } from '../form/FormError';
 import { ModalHeader } from '../form/ModalHeader';
 import { ModalActions } from '../form/ModalActions';
-import Image from 'next/image';
+import { MultiLangInput } from '../form/MultiLangInput';
+import { MultiLangText, createMultiLangText } from '@/lib/constants/languages';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 import { X } from 'lucide-react';
 
 interface TechStackItem {
@@ -53,11 +57,9 @@ export const ProjectModal = ({
   );
   const [newTechLabel, setNewTechLabel] = useState('');
   const [isUploadingTechIcon, setIsUploadingTechIcon] = useState(false);
-  const [description, setDescription] = useState<string>(
-    (project?.description && Array.isArray(project.description))
-      ? project.description.join('\n')
-      : ''
-  );
+
+  const { selectedTranslationLanguages, getLanguageInfo } = useLanguage();
+  const { getText } = useLocalizedText();
 
   useEffect(() => {
     if (project) {
@@ -65,11 +67,6 @@ export const ProjectModal = ({
       setIconPreview(project.icon || null);
       setSubIconPreview(project.subIcon || null);
       setTechStack((project.techStack as TechStackItem[]) || []);
-      setDescription(
-        (project.description && Array.isArray(project.description))
-          ? project.description.join('\n')
-          : ''
-      );
     } else {
       setFormData({
         id: '',
@@ -78,7 +75,6 @@ export const ProjectModal = ({
       setIconPreview(null);
       setSubIconPreview(null);
       setTechStack([]);
-      setDescription('');
     }
     setError('');
     setNewTechLabel('');
@@ -91,6 +87,13 @@ export const ProjectModal = ({
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const handleMultiLangChange = (field: string, value: MultiLangText) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
     }));
   };
 
@@ -232,15 +235,9 @@ export const ProjectModal = ({
         return;
       }
 
-      const descriptionArray = description
-        .split('\n')
-        .map(line => line.trim())
-        .filter(line => line.length > 0);
-
       await onSave({
         ...formData,
-        description: descriptionArray.length > 0 ? descriptionArray.join('\n') : undefined,
-        techStack: techStack.length > 0 ? techStack : null,
+        techStack: techStack.length > 0 ? techStack : undefined,
       });
       handleCloseModal();
     } catch (err) {
@@ -260,7 +257,6 @@ export const ProjectModal = ({
     setSubIconPreview(null);
     setTechStack([]);
     setNewTechLabel('');
-    setDescription('');
     setFormData({
       id: '',
       ...DEFAULT_PROJECT,
@@ -309,31 +305,32 @@ export const ProjectModal = ({
                 { value: '', label: 'Select a category' },
                 ...categories.map((cat) => ({
                   value: cat.id,
-                  label: cat.name,
+                  label: typeof cat.name === 'string' ? cat.name : getText(cat.name),
                 })),
               ]}
               disabled={isSubmitting}
             />
 
-            <FormInput
+            <MultiLangInput
               label="Project Name"
-              required
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
+              value={formData.name || createMultiLangText('')}
+              onChange={(val) => handleMultiLangChange('name', val)}
+              selectedLanguages={selectedTranslationLanguages}
               placeholder="e.g., MyDrive"
               disabled={isSubmitting}
+              type="input"
+              getLanguageInfo={getLanguageInfo}
             />
 
-            <FormInput
+            <MultiLangInput
               label="Tooltip Text"
-              type="text"
-              name="tooltipText"
-              value={formData.tooltipText || ''}
-              onChange={handleChange}
+              value={formData.tooltipText || createMultiLangText('')}
+              onChange={(val) => handleMultiLangChange('tooltipText', val)}
+              selectedLanguages={selectedTranslationLanguages}
               placeholder="e.g., Cloud Storage Project"
               disabled={isSubmitting}
+              type="input"
+              getLanguageInfo={getLanguageInfo}
             />
 
             <FormInput
@@ -392,14 +389,16 @@ export const ProjectModal = ({
               disabled={isSubmitting}
             />
 
-            <FormTextarea
+            <MultiLangInput
               label="Highlighted Description"
-              name="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={formData.description || createMultiLangText('')}
+              onChange={(val) => handleMultiLangChange('description', val)}
+              selectedLanguages={selectedTranslationLanguages}
               placeholder="Enter the project highlighted description"
-              rows={5}
               disabled={isSubmitting}
+              type="textarea"
+              rows={5}
+              getLanguageInfo={getLanguageInfo}
             />
 
             {/* Tech Stack Section */}

@@ -2,11 +2,13 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-
-import { useMemo } from 'react';
 import { parseHighlight } from '@/lib/utils/parseHighlight';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
-export const ContactCard = (card: ContactProps) => {
+export const ContactCard = (card: Contact) => {
+  const { getText } = useLocalizedText();
+  const localizedDescription = getText(card.description);
+  const localizedTooltip = getText(card.tooltipText);
 
   return (
     <div
@@ -33,10 +35,10 @@ export const ContactCard = (card: ContactProps) => {
           {parseHighlight(card.title || '')}
         </span>
 
-        {card.href ? (
+        {card.contactURL ? (
           <Link
-            title={card.description}
-            href={card.href}
+            title={localizedTooltip || localizedDescription}
+            href={card.contactURL}
             target="_blank"
             rel="noopener noreferrer"
             className="
@@ -44,17 +46,17 @@ export const ContactCard = (card: ContactProps) => {
               text-sm
             "
           >
-            {parseHighlight(card.description || '')}
+            {parseHighlight(localizedDescription)}
           </Link>
         ) : (
           <span
-            title={card.description}
+            title={localizedTooltip || localizedDescription}
             className="
               text-gray-600 truncate
               text-sm
             "
           >
-            {parseHighlight(card.description || '')}
+            {parseHighlight(localizedDescription)}
           </span>
         )}
       </div>

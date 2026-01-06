@@ -3,13 +3,13 @@
 import Image from "next/image";
 
 import { Tooltip } from "./tooltip";
-import { useAppStore } from "@/store/app";
+import { useLocalizedText } from "@/hooks/useLocalizedText";
 
 export const TelegramStatus = () =>{
-  const { ui } = useAppStore()
+  const { getUIText } = useLocalizedText();
 
   return (
-    <Tooltip label={ui.telegramStatus}>
+    <Tooltip label={getUIText('telegramStatus')}>
       <span
         className="flex items-center justify-center gap-2 p-1 rounded-full text-xs shadow-sm hover:bg-gray-200 transition cursor-pointer"
       >

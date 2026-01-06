@@ -1,33 +1,39 @@
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import useDataStore from "@/store/data";
+import { useState } from "react";
 import { ProjectModal } from "../modal/projectModal";
-import { ProjectEntryModal } from "../modal/projectEntryModal";
+import { ItemModal } from "../modal/itemModal";
 import { DeleteConfirmModal } from "../modal/deleteConfirmModal";
 import { Icon } from "../icon";
-import { ChevronDown, ChevronRight, Folder, File } from "lucide-react";
-import { ButtonActionGroup } from "./buttonActionGroup";
+import { ChevronDown, ChevronRight, Folder, File, Plus } from "lucide-react";
+import { ActionButtonGroup } from "./actionButtonGroup";
 import { getEffectiveIcon } from "@/lib/utils";
+import { writeCache } from "@/lib/cache";
+import { useLocalizedText } from "@/hooks/useLocalizedText";
+import { ActionButton } from "./actionButton";
 
 
 interface ProjectDashboardProps {
-    categories: Category[];
-    data: Project[];
-    setData: Dispatch<SetStateAction<Project[]>>;
     isDataLoading?: boolean;
 }
 
-export const Project = ({categories, data, setData, isDataLoading = false}: ProjectDashboardProps) => {
+export const Project = ({isDataLoading = false}: ProjectDashboardProps) => {
     
     const [isLoading, setIsLoading] = useState(false);
     const [selectedProject, setSelectedProject] = useState<Project | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEntryModalOpen, setIsEntryModalOpen] = useState(false);
     const [selectedEntry, setSelectedEntry] = useState<ProjectEntry | null>(null);
+    const [parentEntryId, setParentEntryId] = useState<string | undefined>(undefined);
     const [expandedEntries, setExpandedEntries] = useState<Set<string>>(new Set());
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deletingEntryId, setDeletingEntryId] = useState<string | null>(null);
     const [isDeleteProjectModalOpen, setIsDeleteProjectModalOpen] = useState(false);
     const [deletingProjectId, setDeletingProjectId] = useState<string | null>(null);
+
+    // Get projects and categories from global store
+    const { projects, setProjects, categories } = useDataStore();
+    const { getText } = useLocalizedText();
 
     const handleEditProject = (project: Project) => {
         setSelectedProject(project);
@@ -54,15 +60,19 @@ export const Project = ({categories, data, setData, isDataLoading = false}: Proj
             if (res.ok) {
                 const newProject = (await res.json()) as Project;
 
+                // Update global store and cache
+                let updatedProjects: Project[];
                 if (projectData.id) {
                     // Update existing project
-                    setData((prev) =>
-                        prev.map((p) => (p.id === newProject.id ? newProject : p))
-                    );
+                    updatedProjects = projects.map((p) => (p.id === newProject.id ? newProject : p));
                 } else {
                     // Add new project
-                    setData((prev) => [...prev, newProject]);
+                    updatedProjects = [...projects, newProject];
                 }
+                
+                setProjects(updatedProjects);
+                writeCache('projects_cache', updatedProjects);
+                setIsModalOpen(false);
             } else {
                 const error = (await res.json()) as { error?: string };
                 throw new Error(error.error || 'Failed to save project');
@@ -76,8 +86,9 @@ export const Project = ({categories, data, setData, isDataLoading = false}: Proj
 
     const handleAddEntry = (projectId: string, parentId?: string) => {
         setSelectedEntry(null);
+        setParentEntryId(parentId);
         // Store parent info in a ref or state
-        const projectData = data.find(p => p.id === projectId);
+        const projectData = projects.find(p => p.id === projectId);
         if (projectData) {
             setSelectedProject(projectData);
         }
@@ -100,8 +111,11 @@ export const Project = ({categories, data, setData, isDataLoading = false}: Proj
             });
 
             if (res.ok) {
-                // Remove project from local state
-                setData((prev) => prev.filter((p) => p.id !== deletingProjectId));
+                // Remove project from global store and update cache
+                const updatedProjects = projects.filter((p) => p.id !== deletingProjectId);
+                setProjects(updatedProjects);
+                writeCache('projects_cache', updatedProjects);
+                
                 setIsDeleteProjectModalOpen(false);
                 setDeletingProjectId(null);
             } else {
@@ -126,6 +140,23 @@ export const Project = ({categories, data, setData, isDataLoading = false}: Proj
 
         setIsLoading(true);
         try {
+            // Auto-populate PROJECT_INFO fields from project data
+            let dataToSave = { ...entryData };
+            
+            if (entryData.fileType === 'PROJECT_INFO') {
+                const projectData = projects.find(p => p.id === selectedProject.id);
+                if (projectData) {
+                    dataToSave = {
+                        ...dataToSave,
+                        techStack: projectData.techStack,
+                        progress: projectData.progressValue,
+                        description: projectData.description,
+                        subtitle: projectData.name, // Save project name to subtitle
+                        subIcon: projectData.icon, // Save project icon to subIcon
+                    };
+                }
+            }
+
             const url = entryData.id ? `/api/projects/entries/${entryData.id}` : '/api/projects/entries';
             const method = entryData.id ? 'PUT' : 'POST';
 
@@ -133,7 +164,7 @@ export const Project = ({categories, data, setData, isDataLoading = false}: Proj
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    ...entryData,
+                    ...dataToSave,
                     projectId: selectedProject.id,
                 }),
             });
@@ -141,19 +172,20 @@ export const Project = ({categories, data, setData, isDataLoading = false}: Proj
             if (res.ok) {
                 const newEntry = (await res.json()) as ProjectEntry;
 
-                // Update the project data
-                setData((prev) =>
-                    prev.map((p) =>
-                        p.id === selectedProject.id
-                            ? {
-                                ...p,
-                                entries: entryData.id
-                                    ? p.entries?.map((e) => (e.id === newEntry.id ? newEntry : e))
-                                    : [...(p.entries || []), newEntry],
-                            }
-                            : p
-                    )
+                // Update the project data in global store and cache
+                const updatedProjects = projects.map((p) =>
+                    p.id === selectedProject.id
+                        ? {
+                            ...p,
+                            entries: entryData.id
+                                ? p.entries?.map((e) => (e.id === newEntry.id ? newEntry : e))
+                                : [...(p.entries || []), newEntry],
+                        }
+                        : p
                 );
+                
+                setProjects(updatedProjects);
+                writeCache('projects_cache', updatedProjects);
 
                 setIsEntryModalOpen(false);
                 setSelectedEntry(null);
@@ -184,7 +216,7 @@ export const Project = ({categories, data, setData, isDataLoading = false}: Proj
             });
 
             if (res.ok) {
-                // Update the project data
+                // Update the project data in global store and cache
                 const deleteEntryRecursive = (entries: ProjectEntry[], idToDelete: string): ProjectEntry[] => {
                     return entries
                         .filter(e => e.id !== idToDelete)
@@ -194,16 +226,17 @@ export const Project = ({categories, data, setData, isDataLoading = false}: Proj
                         }));
                 };
 
-                setData((prev) =>
-                    prev.map((p) =>
-                        p.id === selectedProject.id
-                            ? {
-                                ...p,
-                                entries: deleteEntryRecursive(p.entries || [], deletingEntryId),
-                            }
-                            : p
-                    )
+                const updatedProjects = projects.map((p) =>
+                    p.id === selectedProject.id
+                        ? {
+                            ...p,
+                            entries: deleteEntryRecursive(p.entries || [], deletingEntryId),
+                        }
+                        : p
                 );
+                
+                setProjects(updatedProjects);
+                writeCache('projects_cache', updatedProjects);
 
                 setIsDeleteModalOpen(false);
                 setDeletingEntryId(null);
@@ -230,22 +263,7 @@ export const Project = ({categories, data, setData, isDataLoading = false}: Proj
         });
     };
 
-    const getFileExtension = (fileType?: string) => {
-        if (!fileType) return '';
-        const extensions: Record<string, string> = {
-            'TXT': '.txt',
-            'IMG': '.img',
-            'PDF': '.pdf',
-            'URL': '.url',
-            'FIG': '.fig',
-            'TECHSTACK': '.tech',
-            'PROJECT_INFO': '.info',
-            'OTHER': '.file',
-        };
-        return extensions[fileType] || '';
-    };
-    
-    console.log({data});
+    console.log({projects});
 
     if (isDataLoading) {
         return (
@@ -282,21 +300,21 @@ export const Project = ({categories, data, setData, isDataLoading = false}: Proj
                 <div className="flex justify-between items-start mb-4">
                     <h2 className="text-xl font-bold text-white">Projects</h2>
                     <div className="flex gap-2">
-                        <button
+                        <ActionButton
                             onClick={handleAddProject}
-                            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-1 px-3 rounded text-sm transition"
-                        >
-                            + Add
-                        </button>
+                            variant="add"  
+                            icon={<> <Plus className="size-3"/> Add </>}
+                            title="Add Project"
+                        />
                     </div>
                 </div>
 
-                {data.length === 0 ? (
+                {projects.length === 0 ? (
                     <p className="text-gray-400 text-sm">No projects found. Click "Add" to create one.</p>
                 ) : (
                     <div className="space-y-4 max-h-96 overflow-y-auto">
-                        {data.map((project) => (
-                            <div key={project.id} className="bg-gray-600 rounded p-4 border border-gray-500">
+                        {projects.map((project) => (
+                            <div key={project.id} className="group bg-gray-600 rounded p-4 border border-gray-500">
                                 <div className="flex items-center justify-between mb-3">
                                     <div className="flex items-center gap-3">
                                         {project.icon && (
@@ -306,28 +324,28 @@ export const Project = ({categories, data, setData, isDataLoading = false}: Proj
                                                     alt="Project Icon"
                                                     width={40}
                                                     height={40}
-                                                    className="rounded-full object-cover"
+                                                    className="size-auto rounded-full object-cover"
                                                 />
                                             </div>
                                         )}
                                         <div>
-                                            <p className="text-white font-semibold">{project.name}</p>
+                                            <p className="text-white font-semibold">{getText(project.name)}</p>
                                             { project.techStack && project.techStack.length > 0 && (
                                                 <div className="flex flex-wrap gap-1.5 sm:gap-2">
-                                                    {project.techStack.map((tech, i) => (
+                                                    {project.techStack.map((tech:TechStack, i: number) => (
                                                         <Icon
                                                             key={i}
                                                             tooltipLabel={tech.label}
                                                             src={tech.techIcon}
                                                             size={14}
-                                                            className="rounded-full bg-gray-900/10 sm:bg-gray-900/20 p-0.5 sm:p-1 border border-white/20"
+                                                            className="rounded-full bg-gray-300 p-0.5 sm:p-1 border border-gray-900/20"
                                                         />
                                                     ))}
                                                 </div>
                                             )}
                                         </div>
                                     </div>
-                                    <ButtonActionGroup
+                                    <ActionButtonGroup
                                         onEdit={() => handleEditProject(project)}
                                         onDelete={() => handleDeleteProject(project.id)}
                                         isLoading={isLoading}
@@ -337,12 +355,12 @@ export const Project = ({categories, data, setData, isDataLoading = false}: Proj
                                     {/* Project Entries Explorer View */}
                                     <div className="flex justify-between">
                                         <h3>Project Files Items</h3>
-                                        <button
+                                        <ActionButton
                                             onClick={() => handleAddEntry(project.id)}
-                                            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-1 px-2 rounded text-xs transition"
-                                        >
-                                            + Entry
-                                        </button>
+                                            variant="add"                                                        
+                                            icon={<> <Plus className="size-3"/> Add Entry </>}
+                                            title="File Explorer"
+                                        />
                                     </div>
                                     {project.entries && project.entries.length > 0 && (
                                         <div className="mt-4 border-t border-gray-500 pt-3">
@@ -379,17 +397,23 @@ export const Project = ({categories, data, setData, isDataLoading = false}: Proj
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSaveProject}
                 project={selectedProject || undefined}
-                categories={categories}
+                categories={categories.map(cat => ({
+                    id: cat.id,
+                    name: typeof cat.name === 'string' ? cat.name : getText(cat.name)
+                }))}
             />
-            <ProjectEntryModal
+            <ItemModal
                 isOpen={isEntryModalOpen}
                 onClose={() => {
                     setIsEntryModalOpen(false);
                     setSelectedEntry(null);
+                    setParentEntryId(undefined);
                 }}
                 onSave={handleSaveEntry}
-                projectEntry={selectedEntry || undefined}
-                projectId={selectedProject?.id || ''}
+                item={selectedEntry || undefined}
+                ownerId={selectedProject?.id || ''}
+                ownerType="project"
+                parentId={parentEntryId}
             />
             <DeleteConfirmModal
                 isOpen={isDeleteModalOpen}
@@ -446,22 +470,24 @@ const ProjectEntryItem = ({
     const hasChildren = entry.children && entry.children.length > 0;
     const paddingLeft = `${level * 1.5}rem`;
 
+    const { getText } = useLocalizedText();
+
     return (
         <div>
             <div
                 style={{ paddingLeft }}
-                className="flex items-center gap-2 py-1 px-2 rounded hover:bg-gray-500/30 group transition"
+                className="group/item flex items-center gap-2 py-1 px-2 rounded hover:bg-gray-500/30 transition"
             >
                 {/* Expand/Collapse Button */}
                 {hasChildren ? (
                     <button
                         onClick={() => onToggleExpand(entry.id)}
-                        className="p-0 hover:bg-gray-500/50 rounded transition flex-shrink-0"
+                        className="p-0 hover:bg-gray-500/50 rounded transition shrink-0"
                     >
                         {isExpanded ? (
-                            <ChevronDown className="w-4 h-4 text-gray-400" />
+                            <ChevronDown className="size-4 text-gray-400" />
                         ) : (
-                            <ChevronRight className="w-4 h-4 text-gray-400" />
+                            <ChevronRight className="size-4 text-gray-400" />
                         )}
                     </button>
                 ) : (
@@ -473,25 +499,25 @@ const ProjectEntryItem = ({
                     {entry.icon || getEffectiveIcon(entry.icon, entry.fileType) ? (
                         <Image
                             src={entry.icon || getEffectiveIcon(entry.icon, entry.fileType) || ''}
-                            alt={entry.name}
+                            alt={typeof entry.name === 'string' ? entry.name : getText(entry.name)}
                             width={18}
                             height={18}
                             className="object-contain"
                         />
                     ) : hasChildren ? (
-                        <Folder className="w-4 h-4 text-blue-400" />
+                        <Folder className="size-4 text-blue-400" />
                     ) : (
-                        <File className="w-4 h-4 text-gray-400" />
+                        <File className="size-4 text-gray-400" />
                     )}
                 </div>
 
                 {/* Entry Name */}
                 <span className="text-gray-300 text-sm grow">
-                    {entry.name}
+                    {getText(entry.name)}
                 </span>
 
                 {/* Action Buttons */}
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                <div className="flex gap-1 opacity-0 group-hover/item:opacity-100 transition">
                     <button
                         onClick={() => onEdit(entry, project)}
                         disabled={isLoading}

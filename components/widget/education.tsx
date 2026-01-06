@@ -1,14 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-
-import { useData } from '@/hooks/useData';
-import { useAppStore } from '@/store/app';
+import useDataStore from '@/store/data';
 import { Tooltip } from '../tooltip';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 export const Education = () => {
-  const { data, isLoading, error } = useData<EducationProps>('educations');
-  const { ui } = useAppStore()
+  const { educations, isLoading, error } = useDataStore();
+  const { getText, getUIText } = useLocalizedText();
 
   // Skeleton loader
   if (isLoading) {
@@ -29,11 +28,11 @@ export const Education = () => {
   }
 
   if (error) {
-    return <p className="text-center text-red-400 p-4">{ui.dataLoadFailed}</p>;
+    return <p className="text-center text-red-400 p-4">{getUIText('dataLoadFailed')}</p>;
   }
 
-  if (!data?.length) {
-    return <p className="text-center text-gray-400 p-4">{ui.dataEmpty}</p>;
+  if (!educations?.length) {
+    return <p className="text-center text-gray-400 p-4">{getUIText('dataEmpty')}</p>;
   }
 
   return (
@@ -45,7 +44,7 @@ export const Education = () => {
           gap-2 sm:gap-4 xl:gap-10 p-3 sm:px-6 sm:py-8
         "
       >
-        {data.map((edu, i) => (
+        {educations.map((edu, i) => (
           <Tooltip key={i} label={edu.school}>
             <div
               className="
@@ -83,7 +82,7 @@ export const Education = () => {
               </div>
 
               {/* Garis penghubung (Desktop only) */}
-              {i < data.length - 1 && (
+              {i < educations.length - 1 && (
                 <div className="hidden sm:block absolute top-8 left-[calc(100%-2rem)] sm:left-[calc(100%-2.5rem)] xl:left-[calc(100%-3rem)] h-0.5 w-20 sm:w-24 bg-linear-to-r from-primary to-yellow-400" />
               )}
 
@@ -93,7 +92,7 @@ export const Education = () => {
                   {edu.school}
                 </h3>
                 <p className="hidden sm:block text-neutral-300 text-[11px] sm:text-xs mt-1 leading-snug">
-                  {edu.major}
+                  {getText(edu.major)}
                 </p>
                 <p className="text-neutral-400 text-[10px] sm:text-xs mt-0.5">
                   {edu.startYear} - {edu.endYear}

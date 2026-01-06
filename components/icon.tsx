@@ -14,10 +14,12 @@ export const Icon = ({
   IconComponent,
   size = 16,
   className,
+  style,
   newTab = true,
 }: IconProps) => {
   const iconContent = (
     <div
+      style={style}
       className={clsx(
         'rounded-full p-1 flex items-center justify-center transition hover:bg-gray-900/30 z-20',
         className

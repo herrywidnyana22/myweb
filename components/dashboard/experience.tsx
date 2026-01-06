@@ -1,17 +1,26 @@
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import useDataStore from "@/store/data";
+import { useState } from "react";
+import { writeCache } from "@/lib/cache";
 import { ExperienceModal } from "../modal/experienceModal";
 import { DeleteConfirmModal } from "../modal/deleteConfirmModal";
-import { ButtonActionGroup } from "./buttonActionGroup";
+import { ActionButtonGroup } from "./actionButtonGroup";
+import { Plus } from "lucide-react";
+import { ActionButton } from "./actionButton";
+import { useLocalizedText } from "@/hooks/useLocalizedText";
 
 
-export const Experience = ({categories, data, setData, isDataLoading = false}: ExperienceDashboardProps) => {
+export const Experience = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
     
     const [isLoading, setIsLoading] = useState(false);
     const [selectedExperience, setSelectedExperience] = useState<Experience | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deletingId, setDeletingId] = useState<string | null>(null);
+
+    // Get experiences from global store
+    const { experiences, setExperiences, categories } = useDataStore();
+    const { getText } = useLocalizedText();
 
     const handleEditExperience = (experience: Experience) => {
         setSelectedExperience(experience);
@@ -38,15 +47,19 @@ export const Experience = ({categories, data, setData, isDataLoading = false}: E
             if (res.ok) {
                 const newExperience = (await res.json()) as Experience;
 
+                // Update global store and cache
+                let updatedExperiences: Experience[];
                 if (experienceData.id) {
                     // Update existing experience
-                    setData((prev: Experience[]) =>
-                        prev.map((e) => (e.id === newExperience.id ? newExperience : e))
-                    );
+                    updatedExperiences = experiences.map((e) => (e.id === newExperience.id ? newExperience : e));
                 } else {
                     // Add new experience
-                    setData((prev: Experience[]) => [...prev, newExperience]);
+                    updatedExperiences = [...experiences, newExperience];
                 }
+                
+                setExperiences(updatedExperiences);
+                writeCache('experiences_cache', updatedExperiences);
+                setIsModalOpen(false);
             } else {
                 const error = (await res.json()) as { error?: string };
                 throw new Error(error.error || 'Failed to save experience');
@@ -74,8 +87,11 @@ export const Experience = ({categories, data, setData, isDataLoading = false}: E
             });
 
             if (res.ok) {
-                // Remove experience from local state
-                setData((prev: Experience[]) => prev.filter((e) => e.id !== deletingId));
+                // Remove experience from global store and update cache
+                const updatedExperiences = experiences.filter((e) => e.id !== deletingId);
+                setExperiences(updatedExperiences);
+                writeCache('experiences_cache', updatedExperiences);
+                
                 setIsDeleteModalOpen(false);
                 setDeletingId(null);
             } else {
@@ -87,7 +103,7 @@ export const Experience = ({categories, data, setData, isDataLoading = false}: E
         } finally {
             setIsLoading(false);
         }
-    };
+    }
 
 
     if (isDataLoading) {
@@ -121,29 +137,29 @@ export const Experience = ({categories, data, setData, isDataLoading = false}: E
                 <div className="flex justify-between items-start mb-4">
                     <h2 className="text-xl font-bold text-white">Experience</h2>
                     <div className="flex gap-2">
-                    <button
-                        onClick={handleAddExperience}
-                        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-1 px-3 rounded text-sm transition"
-                    >
-                        + Add
-                    </button>
+                        <ActionButton
+                            onClick={handleAddExperience}
+                            variant="add"
+                            icon={<> <Plus className="size-3"/> Add </>}
+                            title="Add Experience"
+                        />    
                     </div>
                 </div>
 
-                {data.length === 0 ? (
+                {experiences.length === 0 ? (
                     <p className="text-gray-400 text-sm">No experience found. Click "Add" to create one.</p>
                 ) : (
                     <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {data.map((experience) => (
-                        <div key={experience.id} className="bg-gray-600 rounded p-3 border border-gray-500 flex justify-between items-center">
+                    {experiences.map((experience) => (
+                        <div key={experience.id} className="group bg-gray-600 rounded p-3 border border-gray-500 flex justify-between items-center">
                             <div className='flex items-center gap-2'>
                                 {experience.icon &&(
                                     <Image
                                         src={experience.icon}
                                         alt="Experience Icon"
-                                        width={36}
-                                        height={36}
-                                        className="inline-block rounded-md object-cover"
+                                        width={32}
+                                        height={32}
+                                        className="size-8 inline-block rounded-md object-cover"
                                     />
                                 )}
                                 <div>
@@ -151,11 +167,11 @@ export const Experience = ({categories, data, setData, isDataLoading = false}: E
                                         {experience.company}
                                     </p>
                                     <p className="text-gray-300 text-sm">
-                                        {experience.role} ({experience.start} - {experience.end})
+                                        {getText(experience.role)} ({experience.start} - {experience.end})
                                     </p>
                                 </div>
                             </div>
-                           <ButtonActionGroup
+                           <ActionButtonGroup
                                 onEdit={() => handleEditExperience(experience)}
                                 onDelete={() => handleDeleteExperience(experience.id)}
                                 isLoading={isLoading}
@@ -170,7 +186,10 @@ export const Experience = ({categories, data, setData, isDataLoading = false}: E
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSaveExperience}
                 experience={selectedExperience || undefined}
-                categories={categories}
+                categories={categories.map(cat => ({
+                    id: cat.id,
+                    name: typeof cat.name === 'string' ? cat.name : getText(cat.name)
+                }))}
             />
             <DeleteConfirmModal
                 isOpen={isDeleteModalOpen}

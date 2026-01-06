@@ -1,13 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-
 import { Eye, Github } from 'lucide-react';
 import { Icon } from '../icon';
 import { parseHighlight } from '@/lib/utils/parseHighlight';
 import { BarProgressChart } from '../charts/barProgress';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
-export const ProjectCard = (card: ProjectProps) => {
+export const ProjectCard = (card: Project) => {
+  const { getText } = useLocalizedText();
+  
   return (
     <div
       className="
@@ -21,20 +23,20 @@ export const ProjectCard = (card: ProjectProps) => {
         {card.icon && (
           <Image
             src={card.icon}
-            alt={card.title}
+            alt={getText(card.name) || 'Project Icon'}
             width={30}
             height={30}
             className="object-contain sm:w-10 sm:h-10"
           />
         )}
         <h3 className="font-semibold text-sm sm:text-base md:text-lg text-primary leading-tight">
-          {parseHighlight(card.title || '')}
+          {parseHighlight(getText(card.name) || '')}
         </h3>
       </div>
 
       {/* Description */}
       <div className="text-xs sm:text-sm text-gray-600 leading-snug sm:leading-normal mt-1">
-        {parseHighlight(card.description || '')}
+        {parseHighlight(getText(card.description) || '')}
       </div>
 
       {/* Progress Bar */}
@@ -54,13 +56,13 @@ export const ProjectCard = (card: ProjectProps) => {
         "
       >
         {/* Tech Stack */}
-        {card.iconCategory && card.iconCategory.length > 0 && (
+        {card.techStack && card.techStack.length > 0 && (
           <div className="flex flex-wrap gap-1 sm:gap-1.5">
-            {card.iconCategory.map((icon: IconCategoryProps, idx: number) => (
+            {card.techStack.map((icon: TechStack, idx: number) => (
               <Icon
                 key={idx}
                 tooltipLabel={icon.label}
-                src={icon.src}
+                src={icon.techIcon}
                 size={18}
                 className="
                   bg-gray-900/10 sm:bg-gray-900/20 
@@ -75,10 +77,10 @@ export const ProjectCard = (card: ProjectProps) => {
 
         {/* Action Buttons */}
         <div className="flex gap-1 sm:gap-1.5">
-          {card.githubLink && typeof card.githubLink === 'string' && (
+          {card.repoURL && typeof card.repoURL === 'string' && (
             <Icon
               tooltipLabel="Source code"
-              href={card.githubLink}
+              href={card.repoURL}
               IconComponent={Github}
               size={18}
               className="
@@ -89,10 +91,10 @@ export const ProjectCard = (card: ProjectProps) => {
               "
             />
           )}
-          {card.demoLink && typeof card.demoLink === 'string' && (
+          {card.demoURL && typeof card.demoURL === 'string' && (
             <Icon
               tooltipLabel="View demo"
-              href={card.demoLink}
+              href={card.demoURL}
               IconComponent={Eye}
               size={18}
               className="

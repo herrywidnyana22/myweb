@@ -2,10 +2,11 @@
 
 import clsx from 'clsx';
 
-import { PLACEHOLDERS } from '@/lib/constants/placeholder';
 import { SendHorizonal } from 'lucide-react';
 import { memo, useEffect, useRef, useState } from 'react';
 import { useAppStore } from '@/store/app';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
+import { PLACEHOLDERS } from '@/lib/constants/languages';
 
 export const ChatInput = memo(({
   sendMessage,
@@ -22,13 +23,14 @@ export const ChatInput = memo(({
   const placeholderRef = useRef<HTMLDivElement>(null);
 
 
-  const { language, ui, setIsMinimized, setIsInputFocused } = useAppStore();
+  const { setIsMinimized, setIsInputFocused } = useAppStore();
+  const { getUIText, currentLanguage } = useLocalizedText();
 
   // Typewriter state
   const [currentIndex, setCurrentIndex] = useState(0);
   const [typedText, setTypedText] = useState("");
 
-  const placeholders = PLACEHOLDERS[language] ?? PLACEHOLDERS["en"]
+  const placeholders = PLACEHOLDERS[currentLanguage] ?? PLACEHOLDERS["id"];
   
   /*
     TYPEWRITER JALAN HANYA KETIKA:
@@ -59,7 +61,7 @@ export const ChatInput = memo(({
       clearInterval(typing);
       clearTimeout(rotate);
     };
-  }, [currentIndex, input, isActive, language, placeholders]);
+  }, [currentIndex, input, isActive, currentLanguage, placeholders]);
 
   const handleFocus = () => {
     setIsMinimized(false);
@@ -76,7 +78,7 @@ export const ChatInput = memo(({
   const placeholderText =
     isActive
       ? typedText           
-      : ui.sendPlaceholder
+      : getUIText('sendPlaceholder')
       
   useEffect(() => {
     if (!isActive) return;
@@ -110,7 +112,7 @@ export const ChatInput = memo(({
       clearInterval(typing);
       clearTimeout(rotate);
     };
-  }, [currentIndex, input, isActive, language, placeholders]);
+  }, [currentIndex, input, isActive, currentLanguage, placeholders]);
 
 
   return (

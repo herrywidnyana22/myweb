@@ -1,8 +1,8 @@
-import { useAppStore } from '@/store/app';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 import { memo } from 'react';
 
 export default memo(function DialogConfirm({ text, onConfirm, onCancel }: DialogConfirmProps) {
-  const { ui } = useAppStore()
+  const { getUIText } = useLocalizedText();
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-9999 px-4">
       <div
@@ -35,7 +35,7 @@ export default memo(function DialogConfirm({ text, onConfirm, onCancel }: Dialog
               transition
             "
           >
-            {ui.cancel}
+            {getUIText('cancel')}
           </button>
 
            <button
@@ -50,7 +50,7 @@ export default memo(function DialogConfirm({ text, onConfirm, onCancel }: Dialog
               transition
             "
           >
-            {ui.confirm}
+            {getUIText('confirm')}
           </button>
         </div>
       </div>

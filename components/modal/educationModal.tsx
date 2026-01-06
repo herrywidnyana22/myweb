@@ -7,6 +7,10 @@ import { FormImageUpload } from '../form/FormImageUpload';
 import { FormError } from '../form/FormError';
 import { ModalHeader } from '../form/ModalHeader';
 import { ModalActions } from '../form/ModalActions';
+import { MultiLangInput } from '../form/MultiLangInput';
+import { MultiLangText, createMultiLangText } from '@/lib/constants/languages';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 const DEFAULT_EDUCATION: Omit<Education, 'id'> = {
   school: '',
@@ -39,6 +43,9 @@ export const EducationModal = ({
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
 
+  const { selectedTranslationLanguages, getLanguageInfo } = useLanguage();
+  const { getText } = useLocalizedText();
+
   useEffect(() => {
     if (education) {
       setFormData(education);
@@ -67,6 +74,13 @@ export const EducationModal = ({
             ? Number(value)
             : undefined
           : value,
+    }));
+  };
+
+  const handleMultiLangChange = (field: string, value: MultiLangText) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
     }));
   };
 
@@ -118,7 +132,11 @@ export const EducationModal = ({
 
     try {
       const { school, major, startYear, endYear, categoryId } = formData;
-      if (!school || !major || !startYear || !endYear || !categoryId) {
+      
+      // Extract source text for validation
+      const majorValue = typeof major === 'string' ? major : major?.source || '';
+      
+      if (!school || !majorValue.trim() || !startYear || !endYear || !categoryId) {
         setError('Please fill in all required fields');
         setIsSubmitting(false);
         return;
@@ -193,7 +211,7 @@ export const EducationModal = ({
                 { value: '', label: 'Select a category' },
                 ...categories.map((cat) => ({
                   value: cat.id,
-                  label: cat.name,
+                  label: typeof cat.name === 'string' ? cat.name : getText(cat.name),
                 })),
               ]}
               disabled={isSubmitting}
@@ -209,15 +227,15 @@ export const EducationModal = ({
               disabled={isSubmitting}
             />
 
-            <FormInput
+            <MultiLangInput
               label="Major"
-              required
-              type="text"
-              name="major"
-              value={formData.major}
-              onChange={handleChange}
+              value={formData.major || createMultiLangText('')}
+              onChange={(val) => handleMultiLangChange('major', val)}
+              selectedLanguages={selectedTranslationLanguages}
               placeholder="e.g., Computer Science"
               disabled={isSubmitting}
+              type="input"
+              getLanguageInfo={getLanguageInfo}
             />
 
             <div className="grid grid-cols-2 gap-4">

@@ -3,8 +3,11 @@
 import Image from "next/image";
 import { MapPin } from "lucide-react";
 import { parseHighlight } from "@/lib/utils/parseHighlight";
+import { useLocalizedText } from "@/hooks/useLocalizedText";
 
-export const ExperienceCard = (exp: ExperienceProps) => {
+export const ExperienceCard = (exp: Experience) => {
+  const { getText } = useLocalizedText();
+  
   return (
     <div
       className="
@@ -55,7 +58,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
                 {parseHighlight(exp.company || '')}
               </h3>
               <p className="text-gray-500 font-semibold text-xs sm:text-sm">
-                {parseHighlight(exp.role || '')}
+                {parseHighlight(getText(exp.role) || '')}
               </p>
             </div>
 
@@ -70,7 +73,7 @@ export const ExperienceCard = (exp: ExperienceProps) => {
           
 
           <span className="text-gray-500 text-xs sm:text-sm leading-snug">
-            {parseHighlight(exp.description || '')}
+            {parseHighlight(getText(exp.description) || '')}
           </span>
 
           {/* Location */}

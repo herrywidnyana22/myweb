@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import { buildPrompt } from '@/lib/constants/promptTemplate';
-import { fetchSheetData } from '@/lib/fetchData';
 import { sendToTelegram } from '@/lib/telegram/telegram-server';
 import { sanitizeJSON } from '@/lib/utils';
 import { generatePrompt } from '@/lib/gemini/generatePrompt';
+import prisma from '@/lib/prisma';
 
-let cachedPortfolio: PortfolioCache | null = null;
-const CACHE_TTL_MS = 1000 * 60 * 10;
+let cachedPortfolio: PortfolioCache;
+const CACHE_TTL_MS = 1000 * 60 * 10; // 10 menit
 
 function normalizeCard(card: Partial<DataItemProps>): DataItemProps {
   let type = card.type;
@@ -34,22 +34,55 @@ export async function POST(req: Request) {
 
     const now = Date.now();
     if (!cachedPortfolio || now - cachedPortfolio.timestamp > CACHE_TTL_MS) {
-      const [profile, address, projects, contacts, educations, experiences] = await Promise.all([
-        fetchSheetData<ProfileProps>('profile'),
-        fetchSheetData<AddressProps>('address'),
-        fetchSheetData<ProjectProps>('projects'),
-        fetchSheetData<ContactProps>('contacts'),
-        fetchSheetData<EducationProps>('educations'),
-        fetchSheetData<ExperienceProps>('experiences'),
+      // Query database dengan Prisma (jauh lebih efisien dari fetchSheetData)
+      const [profiles, projects, contacts, educations, experiences] = await Promise.all([
+        prisma.profile.findMany({
+          include: { items: true },
+          orderBy: { createdAt: 'asc' }
+        }),
+        prisma.project.findMany({
+          include: { 
+            entries: true,
+            category: true 
+          },
+          orderBy: { name: 'asc' }
+        }),
+        prisma.contact.findMany({
+          include: { category: true },
+          orderBy: { title: 'asc' }
+        }),
+        prisma.education.findMany({
+          include: { 
+            category: true 
+          },
+          orderBy: { startYear: 'desc' }
+        }),
+        prisma.experience.findMany({
+          include: { 
+            category: true 
+          },
+          orderBy: { start: 'desc' }
+        }),
       ]);
 
-      cachedPortfolio = {
-        profile: Array.isArray(profile) ? profile[0] : profile,
-        address: Array.isArray(address) ? address[0] : address,
-        projects,
-        contacts,
-        educations,
-        experiences,
+      const firstProfile = profiles[0] || null
+
+      // Transform ke format yang dibutuhkan prompt
+      cachedPortfolio = { 
+        profile: firstProfile as Profile,
+        // Address sudah bagian dari Profile model (address, lat, lng, mapURL)
+        address: firstProfile 
+          ? {
+              address: firstProfile.address,
+              lat: firstProfile.lat,
+              lng: firstProfile.lng,
+              mapURL: firstProfile.mapURL,
+            } as Address 
+          : null, 
+        projects: projects as Project[],
+        contacts: contacts as DefaultCardData[],
+        educations: educations as Education[],
+        experiences: experiences as Experience[],
         timestamp: now,
       };
     }

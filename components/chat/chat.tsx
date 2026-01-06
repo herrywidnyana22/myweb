@@ -10,9 +10,8 @@ import { ChatItem } from '@/components/chat/chatItem';
 import { Card } from '@/components/card/card';
 import { sendToTelegram } from '@/lib/telegram/telegram-client';
 import { ChatNotice } from './chatNotice';
-import { translateAll } from '@/lib/translate/app-data';
-import { loadUI } from '@/lib/translate/translateUIText';
 import { useAppStore } from '@/store/app';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 // =============== REDUCER ===============
 type ChatAction =
@@ -42,7 +41,11 @@ export const Chat = () => {
     isInputFocused,
     setIsInputFocused,
     isMinimized,
+    setChatMode, 
+    chatMode, 
   } = useAppStore()
+
+  const { getUIText } = useLocalizedText();
 
   const [messages, dispatch] = useReducer(chatReducer, []);
   const [input, setInput] = useState('');
@@ -52,7 +55,6 @@ export const Chat = () => {
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const hasLoadedRef = useRef(false);
 
-  const { language, setLanguage, setChatMode, chatMode, ui, setUI } = useAppStore()
 
   // ========== MEMORY ==========
   const getMemory = useCallback((): ChatMemory => {
@@ -147,7 +149,6 @@ export const Chat = () => {
             memory: getMemory(),
             history: messages.slice(-6).map(({ role, text }) => ({ role, text })),
             chatMode,
-            language
           }),
         });
 
@@ -164,7 +165,7 @@ export const Chat = () => {
         }
 
         const data: AIResponse = await res.json();
-        const text = data.text ?? ui.dataEmpty
+        const text = data.text ?? getUIText('dataEmpty')
         const cards = data.cards ?? [];
 
         // Update last placeholder -> stop loading -> streaming
@@ -205,7 +206,7 @@ export const Chat = () => {
         dispatch({
           type: 'UPDATE_LAST',
           payload: {
-            text: ui.chatError,
+            text: getUIText('chatError'),
             isLoading: false,
             isStreaming: false,
           },
@@ -218,9 +219,8 @@ export const Chat = () => {
       getMemory, 
       messages, 
       chatMode, 
-      language, 
-      ui.chatError,
-      ui.dataEmpty
+      getUIText('chatError'),
+      getUIText('dataEmpty')
     ]
   );
 
@@ -243,7 +243,7 @@ export const Chat = () => {
         type: "UPDATE_LAST",
         payload: { 
           role: 'bot',
-          text: ui.actionCanceled,
+          text: getUIText('actionCanceled'),
           isLoading: false,
           isStreaming: false,
         },
@@ -258,7 +258,7 @@ export const Chat = () => {
         type: "ADD",
         payload: { 
           role: "bot", 
-          text: ui.translateOnProgressConfirm, 
+          text: getUIText('translateOnProgressConfirm'), 
           isLoading: false,
           isStreaming: false,
         },
@@ -279,17 +279,14 @@ export const Chat = () => {
 
 
       // PROSES TRANSLATE
-      const newUI = await loadUI(targetLang);
-      setUI(newUI);
+      // TODO: change language AI AGENT
 
-      setLanguage(targetLang);
-
-      await translateAll(targetLang);
+      // await translateAll(targetLang);
 
       dispatch({
         type: "UPDATE_LAST",
         payload: {
-          text: ui.langSwitched,
+          text: getUIText('langSwitched'),
           isLoading: false,
           isStreaming: false,
         }
@@ -305,13 +302,13 @@ export const Chat = () => {
 
       setChatMode("telegram")
 
-      await sendToTelegram(ui.telegramConnectConfirm);
+      await sendToTelegram(getUIText('telegramConnectConfirm'));
 
       dispatch({
         type: "ADD",
         payload: {
           role: "bot",
-          text: ui.telegramChatConfirm,
+          text: getUIText('telegramChatConfirm'),
           isLoading: false,
         }
       })
@@ -413,7 +410,7 @@ export const Chat = () => {
                   {!!msg.cards?.length && (
                     <div className="max-w-[80%] sm:max-w-[70%] grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 ml-10 sm:ml-13 mb-2">
                       {msg.cards
-                        .filter(card => !(card.type === "action" && card.targetLanguage === language))
+                        .filter(card => !(card.type === "action"))
                         .map((card, j) => (
                           <Card
                             key={j}
@@ -449,7 +446,7 @@ export const Chat = () => {
 
       {showConfirm && (
         <DialogConfirm
-          text={ui.clearChatConfirm}
+          text={getUIText('clearChatConfirm')}
           onConfirm={clearChat}
           onCancel={() => setShowConfirm(false)}
         />

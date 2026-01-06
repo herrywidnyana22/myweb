@@ -5,6 +5,8 @@ declare type ConfirmAction = 'yes' | 'no'
 declare type ChatMode = "default" | "telegram"
 declare type ChatRole = 'user' | 'bot' | 'herry_telegram' | 'bot_telegram';
 declare type WindowControlAction = 'close' | 'minimize' | 'maximize';
+declare type FileType = 'PROJECT_INFO' | 'TECHSTACK' | 'FIG' | 'URL' | 'TXT' | 'IMG' | 'PDF' | 'OTHER' | 'CONTACT';
+declare type FileKind = 'FOLDER' | 'FILE';
 
 declare interface AppContextProps {
   language: string;
@@ -35,8 +37,8 @@ declare interface AppContextProps {
 type Updater<T> = T | ((prev: T) => T);
 
 declare interface AppStore {
-  language: string;
-  ui: Record<string, string>;
+  // language: string;
+  // ui: Record<string, string>;
   chatMode: ChatMode;
   messages: ChatResponseProps[];
   isMinimized: boolean;
@@ -44,8 +46,8 @@ declare interface AppStore {
   openedDockId: Record<string, boolean>;
   targetedDockId: Record<string, DOMRect | null>;
 
-  setLanguage: (l: string) => void;
-  setUI: (ui: Record<string, string>) => void;
+  // setLanguage: (l: string) => void;
+  // setUI: (ui: Record<string, string>) => void;
   setChatMode: (m: ChatMode) => void;
   setMessages: (v: Updater<ChatResponseProps[]>) => void;
   setIsMinimized: (v: Updater<boolean>) => void;
@@ -79,19 +81,169 @@ declare type LocationKey = keyof typeof locations;
 declare type LocationValue = (typeof locations)[LocationKey];
 
 declare interface LocationStore {
-  activeLocation: LocationValue;
+  activeLocation: LocationValue | null;
   setActiveLocation: (location: LocationValue | null) => void;
   resetActiveLocation: () => void;
 }
 
 declare type DataItemProps =
-  | ({ type: 'project' } & ProjectProps)
-  | ({ type: 'contact' } & ContactProps)
-  | ({ type: 'address' } & AddressProps)
-  | ({ type: 'education' } & EducationProps)
-  | ({ type: 'experience' } & ExperienceProps)
+  | ({ type: 'project' } & Project)
+  | ({ type: 'contact' } & Contact)
+  | ({ type: 'address' } & Address)
+  | ({ type: 'education' } & Education)
+  | ({ type: 'experience' } & Experience)
   | ({ type: 'action' } & ActionCardProps)
   | ({ type: 'default' } & DefaultCardData);
+
+// Import MultiLangText type for multilingual fields
+type MultiLangText = import('@/lib/constants/languages').MultiLangText;
+  
+declare interface Category {
+  id: string;
+  name: string | MultiLangText; // Multilingual (JsonValue from Prisma can be null)
+  icon?: string;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+}
+
+declare interface Contact {
+  id: string;
+  title: string;
+  description: string | MultiLangText; // Multilingual
+  tooltipText?: string | MultiLangText; // Multilingual
+  icon?: string;
+  bgColor?: string;
+  contactURL?: string;
+  categoryId: string;
+  category?: { id: string; name: string | MultiLangText };
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+}
+
+declare interface Profile {
+  id: string;
+  name: string;
+  fullName: string;
+  jenisKelamin: 'PRIA' | 'WANITA';
+  role: string | MultiLangText; // Multilingual (required in DB)
+  quote: string | MultiLangText; // Multilingual (required in DB)
+  photoURL?: string;
+  birthDate?: string | Date;
+  birthPlace?: string;
+  experienceYears?: number;
+  description?: string | MultiLangText; // Multilingual
+  address?: string | MultiLangText; // Multilingual
+  lat?: number;
+  lng?: number;
+  mapURL?: string;
+  preferredLanguages?: any; // Json from Prisma
+  items?: ProfileItem[];
+  categoryId: string;
+  category?: { id: string; name: string | MultiLangText };
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+}
+
+declare interface ProfileItem {
+  id: string;
+  name: string | MultiLangText; // Multilingual (required in DB)
+  kind: FileKind;
+  fileType?: FileType;
+  parentId?: string;
+  profileId: string;
+  icon?: string;
+  imageUrl?: string;
+  href?: string;
+  subtitle?: string | MultiLangText; // Multilingual
+  description?: string | MultiLangText; // Multilingual
+  tooltipText?: string | MultiLangText; // Multilingual
+  extra?: any; // Json from Prisma
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+  children?: ProfileItem[];
+}
+
+declare interface Address {
+  address?: string | MultiLangText; // Multilingual
+  lat?: number;
+  lng?: number;
+  mapURL?: string;
+}
+
+declare interface Education {
+  id: string;
+  school: string;
+  major: string | MultiLangText; // Multilingual (required in DB)
+  startYear: number;
+  endYear: number;
+  schoolLogo?: string;
+  icon?: string;
+  categoryId: string;
+  category?: { id: string; name: string | MultiLangText };
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+}
+
+declare interface Experience {
+  id: string;
+  company: string;
+  role: string | MultiLangText; // Multilingual (required in DB)
+  location: string;
+  start: string;
+  end: string;
+  jobdesk?: string | MultiLangText; // Multilingual
+  description?: string | MultiLangText; // Multilingual
+  icon?: string;
+  categoryId: string;
+  category?: { id: string; name: string | MultiLangText };
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+}
+
+declare interface Project {
+  id: string;
+  name: string | MultiLangText; // Multilingual (required in DB)
+  icon: string;
+  subIcon?: string;
+  tooltipText?: string | MultiLangText; // Multilingual
+  description: string | MultiLangText; // Multilingual (required in DB)
+  progressValue: number;
+  demoURL?: string;
+  repoURL?: string;
+  techStack?: any; // Json from Prisma
+  categoryId: string;
+  category?: { id: string; name: string | MultiLangText };
+  entries?: ProjectEntry[];
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+}
+
+declare interface ProjectEntry {
+  id: string;
+  name: string | MultiLangText; // Multilingual (required in DB)
+  kind: FileKind;
+  fileType?: FileType;
+  parentId?: string;
+  projectId: string;
+  icon?: string;
+  subIcon?: string;
+  tooltipText?: string | MultiLangText; // Multilingual
+  href?: string;
+  imageUrl?: string;
+  subtitle?: string | MultiLangText; // Multilingual
+  progress?: number;
+  description?: string | MultiLangText; // Multilingual
+  techStack?: any; // Json from Prisma
+  extra?: any; // Json from Prisma
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+  children?: ProjectEntry[];
+}
+
+declare interface TechStack {
+  techIcon: string;
+  label: string;
+}
 
 // Default card
 declare interface DefaultCardData {
@@ -109,84 +261,29 @@ declare interface ActionCardProps {
   message?: string; 
 }
 
-
-declare interface ProfileProps {
-  name: string;
-  fullName: string;
-  role: string;
-  summary: string;
-  image: string;
-  birth_place: string;
-  birth_date: string
-}
-
-declare interface AddressProps {
-  address: string;
-  lat: number | string;
-  lng: number | string;
-  mapUrl?: string;
-}
-
-
-declare interface ExperienceProps {
-  company: string;
-  role: string;
-  location: string;
-  start: string;
-  end: string;
-  jobdesk: string;
-  description: string;
-  icon: string | React.ReactNode;
-}
-
-declare interface EducationProps {
-  school: string;
-  major: string;
-  startYear: number;
-  endYear: number;
-  icon?: string | React.ReactNode;
-  schoolLogo?: string | React.ReactNode;
-}
-
-declare interface ProjectProps {
-  name: string;
-  description: string;
-  icon: string | React.ReactNode;
-  subicon?: string | React.ReactNode;
-  tooltipText?: string;
-  progressValue: number;
-  demoURL?: string;
-  repoURL: string;
-  techStack: TechStackProps[];
-}
-
-declare interface ContactProps {
-  id?: string;
-  title: string;
-  description: string;
-  icon?: string | React.ReactNode;
-  bgColor?: string
-  href?: string;
-  tooltipText: string
-}
-
-declare interface TechStackProps {
-  techIcon: string;
-  label: string;
-}
-
 declare interface BuildPromptProps {
   message: string;
-  projects: ProjectProps[];
-  profile: ProfileProps;
-  address: AddressProps;
+  projects: Project[];
+  profile: Profile | null;
+  address: Address | null;
   contacts: DefaultCardData[];
-  educations: EducationProps[];
-  experiences: ExperienceProps[];
+  educations: Education[];
+  experiences: Experience[];
   memory?: ChatMemory;
   language: UILanguage,
   chatMode: ChatMode
   action: Action
+}
+
+
+declare interface PortfolioCache {
+  profile: Profile | null;
+  address: Address | null;
+  projects: Project[];
+  contacts: DefaultCardData[];
+  educations: Education[];
+  experiences: Experience[];
+  timestamp: number;
 }
 
 declare interface DockItemProps {
@@ -271,6 +368,7 @@ declare interface IconProps {
   IconComponent?: LucideIcon;
   size?: number;
   className?: string;
+  style?: React.CSSProperties;
   newTab?: boolean;
 }
 
@@ -279,21 +377,12 @@ declare interface AIResponse {
   cards: DataItemProps[];
 }
 
-declare interface PortfolioCache {
-  profile: ProfileProps;
-  address: AddressProps;
-  projects: ProjectProps[];
-  contacts: ContactProps[];
-  educations: EducationProps[];
-  experiences: ExperienceProps[];
-  timestamp: number;
-}
-
 declare interface HighlightProps {
   title: string;
   label: string;
   className?: string;
 }
+
 declare interface TelegramUser {
   id: number;
   is_bot: boolean;
@@ -301,8 +390,6 @@ declare interface TelegramUser {
   last_name?: string;
   username?: string;
 }
-
-declare type ChatType = "private" | "group" | "supergroup" | "channel";
 
 declare interface TelegramChat { id: number; type: ChatType; }
 
@@ -328,6 +415,7 @@ declare interface TelegramPayload {
 
 declare type FlagIconProps = {
   code: string;
+  flagCode?: string;
   size?: number; 
 }
 
@@ -387,6 +475,29 @@ declare interface ModalHeaderProps {
   disabled?: boolean;
 }
 
+declare interface ProfileDashboardProps {
+    categories: Category[];
+    data: Profile[];
+    setData: Dispatch<SetStateAction<Profile[]>>;
+    isDataLoading?: boolean;
+}
+
+declare interface ProjectModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (project: Project) => Promise<void>;
+  project?: Project;
+  categories?: Array<{ id: string; name: string }>;
+}
+
+declare interface ExperienceModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (experience: Experience) => Promise<void>;
+  experience?: Experience;
+  categories?: Array<{ id: string; name: string }>;
+}
+
 declare interface CategoryModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -434,124 +545,6 @@ declare interface FormTextareaProps extends React.TextareaHTMLAttributes<HTMLTex
   error?: string;
 }
 
-declare interface Category {
-  id: string;
-  name: string;
-  icon?: string;
-}
-
-declare interface Contact {
-  id: string;
-  title: string;
-  description: string;
-  tooltipText?: string;
-  icon?: string;
-  bgColor?: string;
-  contactURL?: string;
-  categoryId: string;
-  category?: { id: string; name: string };
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-declare interface Profile {
-  id: string;
-  name: string;
-  fullName: string;
-  jenisKelamin: 'PRIA' | 'WANITA';
-  role: string;
-  quote: string;
-  photoURL?: string;
-  birthDate?: string;
-  birthPlace?: string;
-  experienceYears?: number;
-  description?: string;
-  address?: string;
-  lat?: number;
-  lng?: number;
-  mapURL?: string;
-  categoryId: string;
-  category?: { id: string; name: string };
-}
-
-declare interface Education {
-  id: string;
-  school: string;
-  major: string;
-  startYear: number;
-  endYear: number;
-  schoolLogo?: string;
-  icon?: string;
-  categoryId: string;
-  category?: { id: string; name: string };
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-declare interface Experience {
-  id: string;
-  company: string;
-  role: string;
-  location: string;
-  start: string;
-  end: string;
-  jobdesk?: string;
-  description?: string;
-  icon?: string;
-  categoryId: string;
-  category?: { id: string; name: string };
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-declare interface ExperienceModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (experience: Experience) => Promise<void>;
-  experience?: Experience;
-  categories?: Array<{ id: string; name: string }>;
-}
-
-declare interface ProjectEntry {
-  id: string;
-  name: string;
-  kind: 'FILE' | 'CONTACT';
-  fileType?: 'PROJECT_INFO' | 'TECHSTACK' | 'FIG' | 'URL' | 'TXT' | 'IMG' | 'PDF' | 'OTHER' | 'CONTACT';
-  parentId?: string;
-  projectId: string;
-  icon?: string;
-  subIcon?: string;
-  tooltipText?: string;
-  href?: string;
-  imageUrl?: string;
-  subtitle?: string;
-  progress?: number;
-  description?: string;
-  techStack?: any;
-  extra?: any;
-  createdAt?: string;
-  updatedAt?: string;
-  children?: ProjectEntry[];
-}
-
-declare interface Project {
-  id: string;
-  name: string;
-  icon: string;
-  subIcon?: string;
-  tooltipText?: string;
-  description?: string;
-  progressValue?: number;
-  demoURL?: string;
-  repoURL?: string;
-  techStack?: Array<{ techIcon: string; label: string }> | null;
-  categoryId: string;
-  category?: { id: string; name: string };
-  entries?: ProjectEntry[];
-  createdAt?: string;
-  updatedAt?: string;
-}
-
 declare interface EducationDashboardProps {
     categories: Category[];
     data: Education[];
@@ -559,25 +552,22 @@ declare interface EducationDashboardProps {
     isDataLoading?: boolean;
 }
 
-interface ExperienceDashboardProps {
+declare interface ExperienceDashboardProps {
     categories: Category[];
     data: Experience[];
     setData: Dispatch<SetStateAction<Experience[]>>;
     isDataLoading?: boolean;
 }
 
-interface CategoryDashboardProps {
+declare interface CategoryDashboardProps {
     data: Category[];
     setData: Dispatch<SetStateAction<Category[]>>;
     isDataLoading?: boolean;
 }
 
-declare interface ProjectModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: (project: Project) => Promise<void>;
-  project?: Project;
-  categories?: Array<{ id: string; name: string }>;
+declare interface ContactDashboardProps {
+    categories: Category[];
+    data: Contact[];
+    setData: Dispatch<SetStateAction<Contact[]>>;
+    isDataLoading?: boolean;
 }
-
-

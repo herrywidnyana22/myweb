@@ -7,10 +7,12 @@ import { Avatar } from '../avatar';
 import { Forward, MousePointer2 } from 'lucide-react';
 import { ChatItemTelegram } from './chatItemTelegram';
 import { useAppStore } from '@/store/app';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatResponseProps) => {
 
-  const { chatMode, ui } = useAppStore();
+  const { chatMode } = useAppStore();
+  const { getUIText } = useLocalizedText();
 
   const isUser = role === 'user';
   const isTelegram = role === 'herry_telegram';
@@ -40,7 +42,7 @@ export const ChatItem = memo(({ role, text, isStreaming, isLoading }: ChatRespon
     if (role === "bot_telegram") {
       return (
         <ChatItemTelegram 
-          headerText={`${ui.forwarding} @herrywidnyana`}
+          headerText={`${getUIText('forwarding')} @herrywidnyana`}
           message={text || ''}
           icon={Forward}
         />

@@ -1,7 +1,7 @@
 
 import clsx from "clsx";
 import { parseHighlight } from "@/lib/utils/parseHighlight";
-import { useAppStore } from "@/store/app";
+import { useLocalizedText } from "@/hooks/useLocalizedText";
 
 type ConfirmCardProps = {
     onConfirm: () => void
@@ -9,7 +9,7 @@ type ConfirmCardProps = {
 } & ActionCardProps
 
 export const ConfirmCard = ({action, message, onConfirm, onCancel}: ConfirmCardProps) => {
-    const { ui } = useAppStore()
+   const { getUIText } = useLocalizedText();
     
     return ( 
         <div className="flex justify-start text-sm md:text-base">
@@ -23,7 +23,7 @@ export const ConfirmCard = ({action, message, onConfirm, onCancel}: ConfirmCardP
                         className="w-full px-3 py-1 rounded-md bg-gray-700 hover:bg-gray-500 text-white cursor-pointer"
                         onClick={onCancel}
                     >
-                        {parseHighlight(ui.cancel ?? '')}
+                        {parseHighlight(getUIText('cancel') ?? '')}
                     </button>
 
                     <button
@@ -34,7 +34,7 @@ export const ConfirmCard = ({action, message, onConfirm, onCancel}: ConfirmCardP
                         )}
                         onClick={onConfirm}
                     >
-                        {ui.confirm}
+                        {getUIText('confirm')}
                     </button>
                 </div>
             </div>

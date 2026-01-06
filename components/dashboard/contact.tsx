@@ -1,23 +1,24 @@
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import useDataStore from "@/store/data";
+import { useState } from "react";
+import { writeCache } from "@/lib/cache";
 import { DeleteConfirmModal } from "../modal/deleteConfirmModal";
-import { ButtonActionGroup } from "./buttonActionGroup";
+import { ActionButtonGroup } from "./actionButtonGroup";
 import { ContactModal } from "../modal/contactModal";
+import { ActionButton } from "./actionButton";
+import { Plus } from "lucide-react";
+import { useLocalizedText } from "@/hooks/useLocalizedText";
 
-
-interface ContactDashboardProps {
-    categories: Category[];
-    data: Contact[];
-    setData: Dispatch<SetStateAction<Contact[]>>;
-    isDataLoading?: boolean;
-}
-
-export const Contact = ({categories, data, setData, isDataLoading = false}: ContactDashboardProps) => {
+export const Contact = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
     const [isLoading, setIsLoading] = useState(false)
     const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deletingId, setDeletingId] = useState<string | null>(null);
+
+    // Get contacts from global store
+    const { contacts, setContacts, categories } = useDataStore();
+    const { getText } = useLocalizedText();
 
     const handleEditContact = (contact: Contact) => {
         setSelectedContact(contact);
@@ -44,15 +45,19 @@ export const Contact = ({categories, data, setData, isDataLoading = false}: Cont
             if (res.ok) {
                 const newContact = (await res.json()) as Contact;
 
+                // Update global store and cache
+                let updatedContacts: Contact[];
                 if (contactData.id) {
                     // Update existing contact
-                    setData((prev) =>
-                        prev.map((c) => (c.id === newContact.id ? newContact : c))
-                    );
+                    updatedContacts = contacts.map((c) => (c.id === newContact.id ? newContact : c));
                 } else {
                     // Add new contact
-                    setData((prev) => [...prev, newContact]);
+                    updatedContacts = [...contacts, newContact];
                 }
+                
+                setContacts(updatedContacts);
+                writeCache('contacts_cache', updatedContacts);
+                setIsModalOpen(false);
             } else {
                 const error = (await res.json()) as { error?: string };
                 throw new Error(error.error || 'Failed to save contact');
@@ -80,8 +85,11 @@ export const Contact = ({categories, data, setData, isDataLoading = false}: Cont
             });
 
             if (res.ok) {
-                // Remove contact from local state
-                setData((prev) => prev.filter((c) => c.id !== deletingId));
+                // Remove contact from global store and update cache
+                const updatedContacts = contacts.filter((c) => c.id !== deletingId);
+                setContacts(updatedContacts);
+                writeCache('contacts_cache', updatedContacts);
+                
                 setIsDeleteModalOpen(false);
                 setDeletingId(null);
             } else {
@@ -124,29 +132,29 @@ export const Contact = ({categories, data, setData, isDataLoading = false}: Cont
                 <div className="flex justify-between items-start mb-4">
                     <h2 className="text-xl font-bold text-white">Contacts</h2>
                     <div className="flex gap-2">
-                        <button
+                       <ActionButton
                             onClick={handleAddContact}
-                            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-1 px-3 rounded text-sm transition"
-                        >
-                            + Add
-                        </button>
+                            variant="add"
+                            icon={<> <Plus className="size-3"/> Add </>}
+                            title="Add Contact"
+                        />
                     </div>
                 </div>
 
-                {data.length === 0 ? (
+                {contacts.length === 0 ? (
                     <p className="text-gray-400 text-sm">No contacts found. Click "Add" to create one.</p>
                 ) : (
                     <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {data.map((contact) => (
-                        <div key={contact.id} className="bg-gray-600 rounded p-3 border border-gray-500 flex justify-between items-center">
+                    {contacts.map((contact) => (
+                        <div key={contact.id} className="group bg-gray-600 rounded p-3 border border-gray-500 flex justify-between items-center">
                             <div className='flex items-center gap-2'>
                                 {contact.icon &&(
                                     <Image
                                         src={contact.icon}
                                         alt="Contact Icon"
-                                        width={36}
-                                        height={36}
-                                        className="inline-block rounded-md object-cover"
+                                        width={32}
+                                        height={32}
+                                        className="size-8 inline-block rounded-md object-cover"
                                     />
                                 )}
                                 <div>
@@ -154,11 +162,11 @@ export const Contact = ({categories, data, setData, isDataLoading = false}: Cont
                                         {contact.title}
                                     </p>
                                     {contact.tooltipText && (
-                                        <p className="text-gray-300 text-xs">{contact.tooltipText}</p>
+                                        <p className="text-gray-300 text-xs">{getText(contact.description)}</p>
                                     )}
                                 </div>
                             </div>
-                            <ButtonActionGroup
+                            <ActionButtonGroup
                                 onEdit={() => handleEditContact(contact)}
                                 onDelete={() => handleDeleteContact(contact.id)}
                                 isLoading={isLoading}
@@ -173,7 +181,10 @@ export const Contact = ({categories, data, setData, isDataLoading = false}: Cont
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSaveContact}
                 contact={selectedContact || undefined}
-                categories={categories}
+                categories={categories.map(cat => ({
+                    id: cat.id,
+                    name: typeof cat.name === 'string' ? cat.name : getText(cat.name)
+                }))}
             />
             <DeleteConfirmModal
                 isOpen={isDeleteModalOpen}

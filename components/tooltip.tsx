@@ -46,7 +46,7 @@ export const Tooltip = ({
           >
             <div
               className={clsx(
-                "relative px-3 py-1 text-xs rounded-md shadow-2xl max-w-[180px] text-center whitespace-normal wrap-break-word",
+                "relative px-3 py-1 text-xs rounded-md shadow-2xl max-w-45 text-center whitespace-normal wrap-break-word",
                 // tailwind bg / text kalau **bukan** hex
                 !isHexBg && (bgColor ?? "bg-orange-100"),
                 !isHexText && (textColor ?? "text-orange-700")

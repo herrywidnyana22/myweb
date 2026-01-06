@@ -147,21 +147,21 @@ export const jsonFormatRule = `
   Card Types:
   Project
   {
-    "type": "project",
-    "title": string,
+    "category": "project",
+    "name": string,
     "description": string,
     "icon": string,
     "progressValue"?: number,
-    "demoLink"?: string,
-    "githubLink"?: string,
-    "iconCategory"?: [
-      { "src": string, "label": string }
+    "demoURL"?: string,
+    "repoURL"?: string,
+    "techStack"?: [
+      { "techIcon": string, "label": string }
     ]
   }
 
   Education
   {
-    "type": "education",
+    "category": "education",
     "school": string,
     "major": string,
     "year": string,
@@ -171,7 +171,7 @@ export const jsonFormatRule = `
 
   Experience
   {
-    "type": "experience",
+    "category": "experience",
     "company": string,
     "role": string,
     "location": string,
@@ -183,7 +183,7 @@ export const jsonFormatRule = `
 
   Address
   {
-    "type": "address",
+    "category": "address",
     "address": string,
     "lat": number | string,
     "lng": number | string,
@@ -192,7 +192,7 @@ export const jsonFormatRule = `
 
   Contact
   {
-    "type": "contact",
+    "category": "contact",
     "title": string,
     "description": string,
     "bg"?: string
@@ -203,7 +203,7 @@ export const jsonFormatRule = `
 
   Action
   {
-    type: "action",
+    category: "action",
     action: "language" | "telegram",
     targetLanguage?: string -> (ISO code provided),
     message?: string,
@@ -211,7 +211,7 @@ export const jsonFormatRule = `
 
   Default
   {
-    "type": "default",
+    "category": "default",
     "title": string,
     "description": string,
     "icon"?: string,
@@ -252,7 +252,7 @@ export const contextRules = `
       "bicara langsung", "ngobrol pribadi", "tele", "dm", "pesan langsung"
       → selalu kirim card:
       {
-        "type": "action",
+        "category": "action",
         "action": "telegram",
         "message": "Klik tombol ini untuk terhubung via <mark data-type="telegram">Telegram.</mark>"
       }
@@ -337,4 +337,39 @@ export const memoryRule = `
     - Jika user berkata: "aku mau, Andi bantu aku" → TIDAK ADA nama user
     - Jika user berkata: "bantu aku Herry" → itu bukan nama user → abaikan
     - Jika user berkata: "namaku bukan Andi, tapi Budi" → update memory
+`
+
+// Field Translation Rules
+export const fieldTranslationRules = `
+  Field Translation Instructions:
+  
+  You are a professional translator specializing in web content localization.
+  Your task is to translate text from one language into multiple target languages.
+  
+  CRITICAL RULES:
+  1. Translate naturally and maintain the original meaning and tone
+  2. Preserve formatting: line breaks, punctuation, capitalization style
+  3. For technical terms, use commonly accepted translations in each language
+  4. For proper nouns (names, brands, locations), keep them unchanged unless they have standard translations
+  5. Maintain formality level: casual → casual, formal → formal, professional → professional
+  
+  CONTEXT AWARENESS:
+  - Role/Job titles: Translate professionally (e.g., "Full Stack Developer" → "フルスタック開発者", "Desarrollador Full Stack")
+  - Quotes/Mottos: Translate with cultural sensitivity, preserving the inspirational tone
+  - Descriptions: Use natural, fluent language appropriate for the target culture
+  - Tech stack: Keep programming languages/framework names unchanged (e.g., "React", "Python")
+  - Location names: Use standard localized names (e.g., "Indonesia" → "インドネシア", "Indonésie")
+  
+  OUTPUT FORMAT:
+  - Return ONLY a valid JSON object
+  - No markdown formatting, no code blocks, no explanations
+  - Include "source" field with original text
+  - Include one field per target language using language code as key
+  - All text values must be properly escaped for JSON
+  
+  QUALITY CHECKS:
+  - Ensure no text is missing or truncated
+  - Verify JSON is valid and parseable
+  - Check all requested target languages are included
+  - Maintain consistent terminology across related fields
 `

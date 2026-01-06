@@ -1,14 +1,15 @@
 'use client';
 
+import useDataStore from "@/store/data";
+
 import { SwiperSlide, Swiper } from "swiper/react";
 import { EffectCreative, Pagination } from "swiper/modules";
-import { useData } from "@/hooks/useData";
-import { useAppStore } from "@/store/app";
 import { ExperienceCard } from "../card/experienceCard";
+import { useLocalizedText } from "@/hooks/useLocalizedText";
 
 export const Experiences = () => {
-  const { data, isLoading, error } = useData<ExperienceProps>('experiences');
-  const { ui } = useAppStore()
+  const { experiences, isLoading, error } = useDataStore();
+  const { getUIText } = useLocalizedText();
 
   if (isLoading) {
     return (
@@ -52,11 +53,11 @@ export const Experiences = () => {
   }
 
   if (error) {
-    return <p className="text-center text-red-400 p-4">{ui.dataLoadFailed}</p>;
+    return <p className="text-center text-red-400 p-4">{getUIText('dataLoadFailed')}</p>;
   }
 
-  if (!data?.length) {
-    return <p className="text-center text-gray-400 p-4">{ui.dataEmpty}</p>;
+  if (!experiences?.length) {
+    return <p className="text-center text-gray-400 p-4">{getUIText('dataEmpty')}</p>;
   }
 
   return (
@@ -75,7 +76,7 @@ export const Experiences = () => {
         modules={[EffectCreative, Pagination]}
         className="mySwiper w-full h-full overflow-hidden"
       >
-        {data.map((project, i) => (
+        {experiences.map((project, i) => (
           <SwiperSlide key={i}>
             <ExperienceCard {...project} />
           </SwiperSlide>

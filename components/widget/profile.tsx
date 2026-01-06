@@ -1,118 +1,32 @@
 'use client'
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 import { MapPin, Calendar } from 'lucide-react';
 import { useAppStore } from '@/store/app';
-
-const CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour
-
-interface CacheEntry<T> {
-  data: T;
-  timestamp: number;
-}
-
-function readCache<T>(key: string): T | null {
-  try {
-    const cached = localStorage.getItem(key);
-    if (!cached) return null;
-
-    const entry: CacheEntry<T> = JSON.parse(cached);
-    const isExpired = Date.now() - entry.timestamp > CACHE_TTL_MS;
-
-    if (isExpired) {
-      localStorage.removeItem(key);
-      return null;
-    }
-
-    return entry.data;
-  } catch (err) {
-    console.error(`Failed to read cache "${key}":`, err);
-    return null;
-  }
-}
-
-function writeCache<T>(key: string, data: T): void {
-  try {
-    const entry: CacheEntry<T> = {
-      data,
-      timestamp: Date.now(),
-    };
-    localStorage.setItem(key, JSON.stringify(entry));
-  } catch (err) {
-    console.error(`Failed to write cache "${key}":`, err);
-  }
-}
+import useDataStore from '@/store/data';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 export const Profile = () => {
-  const [profileData, setProfileData] = useState<ProfileProps | null>(null);
-  const [addressData, setAddressData] = useState<AddressProps | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { profiles, isLoading, error } = useDataStore();
+  const { getText, getUIText } = useLocalizedText();
 
-  const { ui } = useAppStore()
+  const profile = profiles[0];
 
-  // Fetch profile data (includes address)
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
+  // Transform profile data for rendering
+  const profileData = profile ? {
+    fullName: profile.fullName,
+    role: profile.role,
+    summary: profile.description,
+    image: profile.photoURL,
+    birth_date: profile.birthDate,
+  } : null;
 
-        // Check cache first
-        const cachedProfile = readCache<ProfileProps>('profile_cache');
-        const cachedAddress = readCache<AddressProps>('address_cache');
-        
-        if (cachedProfile && cachedAddress) {
-          setProfileData(cachedProfile);
-          setAddressData(cachedAddress);
-          setIsLoading(false);
-          return;
-        }
-
-        // Fetch from API
-        const response = await fetch('/api/profiles');
-        if (!response.ok) throw new Error('Failed to fetch profile');
-
-        const profiles = (await response.json()) as any[];
-        if (!profiles || profiles.length === 0) {
-          throw new Error('No profile found');
-        }
-
-        // Format the first profile to match component expectations
-        const raw = profiles[0];
-        const profileData: ProfileProps = {
-          name: raw.name,
-          fullName: raw.fullName,
-          role: raw.role,
-          summary: raw.description,
-          image: raw.photoURL,
-          birth_date: raw.birthDate,
-          birth_place: raw.birthPlace,
-        };
-
-        const addressData: AddressProps = {
-          address: raw.address,
-          lat: raw.lat,
-          lng: raw.lng,
-          mapUrl: raw.mapURL,
-        };
-
-        setProfileData(profileData);
-        setAddressData(addressData);
-        
-        // Cache both
-        writeCache('profile_cache', profileData);
-        writeCache('address_cache', addressData);
-      } catch (err) {
-        console.error('Error fetching profile:', err);
-        setError(err instanceof Error ? err.message : 'Failed to load profile');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const addressData = profile ? {
+    address: profile.address,
+    lat: profile.lat,
+    lng: profile.lng,
+    mapUrl: profile.mapURL,
+  } : null;
 
   if (isLoading) {
     return (
@@ -132,11 +46,11 @@ export const Profile = () => {
   }
 
   if (error) {
-    return <p className="text-center text-red-400 p-4">{ui.dataLoadFailed}</p>;
+    return <p className="text-center text-red-400 p-4">{getUIText('dataLoadFailed')}</p>;
   }
 
   if (!profileData || !addressData) {
-    return <p className="text-center text-gray-400 p-4">{ui.dataEmpty}</p>;
+    return <p className="text-center text-gray-400 p-4">{getUIText('dataEmpty')}</p>;
   }
   
   const { fullName, role, summary, image, birth_date } = profileData;
@@ -167,11 +81,11 @@ export const Profile = () => {
           </h2>
 
           <p className="text-sm sm:text-base text-white/80 mb-2">
-            {role}
+            {getText(role)}
           </p>
           {/* SUMMARY */}
           <p className="text-xs sm:text-sm text-white/60 leading-relaxed line-clamp-2 mb-3">
-            {summary}
+            {getText(summary)}
           </p>
 
         </div>
@@ -180,7 +94,7 @@ export const Profile = () => {
         <div className="grid grid-cols-2 gap-3">
           <div className="flex items-center gap-2 text-white/80">
             <MapPin size={14} className="text-white/60 shrink-0" />
-            <span className="text-xs sm:text-sm truncate">{address}</span>
+            <span className="text-xs sm:text-sm truncate">{getText(address)}</span>
           </div>
 
           <div className="flex items-center gap-2 text-white/80">

@@ -3,11 +3,14 @@
 import { useEffect, useState, useCallback } from 'react';
 import { FormInput } from '../form/FormInput';
 import { FormSelect } from '../form/FormSelect';
-import { FormTextarea } from '../form/FormTextarea';
 import { FormImageUpload } from '../form/FormImageUpload';
 import { FormError } from '../form/FormError';
 import { ModalHeader } from '../form/ModalHeader';
 import { ModalActions } from '../form/ModalActions';
+import { MultiLangInput } from '../form/MultiLangInput';
+import { MultiLangText, createMultiLangText } from '@/lib/constants/languages';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 
 const DEFAULT_PROFILE: Omit<Profile, 'id'> = {
@@ -37,6 +40,10 @@ export function ProfileModal({
   const [error, setError] = useState('');
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  
+  // Use global language context
+  const { selectedTranslationLanguages, getLanguageInfo } = useLanguage();
+  const { getText } = useLocalizedText();
 
   useEffect(() => {
     if (profile) {
@@ -64,6 +71,13 @@ export function ProfileModal({
             ? Number(value)
             : undefined
           : value,
+    }));
+  };
+
+  const handleMultiLangChange = (field: string, value: MultiLangText) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
     }));
   };
 
@@ -160,22 +174,22 @@ export function ProfileModal({
           <FormError message={error} />
           {/* Category Select */}
           <div className="md:col-span-2">
-              <FormSelect
-                label="Category"
-                required
-                name="categoryId"
-                value={formData.categoryId}
-                onChange={handleChange}
-                options={[
-                  { value: '', label: 'Select a category' },
-                  ...categories.map((cat) => ({
-                    value: cat.id,
-                    label: cat.name,
-                  })),
-                ]}
-                disabled={isSubmitting}
-              />
-            </div>
+            <FormSelect
+              label="Category"
+              required
+              name="categoryId"
+              value={formData.categoryId}
+              onChange={handleChange}
+              options={[
+                { value: '', label: 'Select a category' },
+                ...categories.map((cat) => ({
+                  value: cat.id,
+                  label: cat.name,
+                })),
+              ]}
+              disabled={isSubmitting}
+            />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Required Fields */}
             <FormInput
@@ -189,16 +203,18 @@ export function ProfileModal({
               disabled={isSubmitting}
             />
 
-            <FormInput
-              label="Full Name"
-              required
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              placeholder="e.g., Herry Sanjaya"
-              disabled={isSubmitting}
-            />
+            <div className="md:col-span-2">
+              <FormInput
+                label="Full Name"
+                required
+                type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                placeholder="e.g., Herry Sanjaya"
+                disabled={isSubmitting}
+              />
+            </div>
 
             <FormSelect
               label="Gender"
@@ -213,27 +229,30 @@ export function ProfileModal({
               disabled={isSubmitting}
             />
 
-            <FormInput
-              label="Role"
-              required
-              type="text"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              placeholder="e.g., Full Stack Developer"
-              disabled={isSubmitting}
-            />
+            <div className="md:col-span-2">
+              <MultiLangInput
+                label="Role"
+                value={formData.role || createMultiLangText('')}
+                onChange={(val) => handleMultiLangChange('role', val)}
+                selectedLanguages={selectedTranslationLanguages}
+                placeholder="e.g., Full Stack Developer"
+                disabled={isSubmitting}
+                type="input"
+                getLanguageInfo={getLanguageInfo}
+              />
+            </div>
 
             <div className="md:col-span-2">
-              <FormTextarea
+              <MultiLangInput
                 label="Quote"
-                required
-                name="quote"
-                value={formData.quote}
-                onChange={handleChange}
+                value={formData.quote || createMultiLangText('')}
+                onChange={(val) => handleMultiLangChange('quote', val)}
+                selectedLanguages={selectedTranslationLanguages}
                 placeholder="Your inspirational quote"
-                rows={2}
                 disabled={isSubmitting}
+                type="textarea"
+                rows={2}
+                getLanguageInfo={getLanguageInfo}
               />
             </div>
 
@@ -250,21 +269,23 @@ export function ProfileModal({
             />
 
             {/* Optional Fields */}
-            <FormInput
-              label="Birth Place"
-              type="text"
-              name="birthPlace"
-              value={formData.birthPlace || ''}
-              onChange={handleChange}
-              placeholder="e.g., Jakarta"
-              disabled={isSubmitting}
-            />
+            <div className="md:col-span-2">
+              <FormInput
+                label="Birth Place"
+                type="text"
+                name="birthPlace"
+                value={formData.birthPlace || ''}
+                onChange={handleChange}
+                placeholder="e.g., Jakarta"
+                disabled={isSubmitting}
+              />
+            </div>
 
             <FormInput
               label="Birth Date"
               type="date"
               name="birthDate"
-              value={formData.birthDate ? formData.birthDate.split('T')[0] : ''}
+              value={formData.birthDate ? (typeof formData.birthDate === 'string' ? formData.birthDate.split('T')[0] : formData.birthDate.toISOString().split('T')[0]) : ''}
               onChange={handleChange}
               disabled={isSubmitting}
             />
@@ -280,26 +301,31 @@ export function ProfileModal({
             />
 
             <div className="md:col-span-2">
-              <FormTextarea
+              <MultiLangInput
                 label="Description"
-                name="description"
-                value={formData.description || ''}
-                onChange={handleChange}
+                value={formData.description || createMultiLangText('')}
+                onChange={(val) => handleMultiLangChange('description', val)}
+                selectedLanguages={selectedTranslationLanguages}
                 placeholder="About yourself..."
-                rows={3}
                 disabled={isSubmitting}
+                type="textarea"
+                rows={3}
+                getLanguageInfo={getLanguageInfo}
               />
             </div>
 
-            <FormInput
-              label="Address"
-              type="text"
-              name="address"
-              value={formData.address || ''}
-              onChange={handleChange}
-              placeholder="Your address"
-              disabled={isSubmitting}
-            />
+            <div className="md:col-span-2">
+              <MultiLangInput
+                label="Address"
+                value={formData.address || createMultiLangText('')}
+                onChange={(val) => handleMultiLangChange('address', val)}
+                selectedLanguages={selectedTranslationLanguages}
+                placeholder="Your address"
+                disabled={isSubmitting}
+                type="input"
+                getLanguageInfo={getLanguageInfo}
+              />
+            </div>
 
             <FormInput
               label="Latitude"

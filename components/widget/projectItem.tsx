@@ -3,12 +3,12 @@
 import Image from "next/image";
 import { Eye, Github } from "lucide-react";
 import { parseHighlight } from "@/lib/utils/parseHighlight";
-import { useAppStore } from "@/store/app";
 import { ProgressCircle } from "../charts/circleProgress";
 import { Icon } from "../icon";
+import { useLocalizedText } from "@/hooks/useLocalizedText";
 
-export const ProjectItem = (project: ProjectProps) => {
-  const { ui } = useAppStore()
+export const ProjectItem = (project: Project) => {
+  const { getText, getUIText } = useLocalizedText();
 
   return (
     <div
@@ -39,7 +39,7 @@ export const ProjectItem = (project: ProjectProps) => {
             leading-snug sm:leading-tight
           "
         >
-          {parseHighlight(project.name || '')}
+          {parseHighlight(getText(project.name) || '')}
         </h3>
       </div>
 
@@ -52,13 +52,13 @@ export const ProjectItem = (project: ProjectProps) => {
 
         {/* Description */}
         <div className="text-xs sm:text-sm font-light text-gray-600 leading-relaxed">
-          {parseHighlight(project.description || '')}
+          {parseHighlight(getText(project.description) || '')}
         </div>
 
         <div className="flex items-center justify-between">
         {/* Tech stack icons */}
           <div className="mt-4 flex flex-wrap gap-1.5 sm:gap-2">
-            {project.techStack && project.techStack.map((tech, i) => (
+            {project.techStack && project.techStack.map((tech: TechStack, i: number) => (
                 <Icon
                   key={i}
                   tooltipLabel={tech.label}
@@ -73,8 +73,8 @@ export const ProjectItem = (project: ProjectProps) => {
           <div className="mt-4 sm:mt-5 flex gap-2 justify-end flex-wrap">
             {project.repoURL && typeof project.repoURL === "string" && (
               <Icon
-                tooltipLabel={ui.viewCode}
-                textLabel={ui.source}
+                tooltipLabel={getUIText('viewCode')}
+                textLabel={getUIText('source')}
                 href={project.repoURL}
                 IconComponent={Github}
                 size={14}
@@ -89,8 +89,8 @@ export const ProjectItem = (project: ProjectProps) => {
 
             {project.demoURL && typeof project.demoURL === "string" && (
               <Icon
-                tooltipLabel={ui.viewDemo}
-                textLabel={ui.preview}
+                tooltipLabel={getUIText('viewDemo')}
+                textLabel={getUIText('preview')}
                 href={project.demoURL}
                 IconComponent={Eye}
                 size={14}

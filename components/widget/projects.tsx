@@ -1,49 +1,15 @@
 'use client';
 
+import useDataStore from '@/store/data';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCreative, Pagination } from 'swiper/modules';
-import { useAppStore } from '@/store/app';
 import { ProjectItem } from './projectItem';
-import { useEffect, useState } from 'react';
-import { readCache, writeCache } from '@/lib/cache';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 export const Projects = () => {
-  const { ui } = useAppStore();
-  const [data, setData] = useState<ProjectProps[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-   console.log({data})
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Check cache first
-        const cachedProjects = readCache<ProjectProps[]>('projects_cache');
-        if (cachedProjects) {
-          setData(cachedProjects);
-          setIsLoading(false);
-          return;
-        }
-
-        // Fetch from API if not cached
-        const response = await fetch('/api/projects');
-        if (response.ok) {
-          const projects = (await response.json()) as ProjectProps[];
-          setData(projects);
-          writeCache('projects_cache', projects);
-        } else {
-          setError('Failed to fetch projects');
-        }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { getUIText } = useLocalizedText();
+  const { projects, isLoading, error } = useDataStore();
   
   if (isLoading) {
     return (
@@ -81,11 +47,11 @@ export const Projects = () => {
   }
 
    if (error) {
-    return <p className="text-center text-red-400 p-4">{ui.dataLoadFailed}</p>;
+    return <p className="text-center text-red-400 p-4">{getUIText('dataLoadFailed')}</p>;
   }
 
-  if (!data?.length) {
-    return <p className="text-center text-gray-400 p-4">{ui.dataEmpty}</p>;
+  if (!projects?.length) {
+    return <p className="text-center text-gray-400 p-4">{getUIText('dataEmpty')}</p>;
   }
 
   return (
@@ -104,7 +70,7 @@ export const Projects = () => {
         modules={[EffectCreative, Pagination]}
         className="mySwiper w-full h-full overflow-hidden"
       >
-        {data.map((project, i) => (
+        {projects.map((project, i) => (
           <SwiperSlide key={i}>
             <ProjectItem {...project} />
           </SwiperSlide>

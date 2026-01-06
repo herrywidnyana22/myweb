@@ -167,6 +167,7 @@ export async function PUT(
       lng?: number;
       mapURL?: string;
       categoryId?: string;
+      preferredLanguages?: string[];
     };
 
     const profile = await prisma.profile.update({
@@ -187,6 +188,7 @@ export async function PUT(
         ...(body.lng !== undefined && { lng: body.lng }),
         ...(body.mapURL !== undefined && { mapURL: body.mapURL }),
         ...(body.categoryId !== undefined && { categoryId: body.categoryId }),
+        ...(body.preferredLanguages !== undefined && { preferredLanguages: body.preferredLanguages }),
       },
       include: {
         category: true,
@@ -201,4 +203,59 @@ export async function PUT(
       { status: 500 }
     );
   } 
+}
+
+export async function PATCH(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
+  try {
+    const auth = await authenticateRequest(req);
+
+    if (!auth) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const { id } = await context.params;
+
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Profile ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const body = (await req.json()) as {
+      preferredLanguages?: string[];
+    };
+
+    if (!body.preferredLanguages) {
+      return NextResponse.json(
+        { error: 'preferredLanguages is required' },
+        { status: 400 }
+      );
+    }
+
+    const profile = await prisma.profile.update({
+      where: { id },
+      data: {
+        preferredLanguages: body.preferredLanguages,
+      },
+      select: {
+        id: true,
+        preferredLanguages: true,
+      },
+    });
+
+    return NextResponse.json(profile);
+  } catch (error) {
+    console.error('Error updating language preferences:', error);
+    return NextResponse.json(
+      { error: 'Failed to update language preferences' },
+      { status: 500 }
+    );
+  }
 }

@@ -6,12 +6,14 @@ import { ProjectCard } from './projectCard';
 import { ContactCard } from './contactCard';
 import { parseHighlight } from '@/lib/utils/parseHighlight';
 import { ConfirmCard } from './confirmCard';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 type CardProps = DataItemProps & {
   onConfirm: (action: ConfirmAction, actionType: Action, targetLang?: UILanguage) => void;
 }
 
 const CardComponent = (card: CardProps) => {
+  const { getText } = useLocalizedText();
 
   switch (card.type) {
     case 'project':
@@ -43,8 +45,8 @@ const CardComponent = (card: CardProps) => {
             )}
           <div>
             <h3 className="font-semibold text-primary text-sm sm:text-base md:text-lg">{parseHighlight(card.school ?? '')}</h3>
-            <p className="text-xs sm:text-sm text-gray-600">{parseHighlight(card.major ?? '')}</p>
-            <p className="text-[11px] sm:text-xs text-gray-400">{parseHighlight(card.year ?? '')}</p>
+            <p className="text-xs sm:text-sm text-gray-600">{parseHighlight(getText(card.major) ?? '')}</p>
+            <p className="text-[11px] sm:text-xs text-gray-400"> {parseHighlight(card.startYear + " - " + card.endYear)}</p>
           </div>
         </div>
       );
@@ -66,23 +68,23 @@ const CardComponent = (card: CardProps) => {
                 {parseHighlight(card.company ?? '')}
               </h3>
               <p className="text-xs sm:text-sm text-gray-700">
-                {parseHighlight(card.role ?? '')}
+                {parseHighlight(getText(card.role) ?? '')}
               </p>
               <p className="text-[11px] sm:text-xs text-gray-500 mt-1">
-                {parseHighlight(card.year ?? '')}
+                {parseHighlight(card.start + " - " + card.end)}
               </p>
             </div>
           </div>
-          <p className="text-xs sm:text-sm mt-1 sm:mt-2">{parseHighlight(card.description ?? '')}</p>
+          <p className="text-xs sm:text-sm mt-1 sm:mt-2">{parseHighlight(getText(card.description) ?? '')}</p>
         </div>
       );
     case 'address':
       return (
         <div>
-          <h3 className="font-semibold text-sm sm:text-base">{parseHighlight(card.address ?? '')}</h3>
-          {card.mapUrl && (
+          <h3 className="font-semibold text-sm sm:text-base">{parseHighlight(getText(card.address) ?? '')}</h3>
+          {card.mapURL && (
             <iframe
-              src={`${card.mapUrl}&output=embed`}
+              src={`${card.mapURL}&output=embed`}
               width="100%"
               height="160"
               className="rounded-lg sm:rounded-xl mt-2 sm:mt-3"
@@ -97,7 +99,7 @@ const CardComponent = (card: CardProps) => {
         <div>
           <h3 className="text-sm sm:text-md text-gray-600">{parseHighlight(card.title ?? '')}</h3>
           <div className="font-semibold text-sm sm:text-base md:text-md">
-            <p>{parseHighlight(card.description ?? '')}</p>
+            <p>{parseHighlight(getText(card.description) ?? '')}</p>
           </div>
         </div>
       );
@@ -112,7 +114,7 @@ export const Card = memo((props: CardProps) => {
         border p-3 sm:p-4
         rounded-xl 
         shadow-sm bg-white text-neutral-800 
-        w-full sm:max-w-[450px] 
+        w-full sm:max-w-112.5 
         transition hover:shadow-md
       "
     >

@@ -1,18 +1,25 @@
 import Image from "next/image";
-
+import useDataStore from "@/store/data";
 import { useState } from "react";
+import { writeCache } from "@/lib/cache";
 import { CategoryModal } from "../modal/categoryModal";
 import { DeleteConfirmModal } from "../modal/deleteConfirmModal";
-import { ButtonActionGroup } from "./buttonActionGroup";
+import { ActionButtonGroup } from "./actionButtonGroup";
+import { Plus } from "lucide-react";
+import { ActionButton } from "./actionButton";
+import { useLocalizedText } from "@/hooks/useLocalizedText";
 
-
-export const Category = ({data, setData, isDataLoading = false}: CategoryDashboardProps) => {
+export const Category = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
     
     const [isLoading, setIsLoading] = useState(false)
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deletingId, setDeletingId] = useState<string | null>(null);
+
+    // Get categories from global store
+    const { categories, setCategories } = useDataStore();
+    const { getText } = useLocalizedText();
 
     const handleEditCategory = (category: Category) => {
         setSelectedCategory(category);
@@ -39,13 +46,17 @@ export const Category = ({data, setData, isDataLoading = false}: CategoryDashboa
             if (res.ok) {
                 const newCategory = (await res.json()) as Category;
 
+                // Update global store and cache
+                let updatedCategories: Category[];
                 if (categoryData.id) {
-                    setData((prev: Category[]) =>
-                        prev.map((c) => (c.id === newCategory.id ? newCategory : c))
-                    );
+                    updatedCategories = categories.map((c) => (c.id === newCategory.id ? newCategory : c));
                 } else {
-                    setData((prev: Category[]) => [...prev, newCategory]);
+                    updatedCategories = [...categories, newCategory];
                 }
+                
+                setCategories(updatedCategories);
+                writeCache('categories_cache', updatedCategories);
+                setIsModalOpen(false);
             } else {
                 const error = (await res.json()) as { error?: string };
                 throw new Error(error.error || 'Failed to save category');
@@ -73,7 +84,11 @@ export const Category = ({data, setData, isDataLoading = false}: CategoryDashboa
             });
 
             if (res.ok) {
-                setData((prev: Category[]) => prev.filter((c) => c.id !== deletingId));
+                // Remove category from global store and update cache
+                const updatedCategories = categories.filter((c) => c.id !== deletingId);
+                setCategories(updatedCategories);
+                writeCache('categories_cache', updatedCategories);
+                
                 setIsDeleteModalOpen(false);
                 setDeletingId(null);
             } else {
@@ -116,36 +131,38 @@ export const Category = ({data, setData, isDataLoading = false}: CategoryDashboa
                 <div className="flex justify-between items-start mb-4">
                     <h2 className="text-xl font-bold text-white">Categories</h2>
                     <div className="flex gap-2">
-                        <button
+                        <ActionButton
                             onClick={handleAddCategory}
-                            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-1 px-3 rounded text-sm transition"
-                        >
-                            + Add
-                        </button>
+                            variant="add"
+                            icon={
+                                <><Plus className="size-3"/> Add</>
+                            }
+                            title="Add Category"
+                        />
                     </div>
                 </div>
 
-                {data.length === 0 ? (
+                {categories.length === 0 ? (
                     <p className="text-gray-400 text-sm">No categories found. Click "Add" to create one.</p>
                 ) : (
                     <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {data.map((cat) => (
-                        <div key={cat.id} className="bg-gray-600 rounded p-3 border border-gray-500 flex justify-between items-center">
+                    {categories.map((cat) => (
+                        <div key={cat.id} className="group bg-gray-600 rounded p-3 border border-gray-500 flex justify-between items-center">
                             <div className='flex items-center gap-2'>
                                 {cat.icon &&(
                                     <Image
                                         src={cat.icon}
                                         alt="Category Icon"
-                                        width={36}
-                                        height={36}
-                                        className="inline-block rounded-md object-cover"
+                                        width={32}
+                                        height={32}
+                                        className="size-8 inline-block rounded-md object-cover"
                                     />
                                 )}
                                 <p className="text-white font-semibold">
-                                    {cat.name}
+                                    {getText(cat.name)}
                                 </p>
                             </div>
-                            <ButtonActionGroup
+                            <ActionButtonGroup
                                 onEdit={() => handleEditCategory(cat)}
                                 onDelete={() => handleDeleteCategory(cat.id)}
                                 isLoading={isLoading}

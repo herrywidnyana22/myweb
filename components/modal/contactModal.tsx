@@ -3,11 +3,14 @@
 import { useEffect, useState, useCallback } from 'react';
 import { FormInput } from '../form/FormInput';
 import { FormSelect } from '../form/FormSelect';
-import { FormTextarea } from '../form/FormTextarea';
 import { FormImageUpload } from '../form/FormImageUpload';
 import { FormError } from '../form/FormError';
 import { ModalHeader } from '../form/ModalHeader';
 import { ModalActions } from '../form/ModalActions';
+import { MultiLangInput } from '../form/MultiLangInput';
+import { MultiLangText, createMultiLangText } from '@/lib/constants/languages';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 const DEFAULT_CONTACT: Omit<Contact, 'id'> = {
   title: '',
@@ -38,6 +41,9 @@ export function ContactModal({
   const [isUploadingIcon, setIsUploadingIcon] = useState(false);
   const [iconPreview, setIconPreview] = useState<string | null>(null);
 
+  const { selectedTranslationLanguages, getLanguageInfo } = useLanguage();
+  const { getText } = useLocalizedText();
+
   useEffect(() => {
     if (contact) {
       setFormData(contact);
@@ -59,6 +65,13 @@ export function ContactModal({
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const handleMultiLangChange = (field: string, value: MultiLangText) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
     }));
   };
 
@@ -143,7 +156,7 @@ export function ContactModal({
     <div 
       className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
     >
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[80vh] overflow-y-auto">
         <ModalHeader
           title={contact ? 'Edit Contact' : 'Add Contact'}
           onClose={handleCloseModal}
@@ -163,7 +176,7 @@ export function ContactModal({
               disabled={isSubmitting}
               options={[
                 { value: '', label: 'Select a category' },
-                ...(categories || []).map(cat => ({ value: cat.id, label: cat.name }))
+                ...(categories || []).map(cat => ({ value: cat.id, label: typeof cat.name === 'string' ? cat.name : getText(cat.name) }))
               ]}
             />
 
@@ -178,24 +191,26 @@ export function ContactModal({
               disabled={isSubmitting}
             />
 
-            <FormInput
+            <MultiLangInput
               label="Description"
-              required
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
+              value={formData.description || createMultiLangText('')}
+              onChange={(val) => handleMultiLangChange('description', val)}
+              selectedLanguages={selectedTranslationLanguages}
               placeholder="e.g., testing@gmail.com, 123-456-7890"
               disabled={isSubmitting}
+              type="input"
+              getLanguageInfo={getLanguageInfo}
             />
 
-            <FormInput
+            <MultiLangInput
               label="Tooltip Text"
-              type="text"
-              name="tooltipText"
-              value={formData.tooltipText}
-              onChange={handleChange}
+              value={formData.tooltipText || createMultiLangText('')}
+              onChange={(val) => handleMultiLangChange('tooltipText', val)}
+              selectedLanguages={selectedTranslationLanguages}
               placeholder="e.g., Click to send email"
               disabled={isSubmitting}
+              type="input"
+              getLanguageInfo={getLanguageInfo}
             />
 
             <FormInput

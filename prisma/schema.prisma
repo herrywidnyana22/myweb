@@ -42,7 +42,7 @@ enum ItemType {
 
 model Category {
   id        String    @id @default(uuid())
-  name      String
+  name      Json      // Multilingual
   icon      String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -57,8 +57,8 @@ model Category {
 model Contact {
   id          String    @id @default(uuid())
   title       String
-  description String
-  tooltipText String?
+  description Json      // Multilingual
+  tooltipText Json?     // Multilingual
   icon        String?
   bgColor     String?
   contactURL  String?
@@ -71,22 +71,24 @@ model Contact {
 
 model Profile {
   id          String    @id @default(uuid())
-  name       String
+  name       String    // Internal identifier (not translated)
   fullName String
-  jenisKelamin        JenisKelamin
-  role     String
-  quote  String
+  jenisKelamin        JenisKelamin  // UI will translate enum values
+  role     Json       // Multilingual
+  quote  Json         // Multilingual
   photoURL   String?
   birthDate  DateTime?
   birthPlace String?
   experienceYears Int?
 
-  description String?
+  description Json?    // Multilingual
 
-  address    String?
+  address    Json?     // Multilingual
   lat  Float?
   lng Float?
   mapURL    String?
+
+  preferredLanguages Json?  // ["en", "ja", "zh"] - User's language preferences
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -97,10 +99,40 @@ model Profile {
   items           ProfileItem[]
 }
 
+model ProfileItem {
+  id           String     @id @default(uuid())
+
+  // ownership
+  profileId    String
+  profile      Profile   @relation(fields: [profileId], references: [id])
+
+  // explorer structure
+  name         Json       // Multilingual
+  kind         ItemKind
+  fileType     ItemType?
+
+  parentId     String?
+  parent       ProfileItem? @relation("ProfileItemTree", fields: [parentId], references: [id])
+  children     ProfileItem[] @relation("ProfileItemTree")
+
+  // ui / content
+  icon         String?
+  imageUrl     String?
+  href         String?
+  subtitle     Json?     // Multilingual
+  description  Json?     // Multilingual
+  tooltipText  Json?     // Multilingual
+
+  extra        Json?
+
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
 model Education {
   id          String    @id @default(uuid())
   school      String
-  major      String
+  major      Json       // Multilingual
   startYear Int
   endYear   Int
   schoolLogo       String?
@@ -116,61 +148,31 @@ model Education {
 model Experience {
   id          String    @id @default(uuid())
   company      String
-  role      String
+  role      Json        // Multilingual
   location   String
   start String
   end   String
-  jobdesk       String?
-  description  String?      @db.Text
+  jobdesk       Json?    // Multilingual
+  description  Json?    // Multilingual
   icon  String?
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-   categoryId  String
+  categoryId  String
   category    Category  @relation(fields: [categoryId], references: [id])
-}
-
-model ProfileItem {
-  id           String     @id @default(uuid())
-
-  // ownership
-  profileId    String
-  profile      Profile   @relation(fields: [profileId], references: [id])
-
-  // explorer structure
-  name         String
-  kind         ItemKind
-  fileType     ItemType?
-
-  parentId     String?
-  parent       ProfileItem? @relation("ProfileItemTree", fields: [parentId], references: [id])
-  children     ProfileItem[] @relation("ProfileItemTree")
-
-  // ui / content
-  icon         String?
-  imageUrl     String?
-  href         String?
-  subtitle     String?
-  description  String   @db.Text
-  tooltipText  String?
-
-  extra        Json?
-
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
 }
 
 model Project {
   id          String         @id @default(uuid())
-  name        String
-  description  String      @db.Text
+  name        Json       // Multilingual
+  description  Json          // Multilingual
   progressValue Int
   demoURL    String?
   repoURL    String?
   icon        String
   subIcon     String?
-  tooltipText String?
+  tooltipText Json?          // Multilingual
   techStack   Json?
 
   entries     ProjectEntry[]
@@ -187,7 +189,7 @@ model ProjectEntry {
   id           String        @id @default(uuid())
 
   // struktur project
-  name         String
+  name         Json          // Multilingual
   kind         ItemKind
   fileType         ItemType?
 
@@ -202,15 +204,15 @@ model ProjectEntry {
   // UI & metadata
   icon         String?
   subIcon      String?
-  tooltipText  String?
+  tooltipText  Json?         // Multilingual
 
   // konten
   href         String?
   imageUrl     String?
-  subtitle     String?
+  subtitle     Json?         // Multilingual
   progress     Int?
 
-  description  String?      @db.Text
+  description  Json?         // Multilingual
   techStack    Json?
   extra        Json?
 

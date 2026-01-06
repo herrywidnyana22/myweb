@@ -1,17 +1,25 @@
 import Image from "next/image";
+import useDataStore from "@/store/data";
+
 import { useState } from "react";
+import { writeCache } from "@/lib/cache";
 import { EducationModal } from "../modal/educationModal";
 import { DeleteConfirmModal } from "../modal/deleteConfirmModal";
-import { ButtonActionGroup } from "./buttonActionGroup";
-import { writeCache } from "@/lib/cache";
+import { ActionButtonGroup } from "./actionButtonGroup";
+import { Plus } from "lucide-react";
+import { ActionButton } from "./actionButton";
+import { useLocalizedText } from "@/hooks/useLocalizedText";
 
 
-export const Education = ({categories, data, setData, isDataLoading = false}: EducationDashboardProps) => {
+export const Education = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedEducation, setSelectedEducation] = useState<Education | null>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [deletingId, setDeletingId] = useState<string | null>(null);
+
+    const { educations, setEducations, categories } = useDataStore();
+    const { getText } = useLocalizedText();
 
     const handleEditEducation = (education: Education) => {
         setSelectedEducation(education);
@@ -38,18 +46,18 @@ export const Education = ({categories, data, setData, isDataLoading = false}: Ed
             if (res.ok) {
                 const newEducation = (await res.json()) as Education;
 
+                // Update global store and cache
+                let updatedEducations: Education[];
                 if (educationData.id) {
                     // Update existing education
-                    setData((prev: Education[]) =>
-                        prev.map((e) => (e.id === newEducation.id ? newEducation : e))
-                    );
+                    updatedEducations = educations.map((e) => (e.id === newEducation.id ? newEducation : e));
                 } else {
                     // Add new education
-                    setData((prev: Education[] ) => [...prev, newEducation]);
+                    updatedEducations = [...educations, newEducation];
                 }
-
-                // Invalidate cache after save
-                localStorage.removeItem('educations_cache');
+                
+                setEducations(updatedEducations);
+                writeCache('educations_cache', updatedEducations);
                 setIsModalOpen(false);
             } else {
                 const error = (await res.json()) as { error?: string };
@@ -78,11 +86,11 @@ export const Education = ({categories, data, setData, isDataLoading = false}: Ed
             });
 
             if (res.ok) {
-                // Remove education from local state
-                setData((prev: Education[]) => prev.filter((e) => e.id !== deletingId));
+                // Remove education from global store and update cache
+                const updatedEducations = educations.filter((e) => e.id !== deletingId);
+                setEducations(updatedEducations);
+                writeCache('educations_cache', updatedEducations);
                 
-                // Invalidate cache after delete
-                localStorage.removeItem('educations_cache');
                 setIsDeleteModalOpen(false);
                 setDeletingId(null);
             } else {
@@ -128,29 +136,29 @@ export const Education = ({categories, data, setData, isDataLoading = false}: Ed
                 <div className="flex justify-between items-start mb-4">
                     <h2 className="text-xl font-bold text-white">Education</h2>
                     <div className="flex gap-2">
-                    <button
-                        onClick={handleAddEducation}
-                        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-1 px-3 rounded text-sm transition"
-                    >
-                        + Add
-                    </button>
+                        <ActionButton
+                            onClick={handleAddEducation}
+                            variant="add"
+                            icon={<> <Plus className="size-3"/> Add </>}
+                            title="Add Education"
+                        />
                     </div>
                 </div>
 
-                {data.length === 0 ? (
+                {educations.length === 0 ? (
                     <p className="text-gray-400 text-sm">No education found. Click "Add" to create one.</p>
                 ) : (
                     <div className="space-y-2 max-h-64 overflow-y-auto">
-                    {data.map((education) => (
-                        <div key={education.id} className="bg-gray-600 rounded p-3 border border-gray-500 flex justify-between items-center">
+                    {educations.map((education) => (
+                        <div key={education.id} className="group bg-gray-600 rounded p-3 border border-gray-500 flex justify-between items-center">
                             <div className='flex items-center gap-2'>
                                 {education.schoolLogo &&(
                                     <Image
                                         src={education.schoolLogo}
                                         alt="Education Icon"
-                                        width={36}
-                                        height={36}
-                                        className="inline-block rounded-md object-cover"
+                                        width={32}
+                                        height={32}
+                                        className="size-8 inline-block rounded-md object-cover"
                                     />
                                 )}
                                 <div>
@@ -162,7 +170,7 @@ export const Education = ({categories, data, setData, isDataLoading = false}: Ed
                                     </p>
                                 </div>
                             </div>
-                           <ButtonActionGroup
+                           <ActionButtonGroup
                                 onEdit={() => handleEditEducation(education)}
                                 onDelete={() => handleDeleteEducation(education.id)}
                                 isLoading={isLoading}
@@ -177,7 +185,10 @@ export const Education = ({categories, data, setData, isDataLoading = false}: Ed
                 onClose={() => setIsModalOpen(false)}
                 onSave={handleSaveEducation}
                 education={selectedEducation || undefined}
-                categories={categories}
+                categories={categories.map(cat => ({
+                    id: cat.id,
+                    name: typeof cat.name === 'string' ? cat.name : getText(cat.name)
+                }))}
             />
             <DeleteConfirmModal
                 isOpen={isDeleteModalOpen}

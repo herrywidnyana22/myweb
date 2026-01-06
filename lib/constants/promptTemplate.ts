@@ -1,4 +1,4 @@
-import { baseUIText } from '@/lib/constants/baseUIText';
+
 import {
   languageRule,
   contextRules,
@@ -47,9 +47,6 @@ Here’s your portfolio data in JSON format:
 - Contacts: ${JSON.stringify(contacts)}
 - Educations: ${JSON.stringify(educations)}
 - Experiences: ${JSON.stringify(experiences)}
-
-Here’s your Base Text UI data yang akan ditranslate ke ${language}:
-- Base UI Text:  ${JSON.stringify(baseUIText)}
 
 ======================
 RESPONSE INSTRUCTIONS

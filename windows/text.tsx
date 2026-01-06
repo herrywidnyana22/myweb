@@ -2,14 +2,15 @@
 
 import Image from 'next/image'
 import useWindowStore from '@/store/window'
-
 import { WindowWrapper } from '@/hoc/windowWrapper'
 import { WindowControls } from '@/components/windowControls'
 import { getEffectiveIcon } from '@/lib/utils'
+import { useLocalizedText } from '@/hooks/useLocalizedText'
 
 const TextWindow = () => {
-    const { windows } = useWindowStore()
-    const data = windows.txtfile?.data as LocationValue | undefined
+    const { windows } = useWindowStore();
+    const data = windows.txtfile?.data as LocationValue | undefined;
+    const { getText } = useLocalizedText();
 
     if(!data) return null
 
@@ -54,13 +55,16 @@ const TextWindow = () => {
                 ) }
 
                 {subtitle && (
-                    <p className="text-sm text-gray-600 mb-4">{subtitle}</p>
+                    <p className="text-sm text-gray-600 mb-4">{getText(subtitle)}</p>
                 )}
 
                 <div className="space-y-3">
                     {Array.isArray(description) && description.map((p: string, idx: number) => (
                         <p key={idx} className="leading-7 text-gray-800">{p}</p>
                     ))}
+                    {!Array.isArray(description) && description && (
+                        <p className="leading-7 text-gray-800">{getText(description)}</p>
+                    )}
                 </div>
             </div>
         </div>

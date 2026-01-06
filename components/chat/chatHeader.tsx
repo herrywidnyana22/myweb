@@ -7,14 +7,17 @@ import { TelegramStatus } from "../telegramStatus";
 import { FlagIcon } from "../flagIcon";
 import { useCallback } from "react";
 import { useAppStore } from "@/store/app";
+import { useLocalizedText } from "@/hooks/useLocalizedText";
 
 export const ChatHeader= ({ onClear }: ChatHeaderProps) => {
   
-  const { language, chatMode, ui, setIsMinimized, setIsInputFocused } = useAppStore()
+  const { chatMode, setIsMinimized, setIsInputFocused } = useAppStore()
   const onMinimize = useCallback(() => {
     setIsMinimized((p) => !p)
     setIsInputFocused(false)
   },[setIsMinimized]);
+
+  const { getUIText } = useLocalizedText();
   
   return (
     <div className="flex items-center justify-between p-3 border-b bg-gray-900/80">
@@ -32,22 +35,16 @@ export const ChatHeader= ({ onClear }: ChatHeaderProps) => {
         </div>
       </div>
 
-      <span className="flex gap-2 items-center justify-center">
-        <Tooltip label={ui.langStatus}>
-          <FlagIcon code={language} size={20} />
-        </Tooltip>
-        {
-          chatMode === 'telegram' && (
+      { chatMode === 'telegram' && (
             <TelegramStatus />
           )
-        }
-      </span>
+      }
 
       <div className="flex gap-2">
-        <button onClick={onMinimize} title={ui.minimize} className="p-2 rounded-md hover:bg-white/5">
+        <button onClick={onMinimize} title={getUIText('minimize')} className="p-2 rounded-md hover:bg-white/5">
           <Minimize2 size={16} />
         </button>
-        <button onClick={onClear} title={ui.clear} className="p-2 rounded-md hover:bg-white/5">
+        <button onClick={onClear} title={getUIText('clear')} className="p-2 rounded-md hover:bg-white/5">
           <Trash2 size={16} />
         </button>
       </div>

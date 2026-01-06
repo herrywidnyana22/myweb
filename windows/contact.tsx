@@ -2,20 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import useWindowStore from "@/store/window";
-
+import useDataStore from "@/store/data";
 import { WindowWrapper } from "@/hoc/windowWrapper";
 import { WindowControls } from "@/components/windowControls";
-import { contacts } from "@/lib/constants";
 import { Tooltip } from "@/components/tooltip";
+import { useLocalizedText } from "@/hooks/useLocalizedText";
 
 const ContactWindow = () => {
-    const { windows } = useWindowStore()
-    const data = windows.contact?.data as LocationValue | undefined
+    const { contacts, isLoading } = useDataStore();
+    const { getText } = useLocalizedText();
 
-    if(!data) return null
-
-    const {icon, name} = data
+    if(!contacts) return null
 
     return ( 
         <div className="rounded-xl shadow-2xl drop-shadow-2xl overflow-hidden bg-white">
@@ -23,20 +20,17 @@ const ContactWindow = () => {
                 <div className="w-24">
                     <WindowControls target={'contact'} />
                 </div>
-
                 <div className="flex items-center gap-2">
-                    {icon && (
-                        <div className="size-4 overflow-hidden rounded-md">
-                            <Image
-                                src={icon}
-                                alt={`${name} icon`}
-                                width={32}
-                                height={32}
-                                className="object-cover size-4"
-                            />
-                        </div>
-                    )}
-                    <h2 className="font-semibold text-gray-600">{name}</h2>
+                    <div className="size-4 overflow-hidden rounded-md">
+                        <Image
+                            src={'/icons/contact.png'}
+                            alt={`contact icon`}
+                            width={32}
+                            height={32}
+                            className="object-cover size-4"
+                        />
+                    </div>
+                    <h2 className="font-semibold text-gray-600">{"Contact"}</h2>
                 </div>
 
                 <div className="w-24" />
@@ -64,22 +58,22 @@ const ContactWindow = () => {
                     {contacts.map((contact, i) => (
                         <Tooltip 
                             key={i} 
-                            label={contact.tooltipText}
-                            bgColor={contact.bg}
+                            label={contact.tooltipText ? getText(contact.tooltipText) : contact.title}
+                            bgColor={contact.bgColor || 'bg-primary-light'}
                             textColor="text-white"
                         >
                             <li 
-                                style={{ backgroundColor: contact.bg }}
+                                style={{ backgroundColor: contact.bgColor || '#374151' }}
                                 className="rounded-lg p-3 w-32 hover:-translate-y-0.5 hover:scale-105 origin-center transition-all duration-300"
                             >
 
                                 <Link
-                                    href={contact.href ?? '#'}
+                                    href={contact.contactURL ?? '#'}
                                     target="_blank"
                                     className="flex flex-col gap-4 font-semibold"
                                 >
                                     <Image 
-                                        src={contact.icon}
+                                        src={contact.icon || '/icons/contact.png'}
                                         alt={contact.title}
                                         width={128}
                                         height={128}

@@ -3,7 +3,7 @@ import { useGSAP } from "@gsap/react";
 import { useRef, useEffect } from "react";
 import { FONT_WEIGHTS } from "@/lib/constants";
 import { useAppStore } from "@/store/app";
-import { baseUIText } from "@/lib/constants/baseUIText";
+import { useLocalizedText } from "@/hooks/useLocalizedText";
 
 const TextRender = ({ text = "", className, weight = 400 }: TextRenderProps) => {
     return text.split("").map((char, i) => (
@@ -70,11 +70,11 @@ export const Welcome = () => {
   const subTitleRef = useRef<HTMLDivElement | null>(null);
   const sectionRef = useRef<HTMLDivElement | null>(null);
 
-  const { ui, language } = useAppStore();
+  const { getUIText } = useLocalizedText();
 
-  const welcomeText = ui?.welcomeText ?? baseUIText.welcomeText;
-  const welcomeTitle = ui?.welcomeTitle ?? baseUIText.welcomeTitle;
-
+  const welcomeText = getUIText('welcomeText');
+  const welcomeTitle = getUIText('welcomeTitle');
+  
   useGSAP(
     () => {
       const cleanTitle = setHoverText(titleRef.current, "title");
@@ -85,7 +85,7 @@ export const Welcome = () => {
         cleanSub?.();
       };
     },
-    [welcomeText, welcomeTitle, language]
+    [welcomeText, welcomeTitle]
   );
 
   // Auto-center scroll when content overflows

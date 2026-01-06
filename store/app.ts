@@ -2,29 +2,17 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { loadUI } from "@/lib/translate/translateUIText";
 
 export const useAppStore = create<AppStore>()(
 
   persist(
     (set) => ({
-      language: "id",
-      ui: {},
       chatMode: "default",
       messages: [],
       isMinimized: false,
       isInputFocused: false,
       openedDockId: {},
       targetedDockId: {},
-
-      // STYLE MIRIP REACT useState
-      setLanguage: async (v) => {
-        set({ language: v });
-        const translated = await loadUI(v);
-        set({ ui: translated });
-      },
-
-      setUI: (v) => set({ ui: v }),
 
       setChatMode: (v) => set({ chatMode: v }),
 
@@ -57,17 +45,8 @@ export const useAppStore = create<AppStore>()(
       name: "app-store",
 
       partialize: (state) => ({
-        language: state.language,
         chatMode: state.chatMode,
-      }),
-      
-      onRehydrateStorage: () => async (state) => {
-        if (!state) return;
-
-        // saat zustand selesai load dari storage → load UI sesuai bahasa
-        const translated = await loadUI(state.language);
-        useAppStore.setState({ ui: translated });
-      }
+      })
     }
   )
 );

@@ -6,6 +6,9 @@ import { FormImageUpload } from '../form/FormImageUpload';
 import { FormError } from '../form/FormError';
 import { ModalHeader } from '../form/ModalHeader';
 import { ModalActions } from '../form/ModalActions';
+import { MultiLangInput } from '../form/MultiLangInput';
+import { MultiLangText, createMultiLangText } from '@/lib/constants/languages';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const DEFAULT_CATEGORY: Omit<Category, 'id'> = {
   name: '',
@@ -30,6 +33,8 @@ export function CategoryModal({
   const [isUploadingIcon, setIsUploadingIcon] = useState(false);
   const [iconPreview, setIconPreview] = useState<string | null>(null);
 
+  const { selectedTranslationLanguages, getLanguageInfo } = useLanguage();
+
   useEffect(() => {
     if (category) {
       setFormData(category);
@@ -51,6 +56,13 @@ export function CategoryModal({
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const handleMultiLangChange = (field: string, value: MultiLangText) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
     }));
   };
 
@@ -147,15 +159,15 @@ export function CategoryModal({
           <FormError message={error} />
 
           <div className="space-y-4">
-            <FormInput
+            <MultiLangInput
               label="Name"
-              required
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="e.g., Frontend"
+              value={formData.name || createMultiLangText('')}
+              onChange={(val) => handleMultiLangChange('name', val)}
+              selectedLanguages={selectedTranslationLanguages}
+              placeholder="e.g., Kontak, Profil, Proyek"
               disabled={isSubmitting}
+              type="input"
+              getLanguageInfo={getLanguageInfo}
             />
 
             <FormImageUpload

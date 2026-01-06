@@ -8,6 +8,10 @@ import { FormImageUpload } from '../form/FormImageUpload';
 import { FormError } from '../form/FormError';
 import { ModalHeader } from '../form/ModalHeader';
 import { ModalActions } from '../form/ModalActions';
+import { MultiLangInput } from '../form/MultiLangInput';
+import { MultiLangText, createMultiLangText } from '@/lib/constants/languages';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 const DEFAULT_EXPERIENCE: Omit<Experience, 'id'> = {
   company: '',
@@ -40,6 +44,9 @@ export const ExperienceModal = ({
   const [isUploadingIcon, setIsUploadingIcon] = useState(false);
   const [iconPreview, setIconPreview] = useState<string | null>(null);
 
+  const { selectedTranslationLanguages, getLanguageInfo } = useLanguage();
+  const { getText } = useLocalizedText();
+
   useEffect(() => {
     if (experience) {
       setFormData(experience);
@@ -61,6 +68,13 @@ export const ExperienceModal = ({
     setFormData((prev) => ({
       ...prev,
       [name]: value,
+    }));
+  };
+
+  const handleMultiLangChange = (field: string, value: MultiLangText) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
     }));
   };
 
@@ -166,7 +180,7 @@ export const ExperienceModal = ({
                 { value: '', label: 'Select a category' },
                 ...categories.map((cat) => ({
                   value: cat.id,
-                  label: cat.name,
+                  label: typeof cat.name === 'string' ? cat.name : getText(cat.name),
                 })),
               ]}
               disabled={isSubmitting}
@@ -183,15 +197,15 @@ export const ExperienceModal = ({
               disabled={isSubmitting}
             />
 
-            <FormInput
+            <MultiLangInput
               label="Role"
-              required
-              type="text"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
+              value={formData.role || createMultiLangText('')}
+              onChange={(val) => handleMultiLangChange('role', val)}
+              selectedLanguages={selectedTranslationLanguages}
               placeholder="e.g., Senior Software Engineer"
               disabled={isSubmitting}
+              type="input"
+              getLanguageInfo={getLanguageInfo}
             />
 
             <FormInput
@@ -229,24 +243,28 @@ export const ExperienceModal = ({
               />
             </div>
 
-            <FormTextarea
+            <MultiLangInput
               label="Job Description"
-              name="jobdesk"
-              value={formData.jobdesk || ''}
-              onChange={handleChange}
+              value={formData.jobdesk || createMultiLangText('')}
+              onChange={(val) => handleMultiLangChange('jobdesk', val)}
+              selectedLanguages={selectedTranslationLanguages}
               placeholder="Brief job description..."
-              rows={3}
               disabled={isSubmitting}
+              type="textarea"
+              rows={3}
+              getLanguageInfo={getLanguageInfo}
             />
 
-            <FormTextarea
+            <MultiLangInput
               label="Description"
-              name="description"
-              value={formData.description || ''}
-              onChange={handleChange}
+              value={formData.description || createMultiLangText('')}
+              onChange={(val) => handleMultiLangChange('description', val)}
+              selectedLanguages={selectedTranslationLanguages}
               placeholder="Additional details..."
-              rows={3}
               disabled={isSubmitting}
+              type="textarea"
+              rows={3}
+              getLanguageInfo={getLanguageInfo}
             />
 
             <FormImageUpload
