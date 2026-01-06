@@ -182,7 +182,7 @@ export function ProfileModal({
               onChange={handleChange}
               options={[
                 { value: '', label: 'Select a category' },
-                ...categories.map((cat) => ({
+                ...(Array.isArray(categories) ? categories : []).map((cat) => ({
                   value: cat.id,
                   label: cat.name,
                 })),

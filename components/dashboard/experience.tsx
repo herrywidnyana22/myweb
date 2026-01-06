@@ -146,7 +146,7 @@ export const Experience = ({isDataLoading = false}: {isDataLoading?: boolean}) =
                     </div>
                 </div>
 
-                {experiences.length === 0 ? (
+                {!Array.isArray(experiences) || experiences.length === 0 ? (
                     <p className="text-gray-400 text-sm">No experience found. Click "Add" to create one.</p>
                 ) : (
                     <div className="space-y-2 max-h-64 overflow-y-auto">

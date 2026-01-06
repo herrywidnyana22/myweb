@@ -145,7 +145,7 @@ export const Education = ({isDataLoading = false}: {isDataLoading?: boolean}) =>
                     </div>
                 </div>
 
-                {educations.length === 0 ? (
+                {!Array.isArray(educations) || educations.length === 0 ? (
                     <p className="text-gray-400 text-sm">No education found. Click "Add" to create one.</p>
                 ) : (
                     <div className="space-y-2 max-h-64 overflow-y-auto">

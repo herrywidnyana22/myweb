@@ -142,7 +142,7 @@ export const Category = ({isDataLoading = false}: {isDataLoading?: boolean}) => 
                     </div>
                 </div>
 
-                {categories.length === 0 ? (
+                {!Array.isArray(categories) || categories.length === 0 ? (
                     <p className="text-gray-400 text-sm">No categories found. Click "Add" to create one.</p>
                 ) : (
                     <div className="space-y-2 max-h-64 overflow-y-auto">

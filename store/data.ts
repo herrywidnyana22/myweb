@@ -36,32 +36,32 @@ const useDataStore = create<DataStore>()(
 
     setProfiles: (data) =>
       set((state) => {
-        state.profiles = data;
+        state.profiles = Array.isArray(data) ? data : [];
       }),
 
     setCategories: (data) =>
       set((state) => {
-        state.categories = data;
+        state.categories = Array.isArray(data) ? data : [];
       }),
 
     setContacts: (data) =>
       set((state) => {
-        state.contacts = data;
+        state.contacts = Array.isArray(data) ? data : [];
       }),
 
     setEducations: (data) =>
       set((state) => {
-        state.educations = data;
+        state.educations = Array.isArray(data) ? data : [];
       }),
 
     setExperiences: (data) =>
       set((state) => {
-        state.experiences = data;
+        state.experiences = Array.isArray(data) ? data : [];
       }),
 
     setProjects: (data) =>
       set((state) => {
-        state.projects = data;
+        state.projects = Array.isArray(data) ? data : [];
       }),
 
     loadAllData: async () => {
@@ -81,12 +81,12 @@ const useDataStore = create<DataStore>()(
 
         // Set cached data immediately
         set((state) => {
-          if (cachedProfiles) state.profiles = cachedProfiles;
-          if (cachedCategories) state.categories = cachedCategories;
-          if (cachedContacts) state.contacts = cachedContacts;
-          if (cachedEducations) state.educations = cachedEducations;
-          if (cachedExperiences) state.experiences = cachedExperiences;
-          if (cachedProjects) state.projects = cachedProjects;
+          if (cachedProfiles && Array.isArray(cachedProfiles)) state.profiles = cachedProfiles;
+          if (cachedCategories && Array.isArray(cachedCategories)) state.categories = cachedCategories;
+          if (cachedContacts && Array.isArray(cachedContacts)) state.contacts = cachedContacts;
+          if (cachedEducations && Array.isArray(cachedEducations)) state.educations = cachedEducations;
+          if (cachedExperiences && Array.isArray(cachedExperiences)) state.experiences = cachedExperiences;
+          if (cachedProjects && Array.isArray(cachedProjects)) state.projects = cachedProjects;
         });
 
         // If all data is cached, skip API calls
@@ -120,32 +120,32 @@ const useDataStore = create<DataStore>()(
         results.forEach(({ key, data }: { key: string; data: any }) => {
           if (key === 'profiles') {
             set((state) => {
-              state.profiles = data;
+              state.profiles = Array.isArray(data) ? data : [];
             });
             writeCache('profiles_cache', data);
           } else if (key === 'categories') {
             set((state) => {
-              state.categories = data;
+              state.categories = Array.isArray(data) ? data : [];
             });
             writeCache('categories_cache', data);
           } else if (key === 'contacts') {
             set((state) => {
-              state.contacts = data;
+              state.contacts = Array.isArray(data) ? data : [];
             });
             writeCache('contacts_cache', data);
           } else if (key === 'educations') {
             set((state) => {
-              state.educations = data;
+              state.educations = Array.isArray(data) ? data : [];
             });
             writeCache('educations_cache', data);
           } else if (key === 'experiences') {
             set((state) => {
-              state.experiences = data;
+              state.experiences = Array.isArray(data) ? data : [];
             });
             writeCache('experiences_cache', data);
           } else if (key === 'projects') {
             set((state) => {
-              state.projects = data;
+              state.projects = Array.isArray(data) ? data : [];
             });
             writeCache('projects_cache', data);
           }

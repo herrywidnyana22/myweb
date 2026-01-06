@@ -70,7 +70,7 @@ export const Projects = () => {
         modules={[EffectCreative, Pagination]}
         className="mySwiper w-full h-full overflow-hidden"
       >
-        {(projects || []).map((project, i) => (
+        {(Array.isArray(projects) ? projects : []).map((project, i) => (
           <SwiperSlide key={i}>
             <ProjectItem {...project} />
           </SwiperSlide>

@@ -303,7 +303,7 @@ export const ProjectModal = ({
               onChange={handleChange}
               options={[
                 { value: '', label: 'Select a category' },
-                ...categories.map((cat) => ({
+                ...(Array.isArray(categories) ? categories : []).map((cat) => ({
                   value: cat.id,
                   label: typeof cat.name === 'string' ? cat.name : getText(cat.name),
                 })),

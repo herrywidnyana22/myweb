@@ -176,7 +176,7 @@ export function ContactModal({
               disabled={isSubmitting}
               options={[
                 { value: '', label: 'Select a category' },
-                ...(categories || []).map(cat => ({ value: cat.id, label: typeof cat.name === 'string' ? cat.name : getText(cat.name) }))
+                ...(Array.isArray(categories) ? categories : []).map(cat => ({ value: cat.id, label: typeof cat.name === 'string' ? cat.name : getText(cat.name) }))
               ]}
             />
 

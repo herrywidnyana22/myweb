@@ -16,9 +16,9 @@ export const ContactList = () => {
                     Contact List
                 </label>
                 <div className="p-4 rounded border border-gray-200 max-h-48 overflow-y-auto">
-                    {contacts.length > 0 ? (
+                    {Array.isArray(contacts) && contacts.length > 0 ? (
                         <div className="flex flex-wrap gap-1 sm:gap-2">
-                        {(contacts || []).map((contact) => (
+                        {contacts.map((contact) => (
                             <Icon
                                 key={contact.id}
                                 tooltipLabel={contact.title}

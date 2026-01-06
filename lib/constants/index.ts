@@ -62,11 +62,11 @@ function getProjectLocation(projects: Project[]) {
     icon: "/icons/work.svg",
     kind: "folder",
     tooltipText: "Lihat semua project",
-    children: (projects || []).map((project: Project) => ({
+    children: (Array.isArray(projects) ? projects : []).map((project: Project) => ({
       type: "project",
       ...project,
       kind: "folder", // Explicitly mark projects as folders
-      children: (project.entries || []).map((entry: ProjectEntry) => ({
+      children: (Array.isArray(project.entries) ? project.entries : []).map((entry: ProjectEntry) => ({
         ...entry,
         icon: entry.icon || (entry.fileType ? DEFAULT_FILE_TYPE_ICONS[entry.fileType.toUpperCase()] : undefined) || (entry.kind ? DEFAULT_FILE_KIND_ICONS[entry.kind.toUpperCase()] : DEFAULT_FILE_KIND_ICONS.FILE),
       })),

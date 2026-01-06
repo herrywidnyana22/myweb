@@ -309,7 +309,7 @@ export const Project = ({isDataLoading = false}: ProjectDashboardProps) => {
                     </div>
                 </div>
 
-                {projects.length === 0 ? (
+                {!Array.isArray(projects) || projects.length === 0 ? (
                     <p className="text-gray-400 text-sm">No projects found. Click "Add" to create one.</p>
                 ) : (
                     <div className="space-y-4 max-h-96 overflow-y-auto">

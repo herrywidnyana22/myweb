@@ -12,7 +12,9 @@ const ContactWindow = () => {
     const { contacts } = useDataStore();
     const { getText } = useLocalizedText();
 
-    if(!contacts) return null
+    const contactList = Array.isArray(contacts) ? contacts : [];
+
+    if(contactList.length === 0) return null
 
     return ( 
         <div className="rounded-xl shadow-2xl drop-shadow-2xl overflow-hidden bg-white">
@@ -55,7 +57,7 @@ const ContactWindow = () => {
                 </p>
 
                 <ul className="flex items-center gap-3">
-                    {(contacts || []).map((contact, i) => (
+                    {contactList.map((contact, i) => (
                         <Tooltip 
                             key={i} 
                             label={contact.tooltipText ? getText(contact.tooltipText) : contact.title}
