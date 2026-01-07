@@ -37,7 +37,7 @@ const TextWindow = () => {
                         </div>
                     )}
 
-                    <h2 className="text-center">{name}</h2>
+                    <h2 className="text-center">{ (typeof name === 'string' ? name : getText(name))}</h2>
                 </div>
 
                 <div className="w-24" />

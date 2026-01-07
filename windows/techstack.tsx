@@ -7,9 +7,12 @@ import { WindowControls } from "@/components/windowControls";
 import { WindowWrapper } from "@/hoc/windowWrapper";
 import { Check, Flag } from "lucide-react";
 import { getEffectiveIcon } from "@/lib/utils";
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 const TechstackWindow = () => {
     const { windows } = useWindowStore()
+    const { getText } = useLocalizedText();
+    
     const data = windows.techstack?.data as LocationValue | undefined
 
     if(!data) return null
@@ -45,7 +48,7 @@ const TechstackWindow = () => {
             {/* BODY */}
             <div className="p-5 space-y-4 bg-white">
                 <p className="text-gray-600">
-                    <span className="text-black font-semibold">{projectName}</span> tech stack
+                    <span className="text-black font-semibold">{ (typeof projectName === 'string' ? projectName : getText(projectName))}</span> tech stack
                 </p>
 
                 {/* TABLE HEADER */}

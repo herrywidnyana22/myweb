@@ -146,7 +146,7 @@ const ExplorerWindow = () => {
                         </div>
                     )}
                     <p>
-                        {activeLocation?.name ?? "Explorer"}
+                        {(typeof activeLocation?.name === 'string' ? activeLocation.name : getText(activeLocation.name)) ?? "Explorer"}
                     </p>
                 </div>
 

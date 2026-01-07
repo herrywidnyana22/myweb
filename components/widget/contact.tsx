@@ -25,8 +25,8 @@ export const Contact = () => {
     );
   }
 
-  if (error) {
-    return <p className="text-center text-error p-4">{getUIText('dataLoadFailed')}</p>;
+  if (!contacts?.length) {
+    return <p className="text-center text-gray-400 p-4">{getUIText('dataEmpty')}</p>;
   }
 
   return (

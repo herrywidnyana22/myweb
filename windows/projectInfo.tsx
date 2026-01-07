@@ -6,7 +6,6 @@ import { WindowWrapper } from '@/hoc/windowWrapper'
 import { WindowControls } from '@/components/windowControls'
 import { Icon } from '@/components/icon'
 import { ProgressCircle } from '@/components/charts/circleProgress'
-import { getEffectiveIcon } from '@/lib/utils'
 import { useLocalizedText } from '@/hooks/useLocalizedText'
 
 const ProjectInfoWindow = () => {
