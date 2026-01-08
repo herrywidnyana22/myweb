@@ -42,6 +42,6 @@ export async function POST(req: Request) {
     return response;
   } catch (error) {
     console.error('Login error:', error);
-    return errorResponse('An error occurred during login', 500, error);
+    return errorResponse('An error occurred during login', 500, error as Error);
   }
 }
