@@ -4,9 +4,13 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// generator client {
+//   provider = "prisma-client"
+//   output   = "../lib/generated/prisma"
+// }
+
 generator client {
-  provider = "prisma-client"
-  output   = "../lib/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -41,184 +45,180 @@ enum ItemType {
 }
 
 model Category {
-  id        String    @id @default(uuid())
-  name      Json      // Multilingual
+  id        String   @id @default(uuid())
+  name      Json // Multilingual
   icon      String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  contacts  Contact[]
-  profiles  Profile[]
-  educations Education[]
+  contacts    Contact[]
+  profiles    Profile[]
+  educations  Education[]
   experiences Experience[]
-  projects  Project[]
+  projects    Project[]
 }
 
 model Contact {
-  id          String    @id @default(uuid())
+  id          String   @id @default(uuid())
   title       String
-  description Json      // Multilingual
-  tooltipText Json?     // Multilingual
+  description Json // Multilingual
+  tooltipText Json? // Multilingual
   icon        String?
   bgColor     String?
   contactURL  String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  categoryId  String
-  category    Category  @relation(fields: [categoryId], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
 }
 
 model Profile {
-  id          String    @id @default(uuid())
-  name       String    // Internal identifier (not translated)
-  fullName String
-  jenisKelamin        JenisKelamin  // UI will translate enum values
-  role     Json       // Multilingual
-  quote  Json         // Multilingual
-  photoURL   String?
-  birthDate  DateTime?
-  birthPlace String?
+  id              String       @id @default(uuid())
+  name            String // Internal identifier (not translated)
+  fullName        String
+  jenisKelamin    JenisKelamin // UI will translate enum values
+  role            Json // Multilingual
+  quote           Json // Multilingual
+  photoURL        String?
+  birthDate       DateTime?
+  birthPlace      String?
   experienceYears Int?
 
-  description Json?    // Multilingual
+  description Json? // Multilingual
 
-  address    Json?     // Multilingual
-  lat  Float?
-  lng Float?
-  mapURL    String?
+  address Json? // Multilingual
+  lat     Float?
+  lng     Float?
+  mapURL  String?
 
-  preferredLanguages Json?  // ["en", "ja", "zh"] - User's language preferences
+  preferredLanguages Json? // ["en", "ja", "zh"] - User's language preferences
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  categoryId  String
-  category    Category  @relation(fields: [categoryId], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
 
-  items           ProfileItem[]
+  items ProfileItem[]
 }
 
 model ProfileItem {
-  id           String     @id @default(uuid())
+  id String @id @default(uuid())
 
   // ownership
-  profileId    String
-  profile      Profile   @relation(fields: [profileId], references: [id])
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id])
 
   // explorer structure
-  name         Json       // Multilingual
-  kind         ItemKind
-  fileType     ItemType?
+  name     Json // Multilingual
+  kind     ItemKind
+  fileType ItemType?
 
-  parentId     String?
-  parent       ProfileItem? @relation("ProfileItemTree", fields: [parentId], references: [id])
-  children     ProfileItem[] @relation("ProfileItemTree")
+  parentId String?
+  parent   ProfileItem?  @relation("ProfileItemTree", fields: [parentId], references: [id])
+  children ProfileItem[] @relation("ProfileItemTree")
 
   // ui / content
-  icon         String?
-  imageUrl     String?
-  href         String?
-  subtitle     Json?     // Multilingual
-  description  Json?     // Multilingual
-  tooltipText  Json?     // Multilingual
+  icon        String?
+  imageUrl    String?
+  href        String?
+  subtitle    Json? // Multilingual
+  description Json? // Multilingual
+  tooltipText Json? // Multilingual
 
-  extra        Json?
+  extra Json?
 
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Education {
-  id          String    @id @default(uuid())
-  school      String
-  major      Json       // Multilingual
-  startYear Int
-  endYear   Int
-  schoolLogo       String?
-  icon  String?
+  id         String  @id @default(uuid())
+  school     String
+  major      Json // Multilingual
+  startYear  Int
+  endYear    Int
+  schoolLogo String?
+  icon       String?
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-   categoryId  String
-  category    Category  @relation(fields: [categoryId], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
 }
 
 model Experience {
-  id          String    @id @default(uuid())
-  company      String
-  role      Json        // Multilingual
-  location   String
-  start String
-  end   String
-  jobdesk       Json?    // Multilingual
-  description  Json?    // Multilingual
-  icon  String?
+  id          String  @id @default(uuid())
+  company     String
+  role        Json // Multilingual
+  location    String
+  start       String
+  end         String
+  jobdesk     Json? // Multilingual
+  description Json? // Multilingual
+  icon        String?
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  categoryId  String
-  category    Category  @relation(fields: [categoryId], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
 }
 
 model Project {
-  id          String         @id @default(uuid())
-  name        Json       // Multilingual
-  description  Json          // Multilingual
+  id            String  @id @default(uuid())
+  name          Json // Multilingual
+  description   Json // Multilingual
   progressValue Int
-  demoURL    String?
-  repoURL    String?
-  icon        String
-  subIcon     String?
-  tooltipText Json?          // Multilingual
-  techStack   Json?
+  demoURL       String?
+  repoURL       String?
+  icon          String
+  subIcon       String?
+  tooltipText   Json? // Multilingual
+  techStack     Json?
 
-  entries     ProjectEntry[]
+  entries ProjectEntry[]
 
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  categoryId  String
-  category    Category  @relation(fields: [categoryId], references: [id])
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
 }
-
 
 model ProjectEntry {
-  id           String        @id @default(uuid())
+  id String @id @default(uuid())
 
   // struktur project
-  name         Json          // Multilingual
-  kind         ItemKind
-  fileType         ItemType?
+  name     Json // Multilingual
+  kind     ItemKind
+  fileType ItemType?
 
-  parentId     String?
-  parent       ProjectEntry? @relation("ProjectEntryTree", fields: [parentId], references: [id])
-  children     ProjectEntry[]@relation("ProjectEntryTree")
+  parentId String?
+  parent   ProjectEntry?  @relation("ProjectEntryTree", fields: [parentId], references: [id])
+  children ProjectEntry[] @relation("ProjectEntryTree")
 
   // relasi ke project
-  projectId    String
-  project      Project       @relation(fields: [projectId], references: [id])
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id])
 
   // UI & metadata
-  icon         String?
-  subIcon      String?
-  tooltipText  Json?         // Multilingual
+  icon        String?
+  subIcon     String?
+  tooltipText Json? // Multilingual
 
   // konten
-  href         String?
-  imageUrl     String?
-  subtitle     Json?         // Multilingual
-  progress     Int?
+  href     String?
+  imageUrl String?
+  subtitle Json? // Multilingual
+  progress Int?
 
-  description  Json?         // Multilingual
-  techStack    Json?
-  extra        Json?
+  description Json? // Multilingual
+  techStack   Json?
+  extra       Json?
 
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
-
-
-
