@@ -179,7 +179,7 @@ export async function DELETE(
 
     // Add entry images
     entries.forEach(entry => {
-      imageUrls.push(entry.icon, entry.subIcon, entry.image);
+      imageUrls.push(entry.icon, entry.subIcon, entry.imageUrl);
     });
 
     await Promise.all(imageUrls.filter(Boolean).map(url => deleteImageFile(url)));

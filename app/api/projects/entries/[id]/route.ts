@@ -137,7 +137,7 @@ export async function DELETE(
         await Promise.all([
           deleteImageFile(child.icon),
           deleteImageFile(child.subIcon),
-          deleteImageFile(child.image)
+          deleteImageFile(child.imageUrl)
         ]);
       }
     };
@@ -153,7 +153,7 @@ export async function DELETE(
     await Promise.all([
       deleteImageFile(projectEntry.icon),
       deleteImageFile(projectEntry.subIcon),
-      deleteImageFile(projectEntry.image)
+      deleteImageFile(projectEntry.imageUrl)
     ]);
 
     return successResponse(null, 'Project entry deleted successfully');
