@@ -125,8 +125,7 @@ export async function DELETE(
       if (item) {
         await Promise.all([
           deleteImageFile(item.icon),
-          deleteImageFile(item.subIcon),
-          deleteImageFile(item.image)
+          deleteImageFile(item.imageUrl)
         ]);
       }
     };
