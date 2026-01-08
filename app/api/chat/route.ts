@@ -3,6 +3,7 @@ import { buildPrompt } from '@/lib/constants/promptTemplate';
 import { sendToTelegram } from '@/lib/telegram/telegram-server';
 import { sanitizeJSON } from '@/lib/utils';
 import { generatePrompt } from '@/lib/gemini/generatePrompt';
+import { successResponse, errorResponse } from '@/lib/api-response';
 import prisma from '@/lib/prisma';
 
 let cachedPortfolio: PortfolioCache;
@@ -112,12 +113,13 @@ export async function POST(req: Request) {
       // Kirim pesan user ke Herry via Telegram
       await sendToTelegram(message);
       
-      return NextResponse.json(
+      return successResponse(
         { 
           role: '',
           text: message, 
           cards: [] 
-        }
+        },
+        'Message forwarded to Telegram'
       );
     }
 
@@ -142,12 +144,9 @@ export async function POST(req: Request) {
       ? parsed.cards.map(normalizeCard)
       : [];
 
-    return NextResponse.json(data);
+    return successResponse(data, 'Chat response generated');
   } catch (err) {
     console.error('Chat API Error:', err);
-    return NextResponse.json(
-      { text: 'Terjadi kesalahan server.', cards: [] }, 
-      { status: 500 }
-    );
+    return errorResponse('An error occurred while processing your request', 500, err as Error);
   }
 }

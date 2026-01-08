@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import { NextResponse } from 'next/server';
+import { successResponse, errorResponse } from '@/lib/api-response';
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
 
@@ -44,13 +44,10 @@ export async function GET() {
       categoryId: contact.categoryId,
     }));
 
-    return NextResponse.json(formatted);
+    return successResponse(formatted, 'Contacts fetched successfully');
   } catch (error) {
     console.error('Error fetching contacts:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch contacts' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to fetch contacts', 500, error as Error);
   }
 }
 
@@ -58,20 +55,14 @@ export async function POST(req: Request) {
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const body = await req.json();
     const { title, description, tooltipText, icon, bgColor, contactURL, categoryId } = body;
 
     if (!title || !description || !categoryId) {
-      return NextResponse.json(
-        { error: 'Title, Description, and Category ID are required' },
-        { status: 400 }
-      );
+      return errorResponse('Title, Description, and Category ID are required', 400);
     }
 
     const contact = await prisma.contact.create({
@@ -89,12 +80,9 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json(contact, { status: 201 });
+    return successResponse(contact, 'Contact created successfully', 201);
   } catch (error) {
     console.error('Error creating contact:', error);
-    return NextResponse.json(
-      { error: 'Failed to create contact' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to create contact', 500, error as Error);
   }
 }

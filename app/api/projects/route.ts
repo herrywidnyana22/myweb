@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import { NextResponse } from 'next/server';
+import { successResponse, errorResponse } from '@/lib/api-response';
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
 
@@ -35,13 +35,10 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(projects);
+    return successResponse(projects, 'Projects fetched successfully');
   } catch (error) {
     console.error('Error fetching projects:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch projects' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to fetch projects', 500, error as Error);
   } 
 }
 
@@ -49,20 +46,14 @@ export async function POST(req: Request) {
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const body = await req.json();
     const { name, icon, subIcon, tooltipText, description, techStack, categoryId, demoURL, repoURL, progressValue } = body;
 
     if (!name || !icon || !categoryId) {
-      return NextResponse.json(
-        { error: 'Name, icon, and categoryId are required' },
-        { status: 400 }
-      );
+      return errorResponse('Name, icon, and categoryId are required', 400);
     }
 
     const projectData: any = {
@@ -95,12 +86,9 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json(project, { status: 201 });
+    return successResponse(project, 'Project created successfully', 201);
   } catch (error) {
     console.error('Error creating project:', error);
-    return NextResponse.json(
-      { error: 'Failed to create project' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to create project', 500, error as Error);
   }
 }

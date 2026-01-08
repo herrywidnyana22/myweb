@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
+import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
 
 async function authenticateRequest(
@@ -30,10 +31,7 @@ export async function GET(
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Experience ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Experience ID is required', 400);
     }
 
     const experience = await prisma.experience.findUnique({
@@ -44,19 +42,13 @@ export async function GET(
     });
 
     if (!experience) {
-      return NextResponse.json(
-        { error: 'Experience not found' },
-        { status: 404 }
-      );
+      return errorResponse('Experience not found', 404);
     }
 
-    return NextResponse.json(experience);
+    return successResponse(experience, 'Experience retrieved successfully');
   } catch (error) {
     console.error('Error fetching experience:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch experience' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to fetch experience', 500, error);
   } 
 }
 
@@ -67,29 +59,20 @@ export async function PUT(
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Experience ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Experience ID is required', 400);
     }
 
     const body = await req.json();
     const { company, role, location, start, end, jobdesk, description, icon, categoryId } = body;
 
     if (!company || !role || !location || !start || !end || !categoryId) {
-      return NextResponse.json(
-        { error: 'Company, role, location, start, end, and categoryId are required' },
-        { status: 400 }
-      );
+      return errorResponse('Company, role, location, start, end, and categoryId are required', 400);
     }
 
     const experience = await prisma.experience.update({
@@ -110,13 +93,10 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(experience);
+    return successResponse(experience, 'Experience updated successfully');
   } catch (error) {
     console.error('Error updating experience:', error);
-    return NextResponse.json(
-      { error: 'Failed to update experience' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to update experience', 500, error);
   }
 }
 
@@ -127,19 +107,13 @@ export async function DELETE(
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Experience ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Experience ID is required', 400);
     }
 
     const experience = await prisma.experience.findUnique({
@@ -147,22 +121,22 @@ export async function DELETE(
     });
 
     if (!experience) {
-      return NextResponse.json(
-        { error: 'Experience not found' },
-        { status: 404 }
-      );
+      return errorResponse('Experience not found', 404);
     }
 
+    // Delete the experience
     await prisma.experience.delete({
       where: { id },
     });
 
-    return NextResponse.json({ success: true, message: 'Experience deleted successfully' });
+    // Delete the icon file if exists
+    if (experience.icon) {
+      await deleteImageFile(experience.icon);
+    }
+
+    return successResponse(null, 'Experience deleted successfully');
   } catch (error) {
     console.error('Error deleting experience:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete experience' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to delete experience', 500, error);
   }
 }

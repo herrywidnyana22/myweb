@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
+import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
 
 async function authenticateRequest(
@@ -26,10 +27,7 @@ export async function POST(req: Request) {
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const body = await req.json();
@@ -52,10 +50,7 @@ export async function POST(req: Request) {
     } = body;
 
     if (!name || !kind || !projectId) {
-      return NextResponse.json(
-        { error: 'Name, kind, and projectId are required' },
-        { status: 400 }
-      );
+      return errorResponse('Name, kind, and projectId are required', 400);
     }
 
     // Verify project exists
@@ -64,10 +59,7 @@ export async function POST(req: Request) {
     });
 
     if (!project) {
-      return NextResponse.json(
-        { error: 'Project not found' },
-        { status: 404 }
-      );
+      return errorResponse('Project not found', 404);
     }
 
     const projectEntry = await prisma.projectEntry.create({
@@ -93,12 +85,9 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json(projectEntry, { status: 201 });
+    return successResponse(projectEntry, 'Project entry created successfully', 201);
   } catch (error) {
     console.error('Error creating project entry:', error);
-    return NextResponse.json(
-      { error: 'Failed to create project entry' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to create project entry', 500, error);
   }
 }

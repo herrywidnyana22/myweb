@@ -43,9 +43,10 @@ export const Experience = ({isDataLoading = false}: {isDataLoading?: boolean}) =
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(experienceData),
             });
+            const result = await res.json();
 
-            if (res.ok) {
-                const newExperience = (await res.json()) as Experience;
+            if (result.status === 'ok') {
+                const newExperience = result.data as Experience;
 
                 // Update global store and cache
                 let updatedExperiences: Experience[];
@@ -61,8 +62,7 @@ export const Experience = ({isDataLoading = false}: {isDataLoading?: boolean}) =
                 writeCache('experiences_cache', updatedExperiences);
                 setIsModalOpen(false);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to save experience');
+                throw new Error(result.msg || result.error || 'Failed to save experience');
             }
         } catch (error) {
             throw error;
@@ -85,8 +85,9 @@ export const Experience = ({isDataLoading = false}: {isDataLoading?: boolean}) =
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             });
+            const result = await res.json();
 
-            if (res.ok) {
+            if (result.status === 'ok') {
                 // Remove experience from global store and update cache
                 const updatedExperiences = experiences.filter((e) => e.id !== deletingId);
                 setExperiences(updatedExperiences);
@@ -95,8 +96,7 @@ export const Experience = ({isDataLoading = false}: {isDataLoading?: boolean}) =
                 setIsDeleteModalOpen(false);
                 setDeletingId(null);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to delete experience');
+                throw new Error(result.msg || result.error || 'Failed to delete experience');
             }
         } catch (error) {
             throw error;

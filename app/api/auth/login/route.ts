@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createToken, verifyToken } from '@/lib/jwt';
+import { successResponse, errorResponse } from '@/lib/api-response';
 
 const VALID_USERNAME = 'herry';
 const VALID_PASSWORD = 'herry*1234#';
@@ -12,23 +13,22 @@ export async function POST(req: Request) {
     };
 
     if (!username || !password) {
-      return NextResponse.json(
-        { error: 'Username and password are required' },
-        { status: 400 }
-      );
+      return errorResponse('Username and password are required', 400);
     }
 
     if (username !== VALID_USERNAME || password !== VALID_PASSWORD) {
-      return NextResponse.json(
-        { error: 'Invalid username or password' },
-        { status: 401 }
-      );
+      return errorResponse('Invalid username or password', 401);
     }
 
     const token = await createToken(username);
 
     const response = NextResponse.json(
-      { success: true, username, token },
+      {
+        code: 200,
+        status: 'ok',
+        msg: 'Login successful',
+        data: { success: true, username, token }
+      },
       { status: 200 }
     );
 
@@ -42,9 +42,6 @@ export async function POST(req: Request) {
     return response;
   } catch (error) {
     console.error('Login error:', error);
-    return NextResponse.json(
-      { error: 'An error occurred during login' },
-      { status: 500 }
-    );
+    return errorResponse('An error occurred during login', 500, error);
   }
 }

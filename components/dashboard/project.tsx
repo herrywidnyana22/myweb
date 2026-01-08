@@ -56,9 +56,10 @@ export const Project = ({isDataLoading = false}: ProjectDashboardProps) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(projectData),
             });
+            const result = await res.json();
 
-            if (res.ok) {
-                const newProject = (await res.json()) as Project;
+            if (result.status === 'ok') {
+                const newProject = result.data as Project;
 
                 // Update global store and cache
                 let updatedProjects: Project[];
@@ -74,8 +75,7 @@ export const Project = ({isDataLoading = false}: ProjectDashboardProps) => {
                 writeCache('projects_cache', updatedProjects);
                 setIsModalOpen(false);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to save project');
+                throw new Error(result.msg || result.error || 'Failed to save project');
             }
         } catch (error) {
             throw error;
@@ -109,8 +109,9 @@ export const Project = ({isDataLoading = false}: ProjectDashboardProps) => {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             });
+            const result = await res.json();
 
-            if (res.ok) {
+            if (result.status === 'ok') {
                 // Remove project from global store and update cache
                 const updatedProjects = projects.filter((p) => p.id !== deletingProjectId);
                 setProjects(updatedProjects);
@@ -119,8 +120,7 @@ export const Project = ({isDataLoading = false}: ProjectDashboardProps) => {
                 setIsDeleteProjectModalOpen(false);
                 setDeletingProjectId(null);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to delete project');
+                throw new Error(result.msg || result.error || 'Failed to delete project');
             }
         } catch (error) {
             throw error;
@@ -168,9 +168,10 @@ export const Project = ({isDataLoading = false}: ProjectDashboardProps) => {
                     projectId: selectedProject.id,
                 }),
             });
+            const result = await res.json();
 
-            if (res.ok) {
-                const newEntry = (await res.json()) as ProjectEntry;
+            if (result.status === 'ok') {
+                const newEntry = result.data as ProjectEntry;
 
                 // Update the project data in global store and cache
                 const updatedProjects = projects.map((p) =>
@@ -190,8 +191,7 @@ export const Project = ({isDataLoading = false}: ProjectDashboardProps) => {
                 setIsEntryModalOpen(false);
                 setSelectedEntry(null);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to save project entry');
+                throw new Error(result.msg || result.error || 'Failed to save project entry');
             }
         } catch (error) {
             throw error;
@@ -214,8 +214,9 @@ export const Project = ({isDataLoading = false}: ProjectDashboardProps) => {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             });
+            const result = await res.json();
 
-            if (res.ok) {
+            if (result.status === 'ok') {
                 // Update the project data in global store and cache
                 const deleteEntryRecursive = (entries: ProjectEntry[], idToDelete: string): ProjectEntry[] => {
                     return entries
@@ -241,8 +242,7 @@ export const Project = ({isDataLoading = false}: ProjectDashboardProps) => {
                 setIsDeleteModalOpen(false);
                 setDeletingEntryId(null);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to delete project entry');
+                throw new Error(result.msg || result.error || 'Failed to delete project entry');
             }
         } catch (error) {
             throw error;

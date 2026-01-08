@@ -124,12 +124,12 @@ export const ItemModal = ({
                 method: 'POST',
                 body: formDataUpload,
             });
+            const result = await response.json();
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Upload failed');
+            if (result.status !== 'ok') {
+                throw new Error(result.msg || result.error || 'Upload failed');
             }
-            const data = await response.json();
+            const data = result.data as { url: string };
             handleChange(field, data.url);
         } catch (error) {
             setErrors(prev => ({

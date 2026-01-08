@@ -29,7 +29,7 @@ const TextWindow = () => {
                         <div className="size-4 overflow-hidden rounded-md">
                             <Image
                                 src={effectiveIcon}
-                                alt={`${name} icon`}
+                                alt={(typeof name === 'string' ? name : getText(name))}
                                 width={32}
                                 height={32}
                                 className="object-cover size-4"

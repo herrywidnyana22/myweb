@@ -42,9 +42,10 @@ export const Education = ({isDataLoading = false}: {isDataLoading?: boolean}) =>
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(educationData),
             });
+            const result = await res.json();
 
-            if (res.ok) {
-                const newEducation = (await res.json()) as Education;
+            if (result.status === 'ok') {
+                const newEducation = result.data as Education;
 
                 // Update global store and cache
                 let updatedEducations: Education[];
@@ -60,8 +61,7 @@ export const Education = ({isDataLoading = false}: {isDataLoading?: boolean}) =>
                 writeCache('educations_cache', updatedEducations);
                 setIsModalOpen(false);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to save education');
+                throw new Error(result.msg || result.error || 'Failed to save education');
             }
         } catch (error) {
             throw error;
@@ -84,8 +84,9 @@ export const Education = ({isDataLoading = false}: {isDataLoading?: boolean}) =>
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             });
+            const result = await res.json();
 
-            if (res.ok) {
+            if (result.status === 'ok') {
                 // Remove education from global store and update cache
                 const updatedEducations = educations.filter((e) => e.id !== deletingId);
                 setEducations(updatedEducations);
@@ -94,8 +95,7 @@ export const Education = ({isDataLoading = false}: {isDataLoading?: boolean}) =>
                 setIsDeleteModalOpen(false);
                 setDeletingId(null);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to delete education');
+                throw new Error(result.msg || result.error || 'Failed to delete education');
             }
         } catch (error) {
             throw error;

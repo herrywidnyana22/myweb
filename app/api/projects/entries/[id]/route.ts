@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
+import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
 
 async function authenticateRequest(
@@ -29,19 +30,13 @@ export async function PUT(
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Project Entry ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Project Entry ID is required', 400);
     }
 
     const body = await req.json();
@@ -63,10 +58,7 @@ export async function PUT(
     } = body;
 
     if (!name || !kind) {
-      return NextResponse.json(
-        { error: 'Name and kind are required' },
-        { status: 400 }
-      );
+      return errorResponse('Name and kind are required', 400);
     }
 
     const projectEntry = await prisma.projectEntry.update({
@@ -92,13 +84,10 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(projectEntry);
+    return successResponse(projectEntry, 'Project entry updated successfully');
   } catch (error) {
     console.error('Error updating project entry:', error);
-    return NextResponse.json(
-      { error: 'Failed to update project entry' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to update project entry', 500, error);
   }
 }
 
@@ -109,19 +98,13 @@ export async function DELETE(
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Project Entry ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Project Entry ID is required', 400);
     }
 
     const projectEntry = await prisma.projectEntry.findUnique({
@@ -132,10 +115,7 @@ export async function DELETE(
     });
 
     if (!projectEntry) {
-      return NextResponse.json(
-        { error: 'Project Entry not found' },
-        { status: 404 }
-      );
+      return errorResponse('Project Entry not found', 404);
     }
 
     // Delete all children recursively
@@ -146,9 +126,18 @@ export async function DELETE(
 
       for (const child of children) {
         await deleteChildren(child.id);
+        
+        // Delete child from database
         await prisma.projectEntry.delete({
           where: { id: child.id },
         });
+
+        // Delete child images
+        await Promise.all([
+          deleteImageFile(child.icon),
+          deleteImageFile(child.subIcon),
+          deleteImageFile(child.image)
+        ]);
       }
     };
 
@@ -159,12 +148,16 @@ export async function DELETE(
       where: { id },
     });
 
-    return NextResponse.json({ success: true, message: 'Project entry deleted successfully' });
+    // Delete entry images
+    await Promise.all([
+      deleteImageFile(projectEntry.icon),
+      deleteImageFile(projectEntry.subIcon),
+      deleteImageFile(projectEntry.image)
+    ]);
+
+    return successResponse(null, 'Project entry deleted successfully');
   } catch (error) {
     console.error('Error deleting project entry:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete project entry' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to delete project entry', 500, error);
   }
 }

@@ -48,9 +48,10 @@ export const Profile = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(profileData),
             });
+            const result = await res.json();
 
-            if (res.ok) {
-                const newProfile = (await res.json()) as Profile;
+            if (result.status === 'ok') {
+                const newProfile = result.data as Profile;
 
                 // Update global store and cache
                 let updatedProfiles: Profile[];
@@ -66,8 +67,7 @@ export const Profile = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
                 writeCache('profiles_cache', updatedProfiles);
                 setIsModalOpen(false);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to save profile');
+                throw new Error(result.msg || result.error || 'Failed to save profile');
             }
         } catch (error) {
             throw error;
@@ -110,9 +110,10 @@ export const Profile = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
                     profileId: selectedProfile.id,
                 }),
             });
+            const result = await res.json();
 
-            if (res.ok) {
-                const newItem = (await res.json()) as ProfileItem;
+            if (result.status === 'ok') {
+                const newItem = result.data as ProfileItem;
 
                 // Update global store and cache
                 const updatedProfiles = profiles.map((p) => {
@@ -172,8 +173,7 @@ export const Profile = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
                 writeCache('profiles_cache', updatedProfiles);
                 setIsItemModalOpen(false);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to save profile item');
+                throw new Error(result.msg || result.error || 'Failed to save profile item');
             }
         } catch (error) {
             throw error;
@@ -196,8 +196,9 @@ export const Profile = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             });
+            const result = await res.json();
 
-            if (res.ok) {
+            if (result.status === 'ok') {
                 // Remove item from global store (recursive)
                 const updatedProfiles = profiles.map((p) => {
                     if (p.id === selectedProfile.id) {
@@ -224,8 +225,7 @@ export const Profile = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
                 setIsDeleteModalOpen(false);
                 setDeletingItemId(null);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to delete profile item');
+                throw new Error(result.msg || result.error || 'Failed to delete profile item');
             }
         } catch (error) {
             throw error;

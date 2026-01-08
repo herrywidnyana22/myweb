@@ -1,6 +1,5 @@
 import prisma from '@/lib/prisma';
-
-import { NextResponse } from 'next/server';
+import { successResponse, errorResponse } from '@/lib/api-response';
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
 
@@ -35,13 +34,10 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(categories);
+    return successResponse(categories, 'Categories fetched successfully');
   } catch (error) {
     console.error('Error fetching categories:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch categories' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to fetch categories', 500, error as Error);
   } 
 }
 
@@ -49,20 +45,14 @@ export async function POST(req: Request) {
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const body = await req.json();
     const { name, icon } = body;
 
     if (!name) {
-      return NextResponse.json(
-        { error: 'Name is required' },
-        { status: 400 }
-      );
+      return errorResponse('Name is required', 400);
     }
 
     const category = await prisma.category.create({
@@ -70,15 +60,18 @@ export async function POST(req: Request) {
         name,
         icon: icon || null,
       },
+      include: {
+        contacts: true,
+        profiles: true,
+        educations: true,
+        experiences: true,
+      },
     });
 
-    return NextResponse.json(category, { status: 201 });
+    return successResponse(category, 'Category created successfully', 201);
   } catch (error) {
     console.error('Error creating category:', error);
-    return NextResponse.json(
-      { error: 'Failed to create category' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to create category', 500, error as Error);
   }
 }
 

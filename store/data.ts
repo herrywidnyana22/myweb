@@ -106,12 +106,12 @@ const useDataStore = create<DataStore>()(
 
         // Fetch missing data from APIs
         const requests = [
-          !cachedProfiles && fetch('/api/profiles').then((r) => r.json().then((d) => ({ key: 'profiles', data: d }))),
-          !cachedCategories && fetch('/api/categories').then((r) => r.json().then((d) => ({ key: 'categories', data: d }))),
-          !cachedContacts && fetch('/api/contacts').then((r) => r.json().then((d) => ({ key: 'contacts', data: d }))),
-          !cachedEducations && fetch('/api/educations').then((r) => r.json().then((d) => ({ key: 'educations', data: d }))),
-          !cachedExperiences && fetch('/api/experiences').then((r) => r.json().then((d) => ({ key: 'experiences', data: d }))),
-          !cachedProjects && fetch('/api/projects').then((r) => r.json().then((d) => ({ key: 'projects', data: d }))),
+          !cachedProfiles && fetch('/api/profiles').then((r) => r.json().then((d) => ({ key: 'profiles', data: d.data || d }))),
+          !cachedCategories && fetch('/api/categories').then((r) => r.json().then((d) => ({ key: 'categories', data: d.data || d }))),
+          !cachedContacts && fetch('/api/contacts').then((r) => r.json().then((d) => ({ key: 'contacts', data: d.data || d }))),
+          !cachedEducations && fetch('/api/educations').then((r) => r.json().then((d) => ({ key: 'educations', data: d.data || d }))),
+          !cachedExperiences && fetch('/api/experiences').then((r) => r.json().then((d) => ({ key: 'experiences', data: d.data || d }))),
+          !cachedProjects && fetch('/api/projects').then((r) => r.json().then((d) => ({ key: 'projects', data: d.data || d }))),
         ].filter(Boolean) as Promise<{ key: string; data: any }>[];
 
         const results = await Promise.all(requests);

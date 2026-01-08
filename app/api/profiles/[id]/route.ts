@@ -2,6 +2,7 @@ import prisma from '@/lib/prisma';
 
 import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
+import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
 
 async function authenticateRequest(
@@ -31,10 +32,7 @@ export async function GET(
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Profile ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Profile ID is required', 400);
     }
 
     const profile = await prisma.profile.findUnique({
@@ -50,19 +48,13 @@ export async function GET(
     });
 
     if (!profile) {
-      return NextResponse.json(
-        { error: 'Profile not found' },
-        { status: 404 }
-      );
+      return errorResponse('Profile not found', 404);
     }
 
-    return NextResponse.json(profile);
+    return successResponse(profile, 'Profile retrieved successfully');
   } catch (error) {
     console.error('Error fetching profile:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch profile' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to fetch profile', 500, error);
   }
 }
 
@@ -71,10 +63,7 @@ export async function POST(req: Request) {
     const auth = await authenticateRequest(req);
 
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const body = (await req.json()) as {
@@ -118,13 +107,10 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json(profile, { status: 201 });
+    return successResponse(profile, 'Profile created successfully', 201);
   } catch (error) {
     console.error('Error creating profile:', error);
-    return NextResponse.json(
-      { error: 'Failed to create profile' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to create profile', 500, error);
   } 
 }
 
@@ -136,19 +122,13 @@ export async function PUT(
     const auth = await authenticateRequest(req);
 
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Profile ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Profile ID is required', 400);
     }
 
     const body = (await req.json()) as {
@@ -195,13 +175,10 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(profile);
+    return successResponse(profile, 'Profile updated successfully');
   } catch (error) {
     console.error('Error updating profile:', error);
-    return NextResponse.json(
-      { error: 'Failed to update profile' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to update profile', 500, error);
   } 
 }
 
@@ -213,19 +190,13 @@ export async function PATCH(
     const auth = await authenticateRequest(req);
 
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Profile ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Profile ID is required', 400);
     }
 
     const body = (await req.json()) as {
@@ -233,10 +204,7 @@ export async function PATCH(
     };
 
     if (!body.preferredLanguages) {
-      return NextResponse.json(
-        { error: 'preferredLanguages is required' },
-        { status: 400 }
-      );
+      return errorResponse('preferredLanguages is required', 400);
     }
 
     const profile = await prisma.profile.update({
@@ -250,12 +218,9 @@ export async function PATCH(
       },
     });
 
-    return NextResponse.json(profile);
+    return successResponse(profile, 'Language preferences updated successfully');
   } catch (error) {
     console.error('Error updating language preferences:', error);
-    return NextResponse.json(
-      { error: 'Failed to update language preferences' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to update language preferences', 500, error);
   }
 }

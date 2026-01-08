@@ -1,6 +1,6 @@
 
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";;
+import { successResponse, errorResponse } from '@/lib/api-response';
 
 export async function GET() {
   try {
@@ -8,10 +8,7 @@ export async function GET() {
     const profile = await prisma.profile.findFirst();
 
     if (!profile) {
-      return NextResponse.json(
-        { error: "Address not found" },
-        { status: 404 }
-      );
+      return errorResponse('Address not found', 404);
     }
 
     // Return address data in the expected format
@@ -23,12 +20,9 @@ export async function GET() {
       mapURL: profile.mapURL,
     };
 
-    return NextResponse.json(formatted);
+    return successResponse(formatted, 'Address fetched successfully');
   } catch (error) {
     console.error("Address API Error:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch address" },
-      { status: 500 }
-    );
+    return errorResponse('Failed to fetch address', 500, error as Error);
   }
 }

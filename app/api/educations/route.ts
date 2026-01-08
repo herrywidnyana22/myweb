@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma';
-import { NextResponse } from 'next/server';
+import { successResponse, errorResponse } from '@/lib/api-response';
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
 
@@ -30,13 +30,10 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(educations);
+    return successResponse(educations, 'Educations fetched successfully');
   } catch (error) {
     console.error('Error fetching educations:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch educations' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to fetch educations', 500, error as Error);
   } 
 }
 
@@ -44,27 +41,18 @@ export async function POST(req: Request) {
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const body = await req.json();
     const { school, major, startYear, endYear, schoolLogo, icon, categoryId } = body;
 
     if (!school || !major || !startYear || !endYear || !categoryId) {
-      return NextResponse.json(
-        { error: 'School, major, startYear, endYear, and categoryId are required' },
-        { status: 400 }
-      );
+      return errorResponse('School, major, startYear, endYear, and categoryId are required', 400);
     }
 
     if (startYear > endYear) {
-      return NextResponse.json(
-        { error: 'Start year cannot be greater than end year' },
-        { status: 400 }
-      );
+      return errorResponse('Start year cannot be greater than end year', 400);
     }
 
     const education = await prisma.education.create({
@@ -82,12 +70,9 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json(education, { status: 201 });
+    return successResponse(education, 'Education created successfully', 201);
   } catch (error) {
     console.error('Error creating education:', error);
-    return NextResponse.json(
-      { error: 'Failed to create education' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to create education', 500, error as Error);
   }
 }

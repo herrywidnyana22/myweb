@@ -610,6 +610,48 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     ar: 'عرض السيرة الذاتية',
     pt: 'Ver Currículo',
   },
+
+  emptyImage:{
+    source: 'Belum ada gambar...',
+    id: 'Belum ada gambar...',
+    en: 'No image available',
+    ja: '画像がありません',
+    zh: '没有图片',
+    ko: '이미지가 없습니다',
+    es: 'No hay imagen disponible',
+    fr: 'Pas d\'image disponible',
+    de: 'Kein Bild verfügbar',
+    ar: 'لا توجد صورة متاحة',
+    pt: 'Nenhuma imagem disponível',
+  },
+
+  contactTitle:{
+    source: 'Yuk terhubung!',
+    id: 'Yuk terhubung!',
+    en: 'Let\'s connect!',
+    ja: 'つながりましょう！',
+    zh: '让我们联系吧！',
+    ko: '연결하자!',
+    es: '¡Conectémonos!',
+    fr: 'Connectons-nous!',
+    de: 'Lass uns verbinden!',
+    ar: 'دعونا نتواصل!',
+    pt: 'Vamos nos conectar!',
+  },
+
+  contactSubtitle:{
+    source: 'Punya ide? Ada bug yang perlu diperbaiki? atau hanya ingin ngobrol tentang teknologi? Saya siap.',
+    id: 'Punya ide? Ada bug yang perlu diperbaiki? atau hanya ingin ngobrol tentang teknologi? Saya siap.',
+    en: 'Got an idea? A bug to squash? or just want to talk tech? I am in.',
+    ja: 'アイデアがありますか？バグを修正しますか？または、技術について話したいだけですか？私は参加します。',
+    zh: '有想法吗？有bug需要修复？还是只是想聊聊技术？我愿意。',
+    ko: '아이디어가 있나요? 버그를 수정하시겠습니까? 아니면 그냥 기술에 대해 이야기하고 싶으신가요? 저는 참여합니다.',
+    es: '¿Tienes una idea? ¿Un error que solucionar? o ¿solo quieres hablar de tecnología? Estoy dentro.',
+    fr: 'Vous avez une idée ? Un bug à corriger ? ou vous voulez juste parler tech ? Je suis partant.',
+    de: 'Hast du eine Idee? Einen Bug zu beheben? Oder willst du einfach nur über Technik sprechen? Ich bin dabei.',
+    ar: 'هل لديك فكرة؟ خطأ لإصلاحه؟ أو هل تريد فقط التحدث عن التكنولوجيا؟ أنا معكم.',
+    pt: 'Tem uma ideia? Um bug para corrigir? ou só quer falar sobre tecnologia? Estou dentro.',
+  }
 };
 
 export const PLACEHOLDERS: Record<string, string[]> = {

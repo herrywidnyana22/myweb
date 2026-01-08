@@ -6,9 +6,12 @@ import useWindowStore from '@/store/window'
 import { WindowWrapper } from '@/hoc/windowWrapper'
 import { WindowControls } from '@/components/windowControls'
 import { getEffectiveIcon } from '@/lib/utils'
+import { useLocalizedText } from '@/hooks/useLocalizedText'
 
 const ImageWindow = () => {
     const { windows } = useWindowStore()
+     const { getText, getUIText } = useLocalizedText()
+
     const data = windows.imgfile?.data as LocationValue | undefined
 
     if(!data) return null
@@ -36,7 +39,7 @@ const ImageWindow = () => {
                         </div>
                     )}
 
-                    <h2 className="text-center">{name}</h2>
+                    <h2 className="text-center">{getText(name)}</h2>
                 </div>
 
                 <div className="w-24" />
@@ -47,14 +50,14 @@ const ImageWindow = () => {
                     <div className="max-h-[70vh] overflow-hidden rounded-md">
                         <Image
                             src={imageUrl}
-                            alt={name}
+                            alt={getText(name)}
                             width={900}
                             height={600}
                             className="object-contain rounded-md"
                         />
                     </div>
                 ) : (
-                    <p className="text-gray-600">No image available</p>
+                    <p className="text-gray-600">{getUIText('emptyImage')}</p>
                 )}
             </div>
         </div>

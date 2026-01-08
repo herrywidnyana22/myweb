@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
+import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
 
 async function authenticateRequest(
@@ -30,10 +31,7 @@ export async function GET(
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Project ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Project ID is required', 400);
     }
 
     const project = await prisma.project.findUnique({
@@ -49,19 +47,13 @@ export async function GET(
     });
 
     if (!project) {
-      return NextResponse.json(
-        { error: 'Project not found' },
-        { status: 404 }
-      );
+      return errorResponse('Project not found', 404);
     }
 
-    return NextResponse.json(project);
+    return successResponse(project, 'Project retrieved successfully');
   } catch (error) {
     console.error('Error fetching project:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch project' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to fetch project', 500, error);
   }
 }
 
@@ -72,29 +64,20 @@ export async function PUT(
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Project ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Project ID is required', 400);
     }
 
     const body = await req.json();
     const { name, icon, subIcon, tooltipText, description, techStack, categoryId, demoURL, repoURL, progressValue } = body;
 
     if (!name || !icon || !categoryId) {
-      return NextResponse.json(
-        { error: 'Name, icon, and categoryId are required' },
-        { status: 400 }
-      );
+      return errorResponse('Name, icon, and categoryId are required', 400);
     }
 
     const updateData: any = {
@@ -137,13 +120,10 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(project);
+    return successResponse(project, 'Project updated successfully');
   } catch (error) {
     console.error('Error updating project:', error);
-    return NextResponse.json(
-      { error: 'Failed to update project' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to update project', 500, error);
   }
 }
 
@@ -154,19 +134,13 @@ export async function DELETE(
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Project ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Project ID is required', 400);
     }
 
     const project = await prisma.project.findUnique({
@@ -174,11 +148,13 @@ export async function DELETE(
     });
 
     if (!project) {
-      return NextResponse.json(
-        { error: 'Project not found' },
-        { status: 404 }
-      );
+      return errorResponse('Project not found', 404);
     }
+
+    // Collect all entries to delete their images
+    const entries = await prisma.projectEntry.findMany({
+      where: { projectId: id },
+    });
 
     // Delete all project entries first
     await prisma.projectEntry.deleteMany({
@@ -190,12 +166,26 @@ export async function DELETE(
       where: { id },
     });
 
-    return NextResponse.json({ success: true, message: 'Project and all related entries deleted successfully' });
+    // Delete all image files
+    const imageUrls: (string | null)[] = [project.icon, project.subIcon];
+    
+    // Add techStack icons
+    if (project.techStack && Array.isArray(project.techStack)) {
+      project.techStack.forEach((tech: any) => {
+        if (tech?.techIcon) imageUrls.push(tech.techIcon);
+      });
+    }
+
+    // Add entry images
+    entries.forEach(entry => {
+      imageUrls.push(entry.icon, entry.subIcon, entry.image);
+    });
+
+    await Promise.all(imageUrls.filter(Boolean).map(url => deleteImageFile(url)));
+
+    return successResponse(null, 'Project and all related entries deleted successfully');
   } catch (error) {
     console.error('Error deleting project:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete project' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to delete project', 500, error);
   }
 }

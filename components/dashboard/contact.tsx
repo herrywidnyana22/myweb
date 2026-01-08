@@ -41,9 +41,10 @@ export const Contact = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(contactData),
             });
+            const result = await res.json();
 
-            if (res.ok) {
-                const newContact = (await res.json()) as Contact;
+            if (result.status === 'ok') {
+                const newContact = result.data as Contact;
 
                 // Update global store and cache
                 let updatedContacts: Contact[];
@@ -59,8 +60,7 @@ export const Contact = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
                 writeCache('contacts_cache', updatedContacts);
                 setIsModalOpen(false);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to save contact');
+                throw new Error(result.msg || result.error || 'Failed to save contact');
             }
         } catch (error) {
             throw error;
@@ -83,8 +83,9 @@ export const Contact = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             });
+            const result = await res.json();
 
-            if (res.ok) {
+            if (result.status === 'ok') {
                 // Remove contact from global store and update cache
                 const updatedContacts = contacts.filter((c) => c.id !== deletingId);
                 setContacts(updatedContacts);
@@ -93,8 +94,7 @@ export const Contact = ({isDataLoading = false}: {isDataLoading?: boolean}) => {
                 setIsDeleteModalOpen(false);
                 setDeletingId(null);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to delete contact');
+                throw new Error(result.msg || result.error || 'Failed to delete contact');
             }
         } catch (error) {
             throw error;

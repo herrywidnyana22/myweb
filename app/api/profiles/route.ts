@@ -36,11 +36,22 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json(profiles);
+    return NextResponse.json({
+      code: 200,
+      status: 'ok',
+      msg: 'Profiles fetched successfully',
+      data: profiles
+    });
   } catch (error) {
     console.error('Error fetching profiles:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch profiles' },
+      { 
+        code: 500,
+        status: 'error',
+        msg: 'Failed to fetch profiles',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        data: null
+      },
       { status: 500 }
     );
   } 
@@ -52,7 +63,12 @@ export async function POST(req: Request) {
 
     if (!auth) {
       return NextResponse.json(
-        { error: 'Unauthorized' },
+        { 
+          code: 401,
+          status: 'error',
+          msg: 'Unauthorized',
+          data: null
+        },
         { status: 401 }
       );
     }
@@ -98,11 +114,22 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json(profile, { status: 201 });
+    return NextResponse.json({
+      code: 201,
+      status: 'ok',
+      msg: 'Profile created successfully',
+      data: profile
+    }, { status: 201 });
   } catch (error) {
     console.error('Error creating profile:', error);
     return NextResponse.json(
-      { error: 'Failed to create profile' },
+      { 
+        code: 500,
+        status: 'error',
+        msg: 'Failed to create profile',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        data: null
+      },
       { status: 500 }
     );
   } 

@@ -1,7 +1,9 @@
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
+import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
+import { deleteImageFile } from '@/lib/file-utils';
 
 async function authenticateRequest(
   req: Request
@@ -29,19 +31,13 @@ export async function PUT(
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Profile Item ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Profile Item ID is required', 400);
     }
 
     const body = await req.json();
@@ -60,10 +56,7 @@ export async function PUT(
     } = body;
 
     if (!name || !kind) {
-      return NextResponse.json(
-        { error: 'Name and kind are required' },
-        { status: 400 }
-      );
+      return errorResponse('Name and kind are required', 400);
     }
 
     const profileItem = await prisma.profileItem.update({
@@ -86,13 +79,10 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(profileItem);
+    return successResponse(profileItem, 'Profile item updated successfully');
   } catch (error) {
     console.error('Error updating profile item:', error);
-    return NextResponse.json(
-      { error: 'Failed to update profile item' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to update profile item', 500, error);
   }
 }
 
@@ -103,23 +93,22 @@ export async function DELETE(
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Profile Item ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Profile Item ID is required', 400);
     }
 
     // Delete recursively (children will be deleted via cascade or manually)
     const deleteRecursive = async (itemId: string) => {
+      // Get item with its data before deleting
+      const item = await prisma.profileItem.findUnique({
+        where: { id: itemId },
+      });
+
       const children = await prisma.profileItem.findMany({
         where: { parentId: itemId },
       });
@@ -131,16 +120,22 @@ export async function DELETE(
       await prisma.profileItem.delete({
         where: { id: itemId },
       });
+
+      // Delete image files if exist
+      if (item) {
+        await Promise.all([
+          deleteImageFile(item.icon),
+          deleteImageFile(item.subIcon),
+          deleteImageFile(item.image)
+        ]);
+      }
     };
 
     await deleteRecursive(id);
 
-    return NextResponse.json({ message: 'Profile item deleted successfully' });
+    return successResponse(null, 'Profile item deleted successfully');
   } catch (error) {
     console.error('Error deleting profile item:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete profile item' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to delete profile item', 500, error);
   }
 }

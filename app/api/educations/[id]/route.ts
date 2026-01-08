@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
+import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
 
 async function authenticateRequest(
@@ -30,10 +31,7 @@ export async function GET(
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Education ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Education ID is required', 400);
     }
 
     const education = await prisma.education.findUnique({
@@ -44,19 +42,13 @@ export async function GET(
     });
 
     if (!education) {
-      return NextResponse.json(
-        { error: 'Education not found' },
-        { status: 404 }
-      );
+      return errorResponse('Education not found', 404);
     }
 
-    return NextResponse.json(education);
+    return successResponse(education, 'Education retrieved successfully');
   } catch (error) {
     console.error('Error fetching education:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch education' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to fetch education', 500, error);
   } 
 }
 
@@ -67,36 +59,24 @@ export async function PUT(
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Education ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Education ID is required', 400);
     }
 
     const body = await req.json();
     const { school, major, startYear, endYear, schoolLogo, icon, categoryId } = body;
 
     if (!school || !major || !startYear || !endYear || !categoryId) {
-      return NextResponse.json(
-        { error: 'School, major, startYear, endYear, and categoryId are required' },
-        { status: 400 }
-      );
+      return errorResponse('School, major, startYear, endYear, and categoryId are required', 400);
     }
 
     if (startYear > endYear) {
-      return NextResponse.json(
-        { error: 'Start year cannot be greater than end year' },
-        { status: 400 }
-      );
+      return errorResponse('Start year cannot be greater than end year', 400);
     }
 
     const education = await prisma.education.update({
@@ -115,13 +95,10 @@ export async function PUT(
       },
     });
 
-    return NextResponse.json(education);
+    return successResponse(education, 'Education updated successfully');
   } catch (error) {
     console.error('Error updating education:', error);
-    return NextResponse.json(
-      { error: 'Failed to update education' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to update education', 500, error);
   }
 }
 
@@ -132,19 +109,13 @@ export async function DELETE(
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const { id } = await context.params;
 
     if (!id) {
-      return NextResponse.json(
-        { error: 'Education ID is required' },
-        { status: 400 }
-      );
+      return errorResponse('Education ID is required', 400);
     }
 
     const education = await prisma.education.findUnique({
@@ -152,22 +123,23 @@ export async function DELETE(
     });
 
     if (!education) {
-      return NextResponse.json(
-        { error: 'Education not found' },
-        { status: 404 }
-      );
+      return errorResponse('Education not found', 404);
     }
 
+    // Delete the education
     await prisma.education.delete({
       where: { id },
     });
 
-    return NextResponse.json({ success: true, message: 'Education deleted successfully' });
+    // Delete image files if exist
+    await Promise.all([
+      deleteImageFile(education.icon),
+      deleteImageFile(education.schoolLogo)
+    ]);
+
+    return successResponse(null, 'Education deleted successfully');
   } catch (error) {
     console.error('Error deleting education:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete education' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to delete education', 500, error);
   }
 }

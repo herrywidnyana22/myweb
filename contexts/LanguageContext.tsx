@@ -85,7 +85,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         try {
           const response = await fetch('/api/profiles');
           if (response.ok) {
-            const profiles: Profile[] = await response.json();
+            const result = await response.json();
+            const profiles: Profile[] = result.data || result;
             
             if (profiles.length > 0) {
               const profile = profiles[0];

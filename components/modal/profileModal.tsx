@@ -93,13 +93,13 @@ export function ProfileModal({
         method: 'POST',
         body: formDataToSend,
       });
+      const result = await res.json();
 
-      if (!res.ok) {
-        const errorData = (await res.json()) as { error?: string };
-        throw new Error(errorData.error || 'Failed to upload image');
+      if (result.status !== 'ok') {
+        throw new Error(result.msg || result.error || 'Failed to upload image');
       }
 
-      const data = (await res.json()) as { url: string };
+      const data = result.data as { url: string };
       setFormData((prev) => ({ ...prev, photoURL: data.url }));
       setImagePreview(data.url);
     } catch (err) {

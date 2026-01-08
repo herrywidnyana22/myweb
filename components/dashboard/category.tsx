@@ -42,9 +42,10 @@ export const Category = ({isDataLoading = false}: {isDataLoading?: boolean}) => 
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(categoryData),
             });
+            const result = await res.json();
 
-            if (res.ok) {
-                const newCategory = (await res.json()) as Category;
+            if (result.status === 'ok') {
+                const newCategory = result.data as Category;
 
                 // Update global store and cache
                 let updatedCategories: Category[];
@@ -58,8 +59,7 @@ export const Category = ({isDataLoading = false}: {isDataLoading?: boolean}) => 
                 writeCache('categories_cache', updatedCategories);
                 setIsModalOpen(false);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to save category');
+                throw new Error(result.msg || result.error || 'Failed to save category');
             }
         } catch (error) {
             throw error;
@@ -82,8 +82,9 @@ export const Category = ({isDataLoading = false}: {isDataLoading?: boolean}) => 
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
             });
+            const result = await res.json();
 
-            if (res.ok) {
+            if (result.status === 'ok') {
                 // Remove category from global store and update cache
                 const updatedCategories = categories.filter((c) => c.id !== deletingId);
                 setCategories(updatedCategories);
@@ -92,8 +93,7 @@ export const Category = ({isDataLoading = false}: {isDataLoading?: boolean}) => 
                 setIsDeleteModalOpen(false);
                 setDeletingId(null);
             } else {
-                const error = (await res.json()) as { error?: string };
-                throw new Error(error.error || 'Failed to delete category');
+                throw new Error(result.msg || result.error || 'Failed to delete category');
             }
         } catch (error) {
             throw error;

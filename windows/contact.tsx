@@ -10,7 +10,7 @@ import { useLocalizedText } from "@/hooks/useLocalizedText";
 
 const ContactWindow = () => {
     const { contacts } = useDataStore();
-    const { getText } = useLocalizedText();
+    const { getText, getUIText } = useLocalizedText();
 
     const contactList = Array.isArray(contacts) ? contacts : [];
 
@@ -39,21 +39,12 @@ const ContactWindow = () => {
             </div>
 
             <div className="flex flex-col justify-start p-6 space-y-5 w-auto">
-
-                <Image
-                    src={'/images/profile.webp'}
-                    alt="Herry"
-                    width={128}
-                    height={128}
-                    className="size-24 rounded-full object-cover"
-                />
-
                 <h3 className="text-lg font-semibold text-black">
-                    Let&apos;s Connect
+                    {getUIText('contactTitle')}
                 </h3>
 
                 <p className="text-sm text-gray-600 leading-relaxed">
-                    Got an idea? A bug to squash? or just want to talk tech? I&apos;m in.
+                    {getUIText('contactSubtitle')}  
                 </p>
 
                 <ul className="flex items-center gap-3">

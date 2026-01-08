@@ -1,6 +1,7 @@
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
+import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
 
 async function authenticateRequest(
@@ -26,10 +27,7 @@ export async function POST(req: Request) {
   try {
     const auth = await authenticateRequest(req);
     if (!auth) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return errorResponse('Unauthorized', 401);
     }
 
     const body = await req.json();
@@ -49,10 +47,7 @@ export async function POST(req: Request) {
     } = body;
 
     if (!name || !kind || !profileId) {
-      return NextResponse.json(
-        { error: 'Name, kind, and profileId are required' },
-        { status: 400 }
-      );
+      return errorResponse('Name, kind, and profileId are required', 400);
     }
 
     // Verify profile exists
@@ -61,10 +56,7 @@ export async function POST(req: Request) {
     });
 
     if (!profile) {
-      return NextResponse.json(
-        { error: 'Profile not found' },
-        { status: 404 }
-      );
+      return errorResponse('Profile not found', 404);
     }
 
     const profileItem = await prisma.profileItem.create({
@@ -87,12 +79,9 @@ export async function POST(req: Request) {
       },
     });
 
-    return NextResponse.json(profileItem, { status: 201 });
+    return successResponse(profileItem, 'Profile item created successfully', 201);
   } catch (error) {
     console.error('Error creating profile item:', error);
-    return NextResponse.json(
-      { error: 'Failed to create profile item' },
-      { status: 500 }
-    );
+    return errorResponse('Failed to create profile item', 500, error);
   }
 }
