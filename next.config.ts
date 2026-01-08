@@ -11,6 +11,12 @@ const nextConfig: NextConfig = {
     qualities: [75, 90],
   },
   
+  // Enable detailed error logging in production
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   
 };
 

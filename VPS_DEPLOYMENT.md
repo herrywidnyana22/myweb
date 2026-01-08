@@ -367,6 +367,247 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_cache_bypass $http_upgrade;
+## Debugging 500 Internal Server Error
+
+### Method 1: PM2 Logs (Real-time)
+
+```bash
+# View live logs
+pm2 logs myweb
+
+# View only errors
+pm2 logs myweb --err
+
+# View last 100 lines
+pm2 logs myweb --lines 100
+
+# Save logs to file
+pm2 logs myweb > ~/error-logs.txt
+
+# Clear logs
+pm2 flush
+```
+
+### Method 2: Next.js Logs
+
+```bash
+# Check Next.js build logs
+cd ~/myweb
+cat .next/build-errors.log
+
+# Check server logs if running directly
+npm start 2>&1 | tee server.log
+```
+
+### Method 3: Enable Detailed Error Logging
+
+Tambahkan logging di file API yang error. Contoh untuk `app/api/profiles/route.ts`:
+
+```typescript
+export async function GET() {
+  try {
+    console.log('[PROFILES] Starting GET request');
+    console.log('[PROFILES] DATABASE_URL:', process.env.DATABASE_URL ? 'Set' : 'Not set');
+
+    const profiles = await prisma.profile.findMany({
+      include: { items: true }
+    });
+
+    console.log('[PROFILES] Found profiles:', profiles.length);
+    return successResponse(profiles, 'Success');
+  } catch (error) {
+    console.error('[PROFILES] Error details:', error);
+    console.error('[PROFILES] Error stack:', (error as Error).stack);
+    return errorResponse('Failed to fetch profiles', 500, error as Error);
+  }
+}
+```
+
+### Method 4: Check Application Logs
+
+```bash
+# PM2 log locations
+ls -la ~/.pm2/logs/
+
+# View specific log file
+cat ~/.pm2/logs/myweb-error.log
+cat ~/.pm2/logs/myweb-out.log
+
+# Monitor in real-time
+tail -f ~/.pm2/logs/myweb-error.log
+tail -f ~/.pm2/logs/myweb-out.log
+```
+
+### Method 5: Test API Directly from VPS
+
+```bash
+# Test API endpoint
+curl -v http://localhost:3000/api/profiles
+
+# Test with full response
+curl -i http://localhost:3000/api/profiles
+
+# Save response
+curl http://localhost:3000/api/profiles > api-response.json
+
+# Test database connection from Node
+node << 'EOF'
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+
+async function test() {
+  try {
+    await prisma.$connect();
+    console.log('✅ Database connected');
+    const result = await prisma.$queryRaw`SELECT 1`;
+    console.log('✅ Query successful:', result);
+  } catch (error) {
+    console.error('❌ Error:', error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+test();
+EOF
+```
+
+### Method 6: Enable Next.js Debug Mode
+
+```bash
+# Stop current app
+pm2 stop myweb
+
+# Start with debug mode
+cd ~/myweb
+NODE_ENV=production DEBUG=* npm start
+
+# Or with PM2
+pm2 delete myweb
+pm2 start npm --name "myweb" -- start -- --inspect
+```
+
+### Method 7: Check Environment Variables
+
+```bash
+# Check all env vars for the app
+pm2 env 0
+
+# Or check directly
+cd ~/myweb
+cat .env
+
+# Verify DATABASE_URL format
+node -e "console.log('DATABASE_URL:', process.env.DATABASE_URL)"
+
+# Test if .env is loaded
+node -r dotenv/config -e "console.log(process.env.DATABASE_URL)"
+```
+
+### Common 500 Error Causes
+
+**1. Database Connection Error**
+```bash
+# Symptoms: "Can't reach database server"
+# Check:
+psql -U mywebuser -d mywebdb -h localhost
+npx prisma db pull
+
+# Fix: Verify DATABASE_URL in .env
+```
+
+**2. Missing Environment Variables**
+```bash
+# Check if .env exists
+ls -la ~/myweb/.env
+
+# Verify all required vars are set
+cat ~/myweb/.env | grep -E "DATABASE_URL|JWT_SECRET|GEMINI_API_KEY"
+```
+
+**3. Prisma Client Not Generated**
+```bash
+# Regenerate Prisma client
+cd ~/myweb
+npx prisma generate
+
+# Restart app
+pm2 restart myweb
+```
+
+**4. Build Error**
+```bash
+# Check build logs
+cd ~/myweb
+npm run build
+
+# If error, fix and rebuild
+npm install
+npm run build
+pm2 restart myweb
+```
+
+**5. Permission Issues**
+```bash
+# Check file permissions
+ls -la ~/myweb
+
+# Fix if needed
+chmod -R 755 ~/myweb
+chown -R $USER:$USER ~/myweb
+```
+
+### Quick Diagnostic Script
+
+```bash
+# Create diagnostic script
+cat > ~/diagnose.sh << 'EOF'
+#!/bin/bash
+echo "=== Diagnostic Report ==="
+echo "Date: $(date)"
+echo ""
+
+echo "1. App Status:"
+pm2 list
+
+echo ""
+echo "2. Environment Variables:"
+cd ~/myweb
+if [ -f .env ]; then
+    echo "✅ .env exists"
+    echo "DATABASE_URL: $(grep DATABASE_URL .env | cut -c1-40)..."
+    echo "JWT_SECRET: $(grep JWT_SECRET .env | wc -c) chars"
+else
+    echo "❌ .env NOT FOUND"
+fi
+
+echo ""
+echo "3. Database Connection:"
+psql -U mywebuser -d mywebdb -h localhost -c "SELECT version();" 2>&1 | head -1
+
+echo ""
+echo "4. Disk Space:"
+df -h | grep -E "Filesystem|/$"
+
+echo ""
+echo "5. Memory:"
+free -m
+
+echo ""
+echo "6. Last 10 Error Lines:"
+tail -10 ~/.pm2/logs/myweb-error.log
+
+echo ""
+echo "7. Test API:"
+curl -s http://localhost:3000/api/profiles | head -50
+EOF
+
+chmod +x ~/diagnose.sh
+
+# Run diagnostic
+~/diagnose.sh
+```
+
 ## Troubleshooting Commands
 
 ```bash
