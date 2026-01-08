@@ -32,7 +32,7 @@ export const Education = () => {
   }
 
   if (!educations?.length) {
-    return <p className="text-center text-gray-400 p-4">{getUIText('dataEmpty')}</p>;
+    return <p className="text-center text-gray-100 p-4">{getUIText('dataEmpty')}</p>;
   }
 
   return (
@@ -91,10 +91,10 @@ export const Education = () => {
                 <h3 className="hidden sm:block font-bold text-xs sm:text-sm md:text-base text-primary uppercase leading-tight">
                   {edu.school}
                 </h3>
-                <p className="hidden sm:block text-neutral-300 text-[11px] sm:text-xs mt-1 leading-snug">
+                <p className="hidden sm:block text-slate-100 text-[11px] sm:text-xs mt-1 leading-snug">
                   {getText(edu.major)}
                 </p>
-                <p className="text-neutral-400 text-[10px] sm:text-xs mt-0.5">
+                <p className="text-slate-200 text-[10px] sm:text-xs mt-0.5">
                   {edu.startYear} - {edu.endYear}
                 </p>
               </div>

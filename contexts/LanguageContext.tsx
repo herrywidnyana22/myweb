@@ -68,9 +68,95 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         }
       }
     }
-    // Return empty array, will be populated by detectAndSetLanguages
+    // Return empty array, will be populated by detectAndSetLanguages or fetchFromDatabase
     return [];
   });
+
+  // Fetch preferredLanguages from database if localStorage is empty (only once on mount)
+  useEffect(() => {
+    const fetchLanguagesFromDB = async () => {
+      if (typeof window === 'undefined') return;
+      
+      const saved = localStorage.getItem(STORAGE_KEY);
+      const detected = localStorage.getItem(LANGUAGES_DETECTED_KEY);
+      
+      // Only fetch from DB if localStorage is empty
+      if (!saved || detected !== 'true') {
+        try {
+          const response = await fetch('/api/profiles');
+          if (response.ok) {
+            const profiles: Profile[] = await response.json();
+            
+            if (profiles.length > 0) {
+              const profile = profiles[0];
+              
+              // Check if preferredLanguages exists and is not null
+              if (profile.preferredLanguages && Array.isArray(profile.preferredLanguages)) {
+                const langs = profile.preferredLanguages as string[];
+                if (langs.length > 0) {
+                  setSelectedTranslationLanguages(langs);
+                  localStorage.setItem(STORAGE_KEY, JSON.stringify(langs));
+                  localStorage.setItem(LANGUAGES_DETECTED_KEY, 'true');
+                  setLanguagesDetected(true);
+                  console.log('Loaded languages from database:', langs);
+                  return;
+                }
+              }
+              
+              // If preferredLanguages is null/empty, detect from multilingual fields
+              const detectedLangs: string[] = [];
+              
+              // Check role field
+              if (profile.role && typeof profile.role === 'object') {
+                const roleKeys = Object.keys(profile.role).filter(k => k !== 'source');
+                detectedLangs.push(...roleKeys);
+              }
+              
+              // Check quote field
+              if (profile.quote && typeof profile.quote === 'object') {
+                const quoteKeys = Object.keys(profile.quote).filter(k => k !== 'source');
+                detectedLangs.push(...quoteKeys);
+              }
+              
+              // Check description field
+              if (profile.description && typeof profile.description === 'object') {
+                const descKeys = Object.keys(profile.description).filter(k => k !== 'source');
+                detectedLangs.push(...descKeys);
+              }
+              
+              // Remove duplicates and 'id' (default language)
+              const uniqueLangs = [...new Set(detectedLangs)].filter(lang => lang !== 'id');
+              
+              if (uniqueLangs.length > 0) {
+                setSelectedTranslationLanguages(uniqueLangs);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(uniqueLangs));
+                localStorage.setItem(LANGUAGES_DETECTED_KEY, 'true');
+                setLanguagesDetected(true);
+                console.log('Auto-detected languages from profile fields:', uniqueLangs);
+                
+                // Save to database
+                try {
+                  await fetch(`/api/profiles/${profile.id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ preferredLanguages: uniqueLangs }),
+                  });
+                  console.log('Saved detected languages to database');
+                } catch (err) {
+                  console.error('Failed to save languages to database:', err);
+                }
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching languages from database:', error);
+        }
+      }
+    };
+    
+    fetchLanguagesFromDB();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run only once on mount
 
   // Save to localStorage whenever languages change
   useEffect(() => {
@@ -128,7 +214,23 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    // Detect languages from data
+    // First, try to get preferredLanguages from profile
+    if (data.profiles && data.profiles.length > 0) {
+      const profile = data.profiles[0];
+      if (profile.preferredLanguages && Array.isArray(profile.preferredLanguages)) {
+        const langs = profile.preferredLanguages as string[];
+        if (langs.length > 0) {
+          setSelectedTranslationLanguages(langs);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(langs));
+          localStorage.setItem(LANGUAGES_DETECTED_KEY, 'true');
+          setLanguagesDetected(true);
+          console.log('Loaded languages from profile.preferredLanguages:', langs);
+          return;
+        }
+      }
+    }
+
+    // Fallback: Detect languages from data
     const detectedLanguages = detectLanguagesFromData(data);
     
     if (detectedLanguages.length > 0) {

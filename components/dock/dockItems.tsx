@@ -26,7 +26,7 @@ export const dockItems: DockItemProps[] =
       'col-span-2 sm:col-span-3 md:col-span-3 lg:col-span-4 xl:col-span-6',
   },
   {
-    id: 'contact',
+    id: 'myContact',
     name: 'Contact',
     children: <Contact />,
     icon: (

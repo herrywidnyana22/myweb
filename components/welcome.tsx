@@ -172,7 +172,7 @@ export const Welcome = () => {
       <div className="w-full max-w-5xl text-center text-gray-200 flex flex-col justify-center gap-2 sm:gap-3 md:gap-4">
         <p
           ref={subTitleRef}
-          className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-400 leading-relaxed"
+          className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-300 leading-relaxed"
         >
           <TextRender
             text={welcomeText}
@@ -184,7 +184,7 @@ export const Welcome = () => {
         <h1 ref={titleRef}>
           <TextRender
             text={welcomeTitle}
-            className="inline-block text-xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-georama italic leading-tight"
+            className="inline-block text-xl sm:text-3xl md:text-5xl font-georama italic leading-tight"
           />
         </h1>
       </div>

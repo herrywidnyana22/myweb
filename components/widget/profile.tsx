@@ -50,7 +50,7 @@ export const Profile = () => {
   }
 
   if (!profileData || !addressData) {
-    return <p className="text-center text-gray-400 p-4">{getUIText('dataEmpty')}</p>;
+    return <p className="text-center text-gray-100 p-4">{getUIText('dataEmpty')}</p>;
   }
   
   const { fullName, role, summary, image, birth_date } = profileData;
@@ -84,7 +84,7 @@ export const Profile = () => {
             {getText(role)}
           </p>
           {/* SUMMARY */}
-          <p className="text-xs sm:text-sm text-white/60 leading-relaxed line-clamp-2 mb-3">
+          <p className="text-xs sm:text-sm text-white/70 leading-relaxed line-clamp-2 mb-3">
             {getText(summary)}
           </p>
 

@@ -26,7 +26,7 @@ export const Contact = () => {
   }
 
   if (!contacts?.length) {
-    return <p className="text-center text-gray-400 p-4">{getUIText('dataEmpty')}</p>;
+    return <p className="text-center text-gray-100 p-4">{getUIText('dataEmpty')}</p>;
   }
 
   return (

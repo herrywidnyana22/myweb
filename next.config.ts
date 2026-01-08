@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
         hostname: "flagcdn.com",
       },
     ],
+    qualities: [75, 90],
   },
   
   

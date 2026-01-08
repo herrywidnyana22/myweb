@@ -18,7 +18,7 @@ export const Dock = () => {
   const iconRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const { windows, openWindow, minimizeWindow, restoreWindow } = useWindowStore();
   const { openedDockId, setOpenedDockId, setTargetedDockId, isInputFocused, setIsInputFocused, setIsMinimized } = useAppStore();
-  const { getText } = useLocalizedText();
+  const { getText, getUIText } = useLocalizedText();
 
   useGSAP(
     () => {
@@ -126,7 +126,7 @@ export const Dock = () => {
         >
           <div className="relative flex flex-col items-center">
             <Tooltip 
-              label={"File Explorer"}
+              label={getUIText('fileExplore')}
               bgColor="#000"
               textColor='text-white'
             >
@@ -153,7 +153,7 @@ export const Dock = () => {
           {dockItems.map((item) => (
             <div key={item.id} className="relative flex flex-col items-center z-50">
               <Tooltip 
-                label={getText(item.name)}
+                label={getUIText(item.id)}
                 bgColor="#000"
                 textColor='text-white'
               >
@@ -176,7 +176,7 @@ export const Dock = () => {
           ))}
           <div className="relative flex flex-col items-center">
             <Tooltip 
-              label={"View Resume"}
+              label={getUIText('resume')}
               bgColor="#000"
               textColor='text-white'
             >
