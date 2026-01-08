@@ -1,8 +1,8 @@
 import prisma from '@/lib/prisma';
-import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
 import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
+import { deleteImageFile } from '@/lib/file-utils';
 
 
 async function authenticateRequest(
