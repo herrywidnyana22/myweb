@@ -82,6 +82,6 @@ export async function POST(req: Request) {
     return successResponse(profileItem, 'Profile item created successfully', 201);
   } catch (error) {
     console.error('Error creating profile item:', error);
-    return errorResponse('Failed to create profile item', 500, error);
+    return errorResponse('Failed to create profile item', 500, error as Error);
   }
 }

@@ -53,7 +53,7 @@ export async function GET(
     return successResponse(project, 'Project retrieved successfully');
   } catch (error) {
     console.error('Error fetching project:', error);
-    return errorResponse('Failed to fetch project', 500, error);
+    return errorResponse('Failed to fetch project', 500, error as Error);
   }
 }
 
@@ -123,7 +123,7 @@ export async function PUT(
     return successResponse(project, 'Project updated successfully');
   } catch (error) {
     console.error('Error updating project:', error);
-    return errorResponse('Failed to update project', 500, error);
+    return errorResponse('Failed to update project', 500, error as Error);
   }
 }
 
@@ -186,6 +186,6 @@ export async function DELETE(
     return successResponse(null, 'Project and all related entries deleted successfully');
   } catch (error) {
     console.error('Error deleting project:', error);
-    return errorResponse('Failed to delete project', 500, error);
+    return errorResponse('Failed to delete project', 500, error as Error);
   }
 }

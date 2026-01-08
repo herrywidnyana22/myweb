@@ -21,7 +21,7 @@ export async function GET() {
     return successResponse({ username: payload.username }, 'Token verified successfully');
   } catch (error) {
     console.error('Verification error:', error);
-    return errorResponse('Token verification failed', 500, error);
+    return errorResponse('Token verification failed', 500, error as Error);
   }
 }
 
@@ -42,6 +42,6 @@ export async function POST() {
     return response;
   } catch (error) {
     console.error('Logout error:', error);
-    return errorResponse('An error occurred during logout', 500, error);
+    return errorResponse('An error occurred during logout', 500, error as Error);
   }
 }

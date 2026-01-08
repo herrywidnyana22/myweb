@@ -48,7 +48,7 @@ export async function GET(
     return successResponse(education, 'Education retrieved successfully');
   } catch (error) {
     console.error('Error fetching education:', error);
-    return errorResponse('Failed to fetch education', 500, error);
+    return errorResponse('Failed to fetch education', 500, error as Error);
   } 
 }
 
@@ -98,7 +98,7 @@ export async function PUT(
     return successResponse(education, 'Education updated successfully');
   } catch (error) {
     console.error('Error updating education:', error);
-    return errorResponse('Failed to update education', 500, error);
+    return errorResponse('Failed to update education', 500, error as Error);
   }
 }
 
@@ -140,6 +140,6 @@ export async function DELETE(
     return successResponse(null, 'Education deleted successfully');
   } catch (error) {
     console.error('Error deleting education:', error);
-    return errorResponse('Failed to delete education', 500, error);
+    return errorResponse('Failed to delete education', 500, error as Error);
   }
 }

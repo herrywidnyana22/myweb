@@ -49,7 +49,7 @@ export async function GET(
     return successResponse(contact, 'Contact retrieved successfully');
   } catch (error) {
     console.error('Error fetching contact:', error);
-    return errorResponse('Failed to fetch contact', 500, error);
+    return errorResponse('Failed to fetch contact', 500, error as Error);
   }
 }
 
@@ -95,7 +95,7 @@ export async function PUT(
     return successResponse(contact, 'Contact updated successfully');
   } catch (error) {
     console.error('Error updating contact:', error);
-    return errorResponse('Failed to update contact', 500, error);
+    return errorResponse('Failed to update contact', 500, error as Error);
   }
 }
 
@@ -136,6 +136,6 @@ export async function DELETE(
     return successResponse(null, 'Contact deleted successfully');
   } catch (error) {
     console.error('Error deleting contact:', error);
-    return errorResponse('Failed to delete contact', 500, error);
+    return errorResponse('Failed to delete contact', 500, error as Error);
   }
 }

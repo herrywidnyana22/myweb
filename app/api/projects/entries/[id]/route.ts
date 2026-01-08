@@ -87,7 +87,7 @@ export async function PUT(
     return successResponse(projectEntry, 'Project entry updated successfully');
   } catch (error) {
     console.error('Error updating project entry:', error);
-    return errorResponse('Failed to update project entry', 500, error);
+    return errorResponse('Failed to update project entry', 500, error as Error);
   }
 }
 
@@ -158,6 +158,6 @@ export async function DELETE(
     return successResponse(null, 'Project entry deleted successfully');
   } catch (error) {
     console.error('Error deleting project entry:', error);
-    return errorResponse('Failed to delete project entry', 500, error);
+    return errorResponse('Failed to delete project entry', 500, error as Error);
   }
 }

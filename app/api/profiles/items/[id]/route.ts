@@ -82,7 +82,7 @@ export async function PUT(
     return successResponse(profileItem, 'Profile item updated successfully');
   } catch (error) {
     console.error('Error updating profile item:', error);
-    return errorResponse('Failed to update profile item', 500, error);
+    return errorResponse('Failed to update profile item', 500, error as Error);
   }
 }
 
@@ -136,6 +136,6 @@ export async function DELETE(
     return successResponse(null, 'Profile item deleted successfully');
   } catch (error) {
     console.error('Error deleting profile item:', error);
-    return errorResponse('Failed to delete profile item', 500, error);
+    return errorResponse('Failed to delete profile item', 500, error as Error);
   }
 }

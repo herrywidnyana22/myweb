@@ -48,7 +48,7 @@ export async function GET(
     return successResponse(experience, 'Experience retrieved successfully');
   } catch (error) {
     console.error('Error fetching experience:', error);
-    return errorResponse('Failed to fetch experience', 500, error);
+    return errorResponse('Failed to fetch experience', 500, error as Error);
   } 
 }
 
@@ -96,7 +96,7 @@ export async function PUT(
     return successResponse(experience, 'Experience updated successfully');
   } catch (error) {
     console.error('Error updating experience:', error);
-    return errorResponse('Failed to update experience', 500, error);
+    return errorResponse('Failed to update experience', 500, error as Error);
   }
 }
 
@@ -137,6 +137,6 @@ export async function DELETE(
     return successResponse(null, 'Experience deleted successfully');
   } catch (error) {
     console.error('Error deleting experience:', error);
-    return errorResponse('Failed to delete experience', 500, error);
+    return errorResponse('Failed to delete experience', 500, error as Error);
   }
 }

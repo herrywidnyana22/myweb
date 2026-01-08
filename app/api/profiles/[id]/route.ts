@@ -54,7 +54,7 @@ export async function GET(
     return successResponse(profile, 'Profile retrieved successfully');
   } catch (error) {
     console.error('Error fetching profile:', error);
-    return errorResponse('Failed to fetch profile', 500, error);
+    return errorResponse('Failed to fetch profile', 500, error as Error);
   }
 }
 
@@ -110,7 +110,7 @@ export async function POST(req: Request) {
     return successResponse(profile, 'Profile created successfully', 201);
   } catch (error) {
     console.error('Error creating profile:', error);
-    return errorResponse('Failed to create profile', 500, error);
+    return errorResponse('Failed to create profile', 500, error as Error);
   } 
 }
 
@@ -178,7 +178,7 @@ export async function PUT(
     return successResponse(profile, 'Profile updated successfully');
   } catch (error) {
     console.error('Error updating profile:', error);
-    return errorResponse('Failed to update profile', 500, error);
+    return errorResponse('Failed to update profile', 500, error as Error);
   } 
 }
 
@@ -221,6 +221,6 @@ export async function PATCH(
     return successResponse(profile, 'Language preferences updated successfully');
   } catch (error) {
     console.error('Error updating language preferences:', error);
-    return errorResponse('Failed to update language preferences', 500, error);
+    return errorResponse('Failed to update language preferences', 500, error as Error);
   }
 }

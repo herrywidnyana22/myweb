@@ -88,6 +88,6 @@ export async function POST(req: Request) {
     return successResponse(projectEntry, 'Project entry created successfully', 201);
   } catch (error) {
     console.error('Error creating project entry:', error);
-    return errorResponse('Failed to create project entry', 500, error);
+    return errorResponse('Failed to create project entry', 500, error as Error);
   }
 }
