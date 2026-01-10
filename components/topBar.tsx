@@ -101,14 +101,14 @@ export const TopBar = () => {
 
                         {/* Dropdown Menu */}
                         {isLangMenuOpen && (
-                            <div className="absolute top-full right-0 mt-2 bg-gray-300 rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-9999 min-w-45">
+                            <div className="absolute top-full right-0 mt-2 bg-blue-50 rounded-lg shadow-2xl border border-gray-200 overflow-hidden z-9999 min-w-45">
                                 {availableLanguages.map((lang) => (
                                     <button
                                         key={lang.code}
                                         type="button"
                                         onClick={() => handleLanguageChange(lang.code)}
-                                        className={`w-full flex items-center gap-3 px-4 py-2.5 hover:bg-blue-50 transition-colors cursor-pointer ${
-                                            currentLanguage === lang.code ? 'bg-blue-50' : ''
+                                        className={`w-full flex items-center gap-3 px-4 py-2.5 hover:bg-gray-300 transition-colors cursor-pointer ${
+                                            currentLanguage === lang.code ? 'bg-gray-200' : ''
                                         }`}
                                     >
                                         <FlagIcon 
@@ -124,7 +124,7 @@ export const TopBar = () => {
                                             </div>
                                         </div>
                                         {currentLanguage === lang.code && (
-                                            <div className="w-2 h-2 rounded-full bg-primary" />
+                                            <div className="size-2 rounded-full bg-primary" />
                                         )}
                                     </button>
                                 ))}

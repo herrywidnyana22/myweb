@@ -80,6 +80,7 @@ export async function POST(req: Request) {
       role: string;
       quote: string;
       photoURL?: string;
+      cvURL?: string;
       birthDate?: string;
       birthPlace?: string;
       experienceYears?: number;
@@ -99,6 +100,7 @@ export async function POST(req: Request) {
         role: body.role,
         quote: body.quote,
         photoURL: body.photoURL,
+        cvURL: body.cvURL,
         birthDate: body.birthDate ? new Date(body.birthDate) : undefined,
         birthPlace: body.birthPlace,
         experienceYears: body.experienceYears,
@@ -113,6 +115,20 @@ export async function POST(req: Request) {
         category: true,
       },
     });
+
+    // If CV is attached, create ProfileItem for resume
+    if (body.cvURL) {
+      await prisma.profileItem.create({
+        data: {
+          profileId: profile.id,
+          name: { en: "Resume", id: "Resume", ja: "履歴書", zh: "简历" },
+          tooltipText: { en: "View Resume", id: "Lihat Resume", ja: "履歴書を見る", zh: "查看简历" },
+          kind: "FILE",
+          fileType: "PDF",
+          href: body.cvURL,
+        },
+      });
+    }
 
     return NextResponse.json({
       code: 201,

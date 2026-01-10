@@ -47,7 +47,9 @@ export const ProjectItem = (project: Project) => {
       <div className="w-full">
         {/* Progress Circle */}
         <div className="absolute right-6 top-2 sm:float-right sm:ml-3">
-          <ProgressCircle value={project.progressValue} label="Progress" />
+          <ProgressCircle 
+            value={project.progressValue} 
+            label={getUIText('progress')} />
         </div>
 
         {/* Description */}
@@ -103,10 +105,7 @@ export const ProjectItem = (project: Project) => {
               />
             )}
           </div>
-          
         </div>
-
-        
       </div>
     </div>
   );

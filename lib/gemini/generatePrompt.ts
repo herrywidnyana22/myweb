@@ -1,7 +1,6 @@
 import { client } from "./client";
 import { rateLimit, retry } from "./rateLimit";
 
-
 export async function generatePrompt(prompt: string) {
   await rateLimit();
 

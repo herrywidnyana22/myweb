@@ -70,7 +70,7 @@ export const ProgressCircle = ({
         <div className='absolute flex flex-col items-center justify-center'>
           <span className={clsx(
             'text-gray-900/90 font-light capitalize',
-            isMobile ? 'text-[12px]' : 'text-[14px]'      // font juga ikut kecil
+            isMobile ? 'text-xs' : 'text-sm'     
           )}>
             {value}
             <span className={isMobile ? 'text-[10px]' : 'text-xs text-gray-900/70'}>%</span>

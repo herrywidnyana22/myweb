@@ -3,6 +3,7 @@ import { useGSAP } from "@gsap/react";
 import { useRef, useEffect, useState } from "react";
 import { FONT_WEIGHTS } from "@/lib/constants";
 import { useLocalizedText } from "@/hooks/useLocalizedText";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const TextRender = ({ text = "", className, weight = 400 }: TextRenderProps) => {
     return text.split("").map((char, i) => (
@@ -117,9 +118,7 @@ export const Welcome = () => {
       }, 100);
 
       return () => clearTimeout(timer);
-    },
-    { dependencies: [welcomeText, welcomeTitle, isMounted] }
-  );
+    }, [welcomeText, welcomeTitle, isMounted]);
 
   // Auto-center scroll when content overflows
   useEffect(() => {

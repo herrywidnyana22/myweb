@@ -124,12 +124,12 @@ export const MultiLangInput = ({
           >
             {isTranslating ? (
               <>
-                <Loader2 className="w-3 h-3 animate-spin" />
+                <Loader2 className="size-3 animate-spin" />
                 <span>Translating...</span>
               </>
             ) : (
               <>
-                <Languages className="w-3 h-3" />
+                <Languages className="size-3" />
                 <span>Translate</span>
               </>
             )}
@@ -141,7 +141,7 @@ export const MultiLangInput = ({
       {selectedLanguages.length > 0 && (
         <div className="pl-4 border-l-2 border-blue-200 space-y-3">
           <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Sparkles className="w-4 h-4 text-blue-500" />
+            <Sparkles className="size-4 text-blue-500" />
             <span className="font-medium">AI Translations (editable)</span>
           </div>
           

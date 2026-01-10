@@ -3,9 +3,11 @@
 import gsap from 'gsap';
 import Image from 'next/image';
 import clsx from 'clsx';
-import { useRef, useEffect } from 'react';
-import { useGSAP } from '@gsap/react';
 import useWindowStore from '@/store/window';
+import useDataStore from '@/store/data';
+
+import { useRef } from 'react';
+import { useGSAP } from '@gsap/react';
 import { dockItems } from './dockItems';
 import { Tooltip } from '../tooltip';
 import { useAppStore } from '@/store/app';
@@ -18,10 +20,14 @@ export const Dock = () => {
   const iconRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const { windows, openWindow, minimizeWindow, restoreWindow } = useWindowStore();
   const { openedDockId, setOpenedDockId, setTargetedDockId, isInputFocused, setIsInputFocused, setIsMinimized } = useAppStore();
-  const { getText, getUIText } = useLocalizedText();
+  const { getUIText } = useLocalizedText();
 
-  useGSAP(
-    () => {
+  const { profiles } = useDataStore();
+
+  const hasProfile = profiles && profiles.length > 0;
+  const resumeURL = hasProfile ? profiles[0].cvURL : null;
+
+  useGSAP(() => {
       const dock = dockRef.current;
       if (!dock) return;
 
@@ -69,9 +75,7 @@ export const Dock = () => {
         dock.removeEventListener('mousemove', onMove);
         dock.removeEventListener('mouseleave', onLeave);
       };
-    },
-    { scope: dockRef }
-  );
+    }, [{ scope: dockRef }, profiles]);
 
   const onDockClick = (id: string) => {
     setIsInputFocused(false)
@@ -174,31 +178,33 @@ export const Dock = () => {
               )}
             </div>
           ))}
-          <div className="relative flex flex-col items-center">
-            <Tooltip 
-              label={getUIText('resume')}
-              bgColor="#000"
-              textColor='text-white'
-            >
-              <button
-                ref={el => { iconRefs.current['resume'] = el }}
-                className="dock-icon size-10 sm:size-12 md:size-14 flex items-center justify-center"
-                onClick={() => onDockClick('resume')}
+          { resumeURL && (
+            <div className="relative flex flex-col items-center">
+              <Tooltip 
+                label={getUIText('resume')}
+                bgColor="#000"
+                textColor='text-white'
               >
-                <Image src={'/icons/pdf.png'} 
-                  alt='icon' 
-                  height={128} 
-                  width={128} 
-                  className='size-10 sm:size-12 md:size-14 object-cover'
-                 />
-              </button>
-            </Tooltip>
+                <button
+                  ref={el => { iconRefs.current['resume'] = el }}
+                  className="dock-icon size-10 sm:size-12 md:size-14 flex items-center justify-center"
+                  onClick={() => onDockClick('resume')}
+                >
+                  <Image src={'/icons/pdf.png'} 
+                    alt='icon' 
+                    height={128} 
+                    width={128} 
+                    className='size-10 sm:size-12 md:size-14 object-cover'
+                  />
+                </button>
+              </Tooltip>
 
-            {/* Active Dot Indicator */}
-            {!!openedDockId?.['resume'] && (
-              <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 size-1.5 rounded-full bg-primary shadow-[0_0_6px_rgba(255,255,255,0.9)]" />
-            )}
-          </div>
+              {/* Active Dot Indicator */}
+              {!!openedDockId?.['resume'] && (
+                <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 size-1.5 rounded-full bg-primary shadow-[0_0_6px_rgba(255,255,255,0.9)]" />
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -16,7 +16,7 @@ export const Profile = () => {
   const profileData = profile ? {
     fullName: profile.fullName,
     role: profile.role,
-    summary: profile.description,
+    summary: profile.quote,
     image: profile.photoURL,
     birth_date: profile.birthDate,
   } : null;

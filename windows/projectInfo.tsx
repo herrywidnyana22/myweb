@@ -10,7 +10,7 @@ import { useLocalizedText } from '@/hooks/useLocalizedText'
 
 const ProjectInfoWindow = () => {
     const { windows } = useWindowStore();
-    const { getText } = useLocalizedText();
+    const { getText, getUIText } = useLocalizedText();
     const projects = windows.projectInfo?.data as LocationValue | undefined;
 
     if(!projects) return null
@@ -47,7 +47,7 @@ const ProjectInfoWindow = () => {
                 <div className="absolute right-12 top-16 sm:float-right sm:ml-3">
                     <ProgressCircle 
                         value={projects.progress} 
-                        label="Progress" 
+                        label={getUIText('progress')}
                     />
                 </div>
                 <div className="flex items-center gap-3 mb-4">

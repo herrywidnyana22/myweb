@@ -128,6 +128,7 @@ declare interface Profile {
   role: string | MultiLangText; // Multilingual (required in DB)
   quote: string | MultiLangText; // Multilingual (required in DB)
   photoURL?: string;
+  cvURL?: string;
   birthDate?: string | Date;
   birthPlace?: string;
   experienceYears?: number;
@@ -448,6 +449,10 @@ declare type LocationItem = {
   children?: LocationItem[];
 };
 
+declare type ResumeWindowProps = {
+    resumeURL: string
+}
+
 declare type TextRenderProps = {
     text: string
     className?: string
@@ -537,6 +542,18 @@ declare interface FormImageUploadProps {
   onRemove: () => void;
   error?: string;
   disabled?: boolean;
+}
+
+declare interface FormFileUploadProps {
+  label?: string;
+  fileUrl: string | null;
+  isUploading: boolean;
+  onUpload: (file: File) => Promise<void>;
+  onRemove: () => void;
+  error?: string;
+  disabled?: boolean;
+  accept?: string;
+  description?: string;
 }
 
 declare interface FormTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {

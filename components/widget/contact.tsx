@@ -7,7 +7,7 @@ import { Tooltip } from '../tooltip';
 import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 export const Contact = () => {
-  const { contacts, isLoading, error } = useDataStore();
+  const { contacts, isLoading } = useDataStore();
   const { getText, getUIText } = useLocalizedText();
 
   if (isLoading) {
@@ -60,7 +60,7 @@ export const Contact = () => {
                 )}
               </div>
 
-              <p className="text-[10px] md:w-14 lg:w-full text-center sm:text-xs text-slate-200 capitalize truncate">
+              <p className="text-[10px] md:w-14 lg:w-full text-center sm:text-xs text-blue-50 capitalize truncate">
                 {item.title}
               </p>
             </div>

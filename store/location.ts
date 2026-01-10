@@ -2,7 +2,7 @@ import { getLocations } from "@/lib/constants";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-const DEFAULT_LOCATION = getLocations([], []).resume;
+const DEFAULT_LOCATION = getLocations([], []).project;
 
 const useLocationStore = create<LocationStore>()(
     immer((set) => ({

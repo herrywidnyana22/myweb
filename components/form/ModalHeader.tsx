@@ -2,7 +2,7 @@
 
 export function ModalHeader({ title, onClose, disabled }: ModalHeaderProps) {
   return (
-    <div className="sticky top-0 rounded-t-lg bg-white border-b border-gray-200 p-6 flex justify-between items-center">
+    <div className="sticky top-0 rounded-t-lg bg-white border-b border-gray-200 p-6 flex justify-between items-center z-50">
       <h2 className="text-2xl font-bold text-gray-800">{title}</h2>
       <button
         onClick={onClose}

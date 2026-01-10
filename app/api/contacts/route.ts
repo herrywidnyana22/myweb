@@ -39,7 +39,7 @@ export async function GET() {
       description: contact.description,
       icon: contact.icon,
       bgColor: contact.bgColor,
-      href: contact.contactURL,
+      contactURL: contact.contactURL,
       tooltipText: contact.tooltipText,
       categoryId: contact.categoryId,
     }));

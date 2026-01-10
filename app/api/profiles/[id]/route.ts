@@ -3,6 +3,7 @@ import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
 import { successResponse, errorResponse } from '@/lib/api-response';
+import { deleteImageFile } from '@/lib/file-utils';
 import { cookies } from 'next/headers';
 
 async function authenticateRequest(
@@ -138,6 +139,7 @@ export async function PUT(
       role?: string;
       quote?: string;
       photoURL?: string;
+      cvURL?: string;
       birthDate?: string;
       birthPlace?: string;
       experienceYears?: number;
@@ -159,6 +161,7 @@ export async function PUT(
         ...(body.role !== undefined && { role: body.role }),
         ...(body.quote !== undefined && { quote: body.quote }),
         ...(body.photoURL !== undefined && { photoURL: body.photoURL }),
+        ...(body.cvURL !== undefined && { cvURL: body.cvURL }),
         ...(body.birthDate !== undefined && { birthDate: body.birthDate ? new Date(body.birthDate) : null }),
         ...(body.birthPlace !== undefined && { birthPlace: body.birthPlace }),
         ...(body.experienceYears !== undefined && { experienceYears: body.experienceYears }),
@@ -174,6 +177,51 @@ export async function PUT(
         category: true,
       },
     });
+
+    // Handle Resume ProfileItem: create or update if cvURL changed
+    if (body.cvURL !== undefined) {
+      // Find existing Resume item
+      const existingResumeItem = await prisma.profileItem.findFirst({
+        where: {
+          profileId: id,
+          name: { path: ['en'], equals: 'Resume' }
+        }
+      });
+
+      if (body.cvURL) {
+        // If updating CV and old one exists, delete old file
+        if (existingResumeItem && existingResumeItem.href && existingResumeItem.href !== body.cvURL) {
+          await deleteImageFile(existingResumeItem.href);
+        }
+
+        // Create or update Resume item
+        if (existingResumeItem) {
+          await prisma.profileItem.update({
+            where: { id: existingResumeItem.id },
+            data: { href: body.cvURL }
+          });
+        } else {
+          await prisma.profileItem.create({
+            data: {
+              profileId: id,
+              name: { en: "Resume", id: "Resume", ja: "履歴書", zh: "简历" },
+              tooltipText: { en: "View Resume", id: "Lihat Resume", ja: "履歴書を見る", zh: "查看简历" },
+              kind: "FILE",
+              fileType: "PDF",
+              href: body.cvURL,
+            },
+          });
+        }
+      } else if (existingResumeItem) {
+        // Remove old file and ProfileItem if cvURL is null/empty
+        if (existingResumeItem.href) {
+          await deleteImageFile(existingResumeItem.href);
+        }
+        await prisma.profileItem.delete({
+          where: { id: existingResumeItem.id }
+        });
+      }
+    }
 
     return successResponse(profile, 'Profile updated successfully');
   } catch (error) {

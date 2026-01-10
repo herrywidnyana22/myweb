@@ -114,7 +114,7 @@ export function getLocations(projects: Project[], profiles: Profile[]) {
   return {
     project: getProjectLocation(projects),
     about: getAboutLocation(profiles),
-    resume: RESUME_LOCATION,
+    // resume: RESUME_LOCATION,
   };
 }
 

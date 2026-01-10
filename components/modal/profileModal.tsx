@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { FormInput } from '../form/FormInput';
 import { FormSelect } from '../form/FormSelect';
 import { FormImageUpload } from '../form/FormImageUpload';
+import { FormFileUpload } from '../form/FormFileUpload';
 import { FormError } from '../form/FormError';
 import { ModalHeader } from '../form/ModalHeader';
 import { ModalActions } from '../form/ModalActions';
@@ -40,6 +41,8 @@ export function ProfileModal({
   const [error, setError] = useState('');
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploadingCV, setIsUploadingCV] = useState(false);
+  const [cvPreview, setCVPreview] = useState<string | null>(null);
   
   // Use global language context
   const { selectedTranslationLanguages, getLanguageInfo } = useLanguage();
@@ -49,12 +52,14 @@ export function ProfileModal({
     if (profile) {
       setFormData(profile);
       setImagePreview(profile.photoURL || null);
+      setCVPreview(profile.cvURL || null);
     } else {
       setFormData({
         id: '',
         ...DEFAULT_PROFILE,
       } as Profile);
       setImagePreview(null);
+      setCVPreview(null);
     }
     setError('');
   }, [profile, isOpen]);
@@ -109,6 +114,34 @@ export function ProfileModal({
     }
   };
 
+  const handleCVUpload = async (file: File) => {
+    setIsUploadingCV(true);
+    setError('');
+
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append('file', file);
+
+      const res = await fetch('/api/upload/file', {
+        method: 'POST',
+        body: formDataToSend,
+      });
+      const result = await res.json();
+
+      if (result.status !== 'ok') {
+        throw new Error(result.msg || result.error || 'Failed to upload CV');
+      }
+
+      const data = result.data as { url: string };
+      setFormData((prev) => ({ ...prev, cvURL: data.url }));
+      setCVPreview(data.url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to upload CV');
+    } finally {
+      setIsUploadingCV(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -135,7 +168,9 @@ export function ProfileModal({
     setError('');
     setIsSubmitting(false);
     setIsUploadingImage(false);
+    setIsUploadingCV(false);
     setImagePreview(null);
+    setCVPreview(null);
     setFormData({
       id: '',
       ...DEFAULT_PROFILE,
@@ -266,6 +301,21 @@ export function ProfileModal({
                 setImagePreview(null);
               }}
               disabled={isSubmitting}
+            />
+
+            {/* CV Upload */}
+            <FormFileUpload
+              label="CV / Resume"
+              fileUrl={cvPreview}
+              isUploading={isUploadingCV}
+              onUpload={handleCVUpload}
+              onRemove={() => {
+                setFormData((prev) => ({ ...prev, cvURL: undefined }));
+                setCVPreview(null);
+              }}
+              disabled={isSubmitting}
+              accept=".pdf"
+              description="Supported format: PDF. Max size: 10MB"
             />
 
             {/* Optional Fields */}

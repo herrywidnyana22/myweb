@@ -44,7 +44,7 @@ const ContactWindow = () => {
                 </h3>
 
                 <p className="text-sm text-gray-600 leading-relaxed">
-                    {getUIText('contactSubtitle')}  
+                    {getUIText('contactSubtitle')}
                 </p>
 
                 <ul className="flex items-center gap-3">

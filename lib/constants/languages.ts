@@ -651,6 +651,20 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     de: 'Hast du eine Idee? Einen Bug zu beheben? Oder willst du einfach nur über Technik sprechen? Ich bin dabei.',
     ar: 'هل لديك فكرة؟ خطأ لإصلاحه؟ أو هل تريد فقط التحدث عن التكنولوجيا؟ أنا معكم.',
     pt: 'Tem uma ideia? Um bug para corrigir? ou só quer falar sobre tecnologia? Estou dentro.',
+  },
+
+  progress:{
+    source: 'Progres',
+    id: 'Progres',
+    en: 'Progress',
+    ja: '進捗', 
+    zh: '进度',
+    ko: '진행률',
+    es: 'Progreso',
+    fr: 'Progrès',
+    de: 'Fortschritt',
+    ar: 'التقدم',
+    pt: 'Progresso',
   }
 };
 
