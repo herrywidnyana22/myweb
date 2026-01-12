@@ -46,7 +46,7 @@ const ProjectInfoWindow = () => {
             <div className="space-y-4 p-6 bg-white text-black max-w-3xl min-w-md">
                 <div className="absolute right-12 top-16 sm:float-right sm:ml-3">
                     <ProgressCircle 
-                        value={projects.progress} 
+                        value={projects.progress as number} 
                         label={getUIText('progress')}
                     />
                 </div>

@@ -1,8 +1,6 @@
 import { PrismaClient } from './generated/prisma/client'
 import { PrismaPg } from "@prisma/adapter-pg";
 
-// neonConfig.webSocketConstructor = ws
-
 const connectionString = process.env.DATABASE_URL;
 
 const globalForPrisma = globalThis as unknown as {
@@ -10,18 +8,18 @@ const globalForPrisma = globalThis as unknown as {
 }
 
 const adapter = new PrismaPg({ connectionString });
-// const adapter = new PrismaNeon({
-//   connectionString: process.env.DATABASE_URL!,
-// })
+const prisma = new PrismaClient({ adapter });
 
-const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
-    adapter,
-  })
+// const adapter = new PrismaPg({ connectionString });
 
-if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma
-}
+// const prisma =
+//   globalForPrisma.prisma ??
+//   new PrismaClient({
+//     adapter,
+//   })
+
+// if (process.env.NODE_ENV !== 'production') {
+//   globalForPrisma.prisma = prisma
+// }
 
 export default prisma

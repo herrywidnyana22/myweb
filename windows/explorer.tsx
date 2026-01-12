@@ -16,7 +16,7 @@ import { Tooltip } from "@/components/tooltip";
 import { useLocalizedText } from "@/hooks/useLocalizedText";
 
 const ExplorerWindow = () => {
-    const { getText } = useLocalizedText();
+    const { getText, getUIText } = useLocalizedText();
     const { activeLocation, setActiveLocation } = useLocationStore();
     const { openWindow, focusWindow } = useWindowStore();
     const [navigationHistory, setNavigationHistory] = useState<LocationValue[]>([]);
@@ -54,8 +54,6 @@ const ExplorerWindow = () => {
     const canGoBack = navigationHistory.length > 1;
 
     const openItem = (item: LocationValue) => {
-
-        console.log("Item:", item)
 
         const fileTypeLowerCase = item.fileType?.toLowerCase()
         const fileKindLowerCase = item.kind?.toLowerCase()
@@ -146,7 +144,7 @@ const ExplorerWindow = () => {
                         </div>
                     )}
                     <p>
-                        {(typeof activeLocation?.name === 'string' ? activeLocation.name : getText(activeLocation.name)) ?? "Explorer"}
+                        {(typeof activeLocation?.name === 'string' ? getUIText(activeLocation.name) : getText(activeLocation.name)) ?? "Explorer"}
                     </p>
                 </div>
 
@@ -162,13 +160,13 @@ const ExplorerWindow = () => {
                 {/* LEFT PANEL */}         
                 <div className="scrollable-panel w-48 bg-gray-50 border-r border-gray-200 flex flex-col p-5 space-y-3 overflow-y-auto">
                     <Menu 
-                        title="Favorite"
+                        title={'favorite'}
                         items={Object.values(locations)} 
                         activeLocation={activeLocation}
                         onClick={(item) => setActiveLocation(item)} 
                     />
                     <Menu 
-                        title="Work"
+                        title={'project'}
                         items={locations.project.children} 
                         activeLocation={activeLocation}
                         onClick={(item) => setActiveLocation(item)} 
@@ -182,7 +180,7 @@ const ExplorerWindow = () => {
                             <Tooltip key={item.id} label={item.tooltipText ? getText(item.tooltipText) : (typeof item.name === 'string' ? item.name : getText(item.name))}>
                                 <div
                                     key={item.id}
-                                    onDoubleClick={() => openItem(item)}
+                                    onClick={() => openItem(item)}
                                     className="w-24"
                                 >
                                     <div className="group flex flex-col items-center justify-start hover:cursor-default">

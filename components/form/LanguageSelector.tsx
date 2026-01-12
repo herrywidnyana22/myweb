@@ -70,20 +70,20 @@ export const LanguageSelector = ({
       </div>
 
       {selectedLanguages.length > 0 && (
-        <div className="flex items-center mt-4 p-2 bg-orange-50 rounded text-sm text-primary-hover">
-          <strong>Selected:</strong>{' '}
+        <div className="flex items-center mt-4 p-2 border border-gray-300 rounded-lg text-sm text-primary-hover">
+          <strong>Selected: </strong>
           <span className="inline-flex items-center gap-2 flex-wrap">
             {selectedLanguages.map((code) => {
               const lang = AVAILABLE_LANGUAGES.find((l) => l.code === code);
-              return lang ? (
-                <span key={code} className="inline-flex items-center">
-                    <FlagIcon 
-                        code={lang.countryCode} 
-                        flagCode={lang.flag}
-                        /> 
-                    {lang.name}
-                </span>
-              ) : code;
+              return lang 
+              ? (<span key={code} className="inline-flex items-center">
+                  <FlagIcon 
+                    code={lang.countryCode} 
+                    flagCode={lang.flag}
+                  /> 
+                  {lang.name}
+                </span>) 
+              : code;
             }).reduce((prev, curr) => [prev, ', ', curr] as any)}
           </span>
         </div>

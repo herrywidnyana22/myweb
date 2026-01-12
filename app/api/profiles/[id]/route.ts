@@ -175,6 +175,11 @@ export async function PUT(
       },
       include: {
         category: true,
+        items: {
+          include: {
+            children: true,
+          },
+        },
       },
     });
 

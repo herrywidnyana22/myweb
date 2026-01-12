@@ -11,7 +11,7 @@ import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 const TechstackWindow = () => {
     const { windows } = useWindowStore()
-    const { getText } = useLocalizedText();
+    const { getText , getUIText} = useLocalizedText();
     
     const data = windows.techstack?.data as LocationValue | undefined
 
@@ -33,14 +33,14 @@ const TechstackWindow = () => {
                         <div className="size-4 overflow-hidden rounded-md">
                             <Image
                                 src={effectiveIcon}
-                                alt={`${name} icon`}
+                                alt={`${getText(name)} icon`}
                                 width={32}
                                 height={32}
                                 className="object-cover size-4"
                             />
                         </div>
                     )}
-                    <h2 className="text-center">{name}</h2>
+                    <h2 className="text-center">{getText(name)}</h2>
                 </div>
                 <div className="w-24" />
             </div>
@@ -48,13 +48,14 @@ const TechstackWindow = () => {
             {/* BODY */}
             <div className="p-5 space-y-4 bg-white">
                 <p className="text-gray-600">
-                    <span className="text-black font-semibold">{ (typeof projectName === 'string' ? projectName : getText(projectName))}</span> tech stack
+                    <span className="text-black font-semibold">{ (typeof projectName === 'string' ? projectName : getText(projectName))}</span>
+                    {getUIText('techstack')}
                 </p>
 
                 {/* TABLE HEADER */}
                 <div className="grid grid-cols-[220px_1fr] text-gray-700 font-semibold pt-3 text-sm">
-                    <p className='ml-6'>Category</p>
-                    <p className='ml-2'>Technologies</p>
+                    <p className='ml-6'>{getUIText('category')}</p>
+                    <p className='ml-2'>{getUIText('technologies')}</p>
                 </div>
 
                 <hr className="border-dashed border-gray-400 my-2" />
@@ -84,12 +85,12 @@ const TechstackWindow = () => {
                 <div className="space-y-2 text-sm mt-4">
                     <p className="flex items-center gap-2 text-green-600">
                         <Check size={16} />
-                        {`${dataLength} of ${dataLength} stack loaded successfully (100%)`}
+                        {`${dataLength} of ${dataLength} ${getUIText('stackLoaded')} (100%)`}
                     </p>
 
                     <p className="flex items-center gap-2 text-black">
                         <Flag size={14} fill="black" />
-                        Render time: 6ms
+                        {getUIText('renderTime')}
                     </p>
                 </div>
             </div>

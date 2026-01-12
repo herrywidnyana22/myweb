@@ -44,7 +44,7 @@ export default function PDFViewer() {
     return (
         <div 
             ref={containerRef}
-            className='h-full overflow-auto bg-white flex justify-center items-start p-4'
+            className='size-full bg-white flex justify-center items-start'
         >
             {width && (
                 <Document file={resumeURL}>

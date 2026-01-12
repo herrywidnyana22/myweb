@@ -5,6 +5,7 @@ import { writeCache } from "@/lib/cache";
 import { CategoryModal } from "../modal/categoryModal";
 import { DeleteConfirmModal } from "../modal/deleteConfirmModal";
 import { ActionButtonGroup } from "./actionButtonGroup";
+import { CollapsibleCard } from "./collapsibleCard";
 import { Plus } from "lucide-react";
 import { ActionButton } from "./actionButton";
 import { useLocalizedText } from "@/hooks/useLocalizedText";
@@ -127,19 +128,16 @@ export const Category = ({isDataLoading = false}: {isDataLoading?: boolean}) => 
 
     return (
         <>
-            <div className="bg-gray-700 rounded-lg shadow-lg p-6 border border-gray-600">
-                <div className="flex justify-between items-start mb-4">
-                    <h2 className="text-xl font-bold text-white">Categories</h2>
-                    <div className="flex gap-2">
-                        <ActionButton
-                            onClick={handleAddCategory}
-                            variant="add"
-                            icon={
-                                <><Plus className="size-3"/> Add</>
-                            }
-                            title="Add Category"
-                        />
-                    </div>
+            <CollapsibleCard title="Categories">
+                <div className="flex justify-end items-start mb-4">
+                    <ActionButton
+                        onClick={handleAddCategory}
+                        variant="add"
+                        icon={
+                            <><Plus className="size-3"/> Add</>
+                        }
+                        title="Add Category"
+                    />
                 </div>
 
                 {!Array.isArray(categories) || categories.length === 0 ? (
@@ -171,7 +169,7 @@ export const Category = ({isDataLoading = false}: {isDataLoading?: boolean}) => 
                     ))}
                     </div>
                 )}
-            </div>
+            </CollapsibleCard>
             <CategoryModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}

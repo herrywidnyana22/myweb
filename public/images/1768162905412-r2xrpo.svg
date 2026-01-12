@@ -1,0 +1,28 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dock-style rounded background -->
+  <rect x="4" y="4" width="120" height="120" rx="28" ry="28" fill="url(#bg)"></rect>
+
+  <!-- Graduation cap top (centered) -->
+  <polygon points="64 40 28 56 64 72 100 56" fill="#FFFFFF"></polygon>
+
+  <!-- Cap base (centered) -->
+  <path d="M40 64
+       V82
+       C40 88, 52 94, 64 94
+       C76 94, 88 88, 88 82
+       V64
+       L64 76
+       Z" fill="#F3F4F6"></path>
+
+  <!-- Tassel (centered) -->
+  <line x1="100" y1="56" x2="100" y2="80" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"></line>
+  <circle cx="100" cy="84" r="4" fill="#FFFFFF"></circle>
+
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38BDF8"></stop>
+      <stop offset="100%" stop-color="#6366F1"></stop>
+    </linearGradient>
+  </defs>
+</svg>

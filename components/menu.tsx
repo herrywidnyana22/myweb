@@ -11,11 +11,11 @@ export const Menu = ({
     onClick,
     className 
 }: MenuProps) => {
-    const { getText } = useLocalizedText();
+    const { getText, getUIText } = useLocalizedText();
     
     return (
         <div>
-            {title && <h3 className="text-xs font-medium text-gray-400 mb-1">{title}</h3>}
+            {title && <h3 className="text-xs font-medium text-gray-400 mb-1">{getUIText(title)}</h3>}   
                 <ul className={clsx(className ?? className)}>
                     {items.map((item) => (
                         <li
@@ -28,13 +28,13 @@ export const Menu = ({
                         >
                             <Image
                                 src={item.icon}
-                                alt={typeof item.name === 'string' ? item.name : getText(item.name)}
+                                alt={typeof item.name === 'string' ? getUIText(item.name) : getText(item.name)}
                                 width={64}
                                 height={64}
                                 className="size-4"
                             />
 
-                            <p className="text-xs md:text-sm font-medium truncate">{getText(item.name)}</p>
+                            <p className="text-xs md:text-sm font-medium truncate">{typeof item.name === 'string' ? getUIText(item.name) : getText(item.name)}</p>
                         </li>
                     ))}
                 </ul>

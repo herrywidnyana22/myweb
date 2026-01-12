@@ -5,6 +5,7 @@ import { writeCache } from "@/lib/cache";
 import { ExperienceModal } from "../modal/experienceModal";
 import { DeleteConfirmModal } from "../modal/deleteConfirmModal";
 import { ActionButtonGroup } from "./actionButtonGroup";
+import { CollapsibleCard } from "./collapsibleCard";
 import { Plus } from "lucide-react";
 import { ActionButton } from "./actionButton";
 import { useLocalizedText } from "@/hooks/useLocalizedText";
@@ -133,17 +134,14 @@ export const Experience = ({isDataLoading = false}: {isDataLoading?: boolean}) =
 
     return (
         <>
-            <div className="bg-gray-700 rounded-lg shadow-lg p-6 border border-gray-600">
-                <div className="flex justify-between items-start mb-4">
-                    <h2 className="text-xl font-bold text-white">Experience</h2>
-                    <div className="flex gap-2">
-                        <ActionButton
-                            onClick={handleAddExperience}
-                            variant="add"
-                            icon={<> <Plus className="size-3"/> Add </>}
-                            title="Add Experience"
-                        />    
-                    </div>
+            <CollapsibleCard title="Experience">
+                <div className="flex justify-end items-start mb-4">
+                    <ActionButton
+                        onClick={handleAddExperience}
+                        variant="add"
+                        icon={<> <Plus className="size-3"/> Add </>}
+                        title="Add Experience"
+                    />    
                 </div>
 
                 {!Array.isArray(experiences) || experiences.length === 0 ? (
@@ -180,7 +178,7 @@ export const Experience = ({isDataLoading = false}: {isDataLoading?: boolean}) =
                     ))}
                     </div>
                 )}
-            </div>
+            </CollapsibleCard>
             <ExperienceModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}

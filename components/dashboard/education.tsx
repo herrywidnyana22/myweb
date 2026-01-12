@@ -6,6 +6,7 @@ import { writeCache } from "@/lib/cache";
 import { EducationModal } from "../modal/educationModal";
 import { DeleteConfirmModal } from "../modal/deleteConfirmModal";
 import { ActionButtonGroup } from "./actionButtonGroup";
+import { CollapsibleCard } from "./collapsibleCard";
 import { Plus } from "lucide-react";
 import { ActionButton } from "./actionButton";
 import { useLocalizedText } from "@/hooks/useLocalizedText";
@@ -132,17 +133,14 @@ export const Education = ({isDataLoading = false}: {isDataLoading?: boolean}) =>
 
     return (
         <>
-            <div className="bg-gray-700 rounded-lg shadow-lg p-6 border border-gray-600">
-                <div className="flex justify-between items-start mb-4">
-                    <h2 className="text-xl font-bold text-white">Education</h2>
-                    <div className="flex gap-2">
-                        <ActionButton
-                            onClick={handleAddEducation}
-                            variant="add"
-                            icon={<> <Plus className="size-3"/> Add </>}
-                            title="Add Education"
-                        />
-                    </div>
+            <CollapsibleCard title="Education">
+                <div className="flex justify-end items-start mb-4">
+                    <ActionButton
+                        onClick={handleAddEducation}
+                        variant="add"
+                        icon={<> <Plus className="size-3"/> Add </>}
+                        title="Add Education"
+                    />
                 </div>
 
                 {!Array.isArray(educations) || educations.length === 0 ? (
@@ -179,7 +177,7 @@ export const Education = ({isDataLoading = false}: {isDataLoading?: boolean}) =>
                     ))}
                     </div>
                 )}
-            </div>
+            </CollapsibleCard>
             <EducationModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}

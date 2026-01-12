@@ -103,9 +103,37 @@ export const MultiLangInput = ({
   return (
     <div className="space-y-3">
       {/* Source Input with Translate Button */}
-      <div className="relative">
+      <div>
+        <div className="flex items-center justify-between mb-2">
+          <label className="block text-sm font-medium text-gray-700">
+            {label} (Source)
+          </label>
+          
+          {/* Translate Button */}
+          {selectedLanguages.length > 0 && translations.source.trim() && (
+            <button
+              type="button"
+              onClick={handleTranslate}
+              disabled={disabled || isTranslating}
+              className="flex items-center gap-2 px-3 py-1 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white text-xs font-medium rounded transition-colors shadow-sm"
+            >
+              {isTranslating ? (
+                <>
+                  <Loader2 className="size-3 animate-spin" />
+                  <span>Translating...</span>
+                </>
+              ) : (
+                <>
+                  <Languages className="size-3" />
+                  <span>Translate</span>
+                </>
+              )}
+            </button>
+          )}
+        </div>
+        
         <InputComponent
-          label={`${label} (Source)`}
+          label=""
           value={translations.source || ''}
           onChange={(e) => handleSourceChange(typeof e === 'string' ? e : e.target.value)}
           placeholder={placeholder}
@@ -113,28 +141,6 @@ export const MultiLangInput = ({
           error={error}
           {...(type === 'textarea' ? { rows } : {})}
         />
-        
-        {/* Translate Button */}
-        {selectedLanguages.length > 0 && translations.source.trim() && (
-          <button
-            type="button"
-            onClick={handleTranslate}
-            disabled={disabled || isTranslating}
-            className="absolute right-3 top-9 flex items-center gap-2 px-3 py-1 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white text-xs font-medium rounded transition-colors shadow-sm"
-          >
-            {isTranslating ? (
-              <>
-                <Loader2 className="size-3 animate-spin" />
-                <span>Translating...</span>
-              </>
-            ) : (
-              <>
-                <Languages className="size-3" />
-                <span>Translate</span>
-              </>
-            )}
-          </button>
-        )}
       </div>
 
       {/* Translation Fields */}

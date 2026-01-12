@@ -429,7 +429,7 @@ declare type ChatTelegramProps = {
 
 declare type MenuProps = {
   items: LocationValue[];
-  title?: string
+  title: string
   className?: string
   activeLocation?:LocationValue
   onClick?: (item: LocationValue) => void;

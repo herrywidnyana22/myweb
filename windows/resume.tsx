@@ -18,7 +18,7 @@ const ResumeWindow = () => {
     const resumeURL = hasProfile ? profiles[0].cvURL : null;
     
     return ( 
-        <div className='h-[70vh] w-[90vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] shadow-2xl drop-shadow-2xl overflow-hidden rounded-xl flex flex-col'>
+        <div className='h-[70vh] w-[90vw] md:w-[70vw] lg:w-[60vw] xl:w-[50vw] 2xl:w-[30vw] shadow-2xl drop-shadow-2xl overflow-hidden rounded-xl flex flex-col'>
             <div className='window-header flex items-center justify-between px-3 md:px-4 py-2 md:py-3 bg-gray-50 border-b border-gray-200 select-none text-xs md:text-sm text-gray-400 cursor-grab active:cursor-grabbing'>
                 <WindowControls target={'resume'}/>
 
@@ -35,7 +35,7 @@ const ResumeWindow = () => {
                 )}
             </div>
 
-            <div className='flex-1 overflow-y-auto'>
+            <div className='flex-1'>
                 <PDFViewer />
             </div>
         </div>

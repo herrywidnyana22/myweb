@@ -1,19 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { FormInput } from '../form/FormInput';
 import { FormSelect } from '../form/FormSelect';
-import { FormTextarea } from '../form/FormTextarea';
 import { FormImageUpload } from '../form/FormImageUpload';
 import { FormError } from '../form/FormError';
 import { ModalHeader } from '../form/ModalHeader';
 import { ModalActions } from '../form/ModalActions';
 import { MultiLangInput } from '../form/MultiLangInput';
-import { MultiLangText, createMultiLangText } from '@/lib/constants/languages';
+import { createMultiLangText } from '@/lib/constants/languages';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Trash2, Plus, X } from 'lucide-react';
 import { ContactList } from '../contactList';
 import { Notice } from '../notice';
+import { CommonIconAndTooltipFields, UrlField, SubtitleAndDescriptionFields } from './ItemModalFields';
+import { useItemModalForm } from '@/hooks/useItemModalForm';
+import { getFileTypeOptions } from '@/lib/utils/fileTypeOptions';
+import { TechStackManager } from './TechStackManager';
 
 type ItemType = ProjectEntry | ProfileItem;
 type OwnerType = 'project' | 'profile';
@@ -37,109 +38,30 @@ export const ItemModal = ({
     ownerType,
     parentId,
 }: ItemModalProps) => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [isUploadingIcon, setIsUploadingIcon] = useState(false);
-    const [isUploadingSubIcon, setIsUploadingSubIcon] = useState(false);
-    const [isUploadingImage, setIsUploadingImage] = useState(false);
-    const [errors, setErrors] = useState<Record<string, string>>({});
-    
     const { selectedTranslationLanguages, getLanguageInfo } = useLanguage();
     
-    const getDefaultFormData = () => ({
-        name: '',
-        kind: 'FILE' as const,
-        fileType: 'OTHER' as const,
-        ...(ownerType === 'project' ? { projectId: ownerId } : { profileId: ownerId }),
-        parentId: parentId || undefined,
-        icon: undefined,
-        ...(ownerType === 'project' ? { subIcon: undefined } : {}),
-        tooltipText: '',
-        href: '',
-        imageUrl: undefined,
-        subtitle: '',
-        ...(ownerType === 'project' ? { progress: undefined } : {}),
-        description: '',
-        ...(ownerType === 'project' ? { techStack: undefined } : {}),
-        extra: undefined,
-    });
+    const {
+        formData,
+        setFormData,
+        techItems,
+        setTechItems,
+        errors,
+        setErrors,
+        isLoading,
+        setIsLoading,
+        isUploadingIcon,
+        setIsUploadingIcon,
+        isUploadingSubIcon,
+        setIsUploadingSubIcon,
+        isUploadingImage,
+        setIsUploadingImage,
+        handleChange,
+        handleMultiLangChange,
+        handleImageUpload,
+        validateForm,
+    } = useItemModalForm(isOpen, item, ownerId, ownerType, parentId);
 
-    const [formData, setFormData] = useState<any>(item || getDefaultFormData());
-    const [techItems, setTechItems] = useState<Array<{ category: string; items: string[] }>>(
-        ownerType === 'project' && item && 'techStack' in item ? (item.techStack as any) || [] : []
-    );
-    const [newCategory, setNewCategory] = useState('');
-    const [newItem, setNewItem] = useState('');
-    const [selectedCategoryIndex, setSelectedCategoryIndex] = useState<number | null>(null);
-
-    // Get fileType options based on ownerType
-    const getFileTypeOptions = () => {
-        const baseOptions = [
-            { value: 'TXT', label: 'Text' },
-            { value: 'IMG', label: 'Image' },
-            { value: 'PDF', label: 'PDF' },
-            { value: 'URL', label: 'URL' },
-            { value: 'OTHER', label: 'Other' },
-        ];
-
-        if (ownerType === 'project') {
-            return [
-                { value: 'PROJECT_INFO', label: 'Project Info' },
-                { value: 'TECHSTACK', label: 'Tech Stack' },
-                { value: 'FIG', label: 'Figma' },
-                ...baseOptions,
-            ];
-        } else {
-            return [
-                { value: 'CONTACT', label: 'Contact' },
-                ...baseOptions,
-            ];
-        }
-    };
-
-    // Reset form when modal opens/closes or when item changes
-    useEffect(() => {
-        if (isOpen) {
-            if (item) {
-                setFormData(item);
-                if (ownerType === 'project' && 'techStack' in item) {
-                    setTechItems((item.techStack as any) || []);
-                }
-            } else {
-                setFormData(getDefaultFormData());
-                setTechItems([]);
-                setNewCategory('');
-                setNewItem('');
-                setSelectedCategoryIndex(null);
-                setErrors({});
-            }
-        }
-    }, [isOpen, item, ownerId, ownerType, parentId]);
-
-    const handleImageUpload = async (field: string, file: File) => {
-        try {
-            const formDataUpload = new FormData();
-            formDataUpload.append('file', file);
-
-            const response = await fetch('/api/upload/image', {
-                method: 'POST',
-                body: formDataUpload,
-            });
-            const result = await response.json();
-
-            if (result.status !== 'ok') {
-                throw new Error(result.msg || result.error || 'Upload failed');
-            }
-            const data = result.data as { url: string };
-            handleChange(field, data.url);
-        } catch (error) {
-            setErrors(prev => ({
-                ...prev,
-                [field]: error instanceof Error ? error.message : 'Failed to upload image',
-            }));
-        }
-    };
-
-    const handleIconUpload = async (file: File): Promise<void> => {
+    const handleIconUpload = async (file: File) => {
         setIsUploadingIcon(true);
         try {
             await handleImageUpload('icon', file);
@@ -148,7 +70,7 @@ export const ItemModal = ({
         }
     };
 
-    const handleSubIconUpload = async (file: File): Promise<void> => {
+    const handleSubIconUpload = async (file: File) => {
         setIsUploadingSubIcon(true);
         try {
             await handleImageUpload('subIcon', file);
@@ -157,82 +79,13 @@ export const ItemModal = ({
         }
     };
 
-    const handleImageUploadFile = async (file: File): Promise<void> => {
+    const handleImageUploadFile = async (file: File) => {
         setIsUploadingImage(true);
         try {
             await handleImageUpload('imageUrl', file);
         } finally {
             setIsUploadingImage(false);
         }
-    };
-
-    const handleRemoveIcon = () => handleChange('icon', undefined);
-    const handleRemoveSubIcon = () => handleChange('subIcon', undefined);
-    const handleRemoveImage = () => handleChange('imageUrl', undefined);
-
-    const handleChange = (field: string, value: any) => {
-        const actualValue = value?.target?.value !== undefined ? value.target.value : value;
-        
-        setFormData((prev: any) => ({
-            ...prev,
-            [field]: actualValue || undefined,
-        }));
-        
-        if (errors[field]) {
-            setErrors(prev => {
-                const newErrors = { ...prev };
-                delete newErrors[field];
-                return newErrors;
-            });
-        }
-    };
-
-    const handleMultiLangChange = (field: string, value: MultiLangText) => {
-        setFormData((prev: any) => ({
-            ...prev,
-            [field]: value,
-        }));
-        
-        if (errors[field]) {
-            setErrors(prev => {
-                const newErrors = { ...prev };
-                delete newErrors[field];
-                return newErrors;
-            });
-        }
-    };
-
-    const handleAddTech = () => {
-        if (newItem.trim()) {
-            if (selectedCategoryIndex !== null) {
-                setTechItems(prev => {
-                    const updated = [...prev];
-                    updated[selectedCategoryIndex].items.push(newItem);
-                    return updated;
-                });
-            } else if (newCategory.trim()) {
-                setTechItems(prev => [...prev, { category: newCategory, items: [newItem] }]);
-                setNewCategory('');
-            }
-            setNewItem('');
-        }
-    };
-
-    const handleRemoveTech = (categoryIndex: number, itemIndex: number) => {
-        setTechItems(prev => {
-            const updated = [...prev];
-            updated[categoryIndex].items.splice(itemIndex, 1);
-            if (updated[categoryIndex].items.length === 0) {
-                updated.splice(categoryIndex, 1);
-                setSelectedCategoryIndex(null);
-            }
-            return updated;
-        });
-    };
-
-    const handleRemoveCategory = (categoryIndex: number) => {
-        setTechItems(prev => prev.filter((_, i) => i !== categoryIndex));
-        setSelectedCategoryIndex(null);
     };
 
     const handleFileTypeChange = (value: any) => {
@@ -245,30 +98,6 @@ export const ItemModal = ({
                 setTechItems((item.techStack as any) || []);
             }
         }
-    };
-
-    const validateForm = () => {
-        const newErrors: Record<string, string> = {};
-
-        // Check if name has content (handle both string and MultiLangText)
-        const nameValue = typeof formData.name === 'string' 
-            ? formData.name 
-            : formData.name?.source || '';
-        
-        if (!nameValue.trim()) {
-            newErrors.name = 'Name is required';
-        }
-
-        if (!formData.kind) {
-            newErrors.kind = 'Kind is required';
-        }
-
-        if (!formData.fileType) {
-            newErrors.fileType = 'File Type is required';
-        }
-
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -342,7 +171,7 @@ export const ItemModal = ({
                             label="File Type"
                             value={formData.fileType || 'OTHER'}
                             onChange={(value) => handleFileTypeChange(value)}
-                            options={getFileTypeOptions()}
+                            options={getFileTypeOptions(ownerType)}
                             error={errors.fileType}
                             disabled={isLoading}
                         />
@@ -353,26 +182,18 @@ export const ItemModal = ({
                     {/* PROJECT_INFO - Project only */}
                     {isProject && formData.fileType === 'PROJECT_INFO' && (
                     <>
-                        <FormImageUpload
-                            label="File Icon"
-                            imagePreview={formData.icon || null}
-                            isUploading={isUploadingIcon}
-                            onUpload={handleIconUpload}
-                            onRemove={handleRemoveIcon}
-                            error={errors.icon}
-                            disabled={isLoading}
-                        />
-                        <MultiLangInput
-                            label="Tooltip Text"
-                            value={formData.tooltipText || createMultiLangText('')}
-                            onChange={(val) => handleMultiLangChange('tooltipText', val)}
-                            selectedLanguages={selectedTranslationLanguages}
-                            placeholder="Hover tooltip text (optional)"
-                            disabled={isLoading}
-                            type="input"
+                        <CommonIconAndTooltipFields
+                            formData={formData}
+                            errors={errors}
+                            isLoading={isLoading}
+                            isUploadingIcon={isUploadingIcon}
+                            selectedTranslationLanguages={selectedTranslationLanguages}
                             getLanguageInfo={getLanguageInfo}
+                            onIconUpload={handleIconUpload}
+                            onIconRemove={() => handleChange('icon', undefined)}
+                            onChange={handleChange}
+                            onMultiLangChange={handleMultiLangChange}
                         />
-                        {/* NOTICE */}
                         <Notice
                             text={<>
                                 <strong>Note:</strong> Project data (Tech Stack, Progress, Description) will be automatically populated from the project. The project icon will be saved to subIcon field.
@@ -384,161 +205,46 @@ export const ItemModal = ({
                     {/* TECHSTACK - Project only */}
                     {isProject && formData.fileType === 'TECHSTACK' && (
                     <>
-                        <FormImageUpload
-                            label="File Icon"
-                            imagePreview={formData.icon || null}
-                            isUploading={isUploadingIcon}
-                            onUpload={handleIconUpload}
-                            onRemove={handleRemoveIcon}
-                            error={errors.icon}
-                            disabled={isLoading}
-                        />
-                        <MultiLangInput
-                            label="Tooltip Text"
-                            value={formData.tooltipText || createMultiLangText('')}
-                            onChange={(val) => handleMultiLangChange('tooltipText', val)}
-                            selectedLanguages={selectedTranslationLanguages}
-                            placeholder="Hover tooltip text"
-                            disabled={isLoading}
-                            type="input"
+                        <CommonIconAndTooltipFields
+                            formData={formData}
+                            errors={errors}
+                            isLoading={isLoading}
+                            isUploadingIcon={isUploadingIcon}
+                            selectedTranslationLanguages={selectedTranslationLanguages}
                             getLanguageInfo={getLanguageInfo}
+                            onIconUpload={handleIconUpload}
+                            onIconRemove={() => handleChange('icon', undefined)}
+                            onChange={handleChange}
+                            onMultiLangChange={handleMultiLangChange}
                         />
-                        
-                        {/* Tech Stack Categories */}
-                        <div className="space-y-3 bg-gray-50 p-4 rounded border border-gray-200">
-                            <label className="block text-sm font-medium text-gray-700">
-                                Technologies by Category
-                            </label>
-                            
-                            {techItems.length > 0 && (
-                                <div className="space-y-3">
-                                    {techItems.map((category, catIndex) => (
-                                        <div key={catIndex} className="bg-white p-3 rounded border border-gray-300">
-                                            <div className="flex items-center justify-between mb-2">
-                                                <span className="font-semibold text-gray-800 text-sm">{category.category}</span>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleRemoveCategory(catIndex)}
-                                                    className="text-error hover:text-error-dark"
-                                                    disabled={isLoading}
-                                                >
-                                                    <Trash2 className="w-4 h-4" />
-                                                </button>
-                                            </div>
-                                            <div className="space-y-1">
-                                                {category.items.map((item, itemIndex) => (
-                                                    <div key={itemIndex} className="flex items-center justify-between bg-gray-100 p-2 rounded text-sm">
-                                                        <span className="text-gray-700">{item}</span>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => handleRemoveTech(catIndex, itemIndex)}
-                                                            className="text-error hover:text-error-dark"
-                                                            disabled={isLoading}
-                                                        >
-                                                            <X className="w-3 h-3" />
-                                                        </button>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-
-                            <div className="space-y-2 pt-3 border-t border-gray-200">
-                                {selectedCategoryIndex === null ? (
-                                    <FormInput
-                                        label="New Category"
-                                        value={newCategory}
-                                        onChange={(value) => setNewCategory(value?.target?.value || '')}
-                                        placeholder="e.g., Frontend, Backend"
-                                        disabled={isLoading}
-                                    />
-                                ) : (
-                                    <div className="p-2 bg-blue-100 rounded text-sm text-blue-800">
-                                        Adding to: <strong>{techItems[selectedCategoryIndex]?.category}</strong>
-                                        <button
-                                            type="button"
-                                            onClick={() => setSelectedCategoryIndex(null)}
-                                            className="ml-2 text-blue-600 hover:text-blue-800 underline"
-                                        >
-                                            (change)
-                                        </button>
-                                    </div>
-                                )}
-                                
-                                <FormInput
-                                    label="Technology Name"
-                                    value={newItem}
-                                    onChange={(value) => setNewItem(value?.target?.value || '')}
-                                    placeholder="e.g., React.js, TypeScript"
-                                    disabled={isLoading}
-                                />
-
-                                {selectedCategoryIndex === null && techItems.length > 0 && (
-                                    <FormSelect
-                                        label="Or Add to Existing Category"
-                                        value={selectedCategoryIndex !== null ? String(selectedCategoryIndex) : ''}
-                                        onChange={(value) => {
-                                            const actualValue = typeof value === 'string' ? value : value?.target?.value || '';
-                                            if (actualValue) {
-                                                setSelectedCategoryIndex(parseInt(actualValue, 10));
-                                                setNewCategory('');
-                                            }
-                                        }}
-                                        options={[
-                                            { value: '', label: 'Create new category' },
-                                            ...techItems.map((cat, idx) => ({
-                                                value: idx.toString(),
-                                                label: cat.category,
-                                            })),
-                                        ]}
-                                        disabled={isLoading}
-                                    />
-                                )}
-
-                                <button
-                                    type="button"
-                                    onClick={handleAddTech}
-                                    className="w-full flex items-center justify-center gap-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-3 rounded text-sm transition-colors"
-                                    disabled={!newItem.trim() || (!newCategory.trim() && selectedCategoryIndex === null) || isLoading}
-                                >
-                                    <Plus className="w-4 h-4" />
-                                    Add Technology
-                                </button>
-                            </div>
-                        </div>
+                        <TechStackManager
+                            techItems={techItems}
+                            setTechItems={setTechItems}
+                            disabled={isLoading}
+                        />
                     </>
                     )}
 
                     {/* FIG / FIGMA - Project only */}
                     {isProject && formData.fileType === 'FIG' && (
                     <>
-                        <FormImageUpload
-                            label="File Icon"
-                            imagePreview={formData.icon || null}
-                            isUploading={isUploadingIcon}
-                            onUpload={handleIconUpload}
-                            onRemove={handleRemoveIcon}
-                            error={errors.icon}
-                            disabled={isLoading}
-                        />
-                        <MultiLangInput
-                            label="Tooltip Text"
-                            value={formData.tooltipText || createMultiLangText('')}
-                            onChange={(val) => handleMultiLangChange('tooltipText', val)}
-                            selectedLanguages={selectedTranslationLanguages}
-                            placeholder="Hover tooltip text"
-                            disabled={isLoading}
-                            type="input"
+                        <CommonIconAndTooltipFields
+                            formData={formData}
+                            errors={errors}
+                            isLoading={isLoading}
+                            isUploadingIcon={isUploadingIcon}
+                            selectedTranslationLanguages={selectedTranslationLanguages}
                             getLanguageInfo={getLanguageInfo}
+                            onIconUpload={handleIconUpload}
+                            onIconRemove={() => handleChange('icon', undefined)}
+                            onChange={handleChange}
+                            onMultiLangChange={handleMultiLangChange}
                         />
-                        <FormInput
+                        <UrlField
+                            formData={formData}
+                            isLoading={isLoading}
+                            onChange={handleChange}
                             label="Demo URL"
-                            value={formData.href || ''}
-                            onChange={(value) => handleChange('href', value)}
-                            placeholder="https://..."
-                            disabled={isLoading}
                         />
                     </>
                     )}
@@ -546,31 +252,22 @@ export const ItemModal = ({
                     {/* URL */}
                     {formData.fileType === 'URL' && (
                     <>
-                        <FormImageUpload
-                            label="File Icon"
-                            imagePreview={formData.icon || null}
-                            isUploading={isUploadingIcon}
-                            onUpload={handleIconUpload}
-                            onRemove={handleRemoveIcon}
-                            error={errors.icon}
-                            disabled={isLoading}
-                        />
-                        <MultiLangInput
-                            label="Tooltip Text"
-                            value={formData.tooltipText || createMultiLangText('')}
-                            onChange={(val) => handleMultiLangChange('tooltipText', val)}
-                            selectedLanguages={selectedTranslationLanguages}
-                            placeholder="Hover tooltip text"
-                            disabled={isLoading}
-                            type="input"
+                        <CommonIconAndTooltipFields
+                            formData={formData}
+                            errors={errors}
+                            isLoading={isLoading}
+                            isUploadingIcon={isUploadingIcon}
+                            selectedTranslationLanguages={selectedTranslationLanguages}
                             getLanguageInfo={getLanguageInfo}
+                            onIconUpload={handleIconUpload}
+                            onIconRemove={() => handleChange('icon', undefined)}
+                            onChange={handleChange}
+                            onMultiLangChange={handleMultiLangChange}
                         />
-                        <FormInput
-                            label="URL"
-                            value={formData.href || ''}
-                            onChange={(value) => handleChange('href', value)}
-                            placeholder="https://..."
-                            disabled={isLoading}
+                        <UrlField
+                            formData={formData}
+                            isLoading={isLoading}
+                            onChange={handleChange}
                         />
                     </>
                     )}
@@ -578,45 +275,24 @@ export const ItemModal = ({
                     {/* TXT / TEXT */}
                     {formData.fileType === 'TXT' && (
                     <>
-                        <FormImageUpload
-                            label="File Icon"
-                            imagePreview={formData.icon || null}
-                            isUploading={isUploadingIcon}
-                            onUpload={handleIconUpload}
-                            onRemove={handleRemoveIcon}
-                            error={errors.icon}
-                            disabled={isLoading}
-                        />
-                        <MultiLangInput
-                            label="Tooltip Text"
-                            value={formData.tooltipText || createMultiLangText('')}
-                            onChange={(val) => handleMultiLangChange('tooltipText', val)}
-                            selectedLanguages={selectedTranslationLanguages}
-                            placeholder="Hover tooltip text"
-                            disabled={isLoading}
-                            type="input"
+                        <CommonIconAndTooltipFields
+                            formData={formData}
+                            errors={errors}
+                            isLoading={isLoading}
+                            isUploadingIcon={isUploadingIcon}
+                            selectedTranslationLanguages={selectedTranslationLanguages}
                             getLanguageInfo={getLanguageInfo}
+                            onIconUpload={handleIconUpload}
+                            onIconRemove={() => handleChange('icon', undefined)}
+                            onChange={handleChange}
+                            onMultiLangChange={handleMultiLangChange}
                         />
-                        <MultiLangInput
-                            label="Subtitle"
-                            value={formData.subtitle || createMultiLangText('')}
-                            onChange={(val) => handleMultiLangChange('subtitle', val)}
-                            selectedLanguages={selectedTranslationLanguages}
-                            placeholder="Subtitle"
-                            disabled={isLoading}
-                            type="input"
+                        <SubtitleAndDescriptionFields
+                            formData={formData}
+                            isLoading={isLoading}
+                            selectedTranslationLanguages={selectedTranslationLanguages}
                             getLanguageInfo={getLanguageInfo}
-                        />
-                        <MultiLangInput
-                            label="Content"
-                            value={formData.description || createMultiLangText('')}
-                            onChange={(val) => handleMultiLangChange('description', val)}
-                            selectedLanguages={selectedTranslationLanguages}
-                            placeholder="Enter text content"
-                            disabled={isLoading}
-                            type="textarea"
-                            rows={4}
-                            getLanguageInfo={getLanguageInfo}
+                            onMultiLangChange={handleMultiLangChange}
                         />
                     </>
                     )}
@@ -629,7 +305,7 @@ export const ItemModal = ({
                             imagePreview={formData.imageUrl || null}
                             isUploading={isUploadingImage}
                             onUpload={handleImageUploadFile}
-                            onRemove={handleRemoveImage}
+                            onRemove={() => handleChange('imageUrl', undefined)}
                             error={errors.imageUrl}
                             disabled={isLoading}
                         />
@@ -649,31 +325,24 @@ export const ItemModal = ({
                     {/* PDF */}
                     {formData.fileType === 'PDF' && (
                     <>
-                        <FormImageUpload
-                            label="File Icon"
-                            imagePreview={formData.icon || null}
-                            isUploading={isUploadingIcon}
-                            onUpload={handleIconUpload}
-                            onRemove={handleRemoveIcon}
-                            error={errors.icon}
-                            disabled={isLoading}
-                        />
-                        <MultiLangInput
-                            label="Tooltip Text"
-                            value={formData.tooltipText || createMultiLangText('')}
-                            onChange={(val) => handleMultiLangChange('tooltipText', val)}
-                            selectedLanguages={selectedTranslationLanguages}
-                            placeholder="Hover tooltip text"
-                            disabled={isLoading}
-                            type="input"
+                        <CommonIconAndTooltipFields
+                            formData={formData}
+                            errors={errors}
+                            isLoading={isLoading}
+                            isUploadingIcon={isUploadingIcon}
+                            selectedTranslationLanguages={selectedTranslationLanguages}
                             getLanguageInfo={getLanguageInfo}
+                            onIconUpload={handleIconUpload}
+                            onIconRemove={() => handleChange('icon', undefined)}
+                            onChange={handleChange}
+                            onMultiLangChange={handleMultiLangChange}
                         />
-                        <FormInput
+                        <UrlField
+                            formData={formData}
+                            isLoading={isLoading}
+                            onChange={handleChange}
                             label="PDF URL"
-                            value={formData.href || ''}
-                            onChange={(value) => handleChange('href', value)}
                             placeholder="https://... or /files/..."
-                            disabled={isLoading}
                         />
                     </>
                     )}
@@ -681,24 +350,17 @@ export const ItemModal = ({
                     {/* CONTACT - Profile only */}
                     {!isProject && formData.fileType === 'CONTACT' && (
                     <>
-                        <FormImageUpload
-                            label="Contact Icon"
-                            imagePreview={formData.icon || null}
-                            isUploading={isUploadingIcon}
-                            onUpload={handleIconUpload}
-                            onRemove={handleRemoveIcon}
-                            error={errors.icon}
-                            disabled={isLoading}
-                        />
-                        <MultiLangInput
-                            label="Tooltip Text"
-                            value={formData.tooltipText || createMultiLangText('')}
-                            onChange={(val) => handleMultiLangChange('tooltipText', val)}
-                            selectedLanguages={selectedTranslationLanguages}
-                            placeholder="Hover tooltip text"
-                            disabled={isLoading}
-                            type="input"
+                        <CommonIconAndTooltipFields
+                            formData={formData}
+                            errors={errors}
+                            isLoading={isLoading}
+                            isUploadingIcon={isUploadingIcon}
+                            selectedTranslationLanguages={selectedTranslationLanguages}
                             getLanguageInfo={getLanguageInfo}
+                            onIconUpload={handleIconUpload}
+                            onIconRemove={() => handleChange('icon', undefined)}
+                            onChange={handleChange}
+                            onMultiLangChange={handleMultiLangChange}
                         />
                         <ContactList />
                         <Notice
@@ -713,52 +375,30 @@ export const ItemModal = ({
                     {/* OTHER */}
                     {formData.fileType === 'OTHER' && (
                     <>
-                        <FormImageUpload
-                            label="File Icon"
-                            imagePreview={formData.icon || null}
-                            isUploading={isUploadingIcon}
-                            onUpload={handleIconUpload}
-                            onRemove={handleRemoveIcon}
-                            error={errors.icon}
-                            disabled={isLoading}
-                        />
-                        <MultiLangInput
-                            label="Tooltip Text"
-                            value={formData.tooltipText || createMultiLangText('')}
-                            onChange={(val) => handleMultiLangChange('tooltipText', val)}
-                            selectedLanguages={selectedTranslationLanguages}
-                            placeholder="Hover tooltip text"
-                            disabled={isLoading}
-                            type="input"
+                        <CommonIconAndTooltipFields
+                            formData={formData}
+                            errors={errors}
+                            isLoading={isLoading}
+                            isUploadingIcon={isUploadingIcon}
+                            selectedTranslationLanguages={selectedTranslationLanguages}
                             getLanguageInfo={getLanguageInfo}
+                            onIconUpload={handleIconUpload}
+                            onIconRemove={() => handleChange('icon', undefined)}
+                            onChange={handleChange}
+                            onMultiLangChange={handleMultiLangChange}
                         />
-                        <MultiLangInput
-                            label="Subtitle"
-                            value={formData.subtitle || createMultiLangText('')}
-                            onChange={(val) => handleMultiLangChange('subtitle', val)}
-                            selectedLanguages={selectedTranslationLanguages}
-                            placeholder="Subtitle"
-                            disabled={isLoading}
-                            type="input"
+                        <SubtitleAndDescriptionFields
+                            formData={formData}
+                            isLoading={isLoading}
+                            selectedTranslationLanguages={selectedTranslationLanguages}
                             getLanguageInfo={getLanguageInfo}
+                            onMultiLangChange={handleMultiLangChange}
                         />
-                        <MultiLangInput
-                            label="Description"
-                            value={formData.description || createMultiLangText('')}
-                            onChange={(val) => handleMultiLangChange('description', val)}
-                            selectedLanguages={selectedTranslationLanguages}
-                            placeholder="Enter description"
-                            disabled={isLoading}
-                            type="textarea"
-                            rows={4}
-                            getLanguageInfo={getLanguageInfo}
-                        />
-                        <FormInput
+                        <UrlField
+                            formData={formData}
+                            isLoading={isLoading}
+                            onChange={handleChange}
                             label="Link (optional)"
-                            value={formData.href || ''}
-                            onChange={(value) => handleChange('href', value)}
-                            placeholder="https://..."
-                            disabled={isLoading}
                         />
                     </>
                     )}
@@ -770,7 +410,7 @@ export const ItemModal = ({
                         imagePreview={formData.subIcon || null}
                         isUploading={isUploadingSubIcon}
                         onUpload={handleSubIconUpload}
-                        onRemove={handleRemoveSubIcon}
+                        onRemove={() => handleChange('subIcon', undefined)}
                         disabled={isLoading}
                     />
                     )}

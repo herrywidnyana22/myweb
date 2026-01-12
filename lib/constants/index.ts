@@ -1,4 +1,3 @@
-// Default icons for ProjectEntry file types
 export const DEFAULT_FILE_TYPE_ICONS: Record<string, string> = {
   PROJECT_INFO: "/icons/txt.png",
   TECHSTACK: "/icons/terminal.png",
@@ -16,23 +15,6 @@ export const DEFAULT_FILE_KIND_ICONS: Record<string, string> = {
   FILE: "/icons/plain.png",
 };
 
-export const navLinks = [
-  {
-    id: 1,
-    name: "Projects",
-    type: "finder",
-  },
-  {
-    id: 3,
-    name: "Contact",
-    type: "contact",
-  },
-  {
-    id: 4,
-    name: "Resume",
-    type: "resume",
-  },
-];
 
 export const navUtilsIcons = [
   {
@@ -57,8 +39,8 @@ export const navUtilsIcons = [
 function getProjectLocation(projects: Project[]) {
   return {
     id: 1,
-    type: "work",
-    name: "My Work",
+    type: "project",
+    name: 'myWork', //fieldName for language
     icon: "/icons/work.svg",
     kind: "folder",
     tooltipText: "Lihat semua project",
@@ -79,7 +61,7 @@ function getAboutLocation(profiles: Profile[]) {
   return {
     id: 2,
     type: "about",
-    name: "About me",
+    name: 'aboutMe', //fieldName for language
     icon: "/icons/info.svg",
     kind: "folder",
     children: (profiles || []).flatMap((profile: Profile) => 
