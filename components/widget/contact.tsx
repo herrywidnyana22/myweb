@@ -60,7 +60,7 @@ export const Contact = () => {
                 )}
               </div>
 
-              <p className="text-[10px] md:w-14 lg:w-full text-center sm:text-xs text-blue-50 capitalize truncate">
+              <p className="text-xs md:w-14 lg:w-full text-center text-white capitalize truncate">
                 {item.title}
               </p>
             </div>
