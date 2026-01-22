@@ -15,19 +15,19 @@ export function parseHighlight(text: string): ReactNode[] {
 
     switch (type) {
       case 'name':
-        color = 'text-primary-hover font-semibold'; 
+        color = 'text-primary-hover font-semibold';
         break;
       case 'role':
-        color = 'text-indigo-600 font-semibold'; 
+        color = 'text-indigo-600 font-semibold';
         break;
       case 'location':
         color = 'text-emerald-600 font-semibold';
         break;
       case 'skill':
-        color = 'text-blue-700 font-medium'; 
+        color = 'text-blue-700 font-medium';
         break;
       case 'contact':
-        color = 'text-rose-600 font-semibold underline'; 
+        color = 'text-rose-600 font-semibold underline';
         break;
       case 'project':
         color = 'text-teal-700 font-semibold';
@@ -36,17 +36,17 @@ export function parseHighlight(text: string): ReactNode[] {
         color = 'text-yellow-700 font-semibold';
         break;
       case 'experience':
-        color = 'text-violet-700 font-semibold'; 
+        color = 'text-violet-700 font-semibold';
         break;
       case 'memory':
-        color = 'text-sky-600 font-semibold'; 
+        color = 'text-sky-600 font-semibold';
         break;
       case 'language':
-        color = 'text-emerald-600 font-semibold'; 
+        color = 'text-emerald-600 font-semibold';
         break;
 
       case 'telegram':
-        color = 'text-telegram font-semibold'
+        color = 'text-telegram font-semibold';
         break;
       default:
         color = 'text-gray-800 font-medium';

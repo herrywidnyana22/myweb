@@ -19,7 +19,10 @@ type ChatAction =
   | { type: 'UPDATE_LAST'; payload: Partial<ChatResponseProps> }
   | { type: 'RESET' };
 
-function chatReducer(state: ChatResponseProps[], action: ChatAction): ChatResponseProps[] {
+function chatReducer(
+  state: ChatResponseProps[],
+  action: ChatAction
+): ChatResponseProps[] {
   switch (action.type) {
     case 'ADD':
       return [...state, action.payload];
@@ -41,9 +44,9 @@ export const Chat = () => {
     isInputFocused,
     setIsInputFocused,
     isMinimized,
-    setChatMode, 
-    chatMode, 
-  } = useAppStore()
+    setChatMode,
+    chatMode,
+  } = useAppStore();
 
   const { getUIText } = useLocalizedText();
 
@@ -54,7 +57,6 @@ export const Chat = () => {
 
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const hasLoadedRef = useRef(false);
-
 
   // ========== MEMORY ==========
   const getMemory = useCallback((): ChatMemory => {
@@ -74,25 +76,28 @@ export const Chat = () => {
     [getMemory]
   );
 
-  const detectUserName = useCallback( (msg: string): string | null => {
-    const patterns = [
-      /\b(?:nama saya|nama aku|namaku)\s+(adalah\s+)?([A-Za-zÀ-ÖØ-öø-ÿ]+)/i,
-      /\bpanggil aku\s+([A-Za-zÀ-ÖØ-öø-ÿ]+)/i,
-    ];
+  const detectUserName = useCallback(
+    (msg: string): string | null => {
+      const patterns = [
+        /\b(?:nama saya|nama aku|namaku)\s+(adalah\s+)?([A-Za-zÀ-ÖØ-öø-ÿ]+)/i,
+        /\bpanggil aku\s+([A-Za-zÀ-ÖØ-öø-ÿ]+)/i,
+      ];
 
-    for (const p of patterns) {
-      const match = msg.match(p);
-      if (match) {
-        const name = match[2] ?? match[1];
-        if (name) {
-          saveMemory({ name });
-          return name.trim();
+      for (const p of patterns) {
+        const match = msg.match(p);
+        if (match) {
+          const name = match[2] ?? match[1];
+          if (name) {
+            saveMemory({ name });
+            return name.trim();
+          }
         }
       }
-    }
 
-    return null;
-  }, [saveMemory]);
+      return null;
+    },
+    [saveMemory]
+  );
 
   // ========== UTIL ==========
   const scrollToBottom = useCallback(() => {
@@ -103,22 +108,21 @@ export const Chat = () => {
     dispatch({ type: 'RESET' });
     localStorage.removeItem('chatHistory');
     localStorage.removeItem('chatMemory');
-    setShowConfirm(false)
+    setShowConfirm(false);
 
-    setChatMode('default')
+    setChatMode('default');
   };
 
-  
-
   // ========== SEND MESSAGE ==========
-  const sendMessage = useCallback(async (e: React.FormEvent) => {
+  const sendMessage = useCallback(
+    async (e: React.FormEvent) => {
       e.preventDefault();
       if (!input.trim()) return;
 
       const userMessage: ChatResponseProps = { role: 'user', text: input };
-      dispatch({ 
-        type: 'ADD', 
-        payload: userMessage 
+      dispatch({
+        type: 'ADD',
+        payload: userMessage,
       });
 
       setInput('');
@@ -126,19 +130,18 @@ export const Chat = () => {
       detectUserName(input);
 
       // pilih role placeholder bot berdasarkan chatMode
-      const botRole: ChatRole = chatMode === 'telegram' 
-      ? 'bot_telegram' 
-      : 'bot';
+      const botRole: ChatRole =
+        chatMode === 'telegram' ? 'bot_telegram' : 'bot';
 
-      setIsLoading(true)
+      setIsLoading(true);
       dispatch({
         type: 'ADD',
-        payload: { 
-          role: botRole, 
-          text: '', 
-          isLoading: true 
+        payload: {
+          role: botRole,
+          text: '',
+          isLoading: true,
         },
-      })
+      });
 
       try {
         const res = await fetch('/api/chat', {
@@ -147,7 +150,9 @@ export const Chat = () => {
           body: JSON.stringify({
             message: input,
             memory: getMemory(),
-            history: messages.slice(-6).map(({ role, text }) => ({ role, text })),
+            history: messages
+              .slice(-6)
+              .map(({ role, text }) => ({ role, text })),
             chatMode,
           }),
         });
@@ -155,27 +160,27 @@ export const Chat = () => {
         if (!res.ok) {
           const errText = await res.text();
           dispatch({
-          type: 'UPDATE_LAST',
-          payload: { 
-            isLoading: false, 
-            isStreaming: true, 
-            text: errText 
-          },
-        });
+            type: 'UPDATE_LAST',
+            payload: {
+              isLoading: false,
+              isStreaming: true,
+              text: errText,
+            },
+          });
         }
 
         const data: AIResponse = await res.json();
-        const text = data.text ?? getUIText('dataEmpty')
+        const text = data.text ?? getUIText('dataEmpty');
         const cards = data.cards ?? [];
 
         // Update last placeholder -> stop loading -> streaming
-        setIsLoading(false)
+        setIsLoading(false);
         dispatch({
           type: 'UPDATE_LAST',
-          payload: { 
-            isLoading: false, 
-            isStreaming: true, 
-            text: '' 
+          payload: {
+            isLoading: false,
+            isStreaming: true,
+            text: '',
           },
         });
 
@@ -184,25 +189,25 @@ export const Chat = () => {
           typed += char;
           dispatch({
             type: 'UPDATE_LAST',
-            payload: { 
-              text: typed, 
-              isStreaming: true 
+            payload: {
+              text: typed,
+              isStreaming: true,
             },
           });
-          await new Promise((r) => setTimeout(r, 15));
+          await new Promise(r => setTimeout(r, 15));
         }
 
         dispatch({
           type: 'UPDATE_LAST',
-          payload: { 
-            text, 
-            cards, 
-            isStreaming: false 
+          payload: {
+            text,
+            cards,
+            isStreaming: false,
           },
         });
       } catch (err) {
         console.error('Chat API Error:', err);
-        setIsLoading(false)
+        setIsLoading(false);
         dispatch({
           type: 'UPDATE_LAST',
           payload: {
@@ -214,13 +219,13 @@ export const Chat = () => {
       }
     },
     [
-      input, 
-      detectUserName, 
-      getMemory, 
-      messages, 
-      chatMode, 
+      input,
+      detectUserName,
+      getMemory,
+      messages,
+      chatMode,
       getUIText('chatError'),
-      getUIText('dataEmpty')
+      getUIText('dataEmpty'),
     ]
   );
 
@@ -230,53 +235,52 @@ export const Chat = () => {
     targetLang?: UILanguage
   ) => {
     // hapus kartu
-    dispatch({ 
-      type: "UPDATE_LAST", 
-      payload: { 
-        cards: [] 
-      } 
+    dispatch({
+      type: 'UPDATE_LAST',
+      payload: {
+        cards: [],
+      },
     });
 
     // kalau user menekan "No"
-    if (action === "no") {
+    if (action === 'no') {
       dispatch({
-        type: "UPDATE_LAST",
-        payload: { 
+        type: 'UPDATE_LAST',
+        payload: {
           role: 'bot',
           text: getUIText('actionCanceled'),
           isLoading: false,
           isStreaming: false,
         },
-      })
+      });
 
       return;
     }
 
     // LANGUAGE SWITCH
-    if (type === "language" && targetLang) {
+    if (type === 'language' && targetLang) {
       dispatch({
-        type: "ADD",
-        payload: { 
-          role: "bot", 
-          text: getUIText('translateOnProgressConfirm'), 
+        type: 'ADD',
+        payload: {
+          role: 'bot',
+          text: getUIText('translateOnProgressConfirm'),
           isLoading: false,
           isStreaming: false,
         },
       });
 
-      await new Promise((r) => setTimeout(r, 400));
+      await new Promise(r => setTimeout(r, 400));
 
-      setIsLoading(true)
+      setIsLoading(true);
       dispatch({
-        type: "ADD",
-        payload: { 
-          role: "bot", 
-          text: "", 
+        type: 'ADD',
+        payload: {
+          role: 'bot',
+          text: '',
           isLoading: true,
-          isStreaming: false
+          isStreaming: false,
         },
       });
-
 
       // PROSES TRANSLATE
       // TODO: change language AI AGENT
@@ -284,74 +288,73 @@ export const Chat = () => {
       // await translateAll(targetLang);
 
       dispatch({
-        type: "UPDATE_LAST",
+        type: 'UPDATE_LAST',
         payload: {
           text: getUIText('langSwitched'),
           isLoading: false,
           isStreaming: false,
-        }
+        },
       });
 
-      setIsLoading(false)
+      setIsLoading(false);
 
       return;
     }
 
     // TELEGRAM CONNECT
-    if (type === "telegram") {
-
-      setChatMode("telegram")
+    if (type === 'telegram') {
+      setChatMode('telegram');
 
       await sendToTelegram(getUIText('telegramConnectConfirm'));
 
       dispatch({
-        type: "ADD",
+        type: 'ADD',
         payload: {
-          role: "bot",
+          role: 'bot',
           text: getUIText('telegramChatConfirm'),
           isLoading: false,
-        }
-      })
+        },
+      });
 
-      return
+      return;
     }
-  }
+  };
 
   // ========== STORAGE ==========
   // Load once
   useEffect(() => {
-    const saved = localStorage.getItem('chatHistory')
+    const saved = localStorage.getItem('chatHistory');
     if (saved) {
-      const parsed = JSON.parse(saved) as ChatResponseProps[]
-      parsed.forEach((m) => dispatch({ type: 'ADD', payload: m }))
+      const parsed = JSON.parse(saved) as ChatResponseProps[];
+      parsed.forEach(m => dispatch({ type: 'ADD', payload: m }));
     }
-    hasLoadedRef.current = true
+    hasLoadedRef.current = true;
   }, []);
 
   // Save after loaded
   useEffect(() => {
-    if (!hasLoadedRef) return
-    localStorage.setItem('chatHistory', JSON.stringify(messages))
+    if (!hasLoadedRef) return;
+    localStorage.setItem('chatHistory', JSON.stringify(messages));
 
     const timeout = setTimeout(() => {
       setPropMessages((prev: ChatResponseProps[]) => {
-        if (prev.length !== messages.length) return messages
+        if (prev.length !== messages.length) return messages;
         return prev;
-      })
-    }, 300)
+      });
+    }, 300);
 
     scrollToBottom();
 
     return () => clearTimeout(timeout);
-  }, [messages, scrollToBottom, setPropMessages, hasLoadedRef])
+  }, [messages, scrollToBottom, setPropMessages, hasLoadedRef]);
 
   // Scroll ke bawah saat input difokus
   useEffect(() => {
     if (isInputFocused) {
-      const timer = setTimeout(scrollToBottom, 500)
-      return () => clearTimeout(timer)
+      const timer = setTimeout(scrollToBottom, 500);
+      return () => clearTimeout(timer);
     }
-  }, [isInputFocused, scrollToBottom])
+  }, [isInputFocused, scrollToBottom]);
 
   // Keyboard handler untuk HP
   useEffect(() => {
@@ -359,25 +362,25 @@ export const Chat = () => {
     const handleResize = () => {
       const visual = window.visualViewport;
       if (!visual) return;
-      setIsInputFocused(visual.height < window.innerHeight - 80)
+      setIsInputFocused(visual.height < window.innerHeight - 80);
     };
-    window.visualViewport.addEventListener('resize', handleResize)
+    window.visualViewport.addEventListener('resize', handleResize);
     handleResize();
-    return () => window.visualViewport?.removeEventListener('resize', handleResize)
+    return () =>
+      window.visualViewport?.removeEventListener('resize', handleResize);
   }, [setIsInputFocused]);
-
 
   // TELEGRAM
   useEffect(() => {
-    const es = new EventSource("/api/telegram/sse");
+    const es = new EventSource('/api/telegram/sse');
 
-    es.addEventListener("message", (e) => {
+    es.addEventListener('message', e => {
       const data = JSON.parse(e.data);
 
       dispatch({
-        type: "ADD",
+        type: 'ADD',
         payload: {
-          role: "herry_telegram",
+          role: 'herry_telegram',
           text: data.text,
           isLoading: false,
           isStreaming: false,
@@ -386,31 +389,33 @@ export const Chat = () => {
     });
 
     return () => es.close();
-  }, [])
-
+  }, []);
 
   // ========== RENDER ==========
   return (
     <>
       <div
         className={clsx(
-          'relative z-50 w-full mx-auto transition-all duration-300 ease-in-out',
+          'relative z-50 mx-auto w-full transition-all duration-300 ease-in-out'
         )}
       >
-        <div className="w-full mx-auto rounded-2xl overflow-hidden shadow-2xl border border-gray-600/50">
+        <div className='mx-auto w-full overflow-hidden rounded-2xl border border-gray-600/50 shadow-2xl'>
           {messages.length > 0 && (
-            <ChatHeader onClear={() => setShowConfirm(true)}/>
+            <ChatHeader onClear={() => setShowConfirm(true)} />
           )}
 
           {!isMinimized && messages.length > 0 && (
-            <div className="bg-gray-800/70 backdrop-blur-sm max-h-[65vh] sm:max-h-[60vh] overflow-y-auto p-3 sm:p-4 space-y-3 sm:space-y-4">
+            <div className='max-h-[65vh] space-y-3 overflow-y-auto bg-gray-800/70 p-3 backdrop-blur-sm sm:max-h-[60vh] sm:space-y-4 sm:p-4'>
               {messages.map((msg, i) => (
-                <div key={i} className={msg.role === 'user' ? 'text-right' : ''}>
+                <div
+                  key={i}
+                  className={msg.role === 'user' ? 'text-right' : ''}
+                >
                   <ChatItem {...msg} />
                   {!!msg.cards?.length && (
-                    <div className="max-w-[80%] sm:max-w-[70%] grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 ml-10 sm:ml-13 mb-2">
+                    <div className='mb-2 ml-10 grid max-w-[80%] grid-cols-1 gap-4 pt-2 sm:ml-13 sm:max-w-[70%] md:grid-cols-2'>
                       {msg.cards
-                        .filter(card => !(card.type === "action"))
+                        .filter(card => !(card.type === 'action'))
                         .map((card, j) => (
                           <Card
                             key={j}
@@ -418,26 +423,24 @@ export const Chat = () => {
                             onConfirm={onConfirmActionCard}
                           />
                         ))}
-
                     </div>
                   )}
-
                 </div>
               ))}
-              {chatMode === 'telegram' && (
-                <ChatNotice />
-              )}
+              {chatMode === 'telegram' && <ChatNotice />}
 
               <div ref={chatEndRef} />
             </div>
           )}
 
-          <div className="bg-gray-900/90 border-t border-gray-700">
+          <div className='border-t border-gray-700 bg-gray-900/90'>
             <ChatInput
               input={input}
               setInput={setInput}
               sendMessage={sendMessage}
-              isActive={(messages.length <= 0 && !isInputFocused) || isMinimized}
+              isActive={
+                (messages.length <= 0 && !isInputFocused) || isMinimized
+              }
               disabled={isLoading}
             />
           </div>

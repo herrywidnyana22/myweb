@@ -1,4 +1,3 @@
-
 import Image from 'next/image';
 
 import { Profile } from '@/components/widget/profile';
@@ -7,8 +6,7 @@ import { Projects } from '@/components/widget/projects';
 import { Education } from '../widget/education';
 import { Experiences } from '../widget/experiences';
 
-export const dockItems: DockItemProps[] = 
-[
+export const dockItems: DockItemProps[] = [
   {
     id: 'profile',
     name: 'Profile',
@@ -19,7 +17,7 @@ export const dockItems: DockItemProps[] =
         alt='icon'
         height={128}
         width={128}
-        className='size-10 sm:size-12 md:size-14 rounded-2xl object-cover border border-white/30'
+        className='size-10 rounded-2xl border border-white/30 object-cover sm:size-12 md:size-14'
       />
     ),
     className:
@@ -35,7 +33,7 @@ export const dockItems: DockItemProps[] =
         alt='icon'
         height={128}
         width={128}
-        className='size-13 sm:size-15 md:size-17 object-cover'
+        className='size-13 object-cover sm:size-15 md:size-17'
       />
     ),
 
@@ -52,23 +50,23 @@ export const dockItems: DockItemProps[] =
         alt='icon'
         height={128}
         width={128}
-        className='size-10 sm:size-12 md:size-14 object-cover'
+        className='size-10 object-cover sm:size-12 md:size-14'
       />
     ),
     className:
-      'col-span-1 sm:col-span-4 md:col-span-4 lg:col-span-6 xl:col-span-8 overflow-hidden'
+      'col-span-1 sm:col-span-4 md:col-span-4 lg:col-span-6 xl:col-span-8 overflow-hidden',
   },
   {
     id: 'experience',
     name: 'Experience',
-    children: <Experiences/>,
+    children: <Experiences />,
     icon: (
       <Image
         src={'/icons/experience.svg'}
         alt='icon'
         height={128}
         width={128}
-        className='size-10 sm:size-12 md:size-14 object-cover'
+        className='size-10 object-cover sm:size-12 md:size-14'
       />
     ),
     className:
@@ -77,14 +75,14 @@ export const dockItems: DockItemProps[] =
   {
     id: 'project',
     name: 'Project',
-    children: <Projects/>,
+    children: <Projects />,
     icon: (
       <Image
         src={'/icons/project.svg'}
         alt='icon'
         height={128}
         width={128}
-        className='size-10 sm:size-12 md:size-14 object-cover'
+        className='size-10 object-cover sm:size-12 md:size-14'
       />
     ),
     className:

@@ -1,107 +1,83 @@
 'use client';
 
-import Image from "next/image";
-import { Eye, Github } from "lucide-react";
-import { parseHighlight } from "@/lib/utils/parseHighlight";
-import { ProgressCircle } from "../charts/circleProgress";
-import { Icon } from "../icon";
-import { useLocalizedText } from "@/hooks/useLocalizedText";
+import Image from 'next/image';
+import { Eye, Github } from 'lucide-react';
+import { parseHighlight } from '@/lib/utils/parseHighlight';
+import { ProgressCircle } from '../charts/circleProgress';
+import { Icon } from '../icon';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 export const ProjectItem = (project: Project) => {
   const { getText, getUIText } = useLocalizedText();
 
   return (
-    <div
-      className="
-        w-full h-full flex flex-col gap-2 
-        p-3 sm:p-5 lg:p-6 
-        rounded-xl sm:rounded-2xl 
-        text-slate-800 bg-white
-        transition-all duration-300
-      "
-    >
+    <div className='flex h-full w-full flex-col gap-2 rounded-xl bg-white p-3 text-slate-800 transition-all duration-300 sm:rounded-2xl sm:p-5 lg:p-6'>
       {/* ICON + TITLE */}
-      <div className="flex items-center gap-2 sm:gap-3">
-        <div className="rounded-full size-10 sm:size-12 flex items-center justify-center shrink-0">
+      <div className='flex items-center gap-2 sm:gap-3'>
+        <div className='flex size-10 shrink-0 items-center justify-center rounded-full sm:size-12'>
           <Image
             src={project.icon as string}
-            alt="icon"
+            alt='icon'
             width={40}
             height={40}
-            className="size-8 sm:size-10 object-contain"
+            className='size-8 object-contain sm:size-10'
           />
         </div>
-        <h3
-          className="
-            font-extrabold 
-            text-sm sm:text-base lg:text-lg 
-            uppercase text-primary 
-            leading-snug sm:leading-tight
-          "
-        >
+        <h3 className='text-primary text-sm leading-snug font-extrabold uppercase sm:text-base sm:leading-tight lg:text-lg'>
           {parseHighlight(getText(project.name) || '')}
         </h3>
       </div>
 
       {/* CONTENT */}
-      <div className="w-full">
+      <div className='w-full'>
         {/* Progress Circle */}
-        <div className="absolute right-6 top-2 sm:float-right sm:ml-3">
-          <ProgressCircle 
-            value={project.progressValue} 
-            label={getUIText('progress')} />
+        <div className='absolute top-2 right-6 sm:float-right sm:ml-3'>
+          <ProgressCircle
+            value={project.progressValue}
+            label={getUIText('progress')}
+          />
         </div>
 
         {/* Description */}
-        <div className="text-xs sm:text-sm font-light text-gray-600 leading-relaxed">
+        <div className='text-xs leading-relaxed font-light text-gray-600 sm:text-sm'>
           {parseHighlight(getText(project.description) || '')}
         </div>
 
-        <div className="flex items-center justify-between">
-        {/* Tech stack icons */}
-          <div className="mt-4 flex flex-wrap gap-1.5 sm:gap-2">
-            {project.techStack && project.techStack.map((tech: TechStack, i: number) => (
+        <div className='flex items-center justify-between'>
+          {/* Tech stack icons */}
+          <div className='mt-4 flex flex-wrap gap-1.5 sm:gap-2'>
+            {project.techStack &&
+              project.techStack.map((tech: TechStack, i: number) => (
                 <Icon
                   key={i}
                   tooltipLabel={tech.label}
                   src={tech.techIcon}
                   size={14}
-                  className="rounded-full bg-gray-900/10 sm:bg-gray-900/20 p-0.5 sm:p-1 border border-white/20"
+                  className='rounded-full border border-white/20 bg-gray-900/10 p-0.5 sm:bg-gray-900/20 sm:p-1'
                 />
-            ))}
-            
+              ))}
           </div>
           {/* Buttons */}
-          <div className="mt-4 sm:mt-5 flex gap-2 justify-end flex-wrap">
-            {project.repoURL && typeof project.repoURL === "string" && (
+          <div className='mt-4 flex flex-wrap justify-end gap-2 sm:mt-5'>
+            {project.repoURL && typeof project.repoURL === 'string' && (
               <Icon
                 tooltipLabel={getUIText('viewCode')}
                 textLabel={getUIText('source')}
                 href={project.repoURL}
                 IconComponent={Github}
                 size={14}
-                className="
-                  px-2.5 py-1.5
-                  bg-black
-                  rounded-full 
-                  hover:bg-gray-800 transition
-                "
+                className='rounded-full bg-black px-2.5 py-1.5 transition hover:bg-gray-800'
               />
-              )}
+            )}
 
-            {project.demoURL && typeof project.demoURL === "string" && (
+            {project.demoURL && typeof project.demoURL === 'string' && (
               <Icon
                 tooltipLabel={getUIText('viewDemo')}
                 textLabel={getUIText('preview')}
                 href={project.demoURL}
                 IconComponent={Eye}
                 size={14}
-                className="
-                  px-2.5 py-1.5
-                  bg-primary
-                  rounded-full 
-                  hover:bg-primary-hover transition
-                "
+                className='bg-primary hover:bg-primary-hover rounded-full px-2.5 py-1.5 transition'
               />
             )}
           </div>

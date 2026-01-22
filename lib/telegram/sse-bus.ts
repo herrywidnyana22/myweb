@@ -1,4 +1,4 @@
-import { EventEmitter } from "events";
+import { EventEmitter } from 'events';
 
 const globalForBus = globalThis as unknown as {
   telegramBus?: EventEmitter;

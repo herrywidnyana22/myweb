@@ -1,6 +1,5 @@
 import prisma from '@/lib/prisma';
 
-import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
 import { successResponse, errorResponse } from '@/lib/api-response';
 import { deleteImageFile } from '@/lib/file-utils';
@@ -112,7 +111,7 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error('Error creating profile:', error);
     return errorResponse('Failed to create profile', 500, error as Error);
-  } 
+  }
 }
 
 export async function PUT(
@@ -157,21 +156,31 @@ export async function PUT(
       data: {
         ...(body.name !== undefined && { name: body.name }),
         ...(body.fullName !== undefined && { fullName: body.fullName }),
-        ...(body.jenisKelamin !== undefined && { jenisKelamin: body.jenisKelamin }),
+        ...(body.jenisKelamin !== undefined && {
+          jenisKelamin: body.jenisKelamin,
+        }),
         ...(body.role !== undefined && { role: body.role }),
         ...(body.quote !== undefined && { quote: body.quote }),
         ...(body.photoURL !== undefined && { photoURL: body.photoURL }),
         ...(body.cvURL !== undefined && { cvURL: body.cvURL }),
-        ...(body.birthDate !== undefined && { birthDate: body.birthDate ? new Date(body.birthDate) : null }),
+        ...(body.birthDate !== undefined && {
+          birthDate: body.birthDate ? new Date(body.birthDate) : null,
+        }),
         ...(body.birthPlace !== undefined && { birthPlace: body.birthPlace }),
-        ...(body.experienceYears !== undefined && { experienceYears: body.experienceYears }),
-        ...(body.description !== undefined && { description: body.description }),
+        ...(body.experienceYears !== undefined && {
+          experienceYears: body.experienceYears,
+        }),
+        ...(body.description !== undefined && {
+          description: body.description,
+        }),
         ...(body.address !== undefined && { address: body.address }),
         ...(body.lat !== undefined && { lat: body.lat }),
         ...(body.lng !== undefined && { lng: body.lng }),
         ...(body.mapURL !== undefined && { mapURL: body.mapURL }),
         ...(body.categoryId !== undefined && { categoryId: body.categoryId }),
-        ...(body.preferredLanguages !== undefined && { preferredLanguages: body.preferredLanguages }),
+        ...(body.preferredLanguages !== undefined && {
+          preferredLanguages: body.preferredLanguages,
+        }),
       },
       include: {
         category: true,
@@ -189,13 +198,17 @@ export async function PUT(
       const existingResumeItem = await prisma.profileItem.findFirst({
         where: {
           profileId: id,
-          name: { path: ['en'], equals: 'Resume' }
-        }
+          name: { path: ['en'], equals: 'Resume' },
+        },
       });
 
       if (body.cvURL) {
         // If updating CV and old one exists, delete old file
-        if (existingResumeItem && existingResumeItem.href && existingResumeItem.href !== body.cvURL) {
+        if (
+          existingResumeItem &&
+          existingResumeItem.href &&
+          existingResumeItem.href !== body.cvURL
+        ) {
           await deleteImageFile(existingResumeItem.href);
         }
 
@@ -203,16 +216,21 @@ export async function PUT(
         if (existingResumeItem) {
           await prisma.profileItem.update({
             where: { id: existingResumeItem.id },
-            data: { href: body.cvURL }
+            data: { href: body.cvURL },
           });
         } else {
           await prisma.profileItem.create({
             data: {
               profileId: id,
-              name: { en: "Resume", id: "Resume", ja: "履歴書", zh: "简历" },
-              tooltipText: { en: "View Resume", id: "Lihat Resume", ja: "履歴書を見る", zh: "查看简历" },
-              kind: "FILE",
-              fileType: "PDF",
+              name: { en: 'Resume', id: 'Resume', ja: '履歴書', zh: '简历' },
+              tooltipText: {
+                en: 'View Resume',
+                id: 'Lihat Resume',
+                ja: '履歴書を見る',
+                zh: '查看简历',
+              },
+              kind: 'FILE',
+              fileType: 'PDF',
               href: body.cvURL,
             },
           });
@@ -223,7 +241,7 @@ export async function PUT(
           await deleteImageFile(existingResumeItem.href);
         }
         await prisma.profileItem.delete({
-          where: { id: existingResumeItem.id }
+          where: { id: existingResumeItem.id },
         });
       }
     }
@@ -232,7 +250,7 @@ export async function PUT(
   } catch (error) {
     console.error('Error updating profile:', error);
     return errorResponse('Failed to update profile', 500, error as Error);
-  } 
+  }
 }
 
 export async function PATCH(
@@ -271,9 +289,16 @@ export async function PATCH(
       },
     });
 
-    return successResponse(profile, 'Language preferences updated successfully');
+    return successResponse(
+      profile,
+      'Language preferences updated successfully'
+    );
   } catch (error) {
     console.error('Error updating language preferences:', error);
-    return errorResponse('Failed to update language preferences', 500, error as Error);
+    return errorResponse(
+      'Failed to update language preferences',
+      500,
+      error as Error
+    );
   }
 }

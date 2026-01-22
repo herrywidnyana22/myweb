@@ -27,46 +27,50 @@ export function FormFileUpload({
   const isDisabled = disabled || isUploading;
 
   return (
-    <div className="md:col-span-2">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+    <div className='md:col-span-2'>
+      <label className='mb-2 block text-sm font-medium text-gray-700'>
         {label}
       </label>
-      <div className="space-y-3">
+      <div className='space-y-3'>
         {fileUrl && (
-          <div className="relative w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 flex items-center justify-between">
-            <div className="flex items-center gap-2 text-gray-700">
+          <div className='relative flex w-full items-center justify-between rounded-lg border border-gray-300 bg-gray-50 px-4 py-3'>
+            <div className='flex items-center gap-2 text-gray-700'>
               <FileText size={20} />
-              <span className="text-sm truncate">
+              <span className='truncate text-sm'>
                 {fileUrl.split('/').pop()}
               </span>
             </div>
             <button
-              type="button"
+              type='button'
               onClick={onRemove}
               disabled={isDisabled}
-              className="bg-red-600 hover:bg-red-700 text-white p-1 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+              className='rounded bg-red-600 p-1 text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50'
             >
               <X size={16} />
             </button>
           </div>
         )}
-        <label className={`flex items-center justify-center w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg transition ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-gray-50'}`}>
-          <div className="flex items-center gap-2 text-gray-700">
+        <label
+          className={`flex w-full items-center justify-center rounded-lg border-2 border-dashed border-gray-300 px-4 py-3 transition ${isDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-gray-50'}`}
+        >
+          <div className='flex items-center gap-2 text-gray-700'>
             <Upload size={20} />
-            <span className="text-sm">
-              {isUploading ? 'Uploading...' : `Click to upload ${label.toLowerCase()}`}
+            <span className='text-sm'>
+              {isUploading
+                ? 'Uploading...'
+                : `Click to upload ${label.toLowerCase()}`}
             </span>
           </div>
           <input
-            type="file"
+            type='file'
             accept={accept}
             onChange={handleChange}
             disabled={isDisabled}
-            className="hidden"
+            className='hidden'
           />
         </label>
-        <p className="text-xs text-gray-500">{description}</p>
-        {error && <p className="text-xs text-red-600">{error}</p>}
+        <p className='text-xs text-gray-500'>{description}</p>
+        {error && <p className='text-xs text-red-600'>{error}</p>}
       </div>
     </div>
   );

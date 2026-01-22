@@ -1,7 +1,5 @@
-
 import prisma from '@/lib/prisma';
 
-import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
 import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
@@ -55,7 +53,7 @@ export async function GET(
   } catch (error) {
     console.error('Error fetching category:', error);
     return errorResponse('Failed to fetch category', 500, error as Error);
-  } 
+  }
 }
 
 export async function PUT(
@@ -99,7 +97,7 @@ export async function PUT(
   } catch (error) {
     console.error('Error updating category:', error);
     return errorResponse('Failed to update category', 500, error as Error);
-  } 
+  }
 }
 
 export async function DELETE(
@@ -134,7 +132,7 @@ export async function DELETE(
 
     // Collect all image URLs to delete
     const imageUrls: (string | null)[] = [category.icon];
-    
+
     // Add images from related items
     category.contacts.forEach(c => imageUrls.push(c.icon));
     category.profiles.forEach(p => imageUrls.push(p.photoURL));
@@ -166,12 +164,16 @@ export async function DELETE(
     });
 
     // Delete all related image files
-    await Promise.all(imageUrls.filter(Boolean).map(url => deleteImageFile(url)));
+    await Promise.all(
+      imageUrls.filter(Boolean).map(url => deleteImageFile(url))
+    );
 
-    return successResponse(null, 'Category and all related data deleted successfully');
+    return successResponse(
+      null,
+      'Category and all related data deleted successfully'
+    );
   } catch (error) {
     console.error('Error deleting category:', error);
     return errorResponse('Failed to delete category', 500, error as Error);
   }
 }
-

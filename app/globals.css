@@ -12,7 +12,7 @@
   --primary-hover: #ea580c;
   --primary-light: #fdba74;
 
-  --telegram:#0088cc;
+  --telegram: #0088cc;
   --telegram-secondary: #5ab5e8;
 
   --secondary: #1e293b;
@@ -59,8 +59,10 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  line-height: 1.65; /* sedikit lebih tinggi biar teks chat nyaman */
-  letter-spacing: 0.01em; /* readability */
+  line-height: 1.65;
+  /* sedikit lebih tinggi biar teks chat nyaman */
+  letter-spacing: 0.01em;
+  /* readability */
 }
 
 button {
@@ -123,6 +125,7 @@ button {
    Bullet lebih kecil
 ====================================== */
 @media (max-width: 480px) {
+
   .experience-pagination .swiper-pagination-bullet,
   .project-pagination .swiper-pagination-bullet {
     width: 6px;
@@ -140,6 +143,7 @@ button {
    Sedikit lebih besar dari HP kecil
 ====================================== */
 @media (min-width: 480px) and (max-width: 640px) {
+
   .experience-pagination .swiper-pagination-bullet,
   .project-pagination .swiper-pagination-bullet {
     width: 7px;
@@ -192,6 +196,7 @@ button {
   border-color: transparent white transparent transparent;
   z-index: -1;
 }
+
 .telegram-bubble-bot::before {
   content: '';
   position: absolute;

@@ -27,7 +27,7 @@ export async function POST(req: Request) {
         code: 200,
         status: 'ok',
         msg: 'Login successful',
-        data: { success: true, username, token }
+        data: { success: true, username, token },
       },
       { status: 200 }
     );

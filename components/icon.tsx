@@ -21,26 +21,35 @@ export const Icon = ({
     <div
       style={style}
       className={clsx(
-        'rounded-full p-1 flex items-center justify-center transition hover:bg-gray-900/30 z-20',
+        'z-20 flex items-center justify-center rounded-full p-1 transition hover:bg-gray-900/30',
         className
       )}
     >
-      {src 
-      ? <div className='text-white flex items-center justify-center gap-1.5'>
+      {src ? (
+        <div className='flex items-center justify-center gap-1.5 text-white'>
           <Image
             src={src}
             alt={tooltipLabel || 'icon'}
             width={size}
             height={size}
-            className="opacity-80 hover:opacity-100 transition"
+            className='opacity-80 transition hover:opacity-100'
           />
-          {textLabel && <p className="hidden sm:block xl:hidden text-xs font-medium">{textLabel}</p>}
-      </div> : IconComponent 
-      ? <div className='text-white flex items-center justify-center gap-1.5'>
-          <IconComponent size={size}/>
-          {textLabel && <p className="hidden sm:block xl:hidden text-xs font-medium">{textLabel}</p>}
-        </div> 
-      : null}
+          {textLabel && (
+            <p className='hidden text-xs font-medium sm:block xl:hidden'>
+              {textLabel}
+            </p>
+          )}
+        </div>
+      ) : IconComponent ? (
+        <div className='flex items-center justify-center gap-1.5 text-white'>
+          <IconComponent size={size} />
+          {textLabel && (
+            <p className='hidden text-xs font-medium sm:block xl:hidden'>
+              {textLabel}
+            </p>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 
@@ -48,7 +57,7 @@ export const Icon = ({
     <Link
       href={href}
       target={newTab ? '_blank' : '_self'}
-      rel="noopener noreferrer"
+      rel='noopener noreferrer'
     >
       {iconContent}
     </Link>

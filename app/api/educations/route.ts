@@ -34,7 +34,7 @@ export async function GET() {
   } catch (error) {
     console.error('Error fetching educations:', error);
     return errorResponse('Failed to fetch educations', 500, error as Error);
-  } 
+  }
 }
 
 export async function POST(req: Request) {
@@ -45,10 +45,14 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { school, major, startYear, endYear, schoolLogo, icon, categoryId } = body;
+    const { school, major, startYear, endYear, schoolLogo, icon, categoryId } =
+      body;
 
     if (!school || !major || !startYear || !endYear || !categoryId) {
-      return errorResponse('School, major, startYear, endYear, and categoryId are required', 400);
+      return errorResponse(
+        'School, major, startYear, endYear, and categoryId are required',
+        400
+      );
     }
 
     if (startYear > endYear) {

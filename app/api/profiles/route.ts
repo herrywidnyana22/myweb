@@ -40,21 +40,21 @@ export async function GET() {
       code: 200,
       status: 'ok',
       msg: 'Profiles fetched successfully',
-      data: profiles
+      data: profiles,
     });
   } catch (error) {
     console.error('Error fetching profiles:', error);
     return NextResponse.json(
-      { 
+      {
         code: 500,
         status: 'error',
         msg: 'Failed to fetch profiles',
         error: error instanceof Error ? error.message : 'Unknown error',
-        data: null
+        data: null,
       },
       { status: 500 }
     );
-  } 
+  }
 }
 
 export async function POST(req: Request) {
@@ -63,11 +63,11 @@ export async function POST(req: Request) {
 
     if (!auth) {
       return NextResponse.json(
-        { 
+        {
           code: 401,
           status: 'error',
           msg: 'Unauthorized',
-          data: null
+          data: null,
         },
         { status: 401 }
       );
@@ -121,32 +121,40 @@ export async function POST(req: Request) {
       await prisma.profileItem.create({
         data: {
           profileId: profile.id,
-          name: { en: "Resume", id: "Resume", ja: "履歴書", zh: "简历" },
-          tooltipText: { en: "View Resume", id: "Lihat Resume", ja: "履歴書を見る", zh: "查看简历" },
-          kind: "FILE",
-          fileType: "PDF",
+          name: { en: 'Resume', id: 'Resume', ja: '履歴書', zh: '简历' },
+          tooltipText: {
+            en: 'View Resume',
+            id: 'Lihat Resume',
+            ja: '履歴書を見る',
+            zh: '查看简历',
+          },
+          kind: 'FILE',
+          fileType: 'PDF',
           href: body.cvURL,
         },
       });
     }
 
-    return NextResponse.json({
-      code: 201,
-      status: 'ok',
-      msg: 'Profile created successfully',
-      data: profile
-    }, { status: 201 });
+    return NextResponse.json(
+      {
+        code: 201,
+        status: 'ok',
+        msg: 'Profile created successfully',
+        data: profile,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Error creating profile:', error);
     return NextResponse.json(
-      { 
+      {
         code: 500,
         status: 'error',
         msg: 'Failed to create profile',
         error: error instanceof Error ? error.message : 'Unknown error',
-        data: null
+        data: null,
       },
       { status: 500 }
     );
-  } 
+  }
 }

@@ -6,8 +6,8 @@ import { useAuthStore } from '@/store/auth';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { isLoggedIn, loginWithToken, verifySession } = useAuthStore();
-  
+  const { loginWithToken, verifySession } = useAuthStore();
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -59,63 +59,71 @@ export default function LoginPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-linear-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-        <div className="text-white text-lg">Loading...</div>
+      <div className='flex min-h-screen items-center justify-center bg-linear-to-br from-blue-500 to-purple-600'>
+        <div className='text-lg text-white'>Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-blue-500 to-purple-600 flex items-center justify-center px-4">
-      <div className="bg-white rounded-lg shadow-2xl p-8 w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Login</h1>
-          <p className="text-gray-600">Enter your credentials to access the dashboard</p>
+    <div className='flex min-h-screen items-center justify-center bg-linear-to-br from-blue-500 to-purple-600 px-4'>
+      <div className='w-full max-w-md rounded-lg bg-white p-8 shadow-2xl'>
+        <div className='mb-8 text-center'>
+          <h1 className='mb-2 text-3xl font-bold text-gray-800'>Login</h1>
+          <p className='text-gray-600'>
+            Enter your credentials to access the dashboard
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className='space-y-6'>
           {error && (
-            <div className="bg-red-50 border border-red-200 text-error px-4 py-3 rounded-lg text-sm">
+            <div className='text-error rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm'>
               {error}
             </div>
           )}
 
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor='username'
+              className='mb-2 block text-sm font-medium text-gray-700'
+            >
               Username
             </label>
             <input
-              id="username"
-              type="text"
+              id='username'
+              type='text'
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter your username"
+              onChange={e => setUsername(e.target.value)}
+              placeholder='Enter your username'
               disabled={isLoading}
-              className="w-full px-4 py-2 border text-neutral-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition disabled:bg-gray-50 disabled:cursor-not-allowed"
+              className='w-full rounded-lg border border-gray-300 px-4 py-2 text-neutral-600 transition outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-gray-50'
               required
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor='password'
+              className='mb-2 block text-sm font-medium text-gray-700'
+            >
               Password
             </label>
             <input
-              id="password"
-              type="password"
+              id='password'
+              type='password'
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              onChange={e => setPassword(e.target.value)}
+              placeholder='Enter your password'
               disabled={isLoading}
-              className="w-full px-4 py-2 border text-neutral-600 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition disabled:bg-gray-50 disabled:cursor-not-allowed"
+              className='w-full rounded-lg border border-gray-300 px-4 py-2 text-neutral-600 transition outline-none focus:border-transparent focus:ring-2 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-gray-50'
               required
             />
           </div>
 
           <button
-            type="submit"
+            type='submit'
             disabled={isSubmitting}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 disabled:cursor-not-allowed"
+            className='w-full rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-400'
           >
             {isSubmitting ? 'Logging in...' : 'Login'}
           </button>

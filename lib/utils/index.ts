@@ -1,5 +1,4 @@
-
-import { DEFAULT_FILE_TYPE_ICONS } from "@/lib/constants";
+import { DEFAULT_FILE_TYPE_ICONS } from '@/lib/constants';
 
 export function safeParseJSON(value: string | undefined) {
   if (!value) return [];
@@ -12,11 +11,10 @@ export function safeParseJSON(value: string | undefined) {
 }
 
 export const getColor = (value: number) => {
-  if (value > 80) return '#059669' // bg-emerald-600
-  if (value > 50) return '#EA580C' // bg-orange-600
-  return '#E11D48'                 // bg-rose-600
+  if (value > 80) return '#059669'; // bg-emerald-600
+  if (value > 50) return '#EA580C'; // bg-orange-600
+  return '#E11D48'; // bg-rose-600
 };
-
 
 // Helper untuk rapikan JSON
 export function sanitizeJSON(raw: string): string {
@@ -38,26 +36,27 @@ export function sanitizeJSON(raw: string): string {
 
 /** Safely extract JSON object from dirty LLM text */
 export function safeJson(raw: string) {
-  if (!raw) throw new Error("Empty AI response");
+  if (!raw) throw new Error('Empty AI response');
 
   let txt = raw.trim();
 
   // Remove Markdown ```json fences
-  txt = txt.replace(/```json/gi, "")
-           .replace(/```/g, "")
-           .trim();
+  txt = txt
+    .replace(/```json/gi, '')
+    .replace(/```/g, '')
+    .trim();
 
   // Extract JSON object only
   const match = txt.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error("No JSON found in AI output");
+  if (!match) throw new Error('No JSON found in AI output');
 
   const jsonString = match[0];
 
   try {
     return JSON.parse(jsonString);
   } catch (err) {
-    console.error("Safe JSON parse failed:", err, "\nRAW:", jsonString);
-    throw new Error("Invalid JSON from AI");
+    console.error('Safe JSON parse failed:', err, '\nRAW:', jsonString);
+    throw new Error('Invalid JSON from AI');
   }
 }
 
@@ -67,13 +66,11 @@ export function getDefaultIconForFileType(fileType?: string): string {
   return iconUrl || '';
 }
 
-export function getEffectiveIcon(icon?: string | null, fileType?: string): string | null {
+export function getEffectiveIcon(
+  icon?: string | null,
+  fileType?: string
+): string | null {
   if (icon) return icon;
   const defaultIcon = getDefaultIconForFileType(fileType);
   return defaultIcon || null;
 }
-
-
-
-
-

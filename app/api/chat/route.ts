@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 import { buildPrompt } from '@/lib/constants/promptTemplate';
 import { sendToTelegram } from '@/lib/telegram/telegram-server';
 import { sanitizeJSON } from '@/lib/utils';
@@ -24,62 +23,64 @@ function normalizeCard(card: Partial<DataItemProps>): DataItemProps {
 
 export async function POST(req: Request) {
   try {
-     const { message, memory, history, language, chatMode, actionMode } = (await req.json()) as {
-      message: string;
-      memory?: Record<string, string>;
-      history?: { role: string; text: string }[];
-      language: UILanguage,
-      chatMode: ChatMode
-      actionMode: Action
-    }
+    const { message, memory, history, language, chatMode, actionMode } =
+      (await req.json()) as {
+        message: string;
+        memory?: Record<string, string>;
+        history?: { role: string; text: string }[];
+        language: UILanguage;
+        chatMode: ChatMode;
+        actionMode: Action;
+      };
 
     const now = Date.now();
     if (!cachedPortfolio || now - cachedPortfolio.timestamp > CACHE_TTL_MS) {
       // Query database dengan Prisma (jauh lebih efisien dari fetchSheetData)
-      const [profiles, projects, contacts, educations, experiences] = await Promise.all([
-        prisma.profile.findMany({
-          include: { items: true },
-          orderBy: { createdAt: 'asc' }
-        }),
-        prisma.project.findMany({
-          include: { 
-            entries: true,
-            category: true 
-          },
-          orderBy: { name: 'asc' }
-        }),
-        prisma.contact.findMany({
-          include: { category: true },
-          orderBy: { title: 'asc' }
-        }),
-        prisma.education.findMany({
-          include: { 
-            category: true 
-          },
-          orderBy: { startYear: 'desc' }
-        }),
-        prisma.experience.findMany({
-          include: { 
-            category: true 
-          },
-          orderBy: { start: 'desc' }
-        }),
-      ]);
+      const [profiles, projects, contacts, educations, experiences] =
+        await Promise.all([
+          prisma.profile.findMany({
+            include: { items: true },
+            orderBy: { createdAt: 'asc' },
+          }),
+          prisma.project.findMany({
+            include: {
+              entries: true,
+              category: true,
+            },
+            orderBy: { name: 'asc' },
+          }),
+          prisma.contact.findMany({
+            include: { category: true },
+            orderBy: { title: 'asc' },
+          }),
+          prisma.education.findMany({
+            include: {
+              category: true,
+            },
+            orderBy: { startYear: 'desc' },
+          }),
+          prisma.experience.findMany({
+            include: {
+              category: true,
+            },
+            orderBy: { start: 'desc' },
+          }),
+        ]);
 
-      const firstProfile = profiles[0] || null
+      const firstProfile = profiles[0] || null;
 
       // Transform ke format yang dibutuhkan prompt
-      cachedPortfolio = { 
+      cachedPortfolio = {
         profile: firstProfile as Profile,
         // Address sudah bagian dari Profile model (address, lat, lng, mapURL)
-        address: firstProfile 
-          ? {
+        address: firstProfile
+          ? ({
               address: firstProfile.address,
               lat: firstProfile.lat,
               lng: firstProfile.lng,
               mapURL: firstProfile.mapURL,
-            } as Address 
-          : null, 
+            } as Address)
+          : null,
         projects: projects as Project[],
         contacts: contacts as DefaultCardData[],
         educations: educations as Education[],
@@ -91,7 +92,7 @@ export async function POST(req: Request) {
     const lastMessages = history?.slice(-4) || []; // ambil 4 pesan terakhir
 
     const contextText = lastMessages
-      .map((m) => `${m.role === 'user' ? 'User' : 'AI'}: ${m.text}`)
+      .map(m => `${m.role === 'user' ? 'User' : 'AI'}: ${m.text}`)
       .join('\n');
 
     // Tambahkan memory ke prompt
@@ -106,24 +107,24 @@ export async function POST(req: Request) {
       experiences: cachedPortfolio.experiences,
       language,
       chatMode,
-      action: actionMode
-    })
+      action: actionMode,
+    });
 
-    if (chatMode === "telegram") {
+    if (chatMode === 'telegram') {
       // Kirim pesan user ke Herry via Telegram
       await sendToTelegram(message);
-      
+
       return successResponse(
-        { 
+        {
           role: '',
-          text: message, 
-          cards: [] 
+          text: message,
+          cards: [],
         },
         'Message forwarded to Telegram'
       );
     }
 
-    const response = await generatePrompt(prompt)
+    const response = await generatePrompt(prompt);
     const rawText = response || '';
     const cleanText = sanitizeJSON(rawText);
 
@@ -147,6 +148,10 @@ export async function POST(req: Request) {
     return successResponse(data, 'Chat response generated');
   } catch (err) {
     console.error('Chat API Error:', err);
-    return errorResponse('An error occurred while processing your request', 500, err as Error);
+    return errorResponse(
+      'An error occurred while processing your request',
+      500,
+      err as Error
+    );
   }
 }

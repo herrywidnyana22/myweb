@@ -26,7 +26,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${sora.variable} ${jetbrainsMono.variable} antialiased`}>
+      <body
+        className={`${sora.variable} ${jetbrainsMono.variable} antialiased`}
+      >
         {children}
       </body>
     </html>

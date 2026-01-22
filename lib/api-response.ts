@@ -8,7 +8,11 @@ export interface ApiResponse<T = any> {
   error?: string;
 }
 
-export function successResponse<T>(data: T, message: string = 'Success', statusCode: number = 200) {
+export function successResponse<T>(
+  data: T,
+  message: string = 'Success',
+  statusCode: number = 200
+) {
   return NextResponse.json<ApiResponse<T>>(
     {
       code: statusCode,

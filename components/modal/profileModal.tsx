@@ -13,7 +13,6 @@ import { MultiLangText, createMultiLangText } from '@/lib/constants/languages';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useLocalizedText } from '@/hooks/useLocalizedText';
 
-
 const DEFAULT_PROFILE: Omit<Profile, 'id'> = {
   name: '',
   fullName: '',
@@ -31,10 +30,11 @@ export function ProfileModal({
   categories = [],
 }: ProfileModalProps) {
   const [formData, setFormData] = useState<Profile>(
-    (profile as Profile) || ({
-      id: '',
-      ...DEFAULT_PROFILE,
-    } as Profile)
+    (profile as Profile) ||
+      ({
+        id: '',
+        ...DEFAULT_PROFILE,
+      } as Profile)
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -43,7 +43,7 @@ export function ProfileModal({
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isUploadingCV, setIsUploadingCV] = useState(false);
   const [cvPreview, setCVPreview] = useState<string | null>(null);
-  
+
   // Use global language context
   const { selectedTranslationLanguages, getLanguageInfo } = useLanguage();
   const { getText } = useLocalizedText();
@@ -65,10 +65,12 @@ export function ProfileModal({
   }, [profile, isOpen]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [name]:
         name === 'experienceYears' || name === 'lat' || name === 'lng'
@@ -80,7 +82,7 @@ export function ProfileModal({
   };
 
   const handleMultiLangChange = (field: string, value: MultiLangText) => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [field]: value,
     }));
@@ -105,7 +107,7 @@ export function ProfileModal({
       }
 
       const data = result.data as { url: string };
-      setFormData((prev) => ({ ...prev, photoURL: data.url }));
+      setFormData(prev => ({ ...prev, photoURL: data.url }));
       setImagePreview(data.url);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to upload image');
@@ -133,7 +135,7 @@ export function ProfileModal({
       }
 
       const data = result.data as { url: string };
-      setFormData((prev) => ({ ...prev, cvURL: data.url }));
+      setFormData(prev => ({ ...prev, cvURL: data.url }));
       setCVPreview(data.url);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to upload CV');
@@ -193,31 +195,28 @@ export function ProfileModal({
 
   if (!isOpen) return null;
 
-
   return (
-    <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-    >
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className='bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4'>
+      <div className='max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white shadow-xl'>
         <ModalHeader
           title={profile ? 'Edit Profile' : 'Add Profile'}
           onClose={handleCloseModal}
           disabled={isSubmitting}
         />
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className='space-y-6 p-6'>
           <FormError message={error} />
           {/* Category Select */}
-          <div className="md:col-span-2">
+          <div className='md:col-span-2'>
             <FormSelect
-              label="Category"
+              label='Category'
               required
-              name="categoryId"
+              name='categoryId'
               value={formData.categoryId}
               onChange={handleChange}
               options={[
                 { value: '', label: 'Select a category' },
-                ...(Array.isArray(categories) ? categories : []).map((cat) => ({
+                ...(Array.isArray(categories) ? categories : []).map(cat => ({
                   value: cat.id,
                   label: cat.name,
                 })),
@@ -225,36 +224,36 @@ export function ProfileModal({
               disabled={isSubmitting}
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className='grid grid-cols-1 gap-4 md:grid-cols-2'>
             {/* Required Fields */}
             <FormInput
-              label="Name"
+              label='Name'
               required
-              type="text"
-              name="name"
+              type='text'
+              name='name'
               value={formData.name}
               onChange={handleChange}
-              placeholder="e.g., herry"
+              placeholder='e.g., herry'
               disabled={isSubmitting}
             />
 
-            <div className="md:col-span-2">
+            <div className='md:col-span-2'>
               <FormInput
-                label="Full Name"
+                label='Full Name'
                 required
-                type="text"
-                name="fullName"
+                type='text'
+                name='fullName'
                 value={formData.fullName}
                 onChange={handleChange}
-                placeholder="e.g., Herry Sanjaya"
+                placeholder='e.g., Herry Sanjaya'
                 disabled={isSubmitting}
               />
             </div>
 
             <FormSelect
-              label="Gender"
+              label='Gender'
               required
-              name="jenisKelamin"
+              name='jenisKelamin'
               value={formData.jenisKelamin}
               onChange={handleChange}
               options={[
@@ -264,28 +263,28 @@ export function ProfileModal({
               disabled={isSubmitting}
             />
 
-            <div className="md:col-span-2">
+            <div className='md:col-span-2'>
               <MultiLangInput
-                label="Role"
+                label='Role'
                 value={formData.role || createMultiLangText('')}
-                onChange={(val) => handleMultiLangChange('role', val)}
+                onChange={val => handleMultiLangChange('role', val)}
                 selectedLanguages={selectedTranslationLanguages}
-                placeholder="e.g., Full Stack Developer"
+                placeholder='e.g., Full Stack Developer'
                 disabled={isSubmitting}
-                type="input"
+                type='input'
                 getLanguageInfo={getLanguageInfo}
               />
             </div>
 
-            <div className="md:col-span-2">
+            <div className='md:col-span-2'>
               <MultiLangInput
-                label="Quote"
+                label='Quote'
                 value={formData.quote || createMultiLangText('')}
-                onChange={(val) => handleMultiLangChange('quote', val)}
+                onChange={val => handleMultiLangChange('quote', val)}
                 selectedLanguages={selectedTranslationLanguages}
-                placeholder="Your inspirational quote"
+                placeholder='Your inspirational quote'
                 disabled={isSubmitting}
-                type="textarea"
+                type='textarea'
                 rows={2}
                 getLanguageInfo={getLanguageInfo}
               />
@@ -297,7 +296,7 @@ export function ProfileModal({
               isUploading={isUploadingImage}
               onUpload={handleImageUpload}
               onRemove={() => {
-                setFormData((prev) => ({ ...prev, photoURL: undefined }));
+                setFormData(prev => ({ ...prev, photoURL: undefined }));
                 setImagePreview(null);
               }}
               disabled={isSubmitting}
@@ -305,119 +304,123 @@ export function ProfileModal({
 
             {/* CV Upload */}
             <FormFileUpload
-              label="CV / Resume"
+              label='CV / Resume'
               fileUrl={cvPreview}
               isUploading={isUploadingCV}
               onUpload={handleCVUpload}
               onRemove={() => {
-                setFormData((prev) => ({ ...prev, cvURL: undefined }));
+                setFormData(prev => ({ ...prev, cvURL: undefined }));
                 setCVPreview(null);
               }}
               disabled={isSubmitting}
-              accept=".pdf"
-              description="Supported format: PDF. Max size: 10MB"
+              accept='.pdf'
+              description='Supported format: PDF. Max size: 10MB'
             />
 
             {/* Optional Fields */}
-            <div className="md:col-span-2">
+            <div className='md:col-span-2'>
               <FormInput
-                label="Birth Place"
-                type="text"
-                name="birthPlace"
+                label='Birth Place'
+                type='text'
+                name='birthPlace'
                 value={formData.birthPlace || ''}
                 onChange={handleChange}
-                placeholder="e.g., Jakarta"
+                placeholder='e.g., Jakarta'
                 disabled={isSubmitting}
               />
             </div>
 
             <FormInput
-              label="Birth Date"
-              type="date"
-              name="birthDate"
-              value={formData.birthDate ? (typeof formData.birthDate === 'string' ? formData.birthDate.split('T')[0] : formData.birthDate.toISOString().split('T')[0]) : ''}
+              label='Birth Date'
+              type='date'
+              name='birthDate'
+              value={
+                formData.birthDate
+                  ? typeof formData.birthDate === 'string'
+                    ? formData.birthDate.split('T')[0]
+                    : formData.birthDate.toISOString().split('T')[0]
+                  : ''
+              }
               onChange={handleChange}
               disabled={isSubmitting}
             />
 
             <FormInput
-              label="Experience Years"
-              type="number"
-              name="experienceYears"
+              label='Experience Years'
+              type='number'
+              name='experienceYears'
               value={formData.experienceYears || ''}
               onChange={handleChange}
-              placeholder="5"
+              placeholder='5'
               disabled={isSubmitting}
             />
 
-            <div className="md:col-span-2">
+            <div className='md:col-span-2'>
               <MultiLangInput
-                label="Description"
+                label='Description'
                 value={formData.description || createMultiLangText('')}
-                onChange={(val) => handleMultiLangChange('description', val)}
+                onChange={val => handleMultiLangChange('description', val)}
                 selectedLanguages={selectedTranslationLanguages}
-                placeholder="About yourself..."
+                placeholder='About yourself...'
                 disabled={isSubmitting}
-                type="textarea"
+                type='textarea'
                 rows={3}
                 getLanguageInfo={getLanguageInfo}
               />
             </div>
 
-            <div className="md:col-span-2">
+            <div className='md:col-span-2'>
               <MultiLangInput
-                label="Address"
+                label='Address'
                 value={formData.address || createMultiLangText('')}
-                onChange={(val) => handleMultiLangChange('address', val)}
+                onChange={val => handleMultiLangChange('address', val)}
                 selectedLanguages={selectedTranslationLanguages}
-                placeholder="Your address"
+                placeholder='Your address'
                 disabled={isSubmitting}
-                type="input"
+                type='input'
                 getLanguageInfo={getLanguageInfo}
               />
             </div>
 
             <FormInput
-              label="Latitude"
-              type="number"
-              name="lat"
+              label='Latitude'
+              type='number'
+              name='lat'
               value={formData.lat || ''}
               onChange={handleChange}
-              placeholder="-6.2088"
-              step="0.0001"
+              placeholder='-6.2088'
+              step='0.0001'
               disabled={isSubmitting}
             />
 
             <FormInput
-              label="Longitude"
-              type="number"
-              name="lng"
+              label='Longitude'
+              type='number'
+              name='lng'
               value={formData.lng || ''}
               onChange={handleChange}
-              placeholder="106.8456"
-              step="0.0001"
+              placeholder='106.8456'
+              step='0.0001'
               disabled={isSubmitting}
             />
 
-            <div className="md:col-span-2">
+            <div className='md:col-span-2'>
               <FormInput
-                label="Map URL"
-                type="url"
-                name="mapURL"
+                label='Map URL'
+                type='url'
+                name='mapURL'
                 value={formData.mapURL || ''}
                 onChange={handleChange}
-                placeholder="https://..."
+                placeholder='https://...'
                 disabled={isSubmitting}
               />
             </div>
-
-            
           </div>
 
           <ModalActions
             isSubmitting={isSubmitting}
             onCancel={handleCloseModal}
-            submitLabel="Save Profile"
+            submitLabel='Save Profile'
           />
         </form>
       </div>

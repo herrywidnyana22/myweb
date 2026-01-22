@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { FormInput } from '../form/FormInput';
 import { FormImageUpload } from '../form/FormImageUpload';
 import { FormError } from '../form/FormError';
 import { ModalHeader } from '../form/ModalHeader';
@@ -22,10 +21,11 @@ export function CategoryModal({
   category,
 }: CategoryModalProps) {
   const [formData, setFormData] = useState<Category>(
-    (category as Category) || ({
-      id: '',
-      ...DEFAULT_CATEGORY,
-    } as Category)
+    (category as Category) ||
+      ({
+        id: '',
+        ...DEFAULT_CATEGORY,
+      } as Category)
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -50,17 +50,19 @@ export function CategoryModal({
   }, [category, isOpen]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [name]: value,
     }));
   };
 
   const handleMultiLangChange = (field: string, value: MultiLangText) => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [field]: value,
     }));
@@ -85,7 +87,7 @@ export function CategoryModal({
       }
 
       const data = result.data as { url: string };
-      setFormData((prev) => ({ ...prev, icon: data.url }));
+      setFormData(prev => ({ ...prev, icon: data.url }));
       setIconPreview(data.url);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to upload image');
@@ -143,40 +145,37 @@ export function CategoryModal({
 
   if (!isOpen) return null;
 
-
   return (
-    <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-    >
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+    <div className='bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4'>
+      <div className='w-full max-w-md rounded-lg bg-white shadow-xl'>
         <ModalHeader
           title={category ? 'Edit Category' : 'Add Category'}
           onClose={handleCloseModal}
           disabled={isSubmitting}
         />
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className='space-y-6 p-6'>
           <FormError message={error} />
 
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <MultiLangInput
-              label="Name"
+              label='Name'
               value={formData.name || createMultiLangText('')}
-              onChange={(val) => handleMultiLangChange('name', val)}
+              onChange={val => handleMultiLangChange('name', val)}
               selectedLanguages={selectedTranslationLanguages}
-              placeholder="e.g., Kontak, Profil, Proyek"
+              placeholder='e.g., Kontak, Profil, Proyek'
               disabled={isSubmitting}
-              type="input"
+              type='input'
               getLanguageInfo={getLanguageInfo}
             />
 
             <FormImageUpload
-              label="Icon"
+              label='Icon'
               imagePreview={iconPreview}
               isUploading={isUploadingIcon}
               onUpload={handleImageUpload}
               onRemove={() => {
-                setFormData((prev) => ({ ...prev, icon: undefined }));
+                setFormData(prev => ({ ...prev, icon: undefined }));
                 setIconPreview(null);
               }}
               disabled={isSubmitting}
@@ -186,7 +185,7 @@ export function CategoryModal({
           <ModalActions
             isSubmitting={isSubmitting}
             onCancel={handleCloseModal}
-            submitLabel="Save Category"
+            submitLabel='Save Category'
           />
         </form>
       </div>

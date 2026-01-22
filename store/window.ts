@@ -1,14 +1,14 @@
-import { INITIAL_Z_INDEX, WINDOW_CONFIG } from "@/lib/constants";
-import { create } from "zustand";
-import { immer } from "zustand/middleware/immer";
+import { INITIAL_Z_INDEX, WINDOW_CONFIG } from '@/lib/constants';
+import { create } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
 
 const useWindowStore = create<WindowStore>()(
-  immer((set) => ({
+  immer(set => ({
     windows: WINDOW_CONFIG,
-    nextZIndex: INITIAL_Z_INDEX+1,
+    nextZIndex: INITIAL_Z_INDEX + 1,
 
     openWindow: (windowKey, data = null) =>
-      set((state) => {
+      set(state => {
         const win = state.windows[windowKey];
         if (!win) return;
 
@@ -20,8 +20,8 @@ const useWindowStore = create<WindowStore>()(
         state.nextZIndex++;
       }),
 
-    closeWindow: (windowKey) =>
-      set((state) => {
+    closeWindow: windowKey =>
+      set(state => {
         const win = state.windows[windowKey];
         if (!win) return;
         win.isOpen = false;
@@ -30,16 +30,16 @@ const useWindowStore = create<WindowStore>()(
         win.data = null;
       }),
 
-    minimizeWindow: (windowKey) =>
-      set((state) => {
+    minimizeWindow: windowKey =>
+      set(state => {
         const win = state.windows[windowKey];
         if (!win) return;
         win.isMinimize = true;
         win.isOpen = false;
       }),
 
-    restoreWindow: (windowKey) =>
-      set((state) => {
+    restoreWindow: windowKey =>
+      set(state => {
         const win = state.windows[windowKey];
         if (!win) return;
 
@@ -50,15 +50,13 @@ const useWindowStore = create<WindowStore>()(
         state.nextZIndex++;
       }),
 
-
-    focusWindow: (windowKey) =>
-      set((state) => {
+    focusWindow: windowKey =>
+      set(state => {
         const win = state.windows[windowKey];
         if (!win) return;
         win.zIndex = state.nextZIndex++;
       }),
   }))
 );
-
 
 export default useWindowStore;

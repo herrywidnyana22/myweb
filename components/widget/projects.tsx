@@ -10,34 +10,34 @@ import { useLocalizedText } from '@/hooks/useLocalizedText';
 export const Projects = () => {
   const { getUIText } = useLocalizedText();
   const { projects, isLoading, error } = useDataStore();
-  
+
   if (isLoading) {
     return (
       <Swiper
         grabCursor
-        effect="creative"
+        effect='creative'
         creativeEffect={{
           prev: { shadow: true, translate: [0, 0, -400] },
           next: { translate: ['100%', 0, 0] },
         }}
         modules={[EffectCreative, Pagination]}
-        className="mySwiper w-full h-full overflow-hidden"
+        className='mySwiper h-full w-full overflow-hidden'
       >
         {Array.from({ length: 3 }).map((_, i) => (
           <SwiperSlide key={i}>
-            <div className="w-full h-full flex flex-col gap-3 p-6 rounded-2xl bg-white animate-pulse">
-              <div className="flex items-center gap-3">
-                <div className="rounded-full size-14 bg-gray-300" />
-                <div className="h-5 w-1/2 bg-gray-300 rounded" />
+            <div className='flex h-full w-full animate-pulse flex-col gap-3 rounded-2xl bg-white p-6'>
+              <div className='flex items-center gap-3'>
+                <div className='size-14 rounded-full bg-gray-300' />
+                <div className='h-5 w-1/2 rounded bg-gray-300' />
               </div>
-              <div className="flex-1 mt-3 space-y-3">
-                <div className="h-3 bg-gray-200 rounded w-full" />
-                <div className="h-3 bg-gray-200 rounded w-5/6" />
-                <div className="h-3 bg-gray-200 rounded w-4/5" />
+              <div className='mt-3 flex-1 space-y-3'>
+                <div className='h-3 w-full rounded bg-gray-200' />
+                <div className='h-3 w-5/6 rounded bg-gray-200' />
+                <div className='h-3 w-4/5 rounded bg-gray-200' />
               </div>
-              <div className="flex justify-end gap-3 mt-5">
-                <div className="h-6 w-20 bg-gray-300 rounded-2xl" />
-                <div className="h-6 w-24 bg-gray-300 rounded-2xl" />
+              <div className='mt-5 flex justify-end gap-3'>
+                <div className='h-6 w-20 rounded-2xl bg-gray-300' />
+                <div className='h-6 w-24 rounded-2xl bg-gray-300' />
               </div>
             </div>
           </SwiperSlide>
@@ -46,19 +46,25 @@ export const Projects = () => {
     );
   }
 
-   if (error) {
-    return <p className="text-center text-red-400 p-4">{getUIText('dataLoadFailed')}</p>;
+  if (error) {
+    return (
+      <p className='p-4 text-center text-red-400'>
+        {getUIText('dataLoadFailed')}
+      </p>
+    );
   }
 
   if (!projects?.length) {
-    return <p className="text-center text-gray-100 p-4">{getUIText('dataEmpty')}</p>;
+    return (
+      <p className='p-4 text-center text-gray-100'>{getUIText('dataEmpty')}</p>
+    );
   }
 
   return (
-    <div className="relative w-full h-full">
+    <div className='relative h-full w-full'>
       <Swiper
         grabCursor
-        effect="creative"
+        effect='creative'
         creativeEffect={{
           prev: { shadow: true, translate: [0, 0, -400] },
           next: { translate: ['100%', 0, 0] },
@@ -68,7 +74,7 @@ export const Projects = () => {
           el: '.project-pagination',
         }}
         modules={[EffectCreative, Pagination]}
-        className="mySwiper w-full h-full overflow-hidden"
+        className='mySwiper h-full w-full overflow-hidden'
       >
         {(Array.isArray(projects) ? projects : []).map((project, i) => (
           <SwiperSlide key={i}>
@@ -76,8 +82,7 @@ export const Projects = () => {
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className="project-pagination mt-4 mb-1 flex justify-center w-full" />
+      <div className='project-pagination mt-4 mb-1 flex w-full justify-center' />
     </div>
   );
 };
-

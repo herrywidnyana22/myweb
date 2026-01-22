@@ -1,5 +1,4 @@
 import prisma from '@/lib/prisma';
-import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
 import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
@@ -127,7 +126,7 @@ export async function DELETE(
 
       for (const child of children) {
         await deleteChildren(child.id);
-        
+
         // Delete child from database
         await prisma.projectEntry.delete({
           where: { id: child.id },
@@ -137,7 +136,7 @@ export async function DELETE(
         await Promise.all([
           deleteImageFile(child.icon),
           deleteImageFile(child.subIcon),
-          deleteImageFile(child.imageUrl)
+          deleteImageFile(child.imageUrl),
         ]);
       }
     };
@@ -153,7 +152,7 @@ export async function DELETE(
     await Promise.all([
       deleteImageFile(projectEntry.icon),
       deleteImageFile(projectEntry.subIcon),
-      deleteImageFile(projectEntry.imageUrl)
+      deleteImageFile(projectEntry.imageUrl),
     ]);
 
     return successResponse(null, 'Project entry deleted successfully');

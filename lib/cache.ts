@@ -1,7 +1,6 @@
 // lib/cache.ts
 const CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour for localStorage
 
-
 export function readCache<T>(key: string): T | null {
   try {
     const item = localStorage.getItem(key);

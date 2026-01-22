@@ -12,15 +12,15 @@ export const Education = () => {
   // Skeleton loader
   if (isLoading) {
     return (
-      <div className="grid grid-cols-2 sm:flex sm:flex-row sm:gap-6 gap-4 p-4 sm:p-6 place-items-center">
+      <div className='grid grid-cols-2 place-items-center gap-4 p-4 sm:flex sm:flex-row sm:gap-6 sm:p-6'>
         {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i}
-            className="flex flex-col items-center gap-2 animate-pulse"
+            className='flex animate-pulse flex-col items-center gap-2'
           >
-            <div className="relative flex items-center justify-center size-14 sm:size-16 bg-gray-300 rounded-full" />
-            <div className="h-2 w-20 bg-gray-300 rounded" />
-            <div className="h-2 w-16 bg-gray-200 rounded" />
+            <div className='relative flex size-14 items-center justify-center rounded-full bg-gray-300 sm:size-16' />
+            <div className='h-2 w-20 rounded bg-gray-300' />
+            <div className='h-2 w-16 rounded bg-gray-200' />
           </div>
         ))}
       </div>
@@ -28,73 +28,61 @@ export const Education = () => {
   }
 
   if (error) {
-    return <p className="text-center text-red-400 p-4">{getUIText('dataLoadFailed')}</p>;
+    return (
+      <p className='p-4 text-center text-red-400'>
+        {getUIText('dataLoadFailed')}
+      </p>
+    );
   }
 
   if (!educations?.length) {
-    return <p className="text-center text-gray-100 p-4">{getUIText('dataEmpty')}</p>;
+    return (
+      <p className='p-4 text-center text-gray-100'>{getUIText('dataEmpty')}</p>
+    );
   }
 
   return (
-    <div className="relative w-full overflow-x-hidden sm:overflow-x-auto">
-      <div
-        className="
-          grid grid-cols-2 sm:flex sm:flex-row 
-          items-start justify-center 
-          gap-2 sm:gap-4 xl:gap-10 p-3 sm:px-6 sm:py-8
-        "
-      >
+    <div className='relative w-full overflow-x-hidden sm:overflow-x-auto'>
+      <div className='grid grid-cols-2 items-start justify-center gap-2 p-3 sm:flex sm:flex-row sm:gap-4 sm:px-6 sm:py-8 xl:gap-10'>
         {educations.map((edu, i) => (
           <Tooltip key={i} label={edu.school}>
-            <div
-              className="
-                relative flex flex-col items-center text-center 
-                w-full sm:w-auto
-              "
-            >
+            <div className='relative flex w-full flex-col items-center text-center sm:w-auto'>
               {/* Icon utama */}
-              <div
-                className="
-                  relative flex items-center justify-center 
-                  size-14 sm:size-16 
-                  bg-white rounded-2xl border-2 border-orange-400 
-                  shadow-md
-                "
-              >
+              <div className='relative flex size-14 items-center justify-center rounded-2xl border-2 border-orange-400 bg-white shadow-md sm:size-16'>
                 {typeof edu.schoolLogo === 'string' && (
                   <Image
                     src={edu.schoolLogo}
                     alt={edu.school}
                     width={36}
                     height={36}
-                    className="object-contain size-8 sm:size-10"
+                    className='size-8 object-contain sm:size-10'
                   />
                 )}
                 {typeof edu.icon === 'string' && (
                   <Image
                     src={edu.icon}
-                    alt="graduation"
+                    alt='graduation'
                     width={16}
                     height={16}
-                    className="absolute bottom-0 right-0 size-4 sm:size-5 object-contain"
+                    className='absolute right-0 bottom-0 size-4 object-contain sm:size-5'
                   />
                 )}
               </div>
 
               {/* Garis penghubung (Desktop only) */}
               {i < educations.length - 1 && (
-                <div className="hidden sm:block absolute top-8 left-[calc(100%-2rem)] sm:left-[calc(100%-2.5rem)] xl:left-[calc(100%-3rem)] h-0.5 w-20 sm:w-24 bg-linear-to-r from-primary to-yellow-400" />
+                <div className='from-primary absolute top-8 left-[calc(100%-2rem)] hidden h-0.5 w-20 bg-linear-to-r to-yellow-400 sm:left-[calc(100%-2.5rem)] sm:block sm:w-24 xl:left-[calc(100%-3rem)]' />
               )}
 
               {/* Info pendidikan */}
-              <div className="mt-0 sm:mt-3 w-36 sm:w-44">
-                <h3 className="hidden sm:block font-bold text-xs sm:text-sm md:text-base text-primary uppercase leading-tight">
+              <div className='mt-0 w-36 sm:mt-3 sm:w-44'>
+                <h3 className='text-primary hidden text-xs leading-tight font-bold uppercase sm:block sm:text-sm md:text-base'>
                   {edu.school}
                 </h3>
-                <p className="hidden sm:block text-white text-xs mt-1 leading-snug">
+                <p className='mt-1 hidden text-xs leading-snug text-white sm:block'>
                   {getText(edu.major)}
                 </p>
-                <p className="text-white text-[10px] sm:text-xs mt-1">
+                <p className='mt-1 text-[10px] text-white sm:text-xs'>
                   {edu.startYear} - {edu.endYear}
                 </p>
               </div>

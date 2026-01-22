@@ -1,4 +1,3 @@
-import { NextResponse } from 'next/server';
 import { successResponse, errorResponse } from '@/lib/api-response';
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
@@ -69,11 +68,7 @@ export async function POST(req: Request) {
     // Return the relative URL
     const fileUrl = `/files/${filename}`;
 
-    return successResponse(
-      { url: fileUrl },
-      'File uploaded successfully',
-      201
-    );
+    return successResponse({ url: fileUrl }, 'File uploaded successfully', 201);
   } catch (error) {
     console.error('Upload error:', error);
     return errorResponse('Failed to upload file', 500, error as Error);

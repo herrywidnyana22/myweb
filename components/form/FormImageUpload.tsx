@@ -27,49 +27,51 @@ export function FormImageUpload({
   const isDisabled = disabled || isUploading;
 
   return (
-    <div className="md:col-span-2">
-      <label className="block text-sm font-medium text-gray-700 mb-2">
+    <div className='md:col-span-2'>
+      <label className='mb-2 block text-sm font-medium text-gray-700'>
         {label}
       </label>
-      <div className="space-y-3">
+      <div className='space-y-3'>
         {imagePreview && (
-          <div className="relative w-full h-48 rounded-lg overflow-hidden border border-gray-300 bg-gray-100">
+          <div className='relative h-48 w-full overflow-hidden rounded-lg border border-gray-300 bg-gray-100'>
             <Image
               src={imagePreview}
-              alt="Preview"
+              alt='Preview'
               height={40}
               width={40}
-              className="w-full h-full object-cover"
+              className='h-full w-full object-cover'
             />
             <button
-              type="button"
+              type='button'
               onClick={onRemove}
               disabled={isDisabled}
-              className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white p-1 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+              className='absolute top-2 right-2 rounded bg-red-600 p-1 text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50'
             >
               <X size={16} />
             </button>
           </div>
         )}
-        <label className={`flex items-center justify-center w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg transition ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:bg-gray-50'}`}>
-          <div className="flex items-center gap-2 text-gray-700">
+        <label
+          className={`flex w-full items-center justify-center rounded-lg border-2 border-dashed border-gray-300 px-4 py-3 transition ${isDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-gray-50'}`}
+        >
+          <div className='flex items-center gap-2 text-gray-700'>
             <Upload size={20} />
-            <span className="text-sm">
+            <span className='text-sm'>
               {isUploading ? 'Uploading...' : 'Click to upload image'}
             </span>
           </div>
           <input
-            type="file"
-            accept="image/*"
+            type='file'
+            accept='image/*'
             onChange={handleChange}
             disabled={isDisabled}
-            className="hidden"
+            className='hidden'
           />
         </label>
-        <p className="text-xs text-gray-500">
+        <p className='text-xs text-gray-500'>
           Supported formats: JPG, PNG, GIF, WebP. Max size: 5MB
         </p>
-        {error && <p className="text-xs text-error">{error}</p>}
+        {error && <p className='text-error text-xs'>{error}</p>}
       </div>
     </div>
   );

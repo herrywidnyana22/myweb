@@ -1,5 +1,9 @@
 import { useLanguage } from '@/contexts/LanguageContext';
-import { getLocalizedText, MultiLangText, multiLangUIText } from '@/lib/constants/languages';
+import {
+  getLocalizedText,
+  MultiLangText,
+  multiLangUIText,
+} from '@/lib/constants/languages';
 
 /**
  * Hook to get localized text based on current language
@@ -7,7 +11,9 @@ import { getLocalizedText, MultiLangText, multiLangUIText } from '@/lib/constant
 export function useLocalizedText() {
   const { currentLanguage } = useLanguage();
 
-  const getText = (multiLangText: MultiLangText | string | undefined | null): string => {
+  const getText = (
+    multiLangText: MultiLangText | string | undefined | null
+  ): string => {
     if (!multiLangText) return '';
     if (typeof multiLangText === 'string') return multiLangText;
     return getLocalizedText(multiLangText, currentLanguage);

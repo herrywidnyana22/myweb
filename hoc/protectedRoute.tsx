@@ -10,7 +10,7 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const router = useRouter();
-  const { isLoggedIn, verifySession } = useAuthStore();
+  const { verifySession } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
 
@@ -31,8 +31,8 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg text-gray-600">Loading...</div>
+      <div className='flex min-h-screen items-center justify-center'>
+        <div className='text-lg text-gray-600'>Loading...</div>
       </div>
     );
   }

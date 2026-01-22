@@ -18,33 +18,28 @@ import { LanguageProvider } from '@/contexts/LanguageContext';
 
 export default function Page() {
   const { loadAllData } = useDataStore();
-  
+
   useEffect(() => {
     loadAllData();
   }, [loadAllData]);
 
-
   return (
     <LanguageProvider>
       <main className='relative min-h-screen w-full overflow-x-hidden overflow-y-auto'>
-        <TopBar/>
-        <Welcome/>
+        <TopBar />
+        <Welcome />
 
-        <div className="
-          px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64 
-          py-4 sm:py-10
-          pb-24 sm:pb-32
-        ">        
-          <Contact/>
-          <Resume/>
-          <ProjectInfo/>
-          <TechStack/>
-          <Text/>
-          <Img/>
-          <Explorer/>
-          <BackgroundHome/>
-          <Overlay/>
-          <Home/>
+        <div className='px-4 py-4 pb-24 sm:px-8 sm:py-10 sm:pb-32 md:px-16 lg:px-32 xl:px-64'>
+          <Contact />
+          <Resume />
+          <ProjectInfo />
+          <TechStack />
+          <Text />
+          <Img />
+          <Explorer />
+          <BackgroundHome />
+          <Overlay />
+          <Home />
         </div>
       </main>
     </LanguageProvider>

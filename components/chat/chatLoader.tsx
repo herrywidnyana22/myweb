@@ -1,9 +1,9 @@
 export const ChatLoader = () => {
   return (
-    <div className='flex gap-1 mt-2'>
-      <span className='w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0ms]'/>
-      <span className='w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:150ms]'/>
-      <span className='w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:300ms]'/>
+    <div className='mt-2 flex gap-1'>
+      <span className='size-2 animate-bounce rounded-full bg-gray-400 [animation-delay:0ms]' />
+      <span className='size-2 animate-bounce rounded-full bg-gray-400 [animation-delay:150ms]' />
+      <span className='size-2 animate-bounce rounded-full bg-gray-400 [animation-delay:300ms]' />
     </div>
   );
 };

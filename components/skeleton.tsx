@@ -1,20 +1,15 @@
 'use client';
 
-import React from 'react';
 import clsx from 'clsx';
-
 interface SkeletonProps {
   className?: string;
 }
 
-/**
- * Skeleton loading shimmer
- */
-export const Skeleton = ({ className }:SkeletonProps) => {
+export const Skeleton = ({ className }: SkeletonProps) => {
   return (
     <div
       className={clsx(
-        'animate-pulse bg-linier-to-r from-gray-700/40 via-gray-600/40 to-gray-700/40 rounded-lg',
+        'bg-linier-to-r animate-pulse rounded-lg from-gray-700/40 via-gray-600/40 to-gray-700/40',
         className
       )}
     />

@@ -56,7 +56,7 @@ export const languageRule = `
   - Balas singkat, natural, ramah.
   - Hindari penjelasan teknis panjang kecuali diminta.
   - Kamu boleh playful sedikit tapi tetap profesional sebagai developer Bali.
-`
+`;
 
 export const translationUIRules = `
   Translate ONLY UI text.
@@ -84,9 +84,9 @@ export const translationChatRules = `
   Translate ONLY descriptions, summaries, job roles, etc.
   Preserve JSON structure exactly.
   Return ONLY valid JSON.
-`
+`;
 
-export const translationDataRules =`
+export const translationDataRules = `
   Translate ONLY the text-based fields inside each object:
   - title
   - description
@@ -118,7 +118,7 @@ export const translationDataRules =`
 
   IMPORTANT:
   - iconCategory.label MAY be translated (optional), tetapi iconCategory.src TIDAK BOLEH diubah.
-`
+`;
 
 // Format JSON
 export const jsonFormatRule = `
@@ -224,7 +224,7 @@ export const jsonFormatRule = `
       "text": "Data tidak tersedia.",
       "cards": []
     }
-`
+`;
 
 // Aturan Berdasarkan Konteks
 export const contextRules = `
@@ -260,7 +260,7 @@ export const contextRules = `
     field "message" jawab dalam bahasa percakapan saat ini
 
   jika chatMode === "telegram", maka jawab di "text" kalau sudah terhubung ke telegram
-`
+`;
 
 // Behavior & Highlighting
 export const behaviorRule = `
@@ -284,8 +284,7 @@ export const behaviorRule = `
   - Jika user bertanya “Apakah kamu siap kerja?”, jawab: "Saya siap kapanpun."
   - Jangan beri komentar meta seperti “berdasarkan data” atau “sebagai AI”.
   - Jawaban harus ramah dan enak dibaca.
-`
-
+`;
 
 export const memoryRule = `
  Memory Handling Rules:
@@ -337,7 +336,7 @@ export const memoryRule = `
     - Jika user berkata: "aku mau, Andi bantu aku" → TIDAK ADA nama user
     - Jika user berkata: "bantu aku Herry" → itu bukan nama user → abaikan
     - Jika user berkata: "namaku bukan Andi, tapi Budi" → update memory
-`
+`;
 
 // Field Translation Rules
 export const fieldTranslationRules = `
@@ -372,4 +371,4 @@ export const fieldTranslationRules = `
   - Verify JSON is valid and parseable
   - Check all requested target languages are included
   - Maintain consistent terminology across related fields
-`
+`;

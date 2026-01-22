@@ -8,7 +8,7 @@ export function FormError({ message }: FormErrorProps) {
   if (!message) return null;
 
   return (
-    <div className="bg-red-50 border border-red-200 text-error px-4 py-3 rounded-lg text-sm">
+    <div className='text-error rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm'>
       {message}
     </div>
   );

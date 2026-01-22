@@ -1,6 +1,6 @@
-import { NextResponse } from "next/server";
-import { generatePrompt } from "@/lib/gemini/generatePrompt";
-import { fieldTranslationRules } from "@/lib/constants/promptRule";
+import { NextResponse } from 'next/server';
+import { generatePrompt } from '@/lib/gemini/generatePrompt';
+import { fieldTranslationRules } from '@/lib/constants/promptRule';
 
 export async function POST(req: Request) {
   try {
@@ -8,7 +8,7 @@ export async function POST(req: Request) {
 
     if (!text || !targetLanguages || targetLanguages.length === 0) {
       return NextResponse.json(
-        { error: "Missing required fields: text and targetLanguages" },
+        { error: 'Missing required fields: text and targetLanguages' },
         { status: 400 }
       );
     }
@@ -80,16 +80,17 @@ Return ONLY this JSON structure (no markdown, no explanations):
       success: true,
       translations,
     });
-
   } catch (err) {
-    console.error("Translation API Error:", err);
-    const errorMessage = err instanceof Error ? err.message : 'Translation failed';
-    
+    console.error('Translation API Error:', err);
+    const errorMessage =
+      err instanceof Error ? err.message : 'Translation failed';
+
     return NextResponse.json(
-      { 
+      {
         success: false,
         error: errorMessage,
-        details: process.env.NODE_ENV === 'development' ? String(err) : undefined
+        details:
+          process.env.NODE_ENV === 'development' ? String(err) : undefined,
       },
       { status: 500 }
     );

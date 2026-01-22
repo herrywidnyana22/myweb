@@ -3,7 +3,6 @@ import { successResponse, errorResponse } from '@/lib/api-response';
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
 
-
 async function authenticateRequest(
   req: Request
 ): Promise<{ username: string } | null> {
@@ -32,7 +31,7 @@ export async function GET() {
     });
 
     // Map Prisma Contact fields to expected component format
-    const formatted = contacts.map((contact) => ({
+    const formatted = contacts.map(contact => ({
       id: contact.id,
       type: 'contact',
       title: contact.title,
@@ -59,10 +58,21 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { title, description, tooltipText, icon, bgColor, contactURL, categoryId } = body;
+    const {
+      title,
+      description,
+      tooltipText,
+      icon,
+      bgColor,
+      contactURL,
+      categoryId,
+    } = body;
 
     if (!title || !description || !categoryId) {
-      return errorResponse('Title, Description, and Category ID are required', 400);
+      return errorResponse(
+        'Title, Description, and Category ID are required',
+        400
+      );
     }
 
     const contact = await prisma.contact.create({

@@ -7,13 +7,15 @@ import { existsSync } from 'fs';
  * @param imageUrl - The image URL (e.g., "/images/1234567890-abc123.jpg")
  * @returns Promise<boolean> - true if deleted successfully or file doesn't exist, false if error
  */
-export async function deleteImageFile(imageUrl: string | null | undefined): Promise<boolean> {
+export async function deleteImageFile(
+  imageUrl: string | null | undefined
+): Promise<boolean> {
   if (!imageUrl) return true;
 
   try {
     // Extract filename from URL (e.g., "/images/filename.jpg" -> "filename.jpg")
     const filename = imageUrl.replace(/^\/images\//, '');
-    
+
     // Skip if URL doesn't match expected pattern
     if (!filename || filename === imageUrl) {
       console.warn('Invalid image URL format:', imageUrl);
@@ -44,7 +46,9 @@ export async function deleteImageFile(imageUrl: string | null | undefined): Prom
  * @param imageUrls - Array of image URLs to delete
  * @returns Promise<void>
  */
-export async function deleteImageFiles(imageUrls: (string | null | undefined)[]): Promise<void> {
+export async function deleteImageFiles(
+  imageUrls: (string | null | undefined)[]
+): Promise<void> {
   const promises = imageUrls.filter(Boolean).map(url => deleteImageFile(url));
   await Promise.all(promises);
 }

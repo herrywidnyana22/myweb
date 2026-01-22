@@ -1,54 +1,32 @@
 import { useLocalizedText } from '@/hooks/useLocalizedText';
 import { memo } from 'react';
 
-export default memo(function DialogConfirm({ text, onConfirm, onCancel }: DialogConfirmProps) {
+export default memo(function DialogConfirm({
+  text,
+  onConfirm,
+  onCancel,
+}: DialogConfirmProps) {
   const { getUIText } = useLocalizedText();
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-9999 px-4">
-      <div
-        className="
-          bg-gray-900 
-          p-4 sm:p-6 
-          rounded-xl
-          shadow-lg text-center 
-          border border-white/20 
-          w-full max-w-xs sm:max-w-sm
-          transition-all duration-300
-        "
-      >
+    <div className='fixed inset-0 z-9999 flex items-center justify-center bg-black/50 px-4'>
+      <div className='w-full max-w-xs rounded-xl border border-white/20 bg-gray-900 p-4 text-center shadow-lg transition-all duration-300 sm:max-w-sm sm:p-6'>
         {/* Text */}
-        <p className="text-gray-200 text-sm sm:text-base mb-4 sm:mb-5 leading-relaxed">
+        <p className='mb-4 text-sm leading-relaxed text-gray-200 sm:mb-5 sm:text-base'>
           {text}
         </p>
 
         {/* Buttons */}
-        <div className="flex justify-center gap-3 sm:gap-4">
+        <div className='flex justify-center gap-3 sm:gap-4'>
           <button
             onClick={onCancel}
-            className="
-              px-3 sm:px-4 py-1.5 sm:py-2 
-              bg-gray-600 
-              rounded-md
-              text-white text-sm sm:text-base
-              hover:bg-gray-700 
-              active:scale-[0.98] 
-              transition
-            "
+            className='rounded-md bg-gray-600 px-3 py-1.5 text-sm text-white transition hover:bg-gray-700 active:scale-[0.98] sm:px-4 sm:py-2 sm:text-base'
           >
             {getUIText('cancel')}
           </button>
 
-           <button
+          <button
             onClick={onConfirm}
-            className="
-              px-3 sm:px-4 py-1.5 sm:py-2 
-              bg-red-500 
-              rounded-md sm:rounded-lg 
-              text-white text-sm sm:text-base
-              hover:bg-red-600 
-              active:scale-[0.98] 
-              transition
-            "
+            className='rounded-md bg-red-500 px-3 py-1.5 text-sm text-white transition hover:bg-red-600 active:scale-[0.98] sm:rounded-lg sm:px-4 sm:py-2 sm:text-base'
           >
             {getUIText('confirm')}
           </button>

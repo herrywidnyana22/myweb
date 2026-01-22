@@ -3,15 +3,17 @@ import { MultiLangText, DEFAULT_LANGUAGE } from '@/lib/constants/languages';
 /**
  * Extract all language codes used in MultiLangText objects
  */
-export function extractLanguagesFromMultiLangText(data: MultiLangText | string | null | undefined): string[] {
+export function extractLanguagesFromMultiLangText(
+  data: MultiLangText | string | null | undefined
+): string[] {
   if (!data || typeof data === 'string') {
     return [];
   }
 
   const languages = new Set<string>();
-  
+
   // Check all keys except 'source'
-  Object.keys(data).forEach((key) => {
+  Object.keys(data).forEach(key => {
     if (key !== 'source' && data[key]) {
       languages.add(key);
     }
@@ -36,13 +38,13 @@ export function detectLanguagesFromData(data: {
   // Helper to process a field
   const processField = (field: any) => {
     const langs = extractLanguagesFromMultiLangText(field);
-    langs.forEach((lang) => allLanguages.add(lang));
+    langs.forEach(lang => allLanguages.add(lang));
   };
 
   // Process profiles
   if (data.profiles) {
-    data.profiles.forEach((profile) => {
-      profile.items?.forEach((item) => {
+    data.profiles.forEach(profile => {
+      profile.items?.forEach(item => {
         processField(item.name);
         processField(item.subtitle);
         processField(item.description);
@@ -53,29 +55,29 @@ export function detectLanguagesFromData(data: {
 
   // Process categories
   if (data.categories) {
-    data.categories.forEach((category) => {
+    data.categories.forEach(category => {
       processField(category.name);
     });
   }
 
   // Process contacts
   if (data.contacts) {
-    data.contacts.forEach((contact) => {
-        processField(contact.description);
-        processField(contact.tooltipText);
+    data.contacts.forEach(contact => {
+      processField(contact.description);
+      processField(contact.tooltipText);
     });
   }
 
   // Process educations
   if (data.educations) {
-    data.educations.forEach((education) => {
+    data.educations.forEach(education => {
       processField(education.major);
     });
   }
 
   // Process experiences
   if (data.experiences) {
-    data.experiences.forEach((experience) => {
+    data.experiences.forEach(experience => {
       processField(experience.role);
       processField(experience.jobdesk);
       processField(experience.description);
@@ -84,11 +86,11 @@ export function detectLanguagesFromData(data: {
 
   // Process projects
   if (data.projects) {
-    data.projects.forEach((project) => {
+    data.projects.forEach(project => {
       processField(project.name);
       processField(project.description);
-      
-      project.entries?.forEach((item) => {
+
+      project.entries?.forEach(item => {
         processField(item.name);
         processField(item.tooltipText);
         processField(item.subtitle);
@@ -99,8 +101,10 @@ export function detectLanguagesFromData(data: {
   }
 
   // Remove default language if it's the only one (it's always included)
-  const languages = Array.from(allLanguages).filter((lang) => lang !== DEFAULT_LANGUAGE);
-  
+  const languages = Array.from(allLanguages).filter(
+    lang => lang !== DEFAULT_LANGUAGE
+  );
+
   return languages;
 }
 
@@ -115,7 +119,7 @@ export function isDataEmpty(data: {
   experiences?: Experience[];
   projects?: Project[];
 }): boolean {
-  const hasData = 
+  const hasData =
     (data.profiles && data.profiles.length > 0) ||
     (data.categories && data.categories.length > 0) ||
     (data.contacts && data.contacts.length > 0) ||

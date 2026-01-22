@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import useDataStore from '@/store/data';
 
@@ -7,55 +7,54 @@ import { pdfjs, Document, Page } from 'react-pdf';
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
 
-
 pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-    'pdfjs-dist/build/pdf.worker.min.mjs',
-    import.meta.url,
+  'pdfjs-dist/build/pdf.worker.min.mjs',
+  import.meta.url
 ).toString();
 
 export default function PDFViewer() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [width, setWidth] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState<number | null>(null);
 
-    const { profiles } = useDataStore();
+  const { profiles } = useDataStore();
 
-    const hasProfile = profiles && profiles.length > 0;
-    const resumeURL = hasProfile ? profiles[0].cvURL : null;
+  const hasProfile = profiles && profiles.length > 0;
+  const resumeURL = hasProfile ? profiles[0].cvURL : null;
 
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-        // Initial width
-        setWidth(container.clientWidth - 32); // 32px for padding
+    // Initial width
+    setWidth(container.clientWidth - 32); // 32px for padding
 
-        // ResizeObserver untuk track perubahan ukuran container
-        const resizeObserver = new ResizeObserver(() => {
-            if (container) {
-                setWidth(container.clientWidth - 32);
-            }
-        });
+    // ResizeObserver untuk track perubahan ukuran container
+    const resizeObserver = new ResizeObserver(() => {
+      if (container) {
+        setWidth(container.clientWidth - 32);
+      }
+    });
 
-        resizeObserver.observe(container);
+    resizeObserver.observe(container);
 
-        return () => resizeObserver.disconnect();
-    }, []);
+    return () => resizeObserver.disconnect();
+  }, []);
 
-    return (
-        <div 
-            ref={containerRef}
-            className='size-full bg-white flex justify-center items-start'
-        >
-            {width && (
-                <Document file={resumeURL}>
-                    <Page 
-                        pageNumber={1}
-                        width={width}
-                        renderTextLayer
-                        renderAnnotationLayer
-                    />
-                </Document>
-            )}
-        </div>
-    );
+  return (
+    <div
+      ref={containerRef}
+      className='flex size-full items-start justify-center bg-white'
+    >
+      {width && (
+        <Document file={resumeURL}>
+          <Page
+            pageNumber={1}
+            width={width}
+            renderTextLayer
+            renderAnnotationLayer
+          />
+        </Document>
+      )}
+    </div>
+  );
 }

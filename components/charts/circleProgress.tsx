@@ -10,21 +10,20 @@ export const ProgressCircle = ({
   label,
   className,
 }: CircleProgressProps) => {
-
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const check = () => {
-      setIsMobile(window.matchMedia("(max-width: 640px)").matches);
+      setIsMobile(window.matchMedia('(max-width: 640px)').matches);
     };
     check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
   }, []);
 
   // ukuran menyesuaikan device
-  const radius = isMobile ? 18 : 25;     
-  const stroke = isMobile ? 4 : 6;       
+  const radius = isMobile ? 18 : 25;
+  const stroke = isMobile ? 4 : 6;
   const circumference = 2 * Math.PI * radius;
   const progress = circumference - (value / 100) * circumference;
 
@@ -32,7 +31,7 @@ export const ProgressCircle = ({
     <Tooltip label={`${label} ${value}%`}>
       <div
         className={clsx(
-          'flex flex-col items-center justify-center relative',
+          'relative flex flex-col items-center justify-center',
           className
         )}
       >
@@ -68,12 +67,18 @@ export const ProgressCircle = ({
 
         {/* Value in center */}
         <div className='absolute flex flex-col items-center justify-center'>
-          <span className={clsx(
-            'text-gray-900/90 font-light capitalize',
-            isMobile ? 'text-xs' : 'text-sm'     
-          )}>
+          <span
+            className={clsx(
+              'font-light text-gray-900/90 capitalize',
+              isMobile ? 'text-xs' : 'text-sm'
+            )}
+          >
             {value}
-            <span className={isMobile ? 'text-[10px]' : 'text-xs text-gray-900/70'}>%</span>
+            <span
+              className={isMobile ? 'text-[10px]' : 'text-xs text-gray-900/70'}
+            >
+              %
+            </span>
           </span>
         </div>
       </div>

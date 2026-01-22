@@ -1,9 +1,6 @@
 import { MultiLangText } from '@/lib/constants/languages';
 
-/**
- * Translate text to multiple target languages using the field translation API
- */
-export async function translateField(
+async function translateField(
   text: string,
   targetLanguages: string[],
   sourceLanguage: string = 'id'
@@ -51,7 +48,11 @@ export async function translateFields(
   await Promise.all(
     fields.map(async ({ key, text }) => {
       try {
-        const translations = await translateField(text, targetLanguages, sourceLanguage);
+        const translations = await translateField(
+          text,
+          targetLanguages,
+          sourceLanguage
+        );
         results[key] = translations;
       } catch (error) {
         console.error(`Failed to translate field "${key}":`, error);
@@ -64,9 +65,6 @@ export async function translateFields(
   return results;
 }
 
-/**
- * Validate if a MultiLangText object has all required translations
- */
 export function hasAllTranslations(
   multiLangText: MultiLangText | string,
   requiredLanguages: string[]
@@ -79,14 +77,11 @@ export function hasAllTranslations(
     return false;
   }
 
-  return requiredLanguages.every((lang) => 
-    multiLangText[lang] && multiLangText[lang].trim() !== ''
+  return requiredLanguages.every(
+    lang => multiLangText[lang] && multiLangText[lang].trim() !== ''
   );
 }
 
-/**
- * Get missing translations for a MultiLangText object
- */
 export function getMissingTranslations(
   multiLangText: MultiLangText | string,
   requiredLanguages: string[]
@@ -95,7 +90,7 @@ export function getMissingTranslations(
     return requiredLanguages;
   }
 
-  return requiredLanguages.filter((lang) => 
-    !multiLangText[lang] || multiLangText[lang].trim() === ''
+  return requiredLanguages.filter(
+    lang => !multiLangText[lang] || multiLangText[lang].trim() === ''
   );
 }

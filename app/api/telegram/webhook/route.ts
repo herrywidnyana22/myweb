@@ -1,11 +1,11 @@
-import { NextResponse } from "next/server";
-import { telegramBus } from "@/lib/telegram/sse-bus";
+import { NextResponse } from 'next/server';
+import { telegramBus } from '@/lib/telegram/sse-bus';
 
-export const runtime = "nodejs";
+export const runtime = 'nodejs';
 
 export async function POST(req: Request) {
   const url = new URL(req.url);
-  if (url.searchParams.get("secret") !== process.env.TELEGRAM_WEBHOOK_SECRET) {
+  if (url.searchParams.get('secret') !== process.env.TELEGRAM_WEBHOOK_SECRET) {
     return NextResponse.json({ ok: false }, { status: 403 });
   }
 
@@ -16,11 +16,11 @@ export async function POST(req: Request) {
 
   const payload: TelegramPayload = {
     id: message.message_id,
-    text: message.text ?? "",
-    from: message.from?.username ?? "Telegram User",
+    text: message.text ?? '',
+    from: message.from?.username ?? 'Telegram User',
   };
 
-  telegramBus.emit("telegram-message", payload);
+  telegramBus.emit('telegram-message', payload);
 
   return NextResponse.json({ ok: true });
 }

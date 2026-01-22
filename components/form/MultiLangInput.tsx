@@ -76,7 +76,7 @@ export const MultiLangInput = ({
       }
 
       const data = await response.json();
-      
+
       if (!data.success || !data.translations) {
         throw new Error('Invalid translation response');
       }
@@ -86,7 +86,9 @@ export const MultiLangInput = ({
       onChange(updated);
     } catch (error) {
       console.error('Translation error:', error);
-      alert(`Translation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      alert(
+        `Translation failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     } finally {
       setIsTranslating(false);
     }
@@ -101,41 +103,43 @@ export const MultiLangInput = ({
   const InputComponent = type === 'textarea' ? FormTextarea : FormInput;
 
   return (
-    <div className="space-y-3">
+    <div className='space-y-3'>
       {/* Source Input with Translate Button */}
       <div>
-        <div className="flex items-center justify-between mb-2">
-          <label className="block text-sm font-medium text-gray-700">
+        <div className='mb-2 flex items-center justify-between'>
+          <label className='block text-sm font-medium text-gray-700'>
             {label} (Source)
           </label>
-          
+
           {/* Translate Button */}
           {selectedLanguages.length > 0 && translations.source.trim() && (
             <button
-              type="button"
+              type='button'
               onClick={handleTranslate}
               disabled={disabled || isTranslating}
-              className="flex items-center gap-2 px-3 py-1 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white text-xs font-medium rounded transition-colors shadow-sm"
+              className='flex items-center gap-2 rounded bg-blue-500 px-3 py-1 text-xs font-medium text-white shadow-sm transition-colors hover:bg-blue-600 disabled:bg-gray-400'
             >
               {isTranslating ? (
                 <>
-                  <Loader2 className="size-3 animate-spin" />
+                  <Loader2 className='size-3 animate-spin' />
                   <span>Translating...</span>
                 </>
               ) : (
                 <>
-                  <Languages className="size-3" />
+                  <Languages className='size-3' />
                   <span>Translate</span>
                 </>
               )}
             </button>
           )}
         </div>
-        
+
         <InputComponent
-          label=""
+          label=''
           value={translations.source || ''}
-          onChange={(e) => handleSourceChange(typeof e === 'string' ? e : e.target.value)}
+          onChange={e =>
+            handleSourceChange(typeof e === 'string' ? e : e.target.value)
+          }
           placeholder={placeholder}
           disabled={disabled || isTranslating}
           error={error}
@@ -145,13 +149,13 @@ export const MultiLangInput = ({
 
       {/* Translation Fields */}
       {selectedLanguages.length > 0 && (
-        <div className="pl-4 border-l-2 border-blue-200 space-y-3">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Sparkles className="size-4 text-blue-500" />
-            <span className="font-medium">AI Translations (editable)</span>
+        <div className='space-y-3 border-l-2 border-blue-200 pl-4'>
+          <div className='flex items-center gap-2 text-sm text-gray-600'>
+            <Sparkles className='size-4 text-blue-500' />
+            <span className='font-medium'>AI Translations (editable)</span>
           </div>
-          
-          {selectedLanguages.map((langCode) => {
+
+          {selectedLanguages.map(langCode => {
             const langInfo = getLanguageInfo(langCode);
             if (!langInfo) return null;
 
@@ -160,7 +164,12 @@ export const MultiLangInput = ({
                 key={langCode}
                 label={`${langInfo.flag} ${langInfo.name}`}
                 value={translations[langCode] || ''}
-                onChange={(val) => handleTranslationEdit(langCode, typeof val === 'string' ? val : val.target.value)}
+                onChange={val =>
+                  handleTranslationEdit(
+                    langCode,
+                    typeof val === 'string' ? val : val.target.value
+                  )
+                }
                 placeholder={`${label} in ${langInfo.name}`}
                 disabled={disabled}
                 {...(type === 'textarea' ? { rows } : {})}
@@ -171,7 +180,7 @@ export const MultiLangInput = ({
       )}
 
       {selectedLanguages.length === 0 && translations.source && (
-        <p className="text-xs text-gray-500 italic">
+        <p className='text-xs text-gray-500 italic'>
           Select languages above to enable translation
         </p>
       )}

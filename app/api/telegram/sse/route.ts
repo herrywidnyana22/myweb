@@ -1,7 +1,7 @@
-import { telegramBus } from "@/lib/telegram/sse-bus";
-import { NextResponse } from "next/server";
+import { telegramBus } from '@/lib/telegram/sse-bus';
+import { NextResponse } from 'next/server';
 
-export const runtime = "nodejs";
+export const runtime = 'nodejs';
 
 interface SSEController extends ReadableStreamDefaultController<Uint8Array> {
   cleanup?: () => void;
@@ -27,22 +27,22 @@ export async function GET() {
       };
 
       // initial ping
-      send("event: ping\ndata: connected\n\n");
+      send('event: ping\ndata: connected\n\n');
 
       // telegram → website
       const handler = (payload: TelegramPayload) => {
         send(`event: message\ndata: ${JSON.stringify(payload)}\n\n`);
       };
 
-      telegramBus.on("telegram-message", handler);
+      telegramBus.on('telegram-message', handler);
 
       // keepalive ping
       const interval = setInterval(() => {
-        send("event: ping\ndata: keepalive\n\n");
+        send('event: ping\ndata: keepalive\n\n');
       }, 15000);
 
       ctrl.cleanup = () => {
-        telegramBus.off("telegram-message", handler);
+        telegramBus.off('telegram-message', handler);
         clearInterval(interval);
         closed = true;
       };
@@ -56,9 +56,9 @@ export async function GET() {
 
   return new NextResponse(stream, {
     headers: {
-      "Content-Type": "text/event-stream",
-      "Cache-Control": "no-cache",
-      Connection: "keep-alive",
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
     },
   });
 }

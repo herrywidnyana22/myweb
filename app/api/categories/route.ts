@@ -3,7 +3,6 @@ import { successResponse, errorResponse } from '@/lib/api-response';
 import { verifyToken } from '@/lib/jwt';
 import { cookies } from 'next/headers';
 
-
 async function authenticateRequest(
   req: Request
 ): Promise<{ username: string } | null> {
@@ -38,7 +37,7 @@ export async function GET() {
   } catch (error) {
     console.error('Error fetching categories:', error);
     return errorResponse('Failed to fetch categories', 500, error as Error);
-  } 
+  }
 }
 
 export async function POST(req: Request) {
@@ -74,4 +73,3 @@ export async function POST(req: Request) {
     return errorResponse('Failed to create category', 500, error as Error);
   }
 }
-

@@ -45,10 +45,23 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { company, role, location, start, end, jobdesk, description, icon, categoryId } = body;
+    const {
+      company,
+      role,
+      location,
+      start,
+      end,
+      jobdesk,
+      description,
+      icon,
+      categoryId,
+    } = body;
 
     if (!company || !role || !location || !start || !end || !categoryId) {
-      return errorResponse('Company, role, location, start, end, and categoryId are required', 400);
+      return errorResponse(
+        'Company, role, location, start, end, and categoryId are required',
+        400
+      );
     }
 
     const experience = await prisma.experience.create({

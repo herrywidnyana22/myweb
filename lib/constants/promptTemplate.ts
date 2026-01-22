@@ -1,4 +1,3 @@
-
 import {
   languageRule,
   contextRules,
@@ -13,7 +12,6 @@ import {
 const today = new Date();
 const todayStr = today.toDateString(); // contoh: "Sun Nov 02 2025"
 
-
 export const buildPrompt = ({
   message,
   memory,
@@ -26,7 +24,7 @@ export const buildPrompt = ({
   language,
   chatMode,
   action,
-}: BuildPromptProps ) => `
+}: BuildPromptProps) => `
 
 User Message:
 "${message}"

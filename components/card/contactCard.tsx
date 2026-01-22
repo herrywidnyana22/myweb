@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,27 +11,19 @@ export const ContactCard = (card: Contact) => {
   const localizedTooltip = getText(card.tooltipText);
 
   return (
-    <div
-      className="
-        w-full flex items-center 
-        gap-2 sm:gap-4 
-        rounded-lg sm:rounded-xl 
-        transition 
-        p-1.5 sm:p-2
-      "
-    >
+    <div className='flex w-full items-center gap-2 rounded-lg p-1.5 transition sm:gap-4 sm:rounded-xl sm:p-2'>
       {card.icon && typeof card.icon === 'string' && (
         <Image
           src={card.icon}
           alt={card.title}
           width={36}
           height={36}
-          className="object-contain size-8 sm:size-10"
+          className='size-8 object-contain sm:size-10'
         />
       )}
 
-      <div className="flex flex-col min-w-0">
-        <span className="text-sm font-medium text-gray-700 capitalize truncate">
+      <div className='flex min-w-0 flex-col'>
+        <span className='truncate text-sm font-medium text-gray-700 capitalize'>
           {parseHighlight(card.title || '')}
         </span>
 
@@ -39,22 +31,16 @@ export const ContactCard = (card: Contact) => {
           <Link
             title={localizedTooltip || localizedDescription}
             href={card.contactURL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              text-sky-600 hover:underline truncate
-              text-sm
-            "
+            target='_blank'
+            rel='noopener noreferrer'
+            className='truncate text-sm text-sky-600 hover:underline'
           >
             {parseHighlight(localizedDescription)}
           </Link>
         ) : (
           <span
             title={localizedTooltip || localizedDescription}
-            className="
-              text-gray-600 truncate
-              text-sm
-            "
+            className='truncate text-sm text-gray-600'
           >
             {parseHighlight(localizedDescription)}
           </span>

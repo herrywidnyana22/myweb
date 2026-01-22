@@ -6,9 +6,7 @@ export async function rateLimit() {
   const now = Date.now();
 
   if (now - lastCall < MIN_INTERVAL) {
-    await new Promise(res => setTimeout(
-      res, MIN_INTERVAL - (now - lastCall)
-    ));
+    await new Promise(res => setTimeout(res, MIN_INTERVAL - (now - lastCall)));
   }
 
   lastCall = Date.now();
@@ -21,11 +19,11 @@ export async function retry<T>(fn: () => Promise<T>, tries = 3): Promise<T> {
   } catch (err: any) {
     const overloaded =
       err?.error?.code === 503 ||
-      err?.error?.status === "UNAVAILABLE" ||
-      String(err).includes("overloaded");
+      err?.error?.status === 'UNAVAILABLE' ||
+      String(err).includes('overloaded');
 
     if (tries > 0 && overloaded) {
-      console.warn("⚠️ Gemini overloaded ⇒ retry...");
+      console.warn('⚠️ Gemini overloaded ⇒ retry...');
       await new Promise(res => setTimeout(res, 500));
       return retry(fn, tries - 1);
     }

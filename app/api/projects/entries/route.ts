@@ -1,5 +1,4 @@
 import prisma from '@/lib/prisma';
-import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
 import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
@@ -85,7 +84,11 @@ export async function POST(req: Request) {
       },
     });
 
-    return successResponse(projectEntry, 'Project entry created successfully', 201);
+    return successResponse(
+      projectEntry,
+      'Project entry created successfully',
+      201
+    );
   } catch (error) {
     console.error('Error creating project entry:', error);
     return errorResponse('Failed to create project entry', 500, error as Error);

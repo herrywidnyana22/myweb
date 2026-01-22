@@ -1,5 +1,4 @@
-
-import prisma from "@/lib/prisma";
+import prisma from '@/lib/prisma';
 import { successResponse, errorResponse } from '@/lib/api-response';
 
 export async function GET() {
@@ -22,7 +21,7 @@ export async function GET() {
 
     return successResponse(formatted, 'Address fetched successfully');
   } catch (error) {
-    console.error("Address API Error:", error);
+    console.error('Address API Error:', error);
     return errorResponse('Failed to fetch address', 500, error as Error);
   }
 }

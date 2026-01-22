@@ -1,6 +1,6 @@
-import clsx from "clsx";
-import { useState } from "react";
-import { createPortal } from "react-dom";
+import clsx from 'clsx';
+import { useState } from 'react';
+import { createPortal } from 'react-dom';
 
 export const Tooltip = ({
   children,
@@ -20,13 +20,13 @@ export const Tooltip = ({
     setVisible(true);
   };
 
-  const isHexBg = bgColor?.startsWith("#");
-  const isHexText = textColor?.startsWith("#");
+  const isHexBg = bgColor?.startsWith('#');
+  const isHexText = textColor?.startsWith('#');
 
   return (
     <>
       <div
-        className="relative inline-block"
+        className='relative inline-block'
         onMouseEnter={handleMouseEnter}
         onMouseLeave={() => setVisible(false)}
       >
@@ -37,19 +37,19 @@ export const Tooltip = ({
         createPortal(
           <div
             style={{
-              position: "fixed",
+              position: 'fixed',
               top: coords.top,
               left: coords.left,
-              transform: "translate(-50%, -100%)",
+              transform: 'translate(-50%, -100%)',
             }}
-            className="z-99999 pointer-events-none"
+            className='pointer-events-none z-99999'
           >
             <div
               className={clsx(
-                "relative px-3 py-1 text-xs rounded-md shadow-2xl max-w-45 text-center whitespace-normal wrap-break-word",
+                'relative max-w-45 rounded-md px-3 py-1 text-center text-xs wrap-break-word whitespace-normal shadow-2xl',
                 // tailwind bg / text kalau **bukan** hex
-                !isHexBg && (bgColor ?? "bg-orange-100"),
-                !isHexText && (textColor ?? "text-orange-700")
+                !isHexBg && (bgColor ?? 'bg-orange-100'),
+                !isHexText && (textColor ?? 'text-orange-700')
               )}
               style={{
                 // kalau hex → pakai inline style
@@ -62,12 +62,12 @@ export const Tooltip = ({
               {/* 🔻 ARROW */}
               <span
                 className={clsx(
-                  "absolute left-1/2 top-full -translate-x-1/2",
-                  "size-0 border-l-[6px] border-l-transparent",
-                  "border-r-[6px] border-r-transparent",
-                  "border-t-[6px]",
+                  'absolute top-full left-1/2 -translate-x-1/2',
+                  'size-0 border-l-[6px] border-l-transparent',
+                  'border-r-[6px] border-r-transparent',
+                  'border-t-[6px]',
                   // kalau **bukan** hex → pakai warna default tailwind
-                  !isHexBg && "border-t-orange-100"
+                  !isHexBg && 'border-t-orange-100'
                 )}
                 style={
                   isHexBg

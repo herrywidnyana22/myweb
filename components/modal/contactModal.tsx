@@ -30,10 +30,11 @@ export function ContactModal({
   categories,
 }: ContactModalProps) {
   const [formData, setFormData] = useState<Contact>(
-    (contact as Contact) || ({
-      id: '',
-      ...DEFAULT_CONTACT,
-    } as Contact)
+    (contact as Contact) ||
+      ({
+        id: '',
+        ...DEFAULT_CONTACT,
+      } as Contact)
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -59,17 +60,19 @@ export function ContactModal({
   }, [contact, isOpen]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [name]: value,
     }));
   };
 
   const handleMultiLangChange = (field: string, value: MultiLangText) => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [field]: value,
     }));
@@ -94,7 +97,7 @@ export function ContactModal({
       }
 
       const data = result.data as { url: string };
-      setFormData((prev) => ({ ...prev, icon: data.url }));
+      setFormData(prev => ({ ...prev, icon: data.url }));
       setIconPreview(data.url);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to upload image');
@@ -153,93 +156,95 @@ export function ContactModal({
   if (!isOpen) return null;
 
   return (
-    <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-    >
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[80vh] overflow-y-auto">
+    <div className='bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4'>
+      <div className='max-h-[80vh] w-full max-w-md overflow-y-auto rounded-lg bg-white shadow-xl'>
         <ModalHeader
           title={contact ? 'Edit Contact' : 'Add Contact'}
           onClose={handleCloseModal}
           disabled={isSubmitting}
         />
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className='space-y-6 p-6'>
           <FormError message={error} />
 
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <FormSelect
-              label="Category"
+              label='Category'
               required
-              name="categoryId"
+              name='categoryId'
               value={formData.categoryId}
               onChange={handleChange}
               disabled={isSubmitting}
               options={[
                 { value: '', label: 'Select a category' },
-                ...(Array.isArray(categories) ? categories : []).map(cat => ({ value: cat.id, label: typeof cat.name === 'string' ? cat.name : getText(cat.name) }))
+                ...(Array.isArray(categories) ? categories : []).map(cat => ({
+                  value: cat.id,
+                  label:
+                    typeof cat.name === 'string' ? cat.name : getText(cat.name),
+                })),
               ]}
             />
 
             <FormInput
-              label="Title"
+              label='Title'
               required
-              type="text"
-              name="title"
+              type='text'
+              name='title'
               value={formData.title}
               onChange={handleChange}
-              placeholder="e.g., Email, GitHub, LinkedIn"
+              placeholder='e.g., Email, GitHub, LinkedIn'
               disabled={isSubmitting}
             />
 
             <MultiLangInput
-              label="Description"
+              label='Description'
               value={formData.description || createMultiLangText('')}
-              onChange={(val) => handleMultiLangChange('description', val)}
+              onChange={val => handleMultiLangChange('description', val)}
               selectedLanguages={selectedTranslationLanguages}
-              placeholder="e.g., testing@gmail.com, 123-456-7890"
+              placeholder='e.g., testing@gmail.com, 123-456-7890'
               disabled={isSubmitting}
-              type="input"
+              type='input'
               getLanguageInfo={getLanguageInfo}
             />
 
             <MultiLangInput
-              label="Tooltip Text"
+              label='Tooltip Text'
               value={formData.tooltipText || createMultiLangText('')}
-              onChange={(val) => handleMultiLangChange('tooltipText', val)}
+              onChange={val => handleMultiLangChange('tooltipText', val)}
               selectedLanguages={selectedTranslationLanguages}
-              placeholder="e.g., Click to send email"
+              placeholder='e.g., Click to send email'
               disabled={isSubmitting}
-              type="input"
+              type='input'
               getLanguageInfo={getLanguageInfo}
             />
 
             <FormInput
-              label="Contact URL"
-              type="url"
-              name="contactURL"
+              label='Contact URL'
+              type='url'
+              name='contactURL'
               value={formData.contactURL}
               onChange={handleChange}
-              placeholder="e.g., https://github.com/username"
+              placeholder='e.g., https://github.com/username'
               disabled={isSubmitting}
             />
 
             <FormInput
-              label="Background Color"
-              type="text"
-              name="bgColor"
+              label='Background Color'
+              type='text'
+              name='bgColor'
               value={formData.bgColor}
               onChange={handleChange}
-              placeholder="e.g., #0066cc or bg-blue-500"
+              placeholder='e.g., #0066cc or bg-blue-500'
               disabled={isSubmitting}
             />
 
             <FormImageUpload
-              label="Icon"
+              label='Icon'
               imagePreview={iconPreview}
               isUploading={isUploadingIcon}
               onUpload={handleImageUpload}
               onRemove={() => {
-                setFormData((prev) => ({ ...prev, icon: undefined }));
+                setFormData(prev => ({ ...prev, icon: undefined }));
                 setIconPreview(null);
               }}
               disabled={isSubmitting}
@@ -249,7 +254,7 @@ export function ContactModal({
           <ModalActions
             isSubmitting={isSubmitting}
             onCancel={handleCloseModal}
-            submitLabel="Save Contact"
+            submitLabel='Save Contact'
           />
         </form>
       </div>

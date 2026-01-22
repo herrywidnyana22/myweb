@@ -14,7 +14,9 @@ export async function createToken(username: string): Promise<string> {
   return token;
 }
 
-export async function verifyToken(token: string): Promise<{ username: string } | null> {
+export async function verifyToken(
+  token: string
+): Promise<{ username: string } | null> {
   try {
     const verified = await jwtVerify(token, secret);
     return verified.payload as { username: string };

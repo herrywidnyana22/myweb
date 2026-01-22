@@ -39,10 +39,11 @@ export const ProjectModal = ({
   categories = [],
 }: ProjectModalProps) => {
   const [formData, setFormData] = useState<Project>(
-    (project as Project) || ({
-      id: '',
-      ...DEFAULT_PROJECT,
-    } as Project)
+    (project as Project) ||
+      ({
+        id: '',
+        ...DEFAULT_PROJECT,
+      } as Project)
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -81,17 +82,19 @@ export const ProjectModal = ({
   }, [project, isOpen]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [name]: value,
     }));
   };
 
   const handleMultiLangChange = (field: string, value: MultiLangText) => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [field]: value,
     }));
@@ -121,10 +124,10 @@ export const ProjectModal = ({
 
       const data = result.data as { url: string };
       if (type === 'icon') {
-        setFormData((prev) => ({ ...prev, icon: data.url }));
+        setFormData(prev => ({ ...prev, icon: data.url }));
         setIconPreview(data.url);
       } else {
-        setFormData((prev) => ({ ...prev, subIcon: data.url }));
+        setFormData(prev => ({ ...prev, subIcon: data.url }));
         setSubIconPreview(data.url);
       }
     } catch (err) {
@@ -279,173 +282,174 @@ export const ProjectModal = ({
 
   if (!isOpen) return null;
 
-
   return (
-    <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-    >
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className='bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4'>
+      <div className='max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white shadow-xl'>
         <ModalHeader
           title={project ? 'Edit Project' : 'Add Project'}
           onClose={handleCloseModal}
           disabled={isSubmitting}
         />
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className='space-y-6 p-6'>
           <FormError message={error} />
 
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <FormSelect
-              label="Category"
+              label='Category'
               required
-              name="categoryId"
+              name='categoryId'
               value={formData.categoryId}
               onChange={handleChange}
               options={[
                 { value: '', label: 'Select a category' },
-                ...(Array.isArray(categories) ? categories : []).map((cat) => ({
+                ...(Array.isArray(categories) ? categories : []).map(cat => ({
                   value: cat.id,
-                  label: typeof cat.name === 'string' ? cat.name : getText(cat.name),
+                  label:
+                    typeof cat.name === 'string' ? cat.name : getText(cat.name),
                 })),
               ]}
               disabled={isSubmitting}
             />
 
             <MultiLangInput
-              label="Project Name"
+              label='Project Name'
               value={formData.name || createMultiLangText('')}
-              onChange={(val) => handleMultiLangChange('name', val)}
+              onChange={val => handleMultiLangChange('name', val)}
               selectedLanguages={selectedTranslationLanguages}
-              placeholder="e.g., MyDrive"
+              placeholder='e.g., MyDrive'
               disabled={isSubmitting}
-              type="input"
+              type='input'
               getLanguageInfo={getLanguageInfo}
             />
 
             <MultiLangInput
-              label="Tooltip Text"
+              label='Tooltip Text'
               value={formData.tooltipText || createMultiLangText('')}
-              onChange={(val) => handleMultiLangChange('tooltipText', val)}
+              onChange={val => handleMultiLangChange('tooltipText', val)}
               selectedLanguages={selectedTranslationLanguages}
-              placeholder="e.g., Cloud Storage Project"
+              placeholder='e.g., Cloud Storage Project'
               disabled={isSubmitting}
-              type="input"
+              type='input'
               getLanguageInfo={getLanguageInfo}
             />
 
             <FormInput
-              label="Demo URL"
-              type="url"
-              name="demoURL"
+              label='Demo URL'
+              type='url'
+              name='demoURL'
               value={formData.demoURL || ''}
               onChange={handleChange}
-              placeholder="e.g., https://demo.example.com"
+              placeholder='e.g., https://demo.example.com'
               disabled={isSubmitting}
             />
 
             <FormInput
-              label="Repository URL"
-              type="url"
-              name="repoURL"
+              label='Repository URL'
+              type='url'
+              name='repoURL'
               value={formData.repoURL || ''}
               onChange={handleChange}
-              placeholder="e.g., https://github.com/username/project"
+              placeholder='e.g., https://github.com/username/project'
               disabled={isSubmitting}
             />
 
             <FormInput
-              label="Progress Value (%)"
-              type="number"
-              name="progressValue"
+              label='Progress Value (%)'
+              type='number'
+              name='progressValue'
               value={formData.progressValue || 0}
               onChange={handleChange}
-              placeholder="0-100"
-              min="0"
-              max="100"
+              placeholder='0-100'
+              min='0'
+              max='100'
               disabled={isSubmitting}
             />
 
             <FormImageUpload
-              label="Project Icon"
+              label='Project Icon'
               imagePreview={iconPreview}
               isUploading={isUploadingIcon}
-              onUpload={(file) => handleImageUpload(file, 'icon')}
+              onUpload={file => handleImageUpload(file, 'icon')}
               onRemove={() => {
-                setFormData((prev) => ({ ...prev, icon: '' }));
+                setFormData(prev => ({ ...prev, icon: '' }));
                 setIconPreview(null);
               }}
               disabled={isSubmitting}
             />
 
             <FormImageUpload
-              label="Sub Icon (for Explorer view)"
+              label='Sub Icon (for Explorer view)'
               imagePreview={subIconPreview}
               isUploading={isUploadingSubIcon}
-              onUpload={(file) => handleImageUpload(file, 'subIcon')}
+              onUpload={file => handleImageUpload(file, 'subIcon')}
               onRemove={() => {
-                setFormData((prev) => ({ ...prev, subIcon: undefined }));
+                setFormData(prev => ({ ...prev, subIcon: undefined }));
                 setSubIconPreview(null);
               }}
               disabled={isSubmitting}
             />
 
             <MultiLangInput
-              label="Highlighted Description"
+              label='Highlighted Description'
               value={formData.description || createMultiLangText('')}
-              onChange={(val) => handleMultiLangChange('description', val)}
+              onChange={val => handleMultiLangChange('description', val)}
               selectedLanguages={selectedTranslationLanguages}
-              placeholder="Enter the project highlighted description"
+              placeholder='Enter the project highlighted description'
               disabled={isSubmitting}
-              type="textarea"
+              type='textarea'
               rows={5}
               getLanguageInfo={getLanguageInfo}
             />
 
             {/* Tech Stack Section */}
-            <div className="space-y-3">
-              <label className="block text-sm font-medium text-gray-700">
+            <div className='space-y-3'>
+              <label className='block text-sm font-medium text-gray-700'>
                 Tech Stack
               </label>
-              
+
               {/* Existing Tech Stack Items */}
               {techStack.map((tech, index) => (
-                <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-                  <div className="relative">
+                <div
+                  key={index}
+                  className='flex items-center gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3'
+                >
+                  <div className='relative'>
                     {tech.techIcon ? (
                       <Image
                         src={tech.techIcon}
                         alt={tech.label}
                         width={32}
                         height={32}
-                        className="rounded object-contain"
+                        className='rounded object-contain'
                       />
                     ) : (
-                      <div className="w-8 h-8 bg-gray-300 rounded" />
+                      <div className='h-8 w-8 rounded bg-gray-300' />
                     )}
                     <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
+                      type='file'
+                      accept='image/*'
+                      onChange={e => {
                         const file = e.target.files?.[0];
                         if (file) handleTechIconUpload(file, index);
                       }}
                       disabled={isSubmitting || isUploadingTechIcon}
-                      className="absolute inset-0 opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                      className='absolute inset-0 cursor-pointer opacity-0 disabled:cursor-not-allowed'
                     />
                   </div>
                   <input
-                    type="text"
+                    type='text'
                     value={tech.label}
-                    onChange={(e) => handleUpdateTechLabel(index, e.target.value)}
-                    placeholder="e.g., React.js"
+                    onChange={e => handleUpdateTechLabel(index, e.target.value)}
+                    placeholder='e.g., React.js'
                     disabled={isSubmitting}
-                    className="flex-1 px-3 py-2 border text-gray-700 border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    className='focus:ring-primary flex-1 rounded-lg border border-gray-300 px-3 py-2 text-gray-700 outline-none focus:border-transparent focus:ring-2 disabled:cursor-not-allowed disabled:bg-gray-100'
                   />
                   <button
-                    type="button"
+                    type='button'
                     onClick={() => handleRemoveTechStack(index)}
                     disabled={isSubmitting}
-                    className="text-error hover:text-error-dark disabled:opacity-50"
+                    className='text-error hover:text-error-dark disabled:opacity-50'
                   >
                     <X size={20} />
                   </button>
@@ -453,15 +457,17 @@ export const ProjectModal = ({
               ))}
 
               {/* Add New Tech Stack */}
-              <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 border-dashed">
-                <label className="relative cursor-pointer disabled:cursor-not-allowed">
-                  <div className={`size-8 bg-gray-300 rounded flex items-center justify-center text-gray-500 text-xs ${isUploadingTechIcon ? 'opacity-50' : ''}`}>
+              <div className='flex items-center gap-3 rounded-lg border border-dashed border-gray-200 bg-gray-50 p-3'>
+                <label className='relative cursor-pointer disabled:cursor-not-allowed'>
+                  <div
+                    className={`flex size-8 items-center justify-center rounded bg-gray-300 text-xs text-gray-500 ${isUploadingTechIcon ? 'opacity-50' : ''}`}
+                  >
                     {isUploadingTechIcon ? '...' : '+'}
                   </div>
                   <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
+                    type='file'
+                    accept='image/*'
+                    onChange={e => {
                       const file = e.target.files?.[0];
                       if (file && newTechLabel.trim()) {
                         handleAddTechStack(file);
@@ -469,17 +475,21 @@ export const ProjectModal = ({
                         setError('Please enter a tech name first');
                       }
                     }}
-                    disabled={isSubmitting || isUploadingTechIcon || !newTechLabel.trim()}
-                    className="hidden"
+                    disabled={
+                      isSubmitting ||
+                      isUploadingTechIcon ||
+                      !newTechLabel.trim()
+                    }
+                    className='hidden'
                   />
                 </label>
                 <input
-                  type="text"
+                  type='text'
                   value={newTechLabel}
-                  onChange={(e) => setNewTechLabel(e.target.value)}
-                  placeholder="Enter tech name, then click + icon to upload"
+                  onChange={e => setNewTechLabel(e.target.value)}
+                  placeholder='Enter tech name, then click + icon to upload'
                   disabled={isSubmitting || isUploadingTechIcon}
-                  className="flex-1 px-3 py-2 text-gray-700 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none disabled:bg-gray-100 disabled:cursor-not-allowed "
+                  className='focus:ring-primary flex-1 rounded-lg border border-gray-300 px-3 py-2 text-gray-700 outline-none focus:border-transparent focus:ring-2 disabled:cursor-not-allowed disabled:bg-gray-100'
                 />
               </div>
             </div>
@@ -488,11 +498,10 @@ export const ProjectModal = ({
           <ModalActions
             isSubmitting={isSubmitting}
             onCancel={handleCloseModal}
-            submitLabel="Save Project"
+            submitLabel='Save Project'
           />
         </form>
       </div>
     </div>
   );
-}
-
+};

@@ -6,14 +6,21 @@ import { useAppStore } from '@/store/app';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLayoutEffect, useRef, useState } from 'react';
 
-export const WidgetItem = ({ dockTarget, isOpen, children, className }: WidgetProps) => {
+export const WidgetItem = ({
+  dockTarget,
+  isOpen,
+  children,
+  className,
+}: WidgetProps) => {
+  const { isMinimized, messages } = useAppStore();
 
-  const {isMinimized, messages} = useAppStore();
-
-  const isChatMaximized=!isMinimized && messages.length > 0
+  const isChatMaximized = !isMinimized && messages.length > 0;
 
   const ref = useRef<HTMLDivElement | null>(null);
-  const [offset, setOffset] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+  const [offset, setOffset] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
 
   const computeOffset = () => {
     if (!dockTarget || !ref.current) return { x: 0, y: 0 };
@@ -27,14 +34,13 @@ export const WidgetItem = ({ dockTarget, isOpen, children, className }: WidgetPr
 
   useLayoutEffect(() => {
     if (!isOpen) return;
-    
+
     const next = computeOffset();
     setOffset(next);
     const onResize = () => setOffset(computeOffset());
     window.addEventListener('resize', onResize);
 
-    return () => window.removeEventListener('resize', onResize)
-
+    return () => window.removeEventListener('resize', onResize);
   }, [isOpen, dockTarget]);
 
   return (
@@ -64,7 +70,7 @@ export const WidgetItem = ({ dockTarget, isOpen, children, className }: WidgetPr
           }}
           transition={{ duration: 0.4, ease: 'easeOut' }}
           className={clsx(
-            'relative bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl sm:rounded-2xl shadow-2xl w-full max-w-3xl md:max-w-4xl lg:max-w-5xl mx-auto max-h-[70vh] overflow-auto',
+            'relative mx-auto max-h-[70vh] w-full max-w-3xl overflow-auto rounded-2xl border border-white/20 bg-white/10 shadow-2xl backdrop-blur-2xl sm:rounded-2xl md:max-w-4xl lg:max-w-5xl',
             className
           )}
         >

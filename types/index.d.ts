@@ -1,11 +1,19 @@
-
-declare type UILanguage = string
-declare type Action = "language" | "telegram"
-declare type ConfirmAction = 'yes' | 'no'
-declare type ChatMode = "default" | "telegram"
+declare type UILanguage = string;
+declare type Action = 'language' | 'telegram';
+declare type ConfirmAction = 'yes' | 'no';
+declare type ChatMode = 'default' | 'telegram';
 declare type ChatRole = 'user' | 'bot' | 'herry_telegram' | 'bot_telegram';
 declare type WindowControlAction = 'close' | 'minimize' | 'maximize';
-declare type FileType = 'PROJECT_INFO' | 'TECHSTACK' | 'FIG' | 'URL' | 'TXT' | 'IMG' | 'PDF' | 'OTHER' | 'CONTACT';
+declare type FileType =
+  | 'PROJECT_INFO'
+  | 'TECHSTACK'
+  | 'FIG'
+  | 'URL'
+  | 'TXT'
+  | 'IMG'
+  | 'PDF'
+  | 'OTHER'
+  | 'CONTACT';
 declare type FileKind = 'FOLDER' | 'FILE';
 
 declare interface AppContextProps {
@@ -28,10 +36,14 @@ declare interface AppContextProps {
   setIsInputFocused: React.Dispatch<React.SetStateAction<boolean>>;
 
   openedDockId: Record<string, boolean>;
-  setOpenedDockId: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  setOpenedDockId: React.Dispatch<
+    React.SetStateAction<Record<string, boolean>>
+  >;
 
   targetedDockId: Record<string, DOMRect | null>;
-  setTargetedDockId: React.Dispatch<React.SetStateAction<Record<string, DOMRect | null>>>;
+  setTargetedDockId: React.Dispatch<
+    React.SetStateAction<Record<string, DOMRect | null>>
+  >;
 }
 
 type Updater<T> = T | ((prev: T) => T);
@@ -53,10 +65,15 @@ declare interface AppStore {
   setIsMinimized: (v: Updater<boolean>) => void;
   setIsInputFocused: (v: boolean) => void;
 
-  setOpenedDockId: (updater: (prev: Record<string, boolean>) => Record<string, boolean>) => void;
-  setTargetedDockId: (updater: (prev: Record<string, DOMRect | null>) => Record<string, DOMRect | null>) => void;
+  setOpenedDockId: (
+    updater: (prev: Record<string, boolean>) => Record<string, boolean>
+  ) => void;
+  setTargetedDockId: (
+    updater: (
+      prev: Record<string, DOMRect | null>
+    ) => Record<string, DOMRect | null>
+  ) => void;
 }
-
 
 declare type WindowKey = keyof typeof WINDOW_CONFIG;
 
@@ -75,7 +92,7 @@ declare interface WindowStore {
 
 declare type WindowControlProps = {
   target: WindowKey;
-}
+};
 
 declare type LocationKey = keyof typeof locations;
 declare type LocationValue = (typeof locations)[LocationKey];
@@ -97,7 +114,7 @@ declare type DataItemProps =
 
 // Import MultiLangText type for multilingual fields
 type MultiLangText = import('@/lib/constants/languages').MultiLangText;
-  
+
 declare interface Category {
   id: string;
   name: string | MultiLangText; // Multilingual (JsonValue from Prisma can be null)
@@ -259,7 +276,7 @@ declare interface DefaultCardData {
 declare interface ActionCardProps {
   action: Action;
   targetLanguage?: UILanguage;
-  message?: string; 
+  message?: string;
 }
 
 declare interface BuildPromptProps {
@@ -271,11 +288,10 @@ declare interface BuildPromptProps {
   educations: Education[];
   experiences: Experience[];
   memory?: ChatMemory;
-  language: UILanguage,
-  chatMode: ChatMode
-  action: Action
+  language: UILanguage;
+  chatMode: ChatMode;
+  action: Action;
 }
-
 
 declare interface PortfolioCache {
   profile: Profile | null;
@@ -303,7 +319,7 @@ declare interface ChatStore {
 }
 
 declare interface ChatResponseProps {
-  role: ChatRole
+  role: ChatRole;
   text?: string;
   cards?: DataItemProps[];
   isStreaming?: boolean;
@@ -319,10 +335,10 @@ declare interface ChatMemory {
 
 declare interface ChatInputProps {
   input: string;
-  setInput: React.Dispatch<React.SetStateAction<string>>
-  sendMessage: (e: React.FormEvent) => Promise<void>
-  isActive?: boolean
-  disabled?: boolean
+  setInput: React.Dispatch<React.SetStateAction<string>>;
+  sendMessage: (e: React.FormEvent) => Promise<void>;
+  isActive?: boolean;
+  disabled?: boolean;
 }
 
 declare interface DialogConfirmProps {
@@ -357,8 +373,8 @@ declare interface BarProgressProps {
 declare interface TooltipProps {
   children: ReactNode;
   label: string;
-  bgColor?: string
-  textColor?: string
+  bgColor?: string;
+  textColor?: string;
 }
 
 declare interface IconProps {
@@ -392,7 +408,10 @@ declare interface TelegramUser {
   username?: string;
 }
 
-declare interface TelegramChat { id: number; type: ChatType; }
+declare interface TelegramChat {
+  id: number;
+  type: ChatType;
+}
 
 declare interface TelegramMessage {
   message_id: number;
@@ -417,21 +436,21 @@ declare interface TelegramPayload {
 declare type FlagIconProps = {
   code: string;
   flagCode?: string;
-  size?: number; 
-}
+  size?: number;
+};
 
 declare type ChatTelegramProps = {
-  message: string
-  headerText: string
-  className?: string
-  icon: LucideIcon
-}
+  message: string;
+  headerText: string;
+  className?: string;
+  icon: LucideIcon;
+};
 
 declare type MenuProps = {
   items: LocationValue[];
-  title: string
-  className?: string
-  activeLocation?:LocationValue
+  title: string;
+  className?: string;
+  activeLocation?: LocationValue;
   onClick?: (item: LocationValue) => void;
 };
 
@@ -450,18 +469,18 @@ declare type LocationItem = {
 };
 
 declare type ResumeWindowProps = {
-    resumeURL: string
-}
+  resumeURL: string;
+};
 
 declare type TextRenderProps = {
-    text: string
-    className?: string
-    weight?: number
-}
+  text: string;
+  className?: string;
+  weight?: number;
+};
 
 declare type SetHoverText = (
-    container: HTMLElement | null,
-    type: HoverTextType
+  container: HTMLElement | null,
+  type: HoverTextType
 ) => (() => void) | void;
 
 declare type FontWeightMap = Record<string, FontWeightConfig>;
@@ -481,10 +500,10 @@ declare interface ModalHeaderProps {
 }
 
 declare interface ProfileDashboardProps {
-    categories: Category[];
-    data: Profile[];
-    setData: Dispatch<SetStateAction<Profile[]>>;
-    isDataLoading?: boolean;
+  categories: Category[];
+  data: Profile[];
+  setData: Dispatch<SetStateAction<Profile[]>>;
+  isDataLoading?: boolean;
 }
 
 declare interface ProjectModalProps {
@@ -563,28 +582,28 @@ declare interface FormTextareaProps extends React.TextareaHTMLAttributes<HTMLTex
 }
 
 declare interface EducationDashboardProps {
-    categories: Category[];
-    data: Education[];
-    setData: Dispatch<SetStateAction<Education[]>>;
-    isDataLoading?: boolean;
+  categories: Category[];
+  data: Education[];
+  setData: Dispatch<SetStateAction<Education[]>>;
+  isDataLoading?: boolean;
 }
 
 declare interface ExperienceDashboardProps {
-    categories: Category[];
-    data: Experience[];
-    setData: Dispatch<SetStateAction<Experience[]>>;
-    isDataLoading?: boolean;
+  categories: Category[];
+  data: Experience[];
+  setData: Dispatch<SetStateAction<Experience[]>>;
+  isDataLoading?: boolean;
 }
 
 declare interface CategoryDashboardProps {
-    data: Category[];
-    setData: Dispatch<SetStateAction<Category[]>>;
-    isDataLoading?: boolean;
+  data: Category[];
+  setData: Dispatch<SetStateAction<Category[]>>;
+  isDataLoading?: boolean;
 }
 
 declare interface ContactDashboardProps {
-    categories: Category[];
-    data: Contact[];
-    setData: Dispatch<SetStateAction<Contact[]>>;
-    isDataLoading?: boolean;
+  categories: Category[];
+  data: Contact[];
+  setData: Dispatch<SetStateAction<Contact[]>>;
+  isDataLoading?: boolean;
 }

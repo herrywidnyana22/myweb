@@ -1,5 +1,4 @@
 import prisma from '@/lib/prisma';
-import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
 import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
@@ -125,7 +124,7 @@ export async function DELETE(
       if (item) {
         await Promise.all([
           deleteImageFile(item.icon),
-          deleteImageFile(item.imageUrl)
+          deleteImageFile(item.imageUrl),
         ]);
       }
     };

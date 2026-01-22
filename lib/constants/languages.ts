@@ -7,16 +7,76 @@ export interface Language {
 }
 
 export const AVAILABLE_LANGUAGES: Language[] = [
-  { code: 'en', name: 'English', flag: '🇬🇧', countryCode: 'gb', nativeName: 'English' },
-  { code: 'id', name: 'Indonesian', flag: '🇮🇩', countryCode: 'id', nativeName: 'Bahasa Indonesia' },
-  { code: 'ja', name: 'Japanese', flag: '🇯🇵', countryCode: 'jp', nativeName: '日本語' },
-  { code: 'zh', name: 'Chinese', flag: '🇨🇳', countryCode: 'cn', nativeName: '中文' },
-  { code: 'ko', name: 'Korean', flag: '🇰🇷', countryCode: 'kr', nativeName: '한국어' },
-  { code: 'es', name: 'Spanish', flag: '🇪🇸', countryCode: 'es', nativeName: 'Español' },
-  { code: 'fr', name: 'French', flag: '🇫🇷', countryCode: 'fr', nativeName: 'Français' },
-  { code: 'de', name: 'German', flag: '🇩🇪', countryCode: 'de', nativeName: 'Deutsch' },
-  { code: 'ar', name: 'Arabic', flag: '🇸🇦', countryCode: 'sa', nativeName: 'العربية' },
-  { code: 'pt', name: 'Portuguese', flag: '🇵🇹', countryCode: 'pt', nativeName: 'Português' },
+  {
+    code: 'en',
+    name: 'English',
+    flag: '🇬🇧',
+    countryCode: 'gb',
+    nativeName: 'English',
+  },
+  {
+    code: 'id',
+    name: 'Indonesian',
+    flag: '🇮🇩',
+    countryCode: 'id',
+    nativeName: 'Bahasa Indonesia',
+  },
+  {
+    code: 'ja',
+    name: 'Japanese',
+    flag: '🇯🇵',
+    countryCode: 'jp',
+    nativeName: '日本語',
+  },
+  {
+    code: 'zh',
+    name: 'Chinese',
+    flag: '🇨🇳',
+    countryCode: 'cn',
+    nativeName: '中文',
+  },
+  {
+    code: 'ko',
+    name: 'Korean',
+    flag: '🇰🇷',
+    countryCode: 'kr',
+    nativeName: '한국어',
+  },
+  {
+    code: 'es',
+    name: 'Spanish',
+    flag: '🇪🇸',
+    countryCode: 'es',
+    nativeName: 'Español',
+  },
+  {
+    code: 'fr',
+    name: 'French',
+    flag: '🇫🇷',
+    countryCode: 'fr',
+    nativeName: 'Français',
+  },
+  {
+    code: 'de',
+    name: 'German',
+    flag: '🇩🇪',
+    countryCode: 'de',
+    nativeName: 'Deutsch',
+  },
+  {
+    code: 'ar',
+    name: 'Arabic',
+    flag: '🇸🇦',
+    countryCode: 'sa',
+    nativeName: 'العربية',
+  },
+  {
+    code: 'pt',
+    name: 'Portuguese',
+    flag: '🇵🇹',
+    countryCode: 'pt',
+    nativeName: 'Português',
+  },
 ];
 
 export const DEFAULT_LANGUAGE = 'id'; // Indonesian as source
@@ -35,26 +95,26 @@ export function getLocalizedText(
   fallbackLanguage = DEFAULT_LANGUAGE
 ): string {
   if (!text) return '';
-  
+
   // If it's a plain string, return it
   if (typeof text === 'string') return text;
-  
+
   // If it's a multilingual object
   if (typeof text === 'object') {
     // Try requested language
     if (text[language]) return text[language];
-    
+
     // Try fallback language
     if (text[fallbackLanguage]) return text[fallbackLanguage];
-    
+
     // Try source
     if (text.source) return text.source;
-    
+
     // Return any available language
     const keys = Object.keys(text);
     if (keys.length > 0) return text[keys[0]];
   }
-  
+
   return '';
 }
 
@@ -82,7 +142,7 @@ export const multiLangUIText: Record<string, MultiLangText> = {
   sendPlaceholder: {
     source: 'Sini-sini kenalan sama aku...',
     id: 'Sini-sini kenalan sama aku...',
-    en: 'Come on, let\'s get to know each other...',
+    en: "Come on, let's get to know each other...",
     ja: 'さあ、知り合いましょう...',
     zh: '来吧，让我们互相认识...',
     ko: '자, 서로 알아가요...',
@@ -166,7 +226,7 @@ export const multiLangUIText: Record<string, MultiLangText> = {
   description: {
     source: 'Kenalan yuk, kak!',
     id: 'Kenalan yuk, kak!',
-    en: 'Let\'s get to know each other!',
+    en: "Let's get to know each other!",
     ja: '知り合いましょう！',
     zh: '让我们互相认识吧！',
     ko: '서로 알아가요!',
@@ -222,12 +282,12 @@ export const multiLangUIText: Record<string, MultiLangText> = {
   langSwitched: {
     source: 'Sip! Aku sudah ganti semua konten website',
     id: 'Sip! Aku sudah ganti semua konten website',
-    en: 'Done! I\'ve changed all website content',
+    en: "Done! I've changed all website content",
     ja: '完了！すべてのウェブサイトコンテンツを変更しました',
     zh: '完成！我已经更改了所有网站内容',
     ko: '완료! 모든 웹사이트 콘텐츠를 변경했습니다',
     es: '¡Listo! He cambiado todo el contenido del sitio web',
-    fr: 'Terminé! J\'ai changé tout le contenu du site web',
+    fr: "Terminé! J'ai changé tout le contenu du site web",
     de: 'Fertig! Ich habe alle Website-Inhalte geändert',
     ar: 'تم! لقد قمت بتغيير كل محتوى الموقع',
     pt: 'Feito! Eu mudei todo o conteúdo do site',
@@ -264,12 +324,12 @@ export const multiLangUIText: Record<string, MultiLangText> = {
   actionCanceled: {
     source: 'Oke, request saya batalkan 👍',
     id: 'Oke, request saya batalkan 👍',
-    en: 'Okay, I\'ve canceled the request 👍',
+    en: "Okay, I've canceled the request 👍",
     ja: 'わかりました、リクエストをキャンセルしました 👍',
     zh: '好的，我已取消请求 👍',
     ko: '알겠습니다, 요청을 취소했습니다 👍',
     es: 'Vale, he cancelado la solicitud 👍',
-    fr: 'D\'accord, j\'ai annulé la demande 👍',
+    fr: "D'accord, j'ai annulé la demande 👍",
     de: 'Okay, ich habe die Anfrage abgebrochen 👍',
     ar: 'حسنًا، لقد ألغيت الطلب 👍',
     pt: 'Ok, eu cancelei a solicitação 👍',
@@ -318,7 +378,8 @@ export const multiLangUIText: Record<string, MultiLangText> = {
   },
 
   telegramChatConfirm: {
-    source: 'Sekarang chat kamu akan saya teruskan langsung ke telegram <mark data-type="name">Herry Widnyana</mark>',
+    source:
+      'Sekarang chat kamu akan saya teruskan langsung ke telegram <mark data-type="name">Herry Widnyana</mark>',
     id: 'Sekarang chat kamu akan saya teruskan langsung ke telegram <mark data-type="name">Herry Widnyana</mark>',
     en: 'Now I\'ll forward your chat directly to telegram <mark data-type="name">Herry Widnyana</mark>',
     ja: 'これからあなたのチャットをテレグラム <mark data-type="name">Herry Widnyana</mark> に直接転送します',
@@ -332,7 +393,8 @@ export const multiLangUIText: Record<string, MultiLangText> = {
   },
 
   telegramNotice: {
-    source: 'Anda sedang terhubung langsung ke Telegram @herrywidnyana, semua chat akan diteruskan',
+    source:
+      'Anda sedang terhubung langsung ke Telegram @herrywidnyana, semua chat akan diteruskan',
     id: 'Anda sedang terhubung langsung ke Telegram @herrywidnyana, semua chat akan diteruskan',
     en: 'You are connected directly to Telegram @herrywidnyana, all chats will be forwarded',
     ja: 'Telegram @herrywidnyana に直接接続されています。すべてのチャットが転送されます',
@@ -611,7 +673,7 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     pt: 'Ver Currículo',
   },
 
-  emptyImage:{
+  emptyImage: {
     source: 'Belum ada gambar...',
     id: 'Belum ada gambar...',
     en: 'No image available',
@@ -619,16 +681,16 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     zh: '没有图片',
     ko: '이미지가 없습니다',
     es: 'No hay imagen disponible',
-    fr: 'Pas d\'image disponible',
+    fr: "Pas d'image disponible",
     de: 'Kein Bild verfügbar',
     ar: 'لا توجد صورة متاحة',
     pt: 'Nenhuma imagem disponível',
   },
 
-  contactTitle:{
+  contactTitle: {
     source: 'Yuk terhubung!',
     id: 'Yuk terhubung!',
-    en: 'Let\'s connect!',
+    en: "Let's connect!",
     ja: 'つながりましょう！',
     zh: '让我们联系吧！',
     ko: '연결하자!',
@@ -639,8 +701,9 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     pt: 'Vamos nos conectar!',
   },
 
-  contactSubtitle:{
-    source: 'Punya ide? Ada bug yang perlu diperbaiki? atau hanya ingin ngobrol tentang teknologi? Saya siap.',
+  contactSubtitle: {
+    source:
+      'Punya ide? Ada bug yang perlu diperbaiki? atau hanya ingin ngobrol tentang teknologi? Saya siap.',
     id: 'Punya ide? Ada bug yang perlu diperbaiki? atau hanya ingin ngobrol tentang teknologi? Saya siap.',
     en: 'Got an idea? A bug to squash? or just want to talk tech? I am in.',
     ja: 'アイデアがありますか？バグを修正しますか？または、技術について話したいだけですか？私は参加します。',
@@ -653,11 +716,11 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     pt: 'Tem uma ideia? Um bug para corrigir? ou só quer falar sobre tecnologia? Estou dentro.',
   },
 
-  progress:{
+  progress: {
     source: 'Progres',
     id: 'Progres',
     en: 'Progress',
-    ja: '進捗', 
+    ja: '進捗',
     zh: '进度',
     ko: '진행률',
     es: 'Progreso',
@@ -667,7 +730,7 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     pt: 'Progresso',
   },
 
-  category:{
+  category: {
     source: 'Kategori',
     id: 'Kategori',
     en: 'Category',
@@ -681,7 +744,7 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     pt: 'Categoria',
   },
 
-  technologies:{
+  technologies: {
     source: 'Teknologi',
     id: 'Teknologi',
     en: 'Technologies',
@@ -695,7 +758,7 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     pt: 'Tecnologias',
   },
 
-  techstack:{
+  techstack: {
     source: 'Ringkasan Tech Stack',
     id: 'Ringkasan Tech Stack',
     en: 'Tech Stack Overview',
@@ -709,13 +772,13 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     pt: 'Visão geral do Tech Stack',
   },
 
-  stackLoaded:{
+  stackLoaded: {
     source: 'Stack berhasil dimuat',
     id: 'Stack berhasil dimuat',
     en: 'Stack loaded successfully',
     ja: 'スタックが正常に読み込まれました',
     zh: '堆栈加载成功',
-    ko: '스택이 성공적으로 로드되었습니다',   
+    ko: '스택이 성공적으로 로드되었습니다',
     es: 'Stack cargado con éxito',
     fr: 'Pile chargée avec succès',
     de: 'Stack erfolgreich geladen',
@@ -723,11 +786,11 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     pt: 'Stack carregado com sucesso',
   },
 
-  renderTime:{
+  renderTime: {
     source: 'Waktu render: 4ms',
     id: 'Waktu render: 4ms',
     en: 'Render time: 4ms',
-    ja: 'レンダリング時間: 4ms',  
+    ja: 'レンダリング時間: 4ms',
     zh: '渲染时间：4毫秒',
     ko: '렌더링 시간: 4ms',
     es: 'Tiempo de renderizado: 4ms',
@@ -737,7 +800,7 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     pt: 'Tempo de renderização: 4ms',
   },
 
-  favorite:{
+  favorite: {
     source: 'Favorit',
     id: 'Favorit',
     en: 'Favorites',
@@ -751,7 +814,7 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     pt: 'Favorito',
   },
 
-  myWork:{
+  myWork: {
     source: 'Karyaku',
     id: 'Karyaku',
     en: 'My Works',
@@ -765,7 +828,7 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     pt: 'Minhas Obras',
   },
 
-  aboutMe:{
+  aboutMe: {
     source: 'Aku',
     id: 'Aku',
     en: 'About Me',
@@ -777,87 +840,87 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     de: 'Über Mich',
     ar: 'عني',
     pt: 'Sobre Mim',
-  }
+  },
 };
 
 export const PLACEHOLDERS: Record<string, string[]> = {
   id: [
-    "Halo! Ada yang bisa saya bantu?",
-    "Yuk kenalan, cerita tentang project kamu...",
-    "Tanya seputar portfolio saya...",
-    "Tertarik untuk kolaborasi?",
-    "Butuh developer untuk project?",
+    'Halo! Ada yang bisa saya bantu?',
+    'Yuk kenalan, cerita tentang project kamu...',
+    'Tanya seputar portfolio saya...',
+    'Tertarik untuk kolaborasi?',
+    'Butuh developer untuk project?',
   ],
 
   en: [
-    "Hi! How can I help you today?",
+    'Hi! How can I help you today?',
     "Let's talk about your project...",
-    "Ask me about my work...",
-    "Interested in collaborating?",
-    "Looking for a developer?",
+    'Ask me about my work...',
+    'Interested in collaborating?',
+    'Looking for a developer?',
   ],
 
   ja: [
-    "こんにちは！何かお手伝いできますか？",
-    "あなたのプロジェクトについて話しましょう...",
-    "私の仕事について聞いてください...",
-    "コラボレーションに興味がありますか？",
-    "開発者をお探しですか？",
+    'こんにちは！何かお手伝いできますか？',
+    'あなたのプロジェクトについて話しましょう...',
+    '私の仕事について聞いてください...',
+    'コラボレーションに興味がありますか？',
+    '開発者をお探しですか？',
   ],
 
   zh: [
-    "你好！有什么可以帮您的吗？",
-    "聊聊您的项目吧...",
-    "问问我的工作...",
-    "有兴趣合作吗？",
-    "在找开发人员吗？",
+    '你好！有什么可以帮您的吗？',
+    '聊聊您的项目吧...',
+    '问问我的工作...',
+    '有兴趣合作吗？',
+    '在找开发人员吗？',
   ],
 
   ko: [
-    "안녕하세요! 무엇을 도와드릴까요?",
-    "당신의 프로젝트에 대해 이야기해요...",
-    "제 작업에 대해 물어보세요...",
-    "협업에 관심이 있으신가요?",
-    "개발자를 찾고 계신가요?",
+    '안녕하세요! 무엇을 도와드릴까요?',
+    '당신의 프로젝트에 대해 이야기해요...',
+    '제 작업에 대해 물어보세요...',
+    '협업에 관심이 있으신가요?',
+    '개발자를 찾고 계신가요?',
   ],
 
   es: [
-    "¡Hola! ¿En qué puedo ayudarte?",
-    "Hablemos sobre tu proyecto...",
-    "Pregúntame sobre mi trabajo...",
-    "¿Interesado en colaborar?",
-    "¿Buscas un desarrollador?",
+    '¡Hola! ¿En qué puedo ayudarte?',
+    'Hablemos sobre tu proyecto...',
+    'Pregúntame sobre mi trabajo...',
+    '¿Interesado en colaborar?',
+    '¿Buscas un desarrollador?',
   ],
 
   fr: [
-    "Bonjour! Comment puis-je vous aider?",
-    "Parlons de votre projet...",
-    "Posez-moi des questions sur mon travail...",
-    "Intéressé par une collaboration?",
-    "Vous cherchez un développeur?",
+    'Bonjour! Comment puis-je vous aider?',
+    'Parlons de votre projet...',
+    'Posez-moi des questions sur mon travail...',
+    'Intéressé par une collaboration?',
+    'Vous cherchez un développeur?',
   ],
 
   de: [
-    "Hallo! Wie kann ich Ihnen helfen?",
-    "Lassen Sie uns über Ihr Projekt sprechen...",
-    "Fragen Sie mich über meine Arbeit...",
-    "Interessiert an einer Zusammenarbeit?",
-    "Suchen Sie einen Entwickler?",
+    'Hallo! Wie kann ich Ihnen helfen?',
+    'Lassen Sie uns über Ihr Projekt sprechen...',
+    'Fragen Sie mich über meine Arbeit...',
+    'Interessiert an einer Zusammenarbeit?',
+    'Suchen Sie einen Entwickler?',
   ],
 
   ar: [
-    "مرحبا! كيف يمكنني مساعدتك؟",
-    "دعونا نتحدث عن مشروعك...",
-    "اسألني عن عملي...",
-    "هل أنت مهتم بالتعاون؟",
-    "هل تبحث عن مطور؟",
+    'مرحبا! كيف يمكنني مساعدتك؟',
+    'دعونا نتحدث عن مشروعك...',
+    'اسألني عن عملي...',
+    'هل أنت مهتم بالتعاون؟',
+    'هل تبحث عن مطور؟',
   ],
 
   pt: [
-    "Olá! Como posso ajudá-lo?",
-    "Vamos falar sobre seu projeto...",
-    "Pergunte-me sobre meu trabalho...",
-    "Interessado em colaborar?",
-    "Procurando por um desenvolvedor?",
+    'Olá! Como posso ajudá-lo?',
+    'Vamos falar sobre seu projeto...',
+    'Pergunte-me sobre meu trabalho...',
+    'Interessado em colaborar?',
+    'Procurando por um desenvolvedor?',
   ],
 };

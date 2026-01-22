@@ -1,18 +1,12 @@
-
-import { useAppStore } from "@/store/app";
-import { dockItems } from "./dock/dockItems";
-import { WidgetItem } from "./widget/widgetItem";
+import { useAppStore } from '@/store/app';
+import { dockItems } from './dock/dockItems';
+import { WidgetItem } from './widget/widgetItem';
 
 export const Widget = () => {
-  const { openedDockId, targetedDockId } = useAppStore()
+  const { openedDockId, targetedDockId } = useAppStore();
 
-  return ( 
-    <div
-      className="
-        w-full grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 
-        gap-3 sm:gap-4 lg:gap-6
-      "
-    >
+  return (
+    <div className='grid w-full grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 md:grid-cols-4 lg:grid-cols-6 lg:gap-6 xl:grid-cols-8'>
       {dockItems.map(item => (
         <WidgetItem
           key={item.id}
@@ -25,4 +19,4 @@ export const Widget = () => {
       ))}
     </div>
   );
-}
+};

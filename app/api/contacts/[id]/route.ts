@@ -4,7 +4,6 @@ import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
 import { deleteImageFile } from '@/lib/file-utils';
 
-
 async function authenticateRequest(
   req: Request
 ): Promise<{ username: string } | null> {
@@ -70,10 +69,21 @@ export async function PUT(
     }
 
     const body = await req.json();
-    const { title, description, tooltipText, icon, bgColor, contactURL, categoryId } = body;
+    const {
+      title,
+      description,
+      tooltipText,
+      icon,
+      bgColor,
+      contactURL,
+      categoryId,
+    } = body;
 
     if (!title || !description || !categoryId) {
-      return errorResponse('Title, Description, and Category ID are required', 400);
+      return errorResponse(
+        'Title, Description, and Category ID are required',
+        400
+      );
     }
 
     const contact = await prisma.contact.update({

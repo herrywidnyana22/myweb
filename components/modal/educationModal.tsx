@@ -30,10 +30,11 @@ export const EducationModal = ({
   categories = [],
 }: EducationModalProps) => {
   const [formData, setFormData] = useState<Education>(
-    (education as Education) || ({
-      id: '',
-      ...DEFAULT_EDUCATION,
-    } as Education)
+    (education as Education) ||
+      ({
+        id: '',
+        ...DEFAULT_EDUCATION,
+      } as Education)
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -63,10 +64,12 @@ export const EducationModal = ({
   }, [education, isOpen]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [name]:
         name === 'startYear' || name === 'endYear'
@@ -78,7 +81,7 @@ export const EducationModal = ({
   };
 
   const handleMultiLangChange = (field: string, value: MultiLangText) => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [field]: value,
     }));
@@ -108,10 +111,10 @@ export const EducationModal = ({
 
       const data = result.data as { url: string };
       if (type === 'icon') {
-        setFormData((prev) => ({ ...prev, icon: data.url }));
+        setFormData(prev => ({ ...prev, icon: data.url }));
         setIconPreview(data.url);
       } else {
-        setFormData((prev) => ({ ...prev, schoolLogo: data.url }));
+        setFormData(prev => ({ ...prev, schoolLogo: data.url }));
         setLogoPreview(data.url);
       }
     } catch (err) {
@@ -132,11 +135,18 @@ export const EducationModal = ({
 
     try {
       const { school, major, startYear, endYear, categoryId } = formData;
-      
+
       // Extract source text for validation
-      const majorValue = typeof major === 'string' ? major : major?.source || '';
-      
-      if (!school || !majorValue.trim() || !startYear || !endYear || !categoryId) {
+      const majorValue =
+        typeof major === 'string' ? major : major?.source || '';
+
+      if (
+        !school ||
+        !majorValue.trim() ||
+        !startYear ||
+        !endYear ||
+        !categoryId
+      ) {
         setError('Please fill in all required fields');
         setIsSubmitting(false);
         return;
@@ -187,104 +197,103 @@ export const EducationModal = ({
   if (!isOpen) return null;
 
   return (
-    <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-    >
-      <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+    <div className='bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4'>
+      <div className='max-h-[90vh] w-full max-w-md overflow-y-auto rounded-lg bg-white shadow-xl'>
         <ModalHeader
           title={education ? 'Edit Education' : 'Add Education'}
           onClose={handleCloseModal}
           disabled={isSubmitting}
         />
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className='space-y-6 p-6'>
           <FormError message={error} />
 
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <FormSelect
-              label="Category"
+              label='Category'
               required
-              name="categoryId"
+              name='categoryId'
               value={formData.categoryId}
               onChange={handleChange}
               options={[
                 { value: '', label: 'Select a category' },
-                ...(Array.isArray(categories) ? categories : []).map((cat) => ({
+                ...(Array.isArray(categories) ? categories : []).map(cat => ({
                   value: cat.id,
-                  label: typeof cat.name === 'string' ? cat.name : getText(cat.name),
+                  label:
+                    typeof cat.name === 'string' ? cat.name : getText(cat.name),
                 })),
               ]}
               disabled={isSubmitting}
             />
             <FormInput
-              label="School"
+              label='School'
               required
-              type="text"
-              name="school"
+              type='text'
+              name='school'
               value={formData.school}
               onChange={handleChange}
-              placeholder="e.g., STIKOM Bali"
+              placeholder='e.g., STIKOM Bali'
               disabled={isSubmitting}
             />
 
             <MultiLangInput
-              label="Major"
+              label='Major'
               value={formData.major || createMultiLangText('')}
-              onChange={(val) => handleMultiLangChange('major', val)}
+              onChange={val => handleMultiLangChange('major', val)}
               selectedLanguages={selectedTranslationLanguages}
-              placeholder="e.g., Computer Science"
+              placeholder='e.g., Computer Science'
               disabled={isSubmitting}
-              type="input"
+              type='input'
               getLanguageInfo={getLanguageInfo}
             />
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className='grid grid-cols-2 gap-4'>
               <FormInput
-                label="Start Year"
+                label='Start Year'
                 required
-                type="number"
-                name="startYear"
+                type='number'
+                name='startYear'
                 value={formData.startYear || ''}
                 onChange={handleChange}
-                placeholder="2020"
-                min="1900"
+                placeholder='2020'
+                min='1900'
                 max={new Date().getFullYear()}
                 disabled={isSubmitting}
               />
 
               <FormInput
-                label="End Year"
+                label='End Year'
                 required
-                type="number"
-                name="endYear"
+                type='number'
+                name='endYear'
                 value={formData.endYear || ''}
                 onChange={handleChange}
-                placeholder="2024"
-                min="1900"
+                placeholder='2024'
+                min='1900'
                 max={new Date().getFullYear() + 10}
                 disabled={isSubmitting}
               />
             </div>
 
             <FormImageUpload
-              label="Icon"
+              label='Icon'
               imagePreview={iconPreview}
               isUploading={isUploadingIcon}
-              onUpload={(file) => handleImageUpload(file, 'icon')}
+              onUpload={file => handleImageUpload(file, 'icon')}
               onRemove={() => {
-                setFormData((prev) => ({ ...prev, icon: undefined }));
+                setFormData(prev => ({ ...prev, icon: undefined }));
                 setIconPreview(null);
               }}
               disabled={isSubmitting}
             />
 
             <FormImageUpload
-              label="School Logo"
+              label='School Logo'
               imagePreview={logoPreview}
               isUploading={isUploadingLogo}
-              onUpload={(file) => handleImageUpload(file, 'logo')}
+              onUpload={file => handleImageUpload(file, 'logo')}
               onRemove={() => {
-                setFormData((prev) => ({ ...prev, schoolLogo: undefined }));
+                setFormData(prev => ({ ...prev, schoolLogo: undefined }));
                 setLogoPreview(null);
               }}
               disabled={isSubmitting}
@@ -294,11 +303,10 @@ export const EducationModal = ({
           <ModalActions
             isSubmitting={isSubmitting}
             onCancel={handleCloseModal}
-            submitLabel="Save Education"
+            submitLabel='Save Education'
           />
         </form>
       </div>
     </div>
   );
-}
-
+};

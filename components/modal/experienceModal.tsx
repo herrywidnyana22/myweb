@@ -3,7 +3,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { FormInput } from '../form/FormInput';
 import { FormSelect } from '../form/FormSelect';
-import { FormTextarea } from '../form/FormTextarea';
 import { FormImageUpload } from '../form/FormImageUpload';
 import { FormError } from '../form/FormError';
 import { ModalHeader } from '../form/ModalHeader';
@@ -33,10 +32,11 @@ export const ExperienceModal = ({
   categories = [],
 }: ExperienceModalProps) => {
   const [formData, setFormData] = useState<Experience>(
-    (experience as Experience) || ({
-      id: '',
-      ...DEFAULT_EXPERIENCE,
-    } as Experience)
+    (experience as Experience) ||
+      ({
+        id: '',
+        ...DEFAULT_EXPERIENCE,
+      } as Experience)
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -62,17 +62,19 @@ export const ExperienceModal = ({
   }, [experience, isOpen]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [name]: value,
     }));
   };
 
   const handleMultiLangChange = (field: string, value: MultiLangText) => {
-    setFormData((prev) => ({
+    setFormData(prev => ({
       ...prev,
       [field]: value,
     }));
@@ -97,7 +99,7 @@ export const ExperienceModal = ({
       }
 
       const data = result.data as { url: string };
-      setFormData((prev) => ({ ...prev, icon: data.url }));
+      setFormData(prev => ({ ...prev, icon: data.url }));
       setIconPreview(data.url);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to upload image');
@@ -122,7 +124,9 @@ export const ExperienceModal = ({
       await onSave(formData);
       handleCloseModal();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to save experience');
+      setError(
+        err instanceof Error ? err.message : 'Failed to save experience'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -156,124 +160,123 @@ export const ExperienceModal = ({
   if (!isOpen) return null;
 
   return (
-    <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-    >
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div className='bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4'>
+      <div className='max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white shadow-xl'>
         <ModalHeader
           title={experience ? 'Edit Experience' : 'Add Experience'}
           onClose={handleCloseModal}
           disabled={isSubmitting}
         />
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className='space-y-6 p-6'>
           <FormError message={error} />
 
-          <div className="space-y-4">
+          <div className='space-y-4'>
             <FormSelect
-              label="Category"
+              label='Category'
               required
-              name="categoryId"
+              name='categoryId'
               value={formData.categoryId}
               onChange={handleChange}
               options={[
                 { value: '', label: 'Select a category' },
-                ...(Array.isArray(categories) ? categories : []).map((cat) => ({
+                ...(Array.isArray(categories) ? categories : []).map(cat => ({
                   value: cat.id,
-                  label: typeof cat.name === 'string' ? cat.name : getText(cat.name),
+                  label:
+                    typeof cat.name === 'string' ? cat.name : getText(cat.name),
                 })),
               ]}
               disabled={isSubmitting}
             />
 
             <FormInput
-              label="Company"
+              label='Company'
               required
-              type="text"
-              name="company"
+              type='text'
+              name='company'
               value={formData.company}
               onChange={handleChange}
-              placeholder="e.g., Google"
+              placeholder='e.g., Google'
               disabled={isSubmitting}
             />
 
             <MultiLangInput
-              label="Role"
+              label='Role'
               value={formData.role || createMultiLangText('')}
-              onChange={(val) => handleMultiLangChange('role', val)}
+              onChange={val => handleMultiLangChange('role', val)}
               selectedLanguages={selectedTranslationLanguages}
-              placeholder="e.g., Senior Software Engineer"
+              placeholder='e.g., Senior Software Engineer'
               disabled={isSubmitting}
-              type="input"
+              type='input'
               getLanguageInfo={getLanguageInfo}
             />
 
             <FormInput
-              label="Location"
+              label='Location'
               required
-              type="text"
-              name="location"
+              type='text'
+              name='location'
               value={formData.location}
               onChange={handleChange}
-              placeholder="e.g., San Francisco, CA"
+              placeholder='e.g., San Francisco, CA'
               disabled={isSubmitting}
             />
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className='grid grid-cols-2 gap-4'>
               <FormInput
-                label="Start Date"
+                label='Start Date'
                 required
-                type="text"
-                name="start"
+                type='text'
+                name='start'
                 value={formData.start}
                 onChange={handleChange}
-                placeholder="e.g., Jan 2020"
+                placeholder='e.g., Jan 2020'
                 disabled={isSubmitting}
               />
 
               <FormInput
-                label="End Date"
+                label='End Date'
                 required
-                type="text"
-                name="end"
+                type='text'
+                name='end'
                 value={formData.end}
                 onChange={handleChange}
-                placeholder="e.g., Dec 2023 or Present"
+                placeholder='e.g., Dec 2023 or Present'
                 disabled={isSubmitting}
               />
             </div>
 
             <MultiLangInput
-              label="Job Description"
+              label='Job Description'
               value={formData.jobdesk || createMultiLangText('')}
-              onChange={(val) => handleMultiLangChange('jobdesk', val)}
+              onChange={val => handleMultiLangChange('jobdesk', val)}
               selectedLanguages={selectedTranslationLanguages}
-              placeholder="Brief job description..."
+              placeholder='Brief job description...'
               disabled={isSubmitting}
-              type="textarea"
+              type='textarea'
               rows={3}
               getLanguageInfo={getLanguageInfo}
             />
 
             <MultiLangInput
-              label="Description"
+              label='Description'
               value={formData.description || createMultiLangText('')}
-              onChange={(val) => handleMultiLangChange('description', val)}
+              onChange={val => handleMultiLangChange('description', val)}
               selectedLanguages={selectedTranslationLanguages}
-              placeholder="Additional details..."
+              placeholder='Additional details...'
               disabled={isSubmitting}
-              type="textarea"
+              type='textarea'
               rows={3}
               getLanguageInfo={getLanguageInfo}
             />
 
             <FormImageUpload
-              label="Icon"
+              label='Icon'
               imagePreview={iconPreview}
               isUploading={isUploadingIcon}
               onUpload={handleImageUpload}
               onRemove={() => {
-                setFormData((prev) => ({ ...prev, icon: undefined }));
+                setFormData(prev => ({ ...prev, icon: undefined }));
                 setIconPreview(null);
               }}
               disabled={isSubmitting}
@@ -283,11 +286,10 @@ export const ExperienceModal = ({
           <ModalActions
             isSubmitting={isSubmitting}
             onCancel={handleCloseModal}
-            submitLabel="Save Experience"
+            submitLabel='Save Experience'
           />
         </form>
       </div>
     </div>
   );
-}
-
+};

@@ -1,5 +1,4 @@
 import prisma from '@/lib/prisma';
-import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
 import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
@@ -50,7 +49,7 @@ export async function GET(
   } catch (error) {
     console.error('Error fetching education:', error);
     return errorResponse('Failed to fetch education', 500, error as Error);
-  } 
+  }
 }
 
 export async function PUT(
@@ -70,10 +69,14 @@ export async function PUT(
     }
 
     const body = await req.json();
-    const { school, major, startYear, endYear, schoolLogo, icon, categoryId } = body;
+    const { school, major, startYear, endYear, schoolLogo, icon, categoryId } =
+      body;
 
     if (!school || !major || !startYear || !endYear || !categoryId) {
-      return errorResponse('School, major, startYear, endYear, and categoryId are required', 400);
+      return errorResponse(
+        'School, major, startYear, endYear, and categoryId are required',
+        400
+      );
     }
 
     if (startYear > endYear) {
@@ -135,7 +138,7 @@ export async function DELETE(
     // Delete image files if exist
     await Promise.all([
       deleteImageFile(education.icon),
-      deleteImageFile(education.schoolLogo)
+      deleteImageFile(education.schoolLogo),
     ]);
 
     return successResponse(null, 'Education deleted successfully');

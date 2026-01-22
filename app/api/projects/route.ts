@@ -39,7 +39,7 @@ export async function GET() {
   } catch (error) {
     console.error('Error fetching projects:', error);
     return errorResponse('Failed to fetch projects', 500, error as Error);
-  } 
+  }
 }
 
 export async function POST(req: Request) {
@@ -50,7 +50,18 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { name, icon, subIcon, tooltipText, description, techStack, categoryId, demoURL, repoURL, progressValue } = body;
+    const {
+      name,
+      icon,
+      subIcon,
+      tooltipText,
+      description,
+      techStack,
+      categoryId,
+      demoURL,
+      repoURL,
+      progressValue,
+    } = body;
 
     if (!name || !icon || !categoryId) {
       return errorResponse('Name, icon, and categoryId are required', 400);
@@ -70,9 +81,11 @@ export async function POST(req: Request) {
 
     // Handle description - convert array to string if needed
     if (description !== undefined) {
-      const descriptionValue = Array.isArray(description) 
-        ? (description.length > 0 ? description.join('\n') : '')
-        : (description || '');
+      const descriptionValue = Array.isArray(description)
+        ? description.length > 0
+          ? description.join('\n')
+          : ''
+        : description || '';
       projectData.description = descriptionValue;
     } else {
       projectData.description = '';

@@ -1,5 +1,4 @@
 import prisma from '@/lib/prisma';
-import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
 import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
@@ -75,7 +74,18 @@ export async function PUT(
     }
 
     const body = await req.json();
-    const { name, icon, subIcon, tooltipText, description, techStack, categoryId, demoURL, repoURL, progressValue } = body;
+    const {
+      name,
+      icon,
+      subIcon,
+      tooltipText,
+      description,
+      techStack,
+      categoryId,
+      demoURL,
+      repoURL,
+      progressValue,
+    } = body;
 
     if (!name || !icon || !categoryId) {
       return errorResponse('Name, icon, and categoryId are required', 400);
@@ -107,9 +117,11 @@ export async function PUT(
     }
     // Handle description - convert array to string if needed
     if (description !== undefined) {
-      updateData.description = Array.isArray(description) 
-        ? (description.length > 0 ? description.join('\n') : '')
-        : (description || '');
+      updateData.description = Array.isArray(description)
+        ? description.length > 0
+          ? description.join('\n')
+          : ''
+        : description || '';
     }
 
     const project = await prisma.project.update({
@@ -169,7 +181,7 @@ export async function DELETE(
 
     // Delete all image files
     const imageUrls: (string | null)[] = [project.icon, project.subIcon];
-    
+
     // Add techStack icons
     if (project.techStack && Array.isArray(project.techStack)) {
       project.techStack.forEach((tech: any) => {
@@ -182,9 +194,14 @@ export async function DELETE(
       imageUrls.push(entry.icon, entry.subIcon, entry.imageUrl);
     });
 
-    await Promise.all(imageUrls.filter(Boolean).map(url => deleteImageFile(url)));
+    await Promise.all(
+      imageUrls.filter(Boolean).map(url => deleteImageFile(url))
+    );
 
-    return successResponse(null, 'Project and all related entries deleted successfully');
+    return successResponse(
+      null,
+      'Project and all related entries deleted successfully'
+    );
   } catch (error) {
     console.error('Error deleting project:', error);
     return errorResponse('Failed to delete project', 500, error as Error);

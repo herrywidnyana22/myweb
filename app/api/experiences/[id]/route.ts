@@ -1,5 +1,4 @@
 import prisma from '@/lib/prisma';
-import { NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/jwt';
 import { successResponse, errorResponse } from '@/lib/api-response';
 import { cookies } from 'next/headers';
@@ -50,7 +49,7 @@ export async function GET(
   } catch (error) {
     console.error('Error fetching experience:', error);
     return errorResponse('Failed to fetch experience', 500, error as Error);
-  } 
+  }
 }
 
 export async function PUT(
@@ -70,10 +69,23 @@ export async function PUT(
     }
 
     const body = await req.json();
-    const { company, role, location, start, end, jobdesk, description, icon, categoryId } = body;
+    const {
+      company,
+      role,
+      location,
+      start,
+      end,
+      jobdesk,
+      description,
+      icon,
+      categoryId,
+    } = body;
 
     if (!company || !role || !location || !start || !end || !categoryId) {
-      return errorResponse('Company, role, location, start, end, and categoryId are required', 400);
+      return errorResponse(
+        'Company, role, location, start, end, and categoryId are required',
+        400
+      );
     }
 
     const experience = await prisma.experience.update({

@@ -1,50 +1,52 @@
-"use client";
+'use client';
 
-import { Minimize2, Trash2 } from "lucide-react";
-import { Avatar } from "../avatar";
-import { Tooltip } from "../tooltip";
-import { TelegramStatus } from "../telegramStatus";
-import { FlagIcon } from "../flagIcon";
-import { useCallback } from "react";
-import { useAppStore } from "@/store/app";
-import { useLocalizedText } from "@/hooks/useLocalizedText";
+import { Avatar } from '../avatar';
+import { Minimize2, Trash2 } from 'lucide-react';
+import { TelegramStatus } from '../telegramStatus';
+import { useCallback } from 'react';
+import { useAppStore } from '@/store/app';
+import { useLocalizedText } from '@/hooks/useLocalizedText';
 
-export const ChatHeader= ({ onClear }: ChatHeaderProps) => {
-  
-  const { chatMode, setIsMinimized, setIsInputFocused } = useAppStore()
+export const ChatHeader = ({ onClear }: ChatHeaderProps) => {
+  const { chatMode, setIsMinimized, setIsInputFocused } = useAppStore();
   const onMinimize = useCallback(() => {
-    setIsMinimized((p) => !p)
-    setIsInputFocused(false)
-  },[setIsMinimized]);
+    setIsMinimized(p => !p);
+    setIsInputFocused(false);
+  }, [setIsMinimized]);
 
   const { getUIText } = useLocalizedText();
-  
+
   return (
-    <div className="flex items-center justify-between p-3 border-b bg-gray-900/80">
-      <div className="flex items-center gap-3">
-        <div className="rounded-full size-9 inset-0 bg-white/10 flex items-center justify-center">
+    <div className='flex items-center justify-between border-b bg-gray-900/80 p-3'>
+      <div className='flex items-center gap-3'>
+        <div className='inset-0 flex size-9 items-center justify-center rounded-full bg-white/10'>
           <Avatar
             src='/images/profile.webp'
             alt='Bot'
-            className='rounded-full size-8 sm:size-10 object-cover relative z-10 transition-all duration-300'
+            className='relative z-10 size-8 rounded-full object-cover transition-all duration-300 sm:size-10'
           />
         </div>
         <div>
-          <div className="text-sm font-semibold">Herry Widnyana</div>
-          <div className="text-xs text-gray-400">Fullstack Developer</div>
+          <div className='text-sm font-semibold'>Herry Widnyana</div>
+          <div className='text-xs text-gray-400'>Fullstack Developer</div>
         </div>
       </div>
 
-      { chatMode === 'telegram' && (
-            <TelegramStatus />
-          )
-      }
+      {chatMode === 'telegram' && <TelegramStatus />}
 
-      <div className="flex gap-2">
-        <button onClick={onMinimize} title={getUIText('minimize')} className="p-2 rounded-md hover:bg-white/5">
+      <div className='flex gap-2'>
+        <button
+          onClick={onMinimize}
+          title={getUIText('minimize')}
+          className='rounded-md p-2 hover:bg-white/5'
+        >
           <Minimize2 size={16} />
         </button>
-        <button onClick={onClear} title={getUIText('clear')} className="p-2 rounded-md hover:bg-white/5">
+        <button
+          onClick={onClear}
+          title={getUIText('clear')}
+          className='rounded-md p-2 hover:bg-white/5'
+        >
           <Trash2 size={16} />
         </button>
       </div>
