@@ -33,17 +33,28 @@ export const WindowWrapper = <P extends object>(
       );
     }, [isOpen]);
 
-    useGSAP(() => {
-      const el = ref.current;
+    useGSAP(
+      () => {
+        const el = ref.current;
 
-      if (!el) return;
+        if (!el || !isOpen) return;
 
-      const [instance] = Draggable.create(el, {
-        onPress: () => focusWindow(windowKey),
-      });
+        const headerEl = el.querySelector('.window-header');
 
-      return () => instance.kill();
-    }, []);
+        if (!headerEl) {
+          console.warn(`No .window-header found for ${windowKey}`);
+          return;
+        }
+
+        const [instance] = Draggable.create(el, {
+          trigger: headerEl,
+          onPress: () => focusWindow(windowKey),
+        });
+
+        return () => instance.kill();
+      },
+      { dependencies: [isOpen], scope: ref }
+    );
 
     useLayoutEffect(() => {
       const el = ref.current;

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import useDataStore from '@/store/data';
 import { WindowWrapper } from '@/hoc/windowWrapper';
-import { WindowControls } from '@/components/windowControls';
+import { WindowHeader } from '@/components/windowHeader';
 import { Tooltip } from '@/components/tooltip';
 import { useLocalizedText } from '@/hooks/useLocalizedText';
 
@@ -18,25 +18,11 @@ const ContactWindow = () => {
 
   return (
     <div className='overflow-hidden rounded-xl bg-white shadow-2xl drop-shadow-2xl'>
-      <div className='window-header flex cursor-grab items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-400 select-none active:cursor-grabbing'>
-        <div className='w-24'>
-          <WindowControls target={'contact'} />
-        </div>
-        <div className='flex items-center gap-2'>
-          <div className='size-4 overflow-hidden rounded-md'>
-            <Image
-              src={'/icons/contact.png'}
-              alt={`contact icon`}
-              width={32}
-              height={32}
-              className='size-4 object-cover'
-            />
-          </div>
-          <h2 className='font-semibold text-gray-600'>{'Contact'}</h2>
-        </div>
-
-        <div className='w-24' />
-      </div>
+      <WindowHeader
+        target='contact'
+        icon='/icons/contact.png'
+        title='Contact'
+      />
 
       <div className='flex w-auto flex-col justify-start space-y-5 p-6'>
         <h3 className='text-lg font-semibold text-black'>

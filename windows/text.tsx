@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import useWindowStore from '@/store/window';
 import { WindowWrapper } from '@/hoc/windowWrapper';
-import { WindowControls } from '@/components/windowControls';
+import { WindowHeader } from '@/components/windowHeader';
 import { getEffectiveIcon } from '@/lib/utils';
 import { useLocalizedText } from '@/hooks/useLocalizedText';
 
@@ -19,31 +19,11 @@ const TextWindow = () => {
 
   return (
     <div className='overflow-hidden rounded-xl shadow-2xl drop-shadow-2xl'>
-      <div className='flex items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-400 select-none'>
-        <div className='w-24'>
-          <WindowControls target={'txtfile'} />
-        </div>
-
-        <div className='flex items-center gap-1'>
-          {effectiveIcon && (
-            <div className='size-4 overflow-hidden rounded-md'>
-              <Image
-                src={effectiveIcon}
-                alt={typeof name === 'string' ? name : getText(name)}
-                width={32}
-                height={32}
-                className='size-4 object-cover'
-              />
-            </div>
-          )}
-
-          <h2 className='text-center'>
-            {typeof name === 'string' ? name : getText(name)}
-          </h2>
-        </div>
-
-        <div className='w-24' />
-      </div>
+      <WindowHeader
+        target='txtfile'
+        icon={effectiveIcon}
+        title={typeof name === 'string' ? name : getText(name)}
+      />
 
       <div className='max-w-3xl min-w-md bg-white p-6 text-black'>
         {(image || imageUrl) && (

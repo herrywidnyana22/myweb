@@ -7,8 +7,8 @@ import useWindowStore from '@/store/window';
 import useDataStore from '@/store/data';
 
 import { useEffect, useState } from 'react';
-import { WindowControls } from '@/components/windowControls';
 import { WindowWrapper } from '@/hoc/windowWrapper';
+import { WindowHeader } from '@/components/windowHeader';
 import { Search, ChevronLeft } from 'lucide-react';
 import { Menu } from '@/components/menu';
 import { getLocations } from '@/lib/constants';
@@ -113,12 +113,15 @@ const ExplorerWindow = () => {
   return (
     <div className='h-[50vh] overflow-hidden rounded-xl shadow-2xl drop-shadow-2xl'>
       {/* HEADER */}
-      <div className='window-header relative flex cursor-grab items-center border-b border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-400 select-none active:cursor-grabbing'>
-        {/* Left */}
-        <div className='z-10 flex items-center gap-2'>
-          <WindowControls target={'explorer'} />
-
-          {/* Back Button */}
+      <WindowHeader
+        target='explorer'
+        icon={activeLocation?.icon}
+        title={
+          (typeof activeLocation?.name === 'string'
+            ? getUIText(activeLocation.name)
+            : getText(activeLocation.name)) ?? 'Explorer'
+        }
+        leftContent={
           <button
             onClick={goBack}
             disabled={!canGoBack}
@@ -132,33 +135,11 @@ const ExplorerWindow = () => {
           >
             <ChevronLeft className='size-4' />
           </button>
-        </div>
-
-        {/* Center Title */}
-        <div className='absolute left-1/2 flex -translate-x-1/2 items-center gap-1 font-semibold text-gray-600'>
-          {activeLocation?.icon && (
-            <div className='size-4 overflow-hidden rounded-md'>
-              <Image
-                src={activeLocation?.icon}
-                alt='icon'
-                width={32}
-                height={32}
-                className='size-4 object-cover'
-              />
-            </div>
-          )}
-          <p>
-            {(typeof activeLocation?.name === 'string'
-              ? getUIText(activeLocation.name)
-              : getText(activeLocation.name)) ?? 'Explorer'}
-          </p>
-        </div>
-
-        {/* Right */}
-        <div className='z-10 ml-auto'>
+        }
+        rightContent={
           <Search className='rounded p-1 hover:cursor-default hover:bg-gray-200' />
-        </div>
-      </div>
+        }
+      />
 
       {/* BODY */}
       <div className='flex h-full bg-white'>

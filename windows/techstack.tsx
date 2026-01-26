@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import useWindowStore from '@/store/window';
 
-import { WindowControls } from '@/components/windowControls';
+import { WindowHeader } from '@/components/windowHeader';
 import { WindowWrapper } from '@/hoc/windowWrapper';
 import { Check, Flag } from 'lucide-react';
 import { getEffectiveIcon } from '@/lib/utils';
@@ -23,27 +23,11 @@ const TechstackWindow = () => {
 
   return (
     <div className='overflow-hidden rounded-xl font-mono shadow-2xl drop-shadow-2xl'>
-      <div className='window-header flex cursor-grab items-center justify-between border-b border-gray-200 bg-gray-50 px-4 py-3 text-gray-400 select-none active:cursor-grabbing'>
-        <div className='w-24'>
-          <WindowControls target={'techstack'} />
-        </div>
-
-        <div className='flex items-center gap-1'>
-          {effectiveIcon && (
-            <div className='size-4 overflow-hidden rounded-md'>
-              <Image
-                src={effectiveIcon}
-                alt={`${getText(name)} icon`}
-                width={32}
-                height={32}
-                className='size-4 object-cover'
-              />
-            </div>
-          )}
-          <h2 className='text-center'>{getText(name)}</h2>
-        </div>
-        <div className='w-24' />
-      </div>
+      <WindowHeader
+        target='techstack'
+        icon={effectiveIcon}
+        title={getText(name)}
+      />
 
       {/* BODY */}
       <div className='space-y-4 bg-white p-5'>
