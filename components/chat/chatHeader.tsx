@@ -4,11 +4,11 @@ import { Avatar } from '../avatar';
 import { Minimize2, Trash2 } from 'lucide-react';
 import { TelegramStatus } from '../telegramStatus';
 import { useCallback } from 'react';
-import { useAppStore } from '@/store/app';
+import { useChatStore } from '@/store/chat';
 import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 export const ChatHeader = ({ onClear }: ChatHeaderProps) => {
-  const { chatMode, setIsMinimized, setIsInputFocused } = useAppStore();
+  const { chatMode, setIsMinimized, setIsInputFocused } = useChatStore();
   const onMinimize = useCallback(() => {
     setIsMinimized(p => !p);
     setIsInputFocused(false);

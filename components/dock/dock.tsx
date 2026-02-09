@@ -10,7 +10,7 @@ import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import { dockItems } from './dockItems';
 import { Tooltip } from '../tooltip';
-import { useAppStore } from '@/store/app';
+import { useChatStore } from '@/store/chat';
 import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 gsap.registerPlugin(useGSAP);
@@ -27,7 +27,7 @@ export const Dock = () => {
     isInputFocused,
     setIsInputFocused,
     setIsMinimized,
-  } = useAppStore();
+  } = useChatStore();
   const { getUIText } = useLocalizedText();
 
   const { profiles } = useDataStore();

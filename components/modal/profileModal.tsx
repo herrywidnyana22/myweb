@@ -10,8 +10,7 @@ import { ModalHeader } from '../form/ModalHeader';
 import { ModalActions } from '../form/ModalActions';
 import { MultiLangInput } from '../form/MultiLangInput';
 import { MultiLangText, createMultiLangText } from '@/lib/constants/languages';
-import { useLanguage } from '@/contexts/LanguageContext';
-import { useLocalizedText } from '@/hooks/useLocalizedText';
+import { useLanguageStore } from '@/store/language';
 
 const DEFAULT_PROFILE: Omit<Profile, 'id'> = {
   name: '',
@@ -45,8 +44,7 @@ export function ProfileModal({
   const [cvPreview, setCVPreview] = useState<string | null>(null);
 
   // Use global language context
-  const { selectedTranslationLanguages, getLanguageInfo } = useLanguage();
-  const { getText } = useLocalizedText();
+  const { selectedTranslationLanguages, getLanguageInfo } = useLanguageStore();
 
   useEffect(() => {
     if (profile) {

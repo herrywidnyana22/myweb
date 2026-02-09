@@ -1,9 +1,9 @@
 import { useLocalizedText } from '@/hooks/useLocalizedText';
-import { useAppStore } from '@/store/app';
+import { useChatStore } from '@/store/chat';
 import { Power } from 'lucide-react';
 
 export const ChatNotice = () => {
-  const { setChatMode } = useAppStore();
+  const { setChatMode } = useChatStore();
   const { getUIText } = useLocalizedText();
   return (
     <div className='flex flex-col items-center justify-center pt-4 text-white'>

@@ -8,7 +8,7 @@ import { ModalHeader } from '../form/ModalHeader';
 import { ModalActions } from '../form/ModalActions';
 import { MultiLangInput } from '../form/MultiLangInput';
 import { createMultiLangText } from '@/lib/constants/languages';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguageStore } from '@/store/language';
 import { ContactList } from '../contactList';
 import { Notice } from '../notice';
 import {
@@ -42,7 +42,10 @@ export const ItemModal = ({
   ownerType,
   parentId,
 }: ItemModalProps) => {
-  const { selectedTranslationLanguages, getLanguageInfo } = useLanguage();
+  const selectedTranslationLanguages = useLanguageStore(
+    state => state.selectedTranslationLanguages
+  );
+  const getLanguageInfo = useLanguageStore(state => state.getLanguageInfo);
 
   const {
     formData,

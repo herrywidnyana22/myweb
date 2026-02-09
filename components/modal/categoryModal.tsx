@@ -7,7 +7,7 @@ import { ModalHeader } from '../form/ModalHeader';
 import { ModalActions } from '../form/ModalActions';
 import { MultiLangInput } from '../form/MultiLangInput';
 import { MultiLangText, createMultiLangText } from '@/lib/constants/languages';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguageStore } from '@/store/language';
 
 const DEFAULT_CATEGORY: Omit<Category, 'id'> = {
   name: '',
@@ -33,7 +33,10 @@ export function CategoryModal({
   const [isUploadingIcon, setIsUploadingIcon] = useState(false);
   const [iconPreview, setIconPreview] = useState<string | null>(null);
 
-  const { selectedTranslationLanguages, getLanguageInfo } = useLanguage();
+  const selectedTranslationLanguages = useLanguageStore(
+    state => state.selectedTranslationLanguages
+  );
+  const getLanguageInfo = useLanguageStore(state => state.getLanguageInfo);
 
   useEffect(() => {
     if (category) {

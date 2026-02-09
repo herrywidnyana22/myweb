@@ -14,7 +14,6 @@ import { Welcome } from '@/components/welcome';
 import { TechStack } from '@/windows/techstack';
 import { ProjectInfo } from '@/windows/projectInfo';
 import { Contact } from '@/windows/contact';
-import { LanguageProvider } from '@/contexts/LanguageContext';
 
 export default function Page() {
   const { loadAllData } = useDataStore();
@@ -24,24 +23,22 @@ export default function Page() {
   }, [loadAllData]);
 
   return (
-    <LanguageProvider>
-      <main className='relative min-h-screen w-full overflow-x-hidden overflow-y-auto'>
-        <TopBar />
-        <Welcome />
+    <main className='relative min-h-screen w-full overflow-x-hidden overflow-y-auto'>
+      <TopBar />
+      <Welcome />
 
-        <div className='px-4 py-4 pb-24 sm:px-8 sm:py-10 sm:pb-32 md:px-16 lg:px-32 xl:px-64'>
-          <Contact />
-          <Resume />
-          <ProjectInfo />
-          <TechStack />
-          <Text />
-          <Img />
-          <Explorer />
-          <BackgroundHome />
-          <Overlay />
-          <Home />
-        </div>
-      </main>
-    </LanguageProvider>
+      <div className='px-4 py-4 pb-24 sm:px-8 sm:py-10 sm:pb-32 md:px-16 lg:px-32 xl:px-64'>
+        <Contact />
+        <Resume />
+        <ProjectInfo />
+        <TechStack />
+        <Text />
+        <Img />
+        <Explorer />
+        <BackgroundHome />
+        <Overlay />
+        <Home />
+      </div>
+    </main>
   );
 }

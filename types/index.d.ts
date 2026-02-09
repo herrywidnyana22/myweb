@@ -48,7 +48,7 @@ declare interface AppContextProps {
 
 type Updater<T> = T | ((prev: T) => T);
 
-declare interface AppStore {
+declare interface ChatStoreProps {
   // language: string;
   // ui: Record<string, string>;
   chatMode: ChatMode;
@@ -104,13 +104,13 @@ declare interface LocationStore {
 }
 
 declare type DataItemProps =
-  | ({ type: 'project' } & Project)
-  | ({ type: 'contact' } & Contact)
-  | ({ type: 'address' } & Address)
-  | ({ type: 'education' } & Education)
-  | ({ type: 'experience' } & Experience)
-  | ({ type: 'action' } & ActionCardProps)
-  | ({ type: 'default' } & DefaultCardData);
+  | ({ category: 'project' } & Project)
+  | ({ category: 'contact' } & Contact)
+  | ({ category: 'address' } & Address)
+  | ({ category: 'education' } & Education)
+  | ({ category: 'experience' } & Experience)
+  | ({ category: 'action' } & ActionCardProps)
+  | ({ category: 'default' } & DefaultCardData);
 
 // Import MultiLangText type for multilingual fields
 type MultiLangText = import('@/lib/constants/languages').MultiLangText;
@@ -284,7 +284,7 @@ declare interface BuildPromptProps {
   projects: Project[];
   profile: Profile | null;
   address: Address | null;
-  contacts: DefaultCardData[];
+  contacts: Contact[];
   educations: Education[];
   experiences: Experience[];
   memory?: ChatMemory;
@@ -297,7 +297,7 @@ declare interface PortfolioCache {
   profile: Profile | null;
   address: Address | null;
   projects: Project[];
-  contacts: DefaultCardData[];
+  contacts: Contact[];
   educations: Education[];
   experiences: Experience[];
   timestamp: number;

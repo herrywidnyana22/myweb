@@ -2,11 +2,54 @@
 
 import Image from 'next/image';
 import { MapPin } from 'lucide-react';
+import { memo } from 'react';
 import { parseHighlight } from '@/lib/utils/parseHighlight';
 import { useLocalizedText } from '@/hooks/useLocalizedText';
 
-export const ExperienceCard = (exp: Experience) => {
+type ExperienceCardProps = Experience & {
+  variant?: 'default' | 'chat';
+};
+
+const ExperienceCardComponent = ({
+  variant = 'default',
+  ...exp
+}: ExperienceCardProps) => {
   const { getText } = useLocalizedText();
+
+  // Chat variant - simplified version for chat messages
+  if (variant === 'chat') {
+    return (
+      <div className='flex flex-col gap-1 sm:gap-2'>
+        <div className='flex items-center gap-2 sm:gap-3'>
+          {exp.icon && typeof exp.icon === 'string' && (
+            <Image
+              src={exp.icon}
+              alt='company logo'
+              height={28}
+              width={28}
+              className='sm:h-8 sm:w-8'
+            />
+          )}
+          <div>
+            <h3 className='text-primary text-sm font-semibold sm:text-base md:text-lg'>
+              {parseHighlight(exp.company ?? '')}
+            </h3>
+            <p className='text-xs text-gray-700 sm:text-sm'>
+              {parseHighlight(getText(exp.role) ?? '')}
+            </p>
+            <p className='mt-1 text-[11px] text-gray-500 sm:text-xs'>
+              {parseHighlight(exp.start + ' - ' + exp.end)}
+            </p>
+          </div>
+        </div>
+        <p className='mt-1 text-xs sm:mt-2 sm:text-sm'>
+          {parseHighlight(getText(exp.description) ?? '')}
+        </p>
+      </div>
+    );
+  }
+
+  // Default variant - full card design
 
   return (
     <div className='flex h-full w-full overflow-hidden rounded-xl bg-white shadow-md transition-all duration-300 sm:rounded-2xl'>
@@ -59,3 +102,6 @@ export const ExperienceCard = (exp: Experience) => {
     </div>
   );
 };
+
+export const ExperienceCard = memo(ExperienceCardComponent);
+ExperienceCard.displayName = 'ExperienceCard';

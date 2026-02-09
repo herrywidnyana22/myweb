@@ -13,13 +13,18 @@ export const ContactCard = (card: Contact) => {
   return (
     <div className='flex w-full items-center gap-2 rounded-lg p-1.5 transition sm:gap-4 sm:rounded-xl sm:p-2'>
       {card.icon && typeof card.icon === 'string' && (
-        <Image
-          src={card.icon}
-          alt={card.title}
-          width={36}
-          height={36}
-          className='size-8 object-contain sm:size-10'
-        />
+        <div
+          style={{ backgroundColor: card.bgColor }}
+          className='flex size-10 items-center justify-center rounded-xl p-1.5 shadow-sm sm:size-12 sm:p-2'
+        >
+          <Image
+            src={card.icon}
+            alt={card.title}
+            width={36}
+            height={36}
+            className='size-8 object-contain sm:size-10'
+          />
+        </div>
       )}
 
       <div className='flex min-w-0 flex-col'>

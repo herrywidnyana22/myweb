@@ -10,7 +10,7 @@ import { ChatItem } from '@/components/chat/chatItem';
 import { Card } from '@/components/card/card';
 import { sendToTelegram } from '@/lib/telegram/telegram-client';
 import { ChatNotice } from './chatNotice';
-import { useAppStore } from '@/store/app';
+import { useChatStore } from '@/store/chat';
 import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 // =============== REDUCER ===============
@@ -46,7 +46,7 @@ export const Chat = () => {
     isMinimized,
     setChatMode,
     chatMode,
-  } = useAppStore();
+  } = useChatStore();
 
   const { getUIText } = useLocalizedText();
 
@@ -169,9 +169,12 @@ export const Chat = () => {
           });
         }
 
-        const data: AIResponse = await res.json();
+        const respon = await res.json();
+        const data = respon.data;
         const text = data.text ?? getUIText('dataEmpty');
         const cards = data.cards ?? [];
+
+        console.log({ data });
 
         // Update last placeholder -> stop loading -> streaming
         setIsLoading(false);
@@ -391,7 +394,6 @@ export const Chat = () => {
     return () => es.close();
   }, []);
 
-  // ========== RENDER ==========
   return (
     <>
       <div
@@ -415,7 +417,7 @@ export const Chat = () => {
                   {!!msg.cards?.length && (
                     <div className='mb-2 ml-10 grid max-w-[80%] grid-cols-1 gap-4 pt-2 sm:ml-13 sm:max-w-[70%] md:grid-cols-2'>
                       {msg.cards
-                        .filter(card => !(card.type === 'action'))
+                        .filter(card => !(card.category === 'action'))
                         .map((card, j) => (
                           <Card
                             key={j}

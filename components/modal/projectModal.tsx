@@ -11,7 +11,7 @@ import { ModalHeader } from '../form/ModalHeader';
 import { ModalActions } from '../form/ModalActions';
 import { MultiLangInput } from '../form/MultiLangInput';
 import { MultiLangText, createMultiLangText } from '@/lib/constants/languages';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguageStore } from '@/store/language';
 import { useLocalizedText } from '@/hooks/useLocalizedText';
 import { X } from 'lucide-react';
 
@@ -59,7 +59,7 @@ export const ProjectModal = ({
   const [newTechLabel, setNewTechLabel] = useState('');
   const [isUploadingTechIcon, setIsUploadingTechIcon] = useState(false);
 
-  const { selectedTranslationLanguages, getLanguageInfo } = useLanguage();
+  const { selectedTranslationLanguages, getLanguageInfo } = useLanguageStore();
   const { getText } = useLocalizedText();
 
   useEffect(() => {

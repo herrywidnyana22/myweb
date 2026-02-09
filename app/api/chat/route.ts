@@ -1,24 +1,25 @@
+import prisma from '@/lib/prisma';
+
 import { buildPrompt } from '@/lib/constants/promptTemplate';
 import { sendToTelegram } from '@/lib/telegram/telegram-server';
 import { sanitizeJSON } from '@/lib/utils';
 import { generatePrompt } from '@/lib/gemini/generatePrompt';
 import { successResponse, errorResponse } from '@/lib/api-response';
-import prisma from '@/lib/prisma';
 
 let cachedPortfolio: PortfolioCache;
 const CACHE_TTL_MS = 1000 * 60 * 10; // 10 menit
 
-function normalizeCard(card: Partial<DataItemProps>): DataItemProps {
-  let type = card.type;
-  if (!type) {
-    if ('progressValue' in card) type = 'project';
-    else if ('school' in card) type = 'education';
-    else if ('company' in card) type = 'experience';
-    else if ('address' in card) type = 'address';
-    else if ('href' in card) type = 'contact';
-    else type = 'default';
+function normalizeCard(card: Partial<DataItemProps>) {
+  let category: string | undefined = card.category as string | undefined;
+  if (!category) {
+    if ('progressValue' in card) category = 'project';
+    else if ('school' in card) category = 'education';
+    else if ('company' in card) category = 'experience';
+    else if ('address' in card) category = 'address';
+    else if ('href' in card) category = 'contact';
+    else category = 'default';
   }
-  return { ...card, type } as DataItemProps;
+  return { ...card, category } as DataItemProps;
 }
 
 export async function POST(req: Request) {
@@ -82,7 +83,7 @@ export async function POST(req: Request) {
             } as Address)
           : null,
         projects: projects as Project[],
-        contacts: contacts as DefaultCardData[],
+        contacts: contacts as Contact[],
         educations: educations as Education[],
         experiences: experiences as Experience[],
         timestamp: now,

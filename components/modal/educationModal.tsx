@@ -9,7 +9,7 @@ import { ModalHeader } from '../form/ModalHeader';
 import { ModalActions } from '../form/ModalActions';
 import { MultiLangInput } from '../form/MultiLangInput';
 import { MultiLangText, createMultiLangText } from '@/lib/constants/languages';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguageStore } from '@/store/language';
 import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 const DEFAULT_EDUCATION: Omit<Education, 'id'> = {
@@ -44,7 +44,7 @@ export const EducationModal = ({
   const [isUploadingLogo, setIsUploadingLogo] = useState(false);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
 
-  const { selectedTranslationLanguages, getLanguageInfo } = useLanguage();
+  const { selectedTranslationLanguages, getLanguageInfo } = useLanguageStore();
   const { getText } = useLocalizedText();
 
   useEffect(() => {

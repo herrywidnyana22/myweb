@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export const useAppStore = create<AppStore>()(
+export const useChatStore = create<ChatStoreProps>()(
   persist(
     set => ({
       chatMode: 'default',
@@ -37,7 +37,7 @@ export const useAppStore = create<AppStore>()(
     }),
 
     {
-      name: 'app-store',
+      name: 'chat-store',
 
       partialize: state => ({
         chatMode: state.chatMode,

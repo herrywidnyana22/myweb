@@ -1,11 +1,11 @@
 import useWindowStore from '@/store/window';
 
-import { useAppStore } from '@/store/app';
+import { useChatStore } from '@/store/chat';
 import { Minus, X } from 'lucide-react';
 
 export const WindowControls = ({ target }: WindowControlProps) => {
   const { closeWindow, minimizeWindow } = useWindowStore();
-  const { setOpenedDockId } = useAppStore();
+  const { setOpenedDockId } = useChatStore();
 
   const onAction = (action: WindowControlAction) => {
     if (action === 'minimize') {

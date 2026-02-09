@@ -27,7 +27,7 @@ export const Profile = () => {
         address: profile.address,
         lat: profile.lat,
         lng: profile.lng,
-        mapUrl: profile.mapURL,
+        mapURL: profile.mapURL,
       }
     : null;
 

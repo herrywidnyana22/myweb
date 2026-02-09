@@ -4,7 +4,7 @@ import clsx from 'clsx';
 
 import { SendHorizonal } from 'lucide-react';
 import { memo, useEffect, useRef, useState } from 'react';
-import { useAppStore } from '@/store/app';
+import { useChatStore } from '@/store/chat';
 import { useLocalizedText } from '@/hooks/useLocalizedText';
 import { PLACEHOLDERS } from '@/lib/constants/languages';
 
@@ -16,7 +16,7 @@ export const ChatInput = memo(
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const placeholderRef = useRef<HTMLDivElement>(null);
 
-    const { setIsMinimized, setIsInputFocused } = useAppStore();
+    const { setIsMinimized, setIsInputFocused } = useChatStore();
     const { getUIText, currentLanguage } = useLocalizedText();
 
     // Typewriter state

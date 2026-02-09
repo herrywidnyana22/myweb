@@ -6,12 +6,12 @@ import { ChatLoader } from './chatLoader';
 import { Avatar } from '../avatar';
 import { Forward, MousePointer2 } from 'lucide-react';
 import { ChatItemTelegram } from './chatItemTelegram';
-import { useAppStore } from '@/store/app';
+import { useChatStore } from '@/store/chat';
 import { useLocalizedText } from '@/hooks/useLocalizedText';
 
 export const ChatItem = memo(
   ({ role, text, isStreaming, isLoading }: ChatResponseProps) => {
-    const { chatMode } = useAppStore();
+    const { chatMode } = useChatStore();
     const { getUIText } = useLocalizedText();
 
     const isUser = role === 'user';

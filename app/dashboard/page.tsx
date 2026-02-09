@@ -12,7 +12,7 @@ import { Contact } from '@/components/dashboard/contact';
 import { Navbar } from '@/components/dashboard/navbar';
 import { Footer } from '@/components/dashboard/footer';
 import { DashboardLanguageSelector } from '@/components/dashboard/dashboardLanguageSelector';
-import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
+import { useLanguageStore } from '@/store/language';
 
 function DashboardContent() {
   const {
@@ -25,7 +25,9 @@ function DashboardContent() {
     experiences,
     projects,
   } = useDataStore();
-  const { detectAndSetLanguages } = useLanguage();
+  const detectAndSetLanguages = useLanguageStore(
+    state => state.detectAndSetLanguages
+  );
 
   useEffect(() => {
     loadAllData();
@@ -96,9 +98,7 @@ function DashboardContent() {
 export default function DashboardPage() {
   return (
     <ProtectedRoute>
-      <LanguageProvider>
-        <DashboardContent />
-      </LanguageProvider>
+      <DashboardContent />
     </ProtectedRoute>
   );
 }

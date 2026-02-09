@@ -2,7 +2,7 @@
 
 import clsx from 'clsx';
 
-import { useAppStore } from '@/store/app';
+import { useChatStore } from '@/store/chat';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLayoutEffect, useRef, useState } from 'react';
 
@@ -12,7 +12,7 @@ export const WidgetItem = ({
   children,
   className,
 }: WidgetProps) => {
-  const { isMinimized, messages } = useAppStore();
+  const { isMinimized, messages } = useChatStore();
 
   const isChatMaximized = !isMinimized && messages.length > 0;
 

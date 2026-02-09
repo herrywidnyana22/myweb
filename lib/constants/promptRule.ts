@@ -32,7 +32,7 @@ export const languageRule = `
     2. Kirimkan ACTION CARD dalam format:
       {
         "cards": [{
-            type: "action",
+            category: "action",
             action: "language",
             targetLanguage?: The target language may be any language name or ISO code provided (e.g., "en", "id", "jp", "fr").,
             message?: Switch semua konten website menjadi Bahasa Indonesia juga?,
@@ -140,7 +140,7 @@ export const jsonFormatRule = `
   - Jika pertanyaan tentang "education", "pendidikan", "kuliah" → isi "cards" dengan data educations.
   - Jika pertanyaan tentang "experience", "riwayat kerja", "pengalaman" → isi "cards" dengan data experiences.
   - Jika pertanyaan tentang "alamat", "lokasi", "tinggal" → isi "cards" dengan data address.
-  - Jika pertanyaan tentang ingin menghubungi melalui telegram, berbicara dengan herry, chat pribadi, atau meminta akses langsung →  Tambahkan cards dengan type: "action" dan action: "telegram"
+  - Jika pertanyaan tentang ingin menghubungi melalui telegram, berbicara dengan herry, chat pribadi, atau meminta akses langsung →  Tambahkan cards dengan category: "action" dan action: "telegram"
 
   WAJIB: Semua respons harus memiliki properti "cards", meskipun kosong.
 
@@ -164,9 +164,10 @@ export const jsonFormatRule = `
     "category": "education",
     "school": string,
     "major": string,
-    "year": string,
+    "startYear": string,
+    "endYear": string,
     "icon"?: string,
-    "subIcon"?: string
+    "schoolLogo"?: string
   }
 
   Experience
@@ -175,7 +176,8 @@ export const jsonFormatRule = `
     "company": string,
     "role": string,
     "location": string,
-    "year": string,
+    "start": string,
+    "end": string,
     "jobdesk"?: string,
     "description": string,
     "icon"?: string
@@ -187,18 +189,18 @@ export const jsonFormatRule = `
     "address": string,
     "lat": number | string,
     "lng": number | string,
-    "mapUrl"?: string
+    "mapURL"?: string
   }
 
   Contact
   {
     "category": "contact",
     "title": string,
-    "description": string,
-    "bg"?: string
+    "description": string | MultiLangText; // Multilingual
+    "tooltipText"?: string | MultiLangText; // Multilingual
+    "bgColor"?: string
     "icon"?: string,
-    "href"?: string
-    "tooltipText": string
+    "contactURL"?: string
   }
 
   Action

@@ -1,4 +1,4 @@
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguageStore } from '@/store/language';
 import {
   getLocalizedText,
   MultiLangText,
@@ -9,7 +9,7 @@ import {
  * Hook to get localized text based on current language
  */
 export function useLocalizedText() {
-  const { currentLanguage } = useLanguage();
+  const currentLanguage = useLanguageStore(state => state.currentLanguage);
 
   const getText = (
     multiLangText: MultiLangText | string | undefined | null

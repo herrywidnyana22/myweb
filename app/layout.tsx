@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Sora, JetBrains_Mono } from 'next/font/google';
+import { LanguageStoreInitializer } from '@/components/LanguageStoreInitializer';
 
 const sora = Sora({
   variable: '--font-sans',
@@ -29,6 +30,7 @@ export default function RootLayout({
       <body
         className={`${sora.variable} ${jetbrainsMono.variable} antialiased`}
       >
+        <LanguageStoreInitializer />
         {children}
       </body>
     </html>

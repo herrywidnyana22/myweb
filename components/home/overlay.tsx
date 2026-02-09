@@ -1,7 +1,7 @@
-import { useAppStore } from '@/store/app';
+import { useChatStore } from '@/store/chat';
 
 export const Overlay = () => {
-  const { isInputFocused } = useAppStore();
+  const { isInputFocused } = useChatStore();
   return (
     <>
       {isInputFocused && (

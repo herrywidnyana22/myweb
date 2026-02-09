@@ -2,11 +2,15 @@
 
 import { LanguageSelector } from '@/components/form/LanguageSelector';
 import { CollapsibleCard } from './collapsibleCard';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguageStore } from '@/store/language';
 
 export const DashboardLanguageSelector = () => {
-  const { selectedTranslationLanguages, toggleTranslationLanguage } =
-    useLanguage();
+  const selectedTranslationLanguages = useLanguageStore(
+    state => state.selectedTranslationLanguages
+  );
+  const toggleTranslationLanguage = useLanguageStore(
+    state => state.toggleTranslationLanguage
+  );
 
   return (
     <CollapsibleCard title='Language Settings' className='mb-6'>

@@ -6,13 +6,18 @@ import dayjs from 'dayjs';
 import { useState, useEffect, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { navUtilsIcons } from '@/lib/constants';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useLanguageStore } from '@/store/language';
 import { AVAILABLE_LANGUAGES } from '@/lib/constants/languages';
 import { FlagIcon } from './flagIcon';
 
 export const TopBar = () => {
-  const { currentLanguage, setCurrentLanguage, selectedTranslationLanguages } =
-    useLanguage();
+  const currentLanguage = useLanguageStore(state => state.currentLanguage);
+  const setCurrentLanguage = useLanguageStore(
+    state => state.setCurrentLanguage
+  );
+  const selectedTranslationLanguages = useLanguageStore(
+    state => state.selectedTranslationLanguages
+  );
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const [currentTime, setCurrentTime] = useState('');
   const [isMounted, setIsMounted] = useState(false);
