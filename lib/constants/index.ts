@@ -90,32 +90,41 @@ function getAboutLocation(profiles: Profile[]) {
   };
 }
 
-const RESUME_LOCATION = {
-  id: 3,
-  type: 'resume',
-  name: 'Resume',
-  icon: '/icons/file.svg',
-  kind: 'folder',
-  children: [
-    {
-      id: 1,
-      name: 'Resume.pdf',
-      icon: '/icons/pdf.png',
-      kind: 'file',
-      fileType: 'pdf',
-      href: '/files/resume.pdf',
-    },
-  ],
-};
+// Generate photos location from a list of image paths (strings).
+export function getPhotosLocation(images: string[] = []) {
+  return {
+    id: 3,
+    type: 'photos',
+    name: 'photos',
+    icon: '/icons/photos.png',
+    kind: 'folder',
+    children: (Array.isArray(images) ? images : []).map((img: string, idx: number) => {
+      const href = img.startsWith('/') ? img : `/images/${img}`;
+      return {
+        id: idx + 1,
+        name: href.split('/').pop() || img,
+        href,
+        kind: 'file',
+        fileType: 'img',
+        // Use the actual image as the icon so Explorer shows a thumbnail
+        icon: href,
+        // Keep a small overlay icon indicating it's an image
+        subIcon: DEFAULT_FILE_TYPE_ICONS.IMG,
+      };
+    }),
+  };
+}
 
-// Dynamic locations generator function
+// FAVORITE MENUS
 export function getLocations(projects: Project[], profiles: Profile[]) {
   return {
     project: getProjectLocation(projects),
     about: getAboutLocation(profiles),
-    // resume: RESUME_LOCATION,
+    photos: getPhotosLocation(),
   };
 }
+
+
 
 export const INITIAL_Z_INDEX = 1000;
 

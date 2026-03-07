@@ -42,7 +42,7 @@ export const WindowWrapper = <P extends object>(
         const headerEl = el.querySelector('.window-header');
 
         if (!headerEl) {
-          console.warn(`No .window-header found for ${windowKey}`);
+          console.warn(`No .window-header found for ${String(windowKey)}`);
           return;
         }
 

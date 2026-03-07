@@ -828,6 +828,20 @@ export const multiLangUIText: Record<string, MultiLangText> = {
     pt: 'Minhas Obras',
   },
 
+  photos: {
+    source: 'Foto',
+    id: 'Foto',
+    en: 'My Photos',
+    ja: '私の写真',
+    zh: '我的照片',
+    ko: '나의 사진',
+    es: 'Mis Fotos',
+    fr: 'Mes Photos',
+    de: 'Meine Fotos',
+    ar: 'صورتي',
+    pt: 'Minhas Fotos',
+  },
+
   aboutMe: {
     source: 'Aku',
     id: 'Aku',

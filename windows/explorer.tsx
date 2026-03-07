@@ -11,7 +11,7 @@ import { WindowWrapper } from '@/hoc/windowWrapper';
 import { WindowHeader } from '@/components/windowHeader';
 import { Search, ChevronLeft } from 'lucide-react';
 import { Menu } from '@/components/menu';
-import { getLocations } from '@/lib/constants';
+import { getLocations, getPhotosLocation } from '@/lib/constants';
 import { Tooltip } from '@/components/tooltip';
 import { useLocalizedText } from '@/hooks/useLocalizedText';
 
@@ -23,11 +23,16 @@ const ExplorerWindow = () => {
     []
   );
 
-  // Get dynamic data from store
   const { projects, profiles } = useDataStore();
 
-  // Generate dynamic locations from store data
   const locations = getLocations(projects, profiles);
+  const [photosLocation, setPhotosLocation] = useState<LocationValue | null>(
+    locations.photos || null
+  )
+
+  const favoriteItems = Object.values(locations).map(item =>
+    item.type === 'photos' && photosLocation ? photosLocation : item
+  );
 
   // Set default location to project when component mounts or when locations change
   useEffect(() => {
@@ -35,6 +40,30 @@ const ExplorerWindow = () => {
       setActiveLocation(locations.project);
     }
   }, [locations.project, activeLocation, setActiveLocation]);
+
+  // Fetch images manifest for photos dynamically
+  useEffect(() => {
+    let mounted = true;
+
+    async function fetchImages() {
+      try {
+        const res = await fetch('/api/images');
+        if (!res.ok) return;
+        const images: string[] = await res.json();
+        if (!mounted) return;
+        const photos = getPhotosLocation(images);
+        setPhotosLocation(photos as any);
+      } catch (err) {
+        // ignore
+      }
+    }
+
+    fetchImages();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   // Track navigation history
   useEffect(() => {
@@ -71,18 +100,6 @@ const ExplorerWindow = () => {
       return;
     }
 
-    if (fileTypeLowerCase === 'pdf') {
-      openWindow('resume');
-      focusWindow('resume');
-      return;
-    }
-
-    if (fileTypeLowerCase === 'project_info') {
-      openWindow('projectInfo', item);
-      focusWindow('projectInfo');
-      return;
-    }
-
     if (fileTypeLowerCase === 'techstack') {
       openWindow('techstack', item);
       focusWindow('techstack');
@@ -108,7 +125,7 @@ const ExplorerWindow = () => {
     const key = `${fileTypeLowerCase}${fileKindLowerCase}`;
     openWindow(key, item);
     focusWindow(key);
-  };
+  }
 
   return (
     <div className='h-[50vh] overflow-hidden rounded-xl shadow-2xl drop-shadow-2xl'>
@@ -147,7 +164,7 @@ const ExplorerWindow = () => {
         <div className='scrollable-panel flex w-48 flex-col space-y-3 overflow-y-auto border-r border-gray-200 bg-gray-50 p-5'>
           <Menu
             title={'favorite'}
-            items={Object.values(locations)}
+            items={favoriteItems}
             activeLocation={activeLocation}
             onClick={item => setActiveLocation(item)}
           />
@@ -207,7 +224,7 @@ const ExplorerWindow = () => {
                         />
                       )}
                     </div>
-                    <p className='w-full truncate rounded-md p-1 text-center text-xs font-light text-gray-600 transition-colors group-hover:bg-orange-100 md:text-sm'>
+                    <p className='w-full truncate rounded-md p-1 text-center text-xs font-light text-gray-600 transition-colors md:text-sm'>
                       {getText(item.name)}
                     </p>
                   </div>
