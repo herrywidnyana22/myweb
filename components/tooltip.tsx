@@ -48,8 +48,8 @@ export const Tooltip = ({
               className={clsx(
                 'relative max-w-45 rounded-md px-3 py-1 text-center text-xs wrap-break-word whitespace-normal shadow-2xl',
                 // tailwind bg / text kalau **bukan** hex
-                !isHexBg && (bgColor ?? 'bg-orange-100'),
-                !isHexText && (textColor ?? 'text-orange-700')
+                !isHexBg && (bgColor ?? 'bg-primary-light'),
+                !isHexText && (textColor ?? 'text-accent')
               )}
               style={{
                 // kalau hex → pakai inline style
@@ -67,7 +67,7 @@ export const Tooltip = ({
                   'border-r-[6px] border-r-transparent',
                   'border-t-[6px]',
                   // kalau **bukan** hex → pakai warna default tailwind
-                  !isHexBg && 'border-t-orange-100'
+                  !isHexBg && 'border-t-primary-light'
                 )}
                 style={
                   isHexBg

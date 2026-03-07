@@ -28,7 +28,7 @@ export const Menu = ({
             className={clsx(
               'flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 transition-colors',
               item.id === activeLocation?.id
-                ? 'bg-orange-100 text-orange-600'
+                ? 'bg-primary-light text-primary-hover'
                 : 'text-gray-700 hover:bg-gray-200'
             )}
           >

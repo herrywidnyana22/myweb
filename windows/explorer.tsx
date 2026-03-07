@@ -100,6 +100,18 @@ const ExplorerWindow = () => {
       return;
     }
 
+    if (fileTypeLowerCase === 'pdf') {
+      openWindow('resume');
+      focusWindow('resume');
+      return;
+    }
+
+    if (fileTypeLowerCase === 'project_info') {
+      openWindow('projectInfo', item);
+      focusWindow('projectInfo');
+      return;
+    }
+
     if (fileTypeLowerCase === 'techstack') {
       openWindow('techstack', item);
       focusWindow('techstack');
@@ -125,7 +137,7 @@ const ExplorerWindow = () => {
     const key = `${fileTypeLowerCase}${fileKindLowerCase}`;
     openWindow(key, item);
     focusWindow(key);
-  }
+  };
 
   return (
     <div className='h-[50vh] overflow-hidden rounded-xl shadow-2xl drop-shadow-2xl'>
@@ -211,7 +223,7 @@ const ExplorerWindow = () => {
                           }
                           width={128}
                           height={128}
-                          className='size-10 rounded-t-md object-contain object-center p-1 transition-colors group-hover:bg-orange-100 md:size-12'
+                          className='size-10 rounded-t-md object-contain object-center p-1 transition-colors group-hover:bg-primary-light md:size-12'
                         />
                       )}
                       {item.subIcon && item.kind === 'file' && (
@@ -224,7 +236,7 @@ const ExplorerWindow = () => {
                         />
                       )}
                     </div>
-                    <p className='w-full truncate rounded-md p-1 text-center text-xs font-light text-gray-600 transition-colors md:text-sm'>
+                    <p className='w-full truncate rounded-md p-1 text-center text-xs font-light text-gray-600 transition-colors md:text-sm group-hover:bg-primary-light'>
                       {getText(item.name)}
                     </p>
                   </div>

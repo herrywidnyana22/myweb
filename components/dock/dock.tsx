@@ -161,7 +161,7 @@ export const Dock = () => {
 
             {/* Active Dot Indicator */}
             {!!openedDockId?.['explorer'] && (
-              <div className='bg-primary absolute -bottom-1.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full shadow-[0_0_6px_rgba(255,255,255,0.9)]' />
+              <div className='bg-accent-light absolute -bottom-1.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full shadow-[0_0_6px_rgba(255,255,255,0.9)]' />
             )}
           </div>
 
@@ -188,7 +188,7 @@ export const Dock = () => {
 
               {/* Active Dot Indicator */}
               {!!openedDockId?.[item.id] && (
-                <div className='bg-primary absolute -bottom-1.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full shadow-[0_0_6px_rgba(255,255,255,0.9)]' />
+                <div className='bg-accent-light absolute -bottom-1.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full shadow-[0_0_6px_rgba(255,255,255,0.9)]' />
               )}
             </div>
           ))}
@@ -218,7 +218,7 @@ export const Dock = () => {
 
               {/* Active Dot Indicator */}
               {!!openedDockId?.['resume'] && (
-                <div className='bg-primary absolute -bottom-1.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full shadow-[0_0_6px_rgba(255,255,255,0.9)]' />
+                <div className='bg-accent-light absolute -bottom-1.5 left-1/2 size-1.5 -translate-x-1/2 rounded-full shadow-[0_0_6px_rgba(255,255,255,0.9)]' />
               )}
             </div>
           )}

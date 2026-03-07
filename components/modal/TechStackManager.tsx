@@ -117,7 +117,7 @@ export const TechStackManager = ({
             disabled={disabled}
           />
         ) : (
-          <div className='rounded bg-blue-100 p-2 text-sm text-blue-800'>
+          <div className='rounded primary-light p-2 text-sm text-blue-800'>
             Adding to:{' '}
             <strong>{techItems[selectedCategoryIndex]?.category}</strong>
             <button

@@ -8,16 +8,21 @@
   --background: #0f172a;
   --foreground: #ffffff;
 
-  --primary: #f97316;
+  /* --primary: #f97316;
   --primary-hover: #ea580c;
   --primary-light: #fdba74;
 
-  --telegram: #0088cc;
-  --telegram-secondary: #5ab5e8;
-
   --secondary: #1e293b;
   --accent: #fbbf24;
-  --accent-light: #fde68a;
+  --accent-light: #fde68a; */
+
+--primary: #2563eb;       /* blue-600 */
+--primary-hover: #1d4ed8; /* blue-700 */
+--primary-light: #dbeafe; /* blue-100 */
+
+--secondary: #1e40af;     /* blue-800 */
+--accent: #3b82f6;        /* blue-500 */
+--accent-light: #bfdbfe;  /* blue-200 */
 
   --text-primary: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.8);
@@ -30,6 +35,10 @@
   --success: #22c55e;
   --warning: #eab308;
   --error: #ef4444;
+
+  --telegram: #0088cc;
+  --telegram-secondary: #5ab5e8;
+
 }
 
 @theme {
