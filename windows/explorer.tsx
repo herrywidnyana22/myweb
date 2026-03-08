@@ -139,8 +139,6 @@ const ExplorerWindow = () => {
     focusWindow(key);
   };
 
-  console.log(activeLocation?.children);
-
   return (
     <div className='h-[50vh] overflow-hidden rounded-xl shadow-2xl drop-shadow-2xl'>
       {/* HEADER */}
