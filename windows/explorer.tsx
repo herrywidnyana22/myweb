@@ -28,7 +28,7 @@ const ExplorerWindow = () => {
   const locations = getLocations(projects, profiles);
   const [photosLocation, setPhotosLocation] = useState<LocationValue | null>(
     locations.photos || null
-  )
+  );
 
   const favoriteItems = Object.values(locations).map(item =>
     item.type === 'photos' && photosLocation ? photosLocation : item
@@ -139,6 +139,8 @@ const ExplorerWindow = () => {
     focusWindow(key);
   };
 
+  console.log(activeLocation?.children);
+
   return (
     <div className='h-[50vh] overflow-hidden rounded-xl shadow-2xl drop-shadow-2xl'>
       {/* HEADER */}
@@ -212,7 +214,7 @@ const ExplorerWindow = () => {
                       {item.icon && (
                         <Image
                           src={
-                            item.kind === 'folder'
+                            item.kind === 'FOLDER'
                               ? '/icons/folder.png'
                               : item.icon
                           }
@@ -223,10 +225,10 @@ const ExplorerWindow = () => {
                           }
                           width={128}
                           height={128}
-                          className='size-10 rounded-t-md object-contain object-center p-1 transition-colors group-hover:bg-primary-light md:size-12'
+                          className='group-hover:bg-primary-light size-10 rounded-t-md object-contain object-center p-1 transition-colors md:size-12'
                         />
                       )}
-                      {item.subIcon && item.kind === 'file' && (
+                      {item.subIcon && item.kind === 'FILE' && (
                         <Image
                           src={item.subIcon}
                           alt={getText(item.name)}
@@ -236,7 +238,7 @@ const ExplorerWindow = () => {
                         />
                       )}
                     </div>
-                    <p className='w-full truncate rounded-md p-1 text-center text-xs font-light text-gray-600 transition-colors md:text-sm group-hover:bg-primary-light'>
+                    <p className='group-hover:bg-primary-light w-full truncate rounded-md p-1 text-center text-xs font-light text-gray-600 transition-colors md:text-sm'>
                       {getText(item.name)}
                     </p>
                   </div>

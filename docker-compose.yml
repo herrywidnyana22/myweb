@@ -1,11 +1,13 @@
+version: "3.8"
+
 services:
-  mydrive:
+  myweb:
     image: myweb:${TAG:-latest}
     build: .
     container_name: myweb-app
     ports:
-      - "3000:3000"   # host:container
+      - "3000:3000"
     env_file:
       - .env
-    restart: always
-
+    command: sh -c "npx prisma migrate deploy && npm start"
+    restart: unless-stopped

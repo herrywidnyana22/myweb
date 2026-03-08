@@ -41,13 +41,13 @@ function getProjectLocation(projects: Project[]) {
     type: 'project',
     name: 'myWork', //fieldName for language
     icon: '/icons/work.svg',
-    kind: 'folder',
+    kind: 'FOLDER',
     tooltipText: 'Lihat semua project',
     children: (Array.isArray(projects) ? projects : []).map(
       (project: Project) => ({
         type: 'project',
         ...project,
-        kind: 'folder', // Explicitly mark projects as folders
+        kind: 'FOLDER', // Explicitly mark projects as folders
         children: (Array.isArray(project.entries) ? project.entries : []).map(
           (entry: ProjectEntry) => ({
             ...entry,
@@ -73,7 +73,7 @@ function getAboutLocation(profiles: Profile[]) {
     type: 'about',
     name: 'aboutMe', //fieldName for language
     icon: '/icons/info.svg',
-    kind: 'folder',
+    kind: 'FOLDER',
     children: (profiles || []).flatMap((profile: Profile) =>
       (profile.items || []).map((item: any) => ({
         ...item,
@@ -97,21 +97,21 @@ export function getPhotosLocation(images: string[] = []) {
     type: 'photos',
     name: 'photos',
     icon: '/icons/photos.png',
-    kind: 'folder',
-    children: (Array.isArray(images) ? images : []).map((img: string, idx: number) => {
-      const href = img.startsWith('/') ? img : `/images/${img}`;
-      return {
-        id: idx + 1,
-        name: href.split('/').pop() || img,
-        href,
-        kind: 'file',
-        fileType: 'img',
-        // Use the actual image as the icon so Explorer shows a thumbnail
-        icon: href,
-        // Keep a small overlay icon indicating it's an image
-        subIcon: DEFAULT_FILE_TYPE_ICONS.IMG,
-      };
-    }),
+    kind: 'FOLDER',
+    children: (Array.isArray(images) ? images : []).map(
+      (img: string, idx: number) => {
+        const href = img.startsWith('/') ? img : `/images/${img}`;
+        return {
+          id: idx + 1,
+          name: href.split('/').pop() || img,
+          imageUrl: href,
+          kind: 'FILE',
+          fileType: 'IMG',
+          icon: href,
+          subIcon: DEFAULT_FILE_TYPE_ICONS.IMG,
+        };
+      }
+    ),
   };
 }
 
@@ -123,8 +123,6 @@ export function getLocations(projects: Project[], profiles: Profile[]) {
     photos: getPhotosLocation(),
   };
 }
-
-
 
 export const INITIAL_Z_INDEX = 1000;
 
