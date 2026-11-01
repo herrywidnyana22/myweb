@@ -122,7 +122,6 @@ export const ItemModal = ({
       if (ownerType === 'project' && formData.fileType === 'TECHSTACK') {
         submitData.techStack = techItems;
       }
-      console.log({ submitData });
       await onSave(submitData);
       onClose();
     } catch (error) {

@@ -18,7 +18,6 @@ type CardProps = DataItemProps & {
 };
 
 const CardComponent = (card: CardProps) => {
-  console.log({ card });
 
   switch (card.category) {
     case 'project':

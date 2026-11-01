@@ -28,11 +28,7 @@ export async function deleteImageFile(
     // Check if file exists
     if (existsSync(filepath)) {
       await unlink(filepath);
-      console.log('Deleted image file:', filename);
-    } else {
-      console.log('Image file not found (already deleted?):', filename);
     }
-
     return true;
   } catch (error) {
     console.error('Error deleting image file:', imageUrl, error);

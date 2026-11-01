@@ -118,7 +118,6 @@ export const useLanguageStore = create<LanguageStore>()(
             selectedTranslationLanguages: detectedLanguages,
             languagesDetected: true,
           });
-          console.log('Auto-detected languages from data:', detectedLanguages);
         }
       },
 
@@ -161,7 +160,6 @@ export const useLanguageStore = create<LanguageStore>()(
                     selectedTranslationLanguages: langs,
                     languagesDetected: true,
                   });
-                  console.log('Loaded languages from database:', langs);
                   return;
                 }
               }
@@ -206,10 +204,6 @@ export const useLanguageStore = create<LanguageStore>()(
                   selectedTranslationLanguages: uniqueLangs,
                   languagesDetected: true,
                 });
-                console.log(
-                  'Auto-detected languages from profile fields:',
-                  uniqueLangs
-                );
 
                 // Save to database
                 try {

@@ -15,8 +15,6 @@ const ProjectInfoWindow = () => {
 
   if (!projects) return null;
 
-  console.log({ projects, windows });
-
   return (
     <div className='overflow-hidden rounded-xl shadow-2xl drop-shadow-2xl'>
       <WindowHeader

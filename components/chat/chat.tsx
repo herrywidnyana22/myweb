@@ -174,8 +174,6 @@ export const Chat = () => {
         const text = data.text ?? getUIText('dataEmpty');
         const cards = data.cards ?? [];
 
-        console.log({ data });
-
         // Update last placeholder -> stop loading -> streaming
         setIsLoading(false);
         dispatch({
