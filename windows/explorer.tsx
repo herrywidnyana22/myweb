@@ -140,7 +140,7 @@ const ExplorerWindow = () => {
   };
 
   return (
-    <div className='h-[50vh] overflow-hidden rounded-xl shadow-2xl drop-shadow-2xl'>
+    <div className='h-[55vh] overflow-hidden rounded-xl shadow-2xl drop-shadow-2xl'>
       {/* HEADER */}
       <WindowHeader
         target='explorer'
@@ -190,7 +190,7 @@ const ExplorerWindow = () => {
 
         {/* RIGHT PANEL / CONTENT */}
         <div className='scrollable-panel relative w-[50vw] overflow-y-auto bg-white p-5'>
-          <div className='flex flex-wrap content-start items-start gap-4'>
+          <div className='flex flex-wrap content-start items-start gap-4 pb-10'>
             {activeLocation?.children.map((item: LocationValue) => (
               <Tooltip
                 key={item.id}
