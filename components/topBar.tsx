@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import dayjs from 'dayjs';
+import clsx from 'clsx';
 
 import { useState, useEffect, useRef } from 'react';
 import { ChevronDown } from 'lucide-react';
@@ -119,9 +120,10 @@ export const TopBar = () => {
                     key={lang.code}
                     type='button'
                     onClick={() => handleLanguageChange(lang.code)}
-                    className={`flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 transition-colors hover:bg-gray-300 ${
-                      currentLanguage === lang.code ? 'bg-gray-200' : ''
-                    }`}
+                    className={clsx(
+                      'flex w-full cursor-pointer items-center gap-3 px-4 py-2.5 transition-colors hover:bg-gray-300',
+                      currentLanguage === lang.code && 'bg-gray-200'
+                    )}
                   >
                     <FlagIcon
                       code={lang.countryCode || 'id'}

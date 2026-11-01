@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import clsx from 'clsx';
 
 const WALLPAPERS = [
   '/wallpaper/wallpaper-1.jpg',
@@ -50,9 +51,10 @@ export const BackgroundHome = () => {
           fill
           priority
           quality={90}
-          className={`object-cover transition-opacity duration-500 ${
+          className={clsx(
+            'object-cover transition-opacity duration-500',
             isVisible ? 'opacity-100' : 'opacity-0'
-          }`}
+          )}
         />
       </div>
       {/* background GRADIENT ONLY */}

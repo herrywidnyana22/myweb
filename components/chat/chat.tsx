@@ -409,7 +409,7 @@ export const Chat = () => {
               {messages.map((msg, i) => (
                 <div
                   key={i}
-                  className={msg.role === 'user' ? 'text-right' : ''}
+                  className={clsx(msg.role === 'user' && 'text-right')}
                 >
                   <ChatItem {...msg} />
                   {!!msg.cards?.length && (

@@ -75,7 +75,9 @@ export const ProgressCircle = ({
           >
             {value}
             <span
-              className={isMobile ? 'text-[10px]' : 'text-xs text-gray-900/70'}
+              className={clsx(
+                isMobile ? 'text-[10px]' : 'text-xs text-gray-900/70'
+              )}
             >
               %
             </span>

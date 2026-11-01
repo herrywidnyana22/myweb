@@ -1,4 +1,5 @@
 import './globals.css';
+import clsx from 'clsx';
 import type { Metadata } from 'next';
 import { Sora, JetBrains_Mono } from 'next/font/google';
 import { LanguageStoreInitializer } from '@/components/LanguageStoreInitializer';
@@ -28,7 +29,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`${sora.variable} ${jetbrainsMono.variable} antialiased`}
+        className={clsx(sora.variable, jetbrainsMono.variable, 'antialiased')}
       >
         <LanguageStoreInitializer />
         {children}

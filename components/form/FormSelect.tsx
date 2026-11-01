@@ -1,5 +1,7 @@
 'use client';
 
+import clsx from 'clsx';
+
 interface FormSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   required?: boolean;
@@ -25,7 +27,10 @@ export function FormSelect({
       )}
       <select
         {...props}
-        className={`focus:ring-primary w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-700 transition outline-none focus:border-transparent focus:ring-2 disabled:cursor-not-allowed disabled:bg-gray-100 ${className}`}
+        className={clsx(
+          'focus:ring-primary w-full rounded-lg border border-gray-300 px-3 py-2 text-gray-700 transition outline-none focus:border-transparent focus:ring-2 disabled:cursor-not-allowed disabled:bg-gray-100',
+          className
+        )}
       >
         {options.map(opt => (
           <option key={opt.value} value={opt.value}>

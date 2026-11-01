@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createToken, verifyToken } from '@/lib/jwt';
-import { successResponse, errorResponse } from '@/lib/api-response';
+import { createToken } from '@/lib/jwt';
+import { errorResponse } from '@/lib/api-response';
 
 const VALID_USERNAME = 'herry';
 const VALID_PASSWORD = 'herry*1234#';

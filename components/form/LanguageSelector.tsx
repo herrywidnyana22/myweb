@@ -5,8 +5,11 @@ import {
   MAX_TRANSLATION_LANGUAGES,
   DEFAULT_LANGUAGE,
 } from '@/lib/constants/languages';
+import clsx from 'clsx';
 import { Check } from 'lucide-react';
 import { FlagIcon } from '../flagIcon';
+
+// 私の名前わへりーです
 
 interface LanguageSelectorProps {
   selectedLanguages: string[];
@@ -45,13 +48,15 @@ export const LanguageSelector = ({
               type='button'
               onClick={() => canToggle && onToggle(lang.code)}
               disabled={disabled || !canToggle}
-              className={`relative flex items-center gap-2 rounded-lg border-2 p-3 transition-all ${
+              className={clsx(
+                'relative flex items-center gap-2 rounded-lg border-2 p-3 transition-all',
                 isSelected
                   ? 'border-primary text-primary-dark bg-orange-50'
                   : canToggle
                     ? 'border-gray-200 bg-white hover:border-gray-300'
-                    : 'cursor-not-allowed border-gray-100 bg-gray-50 text-gray-400'
-              } ${disabled ? 'cursor-not-allowed opacity-50' : ''} `}
+                    : 'cursor-not-allowed border-gray-100 bg-gray-50 text-gray-400',
+                disabled && 'cursor-not-allowed opacity-50'
+              )}
             >
               <FlagIcon code={lang.countryCode} flagCode={lang.flag} />
               <div className='flex-1 text-left'>
@@ -67,12 +72,12 @@ export const LanguageSelector = ({
       </div>
 
       {selectedLanguages.length > 0 && (
-        <div className='text-primary-hover mt-4 flex items-center rounded-lg border border-gray-300 p-2 text-sm'>
+        <div className='text-white mt-4 flex items-center rounded-lg border border-gray-300 p-2 text-sm'>
           <strong>Selected: </strong>
-          <span className='inline-flex flex-wrap items-center gap-2'>
+          <span className='inline-flex flex-wrap items-center gap-2 text-gray-400 ml-2'>
             {selectedLanguages
               .map(code => {
-                const lang = AVAILABLE_LANGUAGES.find(l => l.code === code);
+                const lang = AVAILABLE_LANGUAGES.find(l => l.code === code)
                 return lang ? (
                   <span key={code} className='inline-flex items-center'>
                     <FlagIcon code={lang.countryCode} flagCode={lang.flag} />
@@ -80,7 +85,7 @@ export const LanguageSelector = ({
                   </span>
                 ) : (
                   code
-                );
+                )
               })
               .reduce((prev, curr) => [prev, ', ', curr] as any)}
           </span>

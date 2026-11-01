@@ -1,5 +1,6 @@
 'use client';
 
+import clsx from 'clsx';
 import Image from 'next/image';
 
 import { useEffect, useState, useCallback } from 'react';
@@ -460,7 +461,10 @@ export const ProjectModal = ({
               <div className='flex items-center gap-3 rounded-lg border border-dashed border-gray-200 bg-gray-50 p-3'>
                 <label className='relative cursor-pointer disabled:cursor-not-allowed'>
                   <div
-                    className={`flex size-8 items-center justify-center rounded bg-gray-300 text-xs text-gray-500 ${isUploadingTechIcon ? 'opacity-50' : ''}`}
+                    className={clsx(
+                      'flex size-8 items-center justify-center rounded bg-gray-300 text-xs text-gray-500',
+                      isUploadingTechIcon && 'opacity-50'
+                    )}
                   >
                     {isUploadingTechIcon ? '...' : '+'}
                   </div>

@@ -1,5 +1,6 @@
 'use client';
 
+import clsx from 'clsx';
 import Image from 'next/image';
 
 import { X, Upload } from 'lucide-react';
@@ -52,7 +53,12 @@ export function FormImageUpload({
           </div>
         )}
         <label
-          className={`flex w-full items-center justify-center rounded-lg border-2 border-dashed border-gray-300 px-4 py-3 transition ${isDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-gray-50'}`}
+          className={clsx(
+            'flex w-full items-center justify-center rounded-lg border-2 border-dashed border-gray-300 px-4 py-3 transition',
+            isDisabled
+              ? 'cursor-not-allowed opacity-50'
+              : 'cursor-pointer hover:bg-gray-50'
+          )}
         >
           <div className='flex items-center gap-2 text-gray-700'>
             <Upload size={20} />
